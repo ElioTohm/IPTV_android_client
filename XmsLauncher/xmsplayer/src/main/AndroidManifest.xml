@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="xms.com.xmsplayer">
+
+    <application
+        android:allowBackup="true"
+        android:label="@string/app_name"
+        android:supportsRtl="true">
+        <activity android:name=".UdpPlayerActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:resizeableActivity="true"
+            android:supportsPictureInPicture="true"
+            android:label="@string/player"
+            android:theme="@style/PlayerTheme">
+        </activity>
+    </application>
+
+</manifest>
