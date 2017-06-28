@@ -20,7 +20,7 @@ import android.os.Bundle;
 /*
  * MainActivity class that loads MainFragment
  */
-public class Home extends Activity {
+public class MainActivity extends Activity {
     /**
      * Called when the activity is first created.
      */
@@ -28,6 +28,6 @@ public class Home extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+        setContentView(R.layout.activity_main);
     }
 }

@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -57,8 +58,8 @@ public class MainFragment extends BrowseFragment {
     private static final int BACKGROUND_UPDATE_DELAY = 300;
     private static final int GRID_ITEM_WIDTH = 200;
     private static final int GRID_ITEM_HEIGHT = 200;
-    private static final int NUM_ROWS = 6;
-    private static final int NUM_COLS = 15;
+    private static final int NUM_ROWS = 1;
+    private static final int NUM_COLS = 5;
 
     private final Handler mHandler = new Handler();
     private ArrayObjectAdapter mRowsAdapter;
@@ -104,7 +105,7 @@ public class MainFragment extends BrowseFragment {
             }
             ArrayObjectAdapter listRowAdapter = new ArrayObjectAdapter(cardPresenter);
             for (int j = 0; j < NUM_COLS; j++) {
-                listRowAdapter.add(list.get(j % 5));
+                listRowAdapter.add(list.get(j % 4));
             }
             HeaderItem header = new HeaderItem(i, MovieList.MOVIE_CATEGORY[i]);
             mRowsAdapter.add(new ListRow(header, listRowAdapter));
@@ -114,7 +115,6 @@ public class MainFragment extends BrowseFragment {
 
         GridItemPresenter mGridPresenter = new GridItemPresenter();
         ArrayObjectAdapter gridRowAdapter = new ArrayObjectAdapter(mGridPresenter);
-        gridRowAdapter.add(getResources().getString(R.string.grid_view));
         gridRowAdapter.add(getString(R.string.error_fragment));
         gridRowAdapter.add(getResources().getString(R.string.personal_settings));
         mRowsAdapter.add(new ListRow(gridHeader, gridRowAdapter));
@@ -207,8 +207,7 @@ public class MainFragment extends BrowseFragment {
                     Intent intent = new Intent(getActivity(), BrowseErrorActivity.class);
                     startActivity(intent);
                 } else {
-                    Toast.makeText(getActivity(), ((String) item), Toast.LENGTH_SHORT)
-                            .show();
+                    startActivityForResult(new Intent(android.provider.Settings.ACTION_SETTINGS), 0);
                 }
             }
         }

@@ -37,7 +37,4 @@
     <string name="error_fragment_message">An error occurred</string>
     <string name="dismiss_error">Dismiss</string>
     <string name="oops">Oops</string>
-
-    <!--URL TEST Strings-->
-    <string name="URL_TEST_UDP">upd://@224.1.1.2:1234</string>
 </resources>

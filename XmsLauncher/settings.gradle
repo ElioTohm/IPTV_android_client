@@ -1,1 +1,1 @@
-include ':mobile', ':xmsplayer', ':smarttv'
+include ':xmsplayer', ':smarttv'

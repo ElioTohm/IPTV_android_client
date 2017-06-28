@@ -89,7 +89,7 @@ public class VideoDetailsFragment extends DetailsFragment {
             updateBackground(mSelectedMovie.getBackgroundImageUrl());
             setOnItemViewClickedListener(new ItemViewClickedListener());
         } else {
-            Intent intent = new Intent(getActivity(), Home.class);
+            Intent intent = new Intent(getActivity(), MainActivity.class);
             startActivity(intent);
         }
     }
@@ -175,12 +175,9 @@ public class VideoDetailsFragment extends DetailsFragment {
             @Override
             public void onActionClicked(Action action) {
                 if (action.getId() == ACTION_WATCH_TRAILER) {
-//                    Intent intent = new Intent(getActivity(), PlaybackOverlayActivity.class);
-//                    intent.putExtra(DetailsActivity.MOVIE, mSelectedMovie);
-//                    startActivity(intent);
-                    String[] data = {getString(R.string.URL_TEST_UDP)};
+                    String [] uris = {"upd://@224.1.8.14:1234"};
                     Intent intent = new Intent("xms.com.xmsplayer.UdpPlayerActivity");
-                    intent.putExtra("uri_list", data);
+                    intent.putExtra("uri_list", uris);
                     startActivity(intent);
                 } else {
                     Toast.makeText(getActivity(), action.toString(), Toast.LENGTH_SHORT).show();
@@ -197,7 +194,7 @@ public class VideoDetailsFragment extends DetailsFragment {
         Collections.shuffle(list);
         ArrayObjectAdapter listRowAdapter = new ArrayObjectAdapter(new CardPresenter());
         for (int j = 0; j < NUM_COLS; j++) {
-            listRowAdapter.add(list.get(j % 5));
+            listRowAdapter.add(list.get(j % 4));
         }
 
         HeaderItem header = new HeaderItem(0, subcategories[0]);
@@ -216,13 +213,11 @@ public class VideoDetailsFragment extends DetailsFragment {
             if (item instanceof Movie) {
                 Movie movie = (Movie) item;
                 Log.d(TAG, "Item: " + item.toString());
-//                Intent intent = new Intent(getActivity(), DetailsActivity.class);
-//                intent.putExtra(getResources().getString(R.string.movie), mSelectedMovie);
-//                intent.putExtra(getResources().getString(R.string.should_start), true);
-//                startActivity(intent);
-                Intent intent = new Intent("xms.com.xmsplayer.UdpPlayerActivity");
-                intent.putExtra("uri_list", "upd://@224.1.8.14:1234");
+                Intent intent = new Intent(getActivity(), DetailsActivity.class);
+                intent.putExtra(getResources().getString(R.string.movie), movie);
+                intent.putExtra(getResources().getString(R.string.should_start), true);
                 startActivity(intent);
+
 
                 Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(
                         getActivity(),

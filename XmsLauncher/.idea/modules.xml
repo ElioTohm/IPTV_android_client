@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/XmsLauncher.iml" filepath="$PROJECT_DIR$/XmsLauncher.iml" />
-      <module fileurl="file://$PROJECT_DIR$/mobile/mobile.iml" filepath="$PROJECT_DIR$/mobile/mobile.iml" />
       <module fileurl="file://$PROJECT_DIR$/smarttv/smarttv.iml" filepath="$PROJECT_DIR$/smarttv/smarttv.iml" />
       <module fileurl="file://$PROJECT_DIR$/xmsplayer/xmsplayer.iml" filepath="$PROJECT_DIR$/xmsplayer/xmsplayer.iml" />
     </modules>

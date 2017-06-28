@@ -2,5 +2,5 @@
 <fragment xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:id="@+id/main_browse_fragment"
     android:name="xms.com.smarttv.MainFragment" android:layout_width="match_parent"
-    android:layout_height="match_parent" tools:context=".Home" tools:deviceIds="tv"
+    android:layout_height="match_parent" tools:context=".MainActivity" tools:deviceIds="tv"
     tools:ignore="MergeRootFrame" />
