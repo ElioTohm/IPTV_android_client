@@ -1,1 +1,1 @@
-include ':xmsplayer', ':smarttv'
+include ':xmsplayer', ':smarttv', ':ffmpeg'

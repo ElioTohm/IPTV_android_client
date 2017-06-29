@@ -8,6 +8,7 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/ffmpeg" />
             <option value="$PROJECT_DIR$/smarttv" />
             <option value="$PROJECT_DIR$/xmsplayer" />
           </set>

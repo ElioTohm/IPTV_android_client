@@ -1,0 +1,30 @@
+[
+    {
+        "merged": "C:\\Users\\Elio\\Desktop\\androidlauncher\\XmsLauncher\\ffmpeg\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-ldpi-v4\\exo_controls_pause.png",
+        "source": "C:\\Users\\Elio\\.android\\build-cache\\cfe42de63e1ea1cf1073ab44e1cd37c84735fb9b\\output\\res\\drawable-ldpi-v4\\exo_controls_pause.png"
+    },
+    {
+        "merged": "C:\\Users\\Elio\\Desktop\\androidlauncher\\XmsLauncher\\ffmpeg\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-ldpi-v4\\exo_controls_rewind.png",
+        "source": "C:\\Users\\Elio\\.android\\build-cache\\cfe42de63e1ea1cf1073ab44e1cd37c84735fb9b\\output\\res\\drawable-ldpi-v4\\exo_controls_rewind.png"
+    },
+    {
+        "merged": "C:\\Users\\Elio\\Desktop\\androidlauncher\\XmsLauncher\\ffmpeg\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-ldpi-v4\\exo_edit_mode_logo.png",
+        "source": "C:\\Users\\Elio\\.android\\build-cache\\cfe42de63e1ea1cf1073ab44e1cd37c84735fb9b\\output\\res\\drawable-ldpi-v4\\exo_edit_mode_logo.png"
+    },
+    {
+        "merged": "C:\\Users\\Elio\\Desktop\\androidlauncher\\XmsLauncher\\ffmpeg\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-ldpi-v4\\exo_controls_previous.png",
+        "source": "C:\\Users\\Elio\\.android\\build-cache\\cfe42de63e1ea1cf1073ab44e1cd37c84735fb9b\\output\\res\\drawable-ldpi-v4\\exo_controls_previous.png"
+    },
+    {
+        "merged": "C:\\Users\\Elio\\Desktop\\androidlauncher\\XmsLauncher\\ffmpeg\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-ldpi-v4\\exo_controls_play.png",
+        "source": "C:\\Users\\Elio\\.android\\build-cache\\cfe42de63e1ea1cf1073ab44e1cd37c84735fb9b\\output\\res\\drawable-ldpi-v4\\exo_controls_play.png"
+    },
+    {
+        "merged": "C:\\Users\\Elio\\Desktop\\androidlauncher\\XmsLauncher\\ffmpeg\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-ldpi-v4\\exo_controls_fastforward.png",
+        "source": "C:\\Users\\Elio\\.android\\build-cache\\cfe42de63e1ea1cf1073ab44e1cd37c84735fb9b\\output\\res\\drawable-ldpi-v4\\exo_controls_fastforward.png"
+    },
+    {
+        "merged": "C:\\Users\\Elio\\Desktop\\androidlauncher\\XmsLauncher\\ffmpeg\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-ldpi-v4\\exo_controls_next.png",
+        "source": "C:\\Users\\Elio\\.android\\build-cache\\cfe42de63e1ea1cf1073ab44e1cd37c84735fb9b\\output\\res\\drawable-ldpi-v4\\exo_controls_next.png"
+    }
+]

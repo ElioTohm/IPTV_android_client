@@ -5,24 +5,15 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Surface;
 import android.view.SurfaceView;
 import android.view.View;
 
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
-import com.google.android.exoplayer2.ExoPlaybackException;
-import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlayerFactory;
-import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.LoadControl;
-import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.Timeline;
-import com.google.android.exoplayer2.audio.AudioRendererEventListener;
-import com.google.android.exoplayer2.decoder.DecoderCounters;
-import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.extractor.Extractor;
 import com.google.android.exoplayer2.extractor.ExtractorsFactory;
 import com.google.android.exoplayer2.extractor.ts.DefaultTsPayloadReaderFactory;
@@ -30,25 +21,17 @@ import com.google.android.exoplayer2.extractor.ts.TsExtractor;
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.source.TrackGroupArray;
-import com.google.android.exoplayer2.source.dash.DashChunkSource;
-import com.google.android.exoplayer2.source.dash.DashMediaSource;
-import com.google.android.exoplayer2.source.dash.DefaultDashChunkSource;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.MappingTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
-import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
-import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultAllocator;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
-import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.upstream.UdpDataSource;
 import com.google.android.exoplayer2.util.TimestampAdjuster;
 import com.google.android.exoplayer2.util.Util;
-import com.google.android.exoplayer2.video.VideoRendererEventListener;
 
 import java.net.CookieHandler;
 import java.net.CookieManager;
@@ -64,42 +47,12 @@ public class UdpPlayerActivity extends AppCompatActivity {
     private EventLogger eventlogger;
     private SurfaceView playerView;
     public static final String URI_LIST_EXTRA = "uri_list";
-    private TrackSelector trackSelector;
     private static final CookieManager DEFAULT_COOKIE_MANAGER;
 
     static {
         DEFAULT_COOKIE_MANAGER = new CookieManager();
         DEFAULT_COOKIE_MANAGER.setCookiePolicy(CookiePolicy.ACCEPT_ORIGINAL_SERVER);
     }
-
-//    private void initializePlayer() {
-//
-//        if (player == null) {
-//
-//            TrackSelection.Factory adaptiveTrackSelectionFactory =
-//                    new AdaptiveTrackSelection.Factory(BANDWIDTH_METER);
-//
-//            player = ExoPlayerFactory.newSimpleInstance(
-//                    new DefaultRenderersFactory(this),
-//                    new DefaultTrackSelector(adaptiveTrackSelectionFactory),
-//                    new DefaultLoadControl());
-//
-//            player.addListener(componentListener);
-//            player.setVideoDebugListener(componentListener);
-//            player.setAudioDebugListener(componentListener);
-//
-//            playerView.setPlayer(player);
-//
-//            player.setPlayWhenReady(playWhenReady);
-//            player.seekTo(currentWindow, playbackPosition);
-//
-//            Uri uri = Uri.parse(getString(R.string.media_url_dash));
-//            MediaSource mediaSource = DashbuildMediaSource(uri);
-//            player.prepare(mediaSource, true, false);
-//
-//
-//        }
-//    }
 
     private MediaSource buildUDPMediaSource(Uri[] uris) {
         /*
@@ -168,7 +121,10 @@ public class UdpPlayerActivity extends AppCompatActivity {
                 new DefaultAllocator(true, C.DEFAULT_BUFFER_SEGMENT_SIZE),
                 15000, 60000, 2500, 6000);
 
-        player = ExoPlayerFactory.newSimpleInstance(this, trackSelector, loadControl);
+        DefaultRenderersFactory renderersFactory = new DefaultRenderersFactory(this,
+            null, DefaultRenderersFactory.EXTENSION_RENDERER_MODE_ON);
+
+        player = ExoPlayerFactory.newSimpleInstance(renderersFactory, trackSelector, loadControl);
 
         //set Player listeners
         player.addListener(eventlogger);
