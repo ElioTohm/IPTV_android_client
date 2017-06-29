@@ -175,7 +175,7 @@ public class VideoDetailsFragment extends DetailsFragment {
             @Override
             public void onActionClicked(Action action) {
                 if (action.getId() == ACTION_WATCH_TRAILER) {
-                    String [] uris = {"upd://@224.1.8.14:1234"};
+                    String [] uris = {getString(R.string.URI_UDP_TEST)};
                     Intent intent = new Intent("xms.com.xmsplayer.UdpPlayerActivity");
                     intent.putExtra("uri_list", uris);
                     startActivity(intent);
