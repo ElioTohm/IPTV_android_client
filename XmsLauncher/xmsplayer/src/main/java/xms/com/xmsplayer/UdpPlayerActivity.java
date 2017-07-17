@@ -169,7 +169,6 @@ public class UdpPlayerActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         if (Util.SDK_INT > 23) {
-//            initializePlayer();
             initializePlayer();
         }
     }
@@ -179,7 +178,6 @@ public class UdpPlayerActivity extends AppCompatActivity {
         super.onResume();
         hideSystemUi();
         if ((Util.SDK_INT <= 23 || player == null)) {
-//            initializePlayer();
             initializePlayer();
         }
     }
