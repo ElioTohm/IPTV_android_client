@@ -30,8 +30,10 @@ android {
 }
 
 dependencies {
-    compile project(':xmsplayer')
+//    compile project(':xmsplayer')
+    compile 'com.google.android.exoplayer:exoplayer:r2.4.2'
 }
+
 
 ext {
     javadocTitle = 'FFmpeg extension'

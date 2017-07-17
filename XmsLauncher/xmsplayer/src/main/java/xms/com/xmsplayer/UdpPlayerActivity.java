@@ -116,15 +116,10 @@ public class UdpPlayerActivity extends AppCompatActivity {
         //add trackselector to EventLogger constructor
         eventlogger = new EventLogger(trackSelector);
 
-        // Initialize Loadcontroller
-        LoadControl loadControl = new DefaultLoadControl(
-                new DefaultAllocator(true, C.DEFAULT_BUFFER_SEGMENT_SIZE),
-                15000, 60000, 2500, 6000);
-
         DefaultRenderersFactory renderersFactory = new DefaultRenderersFactory(this,
             null, DefaultRenderersFactory.EXTENSION_RENDERER_MODE_ON);
 
-        player = ExoPlayerFactory.newSimpleInstance(renderersFactory, trackSelector, loadControl);
+        player = ExoPlayerFactory.newSimpleInstance(renderersFactory, trackSelector);
 
         //set Player listeners
         player.addListener(eventlogger);

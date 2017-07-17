@@ -215,8 +215,7 @@ import java.util.Locale;
 
     @Override
     public void onAudioInputFormatChanged(Format format) {
-        Log.d(TAG, "audioFormatChanged [" + getSessionTimeString() + ", " + Format.toLogString(format)
-                + "]");
+        Log.d(TAG, "audioFormatChanged [" + getSessionTimeString() + ", " + Format.toLogString(format) + "]");
     }
 
     @Override

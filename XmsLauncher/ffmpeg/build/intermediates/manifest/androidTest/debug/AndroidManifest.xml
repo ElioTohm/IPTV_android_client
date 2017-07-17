@@ -17,20 +17,8 @@
         android:name="android.support.VERSION"
         android:value="25.3.1" />
 
-    <application
-        android:allowBackup="true"
-        android:label="@string/app_name"
-        android:supportsRtl="true" >
+    <application>
         <uses-library android:name="android.test.runner" />
-
-        <activity
-            android:name="xms.com.xmsplayer.UdpPlayerActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
-            android:label="@string/player"
-            android:resizeableActivity="true"
-            android:supportsPictureInPicture="true"
-            android:theme="@style/PlayerTheme" >
-        </activity>
     </application>
 
 </manifest>

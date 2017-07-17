@@ -7,369 +7,8 @@
                     "startLine": 2,
                     "startColumn": 4,
                     "startOffset": 55,
-                    "endColumn": 96,
-                    "endOffset": 147
-                },
-                "from": {
-                    "file": "C:\\Users\\Elio\\.android\\build-cache\\805af77b856525670a88becbbc4bf74a2087cad7\\output\\res\\values-ja\\values-ja.xml",
-                    "position": {
-                        "startLine": 2,
-                        "startColumn": 4,
-                        "startOffset": 55,
-                        "endColumn": 96,
-                        "endOffset": 147
-                    }
-                }
-            },
-            {
-                "to": {
-                    "startLine": 3,
-                    "startColumn": 4,
-                    "startOffset": 152,
-                    "endColumn": 106,
-                    "endOffset": 254
-                },
-                "from": {
-                    "file": "C:\\Users\\Elio\\.android\\build-cache\\805af77b856525670a88becbbc4bf74a2087cad7\\output\\res\\values-ja\\values-ja.xml",
-                    "position": {
-                        "startLine": 3,
-                        "startColumn": 4,
-                        "startOffset": 152,
-                        "endColumn": 106,
-                        "endOffset": 254
-                    }
-                }
-            },
-            {
-                "to": {
-                    "startLine": 4,
-                    "startColumn": 4,
-                    "startOffset": 259,
-                    "endColumn": 120,
-                    "endOffset": 375
-                },
-                "from": {
-                    "file": "C:\\Users\\Elio\\.android\\build-cache\\805af77b856525670a88becbbc4bf74a2087cad7\\output\\res\\values-ja\\values-ja.xml",
-                    "position": {
-                        "startLine": 4,
-                        "startColumn": 4,
-                        "startOffset": 259,
-                        "endColumn": 120,
-                        "endOffset": 375
-                    }
-                }
-            },
-            {
-                "to": {
-                    "startLine": 5,
-                    "startColumn": 4,
-                    "startOffset": 380,
-                    "endColumn": 92,
-                    "endOffset": 468
-                },
-                "from": {
-                    "file": "C:\\Users\\Elio\\.android\\build-cache\\805af77b856525670a88becbbc4bf74a2087cad7\\output\\res\\values-ja\\values-ja.xml",
-                    "position": {
-                        "startLine": 5,
-                        "startColumn": 4,
-                        "startOffset": 380,
-                        "endColumn": 92,
-                        "endOffset": 468
-                    }
-                }
-            },
-            {
-                "to": {
-                    "startLine": 6,
-                    "startColumn": 4,
-                    "startOffset": 473,
-                    "endColumn": 104,
-                    "endOffset": 573
-                },
-                "from": {
-                    "file": "C:\\Users\\Elio\\.android\\build-cache\\805af77b856525670a88becbbc4bf74a2087cad7\\output\\res\\values-ja\\values-ja.xml",
-                    "position": {
-                        "startLine": 6,
-                        "startColumn": 4,
-                        "startOffset": 473,
-                        "endColumn": 104,
-                        "endOffset": 573
-                    }
-                }
-            },
-            {
-                "to": {
-                    "startLine": 7,
-                    "startColumn": 4,
-                    "startOffset": 578,
-                    "endColumn": 81,
-                    "endOffset": 655
-                },
-                "from": {
-                    "file": "C:\\Users\\Elio\\.android\\build-cache\\805af77b856525670a88becbbc4bf74a2087cad7\\output\\res\\values-ja\\values-ja.xml",
-                    "position": {
-                        "startLine": 7,
-                        "startColumn": 4,
-                        "startOffset": 578,
-                        "endColumn": 81,
-                        "endOffset": 655
-                    }
-                }
-            },
-            {
-                "to": {
-                    "startLine": 8,
-                    "startColumn": 4,
-                    "startOffset": 660,
-                    "endColumn": 97,
-                    "endOffset": 753
-                },
-                "from": {
-                    "file": "C:\\Users\\Elio\\.android\\build-cache\\805af77b856525670a88becbbc4bf74a2087cad7\\output\\res\\values-ja\\values-ja.xml",
-                    "position": {
-                        "startLine": 8,
-                        "startColumn": 4,
-                        "startOffset": 660,
-                        "endColumn": 97,
-                        "endOffset": 753
-                    }
-                }
-            },
-            {
-                "to": {
-                    "startLine": 9,
-                    "startColumn": 4,
-                    "startOffset": 758,
-                    "endColumn": 107,
-                    "endOffset": 861
-                },
-                "from": {
-                    "file": "C:\\Users\\Elio\\.android\\build-cache\\805af77b856525670a88becbbc4bf74a2087cad7\\output\\res\\values-ja\\values-ja.xml",
-                    "position": {
-                        "startLine": 9,
-                        "startColumn": 4,
-                        "startOffset": 758,
-                        "endColumn": 107,
-                        "endOffset": 861
-                    }
-                }
-            },
-            {
-                "to": {
-                    "startLine": 10,
-                    "startColumn": 4,
-                    "startOffset": 866,
-                    "endColumn": 76,
-                    "endOffset": 938
-                },
-                "from": {
-                    "file": "C:\\Users\\Elio\\.android\\build-cache\\805af77b856525670a88becbbc4bf74a2087cad7\\output\\res\\values-ja\\values-ja.xml",
-                    "position": {
-                        "startLine": 10,
-                        "startColumn": 4,
-                        "startOffset": 866,
-                        "endColumn": 76,
-                        "endOffset": 938
-                    }
-                }
-            },
-            {
-                "to": {
-                    "startLine": 11,
-                    "startColumn": 4,
-                    "startOffset": 943,
-                    "endColumn": 75,
-                    "endOffset": 1014
-                },
-                "from": {
-                    "file": "C:\\Users\\Elio\\.android\\build-cache\\805af77b856525670a88becbbc4bf74a2087cad7\\output\\res\\values-ja\\values-ja.xml",
-                    "position": {
-                        "startLine": 11,
-                        "startColumn": 4,
-                        "startOffset": 943,
-                        "endColumn": 75,
-                        "endOffset": 1014
-                    }
-                }
-            },
-            {
-                "to": {
-                    "startLine": 12,
-                    "startColumn": 4,
-                    "startOffset": 1019,
-                    "endColumn": 77,
-                    "endOffset": 1092
-                },
-                "from": {
-                    "file": "C:\\Users\\Elio\\.android\\build-cache\\805af77b856525670a88becbbc4bf74a2087cad7\\output\\res\\values-ja\\values-ja.xml",
-                    "position": {
-                        "startLine": 12,
-                        "startColumn": 4,
-                        "startOffset": 1019,
-                        "endColumn": 77,
-                        "endOffset": 1092
-                    }
-                }
-            },
-            {
-                "to": {
-                    "startLine": 13,
-                    "startColumn": 4,
-                    "startOffset": 1097,
-                    "endColumn": 101,
-                    "endOffset": 1194
-                },
-                "from": {
-                    "file": "C:\\Users\\Elio\\.android\\build-cache\\805af77b856525670a88becbbc4bf74a2087cad7\\output\\res\\values-ja\\values-ja.xml",
-                    "position": {
-                        "startLine": 13,
-                        "startColumn": 4,
-                        "startOffset": 1097,
-                        "endColumn": 101,
-                        "endOffset": 1194
-                    }
-                }
-            },
-            {
-                "to": {
-                    "startLine": 14,
-                    "startColumn": 4,
-                    "startOffset": 1199,
-                    "endColumn": 98,
-                    "endOffset": 1293
-                },
-                "from": {
-                    "file": "C:\\Users\\Elio\\.android\\build-cache\\805af77b856525670a88becbbc4bf74a2087cad7\\output\\res\\values-ja\\values-ja.xml",
-                    "position": {
-                        "startLine": 14,
-                        "startColumn": 4,
-                        "startOffset": 1199,
-                        "endColumn": 98,
-                        "endOffset": 1293
-                    }
-                }
-            },
-            {
-                "to": {
-                    "startLine": 15,
-                    "startColumn": 4,
-                    "startOffset": 1298,
-                    "endColumn": 94,
-                    "endOffset": 1388
-                },
-                "from": {
-                    "file": "C:\\Users\\Elio\\.android\\build-cache\\805af77b856525670a88becbbc4bf74a2087cad7\\output\\res\\values-ja\\values-ja.xml",
-                    "position": {
-                        "startLine": 15,
-                        "startColumn": 4,
-                        "startOffset": 1298,
-                        "endColumn": 94,
-                        "endOffset": 1388
-                    }
-                }
-            },
-            {
-                "to": {
-                    "startLine": 16,
-                    "startColumn": 4,
-                    "startOffset": 1393,
-                    "endColumn": 102,
-                    "endOffset": 1491
-                },
-                "from": {
-                    "file": "C:\\Users\\Elio\\.android\\build-cache\\805af77b856525670a88becbbc4bf74a2087cad7\\output\\res\\values-ja\\values-ja.xml",
-                    "position": {
-                        "startLine": 16,
-                        "startColumn": 4,
-                        "startOffset": 1393,
-                        "endColumn": 102,
-                        "endOffset": 1491
-                    }
-                }
-            },
-            {
-                "to": {
-                    "startLine": 17,
-                    "startColumn": 4,
-                    "startOffset": 1496,
-                    "endColumn": 94,
-                    "endOffset": 1586
-                },
-                "from": {
-                    "file": "C:\\Users\\Elio\\.android\\build-cache\\805af77b856525670a88becbbc4bf74a2087cad7\\output\\res\\values-ja\\values-ja.xml",
-                    "position": {
-                        "startLine": 17,
-                        "startColumn": 4,
-                        "startOffset": 1496,
-                        "endColumn": 94,
-                        "endOffset": 1586
-                    }
-                }
-            },
-            {
-                "to": {
-                    "startLine": 18,
-                    "startColumn": 4,
-                    "startOffset": 1591,
-                    "endColumn": 95,
-                    "endOffset": 1682
-                },
-                "from": {
-                    "file": "C:\\Users\\Elio\\.android\\build-cache\\805af77b856525670a88becbbc4bf74a2087cad7\\output\\res\\values-ja\\values-ja.xml",
-                    "position": {
-                        "startLine": 18,
-                        "startColumn": 4,
-                        "startOffset": 1591,
-                        "endColumn": 95,
-                        "endOffset": 1682
-                    }
-                }
-            },
-            {
-                "to": {
-                    "startLine": 19,
-                    "startColumn": 4,
-                    "startOffset": 1687,
-                    "endColumn": 110,
-                    "endOffset": 1793
-                },
-                "from": {
-                    "file": "C:\\Users\\Elio\\.android\\build-cache\\805af77b856525670a88becbbc4bf74a2087cad7\\output\\res\\values-ja\\values-ja.xml",
-                    "position": {
-                        "startLine": 19,
-                        "startColumn": 4,
-                        "startOffset": 1687,
-                        "endColumn": 110,
-                        "endOffset": 1793
-                    }
-                }
-            },
-            {
-                "to": {
-                    "startLine": 20,
-                    "startColumn": 4,
-                    "startOffset": 1798,
-                    "endColumn": 96,
-                    "endOffset": 1890
-                },
-                "from": {
-                    "file": "C:\\Users\\Elio\\.android\\build-cache\\805af77b856525670a88becbbc4bf74a2087cad7\\output\\res\\values-ja\\values-ja.xml",
-                    "position": {
-                        "startLine": 20,
-                        "startColumn": 4,
-                        "startOffset": 1798,
-                        "endColumn": 96,
-                        "endOffset": 1890
-                    }
-                }
-            },
-            {
-                "to": {
-                    "startLine": 21,
-                    "startColumn": 4,
-                    "startOffset": 1895,
                     "endColumn": 70,
-                    "endOffset": 1961
+                    "endOffset": 121
                 },
                 "from": {
                     "file": "C:\\Users\\Elio\\.android\\build-cache\\cfe42de63e1ea1cf1073ab44e1cd37c84735fb9b\\output\\res\\values-ja\\values-ja.xml",
@@ -384,11 +23,11 @@
             },
             {
                 "to": {
-                    "startLine": 22,
+                    "startLine": 3,
                     "startColumn": 4,
-                    "startOffset": 1966,
+                    "startOffset": 126,
                     "endColumn": 66,
-                    "endOffset": 2028
+                    "endOffset": 188
                 },
                 "from": {
                     "file": "C:\\Users\\Elio\\.android\\build-cache\\cfe42de63e1ea1cf1073ab44e1cd37c84735fb9b\\output\\res\\values-ja\\values-ja.xml",
@@ -403,11 +42,11 @@
             },
             {
                 "to": {
-                    "startLine": 23,
+                    "startLine": 4,
                     "startColumn": 4,
-                    "startOffset": 2033,
+                    "startOffset": 193,
                     "endColumn": 65,
-                    "endOffset": 2094
+                    "endOffset": 254
                 },
                 "from": {
                     "file": "C:\\Users\\Elio\\.android\\build-cache\\cfe42de63e1ea1cf1073ab44e1cd37c84735fb9b\\output\\res\\values-ja\\values-ja.xml",
@@ -422,11 +61,11 @@
             },
             {
                 "to": {
-                    "startLine": 24,
+                    "startLine": 5,
                     "startColumn": 4,
-                    "startOffset": 2099,
+                    "startOffset": 259,
                     "endColumn": 62,
-                    "endOffset": 2157
+                    "endOffset": 317
                 },
                 "from": {
                     "file": "C:\\Users\\Elio\\.android\\build-cache\\cfe42de63e1ea1cf1073ab44e1cd37c84735fb9b\\output\\res\\values-ja\\values-ja.xml",
@@ -441,11 +80,11 @@
             },
             {
                 "to": {
-                    "startLine": 25,
+                    "startLine": 6,
                     "startColumn": 4,
-                    "startOffset": 2162,
+                    "startOffset": 322,
                     "endColumn": 70,
-                    "endOffset": 2228
+                    "endOffset": 388
                 },
                 "from": {
                     "file": "C:\\Users\\Elio\\.android\\build-cache\\cfe42de63e1ea1cf1073ab44e1cd37c84735fb9b\\output\\res\\values-ja\\values-ja.xml",
@@ -460,11 +99,11 @@
             },
             {
                 "to": {
-                    "startLine": 26,
+                    "startLine": 7,
                     "startColumn": 4,
-                    "startOffset": 2233,
+                    "startOffset": 393,
                     "endColumn": 66,
-                    "endOffset": 2295
+                    "endOffset": 455
                 },
                 "from": {
                     "file": "C:\\Users\\Elio\\.android\\build-cache\\cfe42de63e1ea1cf1073ab44e1cd37c84735fb9b\\output\\res\\values-ja\\values-ja.xml",
@@ -479,11 +118,11 @@
             },
             {
                 "to": {
-                    "startLine": 27,
+                    "startLine": 8,
                     "startColumn": 4,
-                    "startOffset": 2300,
+                    "startOffset": 460,
                     "endColumn": 62,
-                    "endOffset": 2358
+                    "endOffset": 518
                 },
                 "from": {
                     "file": "C:\\Users\\Elio\\.android\\build-cache\\cfe42de63e1ea1cf1073ab44e1cd37c84735fb9b\\output\\res\\values-ja\\values-ja.xml",
@@ -493,44 +132,6 @@
                         "startOffset": 460,
                         "endColumn": 62,
                         "endOffset": 518
-                    }
-                }
-            },
-            {
-                "to": {
-                    "startLine": 28,
-                    "startColumn": 4,
-                    "startOffset": 2363,
-                    "endColumn": 77,
-                    "endOffset": 2436
-                },
-                "from": {
-                    "file": "C:\\Users\\Elio\\.android\\build-cache\\805af77b856525670a88becbbc4bf74a2087cad7\\output\\res\\values-ja\\values-ja.xml",
-                    "position": {
-                        "startLine": 21,
-                        "startColumn": 4,
-                        "startOffset": 1895,
-                        "endColumn": 77,
-                        "endOffset": 1968
-                    }
-                }
-            },
-            {
-                "to": {
-                    "startLine": 29,
-                    "startColumn": 4,
-                    "startOffset": 2441,
-                    "endColumn": 100,
-                    "endOffset": 2537
-                },
-                "from": {
-                    "file": "C:\\Users\\Elio\\.android\\build-cache\\805af77b856525670a88becbbc4bf74a2087cad7\\output\\res\\values-ja\\values-ja.xml",
-                    "position": {
-                        "startLine": 22,
-                        "startColumn": 4,
-                        "startOffset": 1973,
-                        "endColumn": 100,
-                        "endOffset": 2069
                     }
                 }
             }

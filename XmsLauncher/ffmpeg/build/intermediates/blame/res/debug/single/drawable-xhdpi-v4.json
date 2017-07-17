@@ -36,12 +36,12 @@
         "source": "C:\\Users\\Elio\\.android\\build-cache\\805af77b856525670a88becbbc4bf74a2087cad7\\output\\res\\drawable-xhdpi-v4\\abc_btn_radio_to_on_mtrl_000.png"
     },
     {
-        "merged": "C:\\Users\\Elio\\Desktop\\androidlauncher\\XmsLauncher\\ffmpeg\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\abc_ic_menu_share_mtrl_alpha.png",
-        "source": "C:\\Users\\Elio\\.android\\build-cache\\805af77b856525670a88becbbc4bf74a2087cad7\\output\\res\\drawable-xhdpi-v4\\abc_ic_menu_share_mtrl_alpha.png"
-    },
-    {
         "merged": "C:\\Users\\Elio\\Desktop\\androidlauncher\\XmsLauncher\\ffmpeg\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\abc_ic_star_black_36dp.png",
         "source": "C:\\Users\\Elio\\.android\\build-cache\\805af77b856525670a88becbbc4bf74a2087cad7\\output\\res\\drawable-xhdpi-v4\\abc_ic_star_black_36dp.png"
+    },
+    {
+        "merged": "C:\\Users\\Elio\\Desktop\\androidlauncher\\XmsLauncher\\ffmpeg\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\abc_ic_menu_share_mtrl_alpha.png",
+        "source": "C:\\Users\\Elio\\.android\\build-cache\\805af77b856525670a88becbbc4bf74a2087cad7\\output\\res\\drawable-xhdpi-v4\\abc_ic_menu_share_mtrl_alpha.png"
     },
     {
         "merged": "C:\\Users\\Elio\\Desktop\\androidlauncher\\XmsLauncher\\ffmpeg\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\abc_ic_menu_selectall_mtrl_alpha.png",
