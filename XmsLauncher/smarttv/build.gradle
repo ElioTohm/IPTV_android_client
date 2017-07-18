@@ -22,9 +22,10 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile project(':xmsplayer')
+    compile project(':ffmpeg')
     compile 'com.android.support:leanback-v17:25.3.1'
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.github.bumptech.glide:glide:3.7.0'
-    compile project(':xmsplayer')
-    compile project(':ffmpeg')
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
 }

@@ -40,4 +40,16 @@
 
     <!--TEST URI-->
     <string name="URI_UDP_TEST">upd://@224.1.1.30:1234</string>
+
+    <!--onboarding-->
+    <string name="onboarding_title_welcome">Welcome to XMS pro Launcher</string>
+    <string name="onboarding_title_design">The Smart TV that will be your guide in the hotel</string>
+    <string name="onboarding_title_simple">We wish you a pleasant stay</string>
+    <string name="onboarding_title_project">Enjoy your stay</string>
+
+    <string name="onboarding_description_welcome">This isn\'t your ordinary TV</string>
+    <string name="onboarding_description_design">Let us be your virtual guide.... With a press of a button check the hotel restaurant, resort and many more</string>
+    <string name="onboarding_description_simple">No more waiting or asking around for information your room is where you need to be</string>
+    <string name="onboarding_description_project">with 4seasons Hotel</string>
+
 </resources>

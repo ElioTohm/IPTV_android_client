@@ -1,20 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="xms.com.smarttv">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="xms.com.smarttv">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
-    <uses-feature android:name="android.hardware.touchscreen" android:required="false" />
-    <uses-feature android:name="android.software.leanback" android:required="true" />
+    <uses-feature
+        android:name="android.hardware.touchscreen"
+        android:required="false" />
+    <uses-feature
+        android:name="android.software.leanback"
+        android:required="true" />
 
-    <application android:allowBackup="true" android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name" android:supportsRtl="true"
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
         android:theme="@style/Theme.Leanback">
-        <activity android:name=".MainActivity" android:banner="@drawable/app_icon_your_company"
-            android:icon="@drawable/app_icon_your_company" android:label="@string/app_name"
-            android:logo="@drawable/app_icon_your_company" android:screenOrientation="landscape">
+        <activity
+            android:name=".MainActivity"
+            android:banner="@drawable/app_icon_your_company"
+            android:icon="@drawable/app_icon_your_company"
+            android:label="@string/app_name"
+            android:logo="@drawable/app_icon_your_company"
+            android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.HOME" />
@@ -23,13 +36,18 @@
         </activity>
         <activity android:name=".DetailsActivity" />
         <activity android:name=".BrowseErrorActivity" />
-
         <activity android:name="xms.com.xmsplayer.UdpPlayerActivity">
             <intent-filter>
-                <action android:name="xms.com.xmsplayer.UdpPlayerActivity"/>
-                <category android:name="android.intent.category.DEFAULT"/>
+                <action android:name="xms.com.xmsplayer.UdpPlayerActivity" />
+
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity android:name=".UI.OnboardingActivity"
+            android:enabled="true"
+            android:exported="true"
+            android:theme="@style/Theme.Leanback.Onboarding"
+            ></activity>
     </application>
 
 </manifest>
