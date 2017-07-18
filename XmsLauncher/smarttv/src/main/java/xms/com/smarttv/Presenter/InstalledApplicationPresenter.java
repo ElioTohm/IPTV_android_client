@@ -5,8 +5,7 @@ import android.support.v17.leanback.widget.ImageCardView;
 import android.support.v17.leanback.widget.Presenter;
 import android.util.Log;
 import android.view.ViewGroup;
-
-import com.bumptech.glide.Glide;
+import android.widget.ImageView;
 
 import xms.com.smarttv.R;
 import xms.com.smarttv.objects.InstallAppsInfo;
@@ -46,6 +45,7 @@ public class InstalledApplicationPresenter extends Presenter {
 
         cardView.setFocusable(true);
         cardView.setFocusableInTouchMode(true);
+        cardView.setMainImageScaleType(ImageView.ScaleType.FIT_CENTER);
         updateCardBackgroundColor(cardView, false);
         return new Presenter.ViewHolder(cardView);
     }
@@ -60,13 +60,7 @@ public class InstalledApplicationPresenter extends Presenter {
         cardView.setTitleText(installAppsInfo.getAppname());
         cardView.setContentText(installAppsInfo.getVersionName());
         cardView.setMainImageDimensions(CARD_WIDTH, CARD_HEIGHT);
-        Glide.with(viewHolder.view.getContext())
-                .load("")
-                .placeholder(installAppsInfo.getIcon())
-                .centerCrop()
-                .error(mDefaultCardImage)
-                .into(cardView.getMainImageView());
-
+        cardView.getMainImageView().setImageDrawable(installAppsInfo.getIcon());
     }
 
 

@@ -96,7 +96,7 @@ public class MainFragment extends BrowseFragment {
     }
 
 
-    private ArrayList<InstallAppsInfo> getInstalledApps(boolean getSysPackages) throws PackageManager.NameNotFoundException {
+    private ArrayList<InstallAppsInfo> getInstalledApps() throws PackageManager.NameNotFoundException {
         ArrayList<InstallAppsInfo> res = new ArrayList<InstallAppsInfo>();
 
         Activity thisactivity = getActivity();
@@ -108,7 +108,7 @@ public class MainFragment extends BrowseFragment {
         for(PackageInfo packinfo : packs) {
             ApplicationInfo ai = pm.getApplicationInfo(packinfo.packageName, 0);
 
-            if ((ai.flags & ApplicationInfo.FLAG_SYSTEM) == 0) {
+            if ((ai.flags & ApplicationInfo.FLAG_SYSTEM) == 0 && !packinfo.applicationInfo.loadLabel(thisactivity.getPackageManager()).toString().equals(getString(R.string.app_name))) {
                 InstallAppsInfo newInfo = new InstallAppsInfo();
                 newInfo.setAppname(packinfo.applicationInfo.loadLabel(thisactivity.getPackageManager()).toString());
                 newInfo.setPname(packinfo.packageName);
@@ -153,7 +153,7 @@ public class MainFragment extends BrowseFragment {
         ArrayObjectAdapter ApplistRowAdapter = new ArrayObjectAdapter(new InstalledApplicationPresenter());
 
         try {
-            installAppsInfos = getInstalledApps(false);
+            installAppsInfos = getInstalledApps();
             for (int j = 0; j < installAppsInfos.size(); j++) {
                 ApplistRowAdapter.add(installAppsInfos.get(j));
             }
@@ -163,7 +163,7 @@ public class MainFragment extends BrowseFragment {
 
         mRowsAdapter.add(new ListRow(new HeaderItem(i, "Applications"), ApplistRowAdapter));
 
-        HeaderItem gridHeader = new HeaderItem(i, "PREFERENCES");
+        HeaderItem gridHeader = new HeaderItem(i, "Preferences");
 
         GridItemPresenter mGridPresenter = new GridItemPresenter();
         ArrayObjectAdapter gridRowAdapter = new ArrayObjectAdapter(mGridPresenter);
