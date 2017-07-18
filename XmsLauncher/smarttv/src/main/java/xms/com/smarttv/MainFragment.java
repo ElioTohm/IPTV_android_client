@@ -15,13 +15,18 @@
 package xms.com.smarttv;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -52,6 +57,10 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 
+import xms.com.smarttv.Presenter.CardPresenter;
+import xms.com.smarttv.Presenter.InstalledApplicationPresenter;
+import xms.com.smarttv.ojects.InstallAppsInfo;
+
 public class MainFragment extends BrowseFragment {
     private static final String TAG = "MainFragment";
 
@@ -81,6 +90,33 @@ public class MainFragment extends BrowseFragment {
         loadRows();
 
         setupEventListeners();
+
+    }
+
+
+    private ArrayList<InstallAppsInfo> getInstalledApps(boolean getSysPackages) throws PackageManager.NameNotFoundException {
+        ArrayList<InstallAppsInfo> res = new ArrayList<InstallAppsInfo>();
+
+        Activity thisactivity = getActivity();
+
+        List<PackageInfo> packs = thisactivity.getPackageManager().getInstalledPackages(0);
+
+        PackageManager pm = thisactivity.getPackageManager();
+
+        for(PackageInfo packinfo : packs) {
+            ApplicationInfo ai = pm.getApplicationInfo(packinfo.packageName, 0);
+
+            if ((ai.flags & ApplicationInfo.FLAG_SYSTEM) == 0) {
+                InstallAppsInfo newInfo = new InstallAppsInfo();
+                newInfo.setAppname(packinfo.applicationInfo.loadLabel(thisactivity.getPackageManager()).toString());
+                newInfo.setPname(packinfo.packageName);
+                newInfo.setVersionName(packinfo.versionName);
+                newInfo.setVersionCode(packinfo.versionCode);
+                newInfo.setIcon(packinfo.applicationInfo.loadIcon(thisactivity.getPackageManager()));
+                res.add(newInfo);
+            }
+        }
+        return res;
     }
 
     @Override
@@ -110,6 +146,20 @@ public class MainFragment extends BrowseFragment {
             HeaderItem header = new HeaderItem(i, MovieList.MOVIE_CATEGORY[i]);
             mRowsAdapter.add(new ListRow(header, listRowAdapter));
         }
+
+        ArrayList<InstallAppsInfo> installAppsInfos;
+        ArrayObjectAdapter ApplistRowAdapter = new ArrayObjectAdapter(new InstalledApplicationPresenter());
+
+        try {
+            installAppsInfos = getInstalledApps(false);
+            for (int j = 0; j < installAppsInfos.size(); j++) {
+                ApplistRowAdapter.add(installAppsInfos.get(j));
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        mRowsAdapter.add(new ListRow(new HeaderItem(i, "Applications"), ApplistRowAdapter));
 
         HeaderItem gridHeader = new HeaderItem(i, "PREFERENCES");
 
@@ -209,6 +259,13 @@ public class MainFragment extends BrowseFragment {
                 } else {
                     startActivityForResult(new Intent(android.provider.Settings.ACTION_SETTINGS), 0);
                 }
+            } else if (item instanceof InstallAppsInfo) {
+                InstallAppsInfo installAppsInfo = (InstallAppsInfo) item;
+
+                Context ctx = getActivity(); // or you can replace **'this'** with your **ActivityName.this**
+                Intent i = ctx.getPackageManager().getLaunchIntentForPackage(installAppsInfo.getPname());
+                ctx.startActivity(i);
+
             }
         }
     }

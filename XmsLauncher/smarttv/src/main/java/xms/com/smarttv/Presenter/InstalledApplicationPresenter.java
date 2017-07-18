@@ -1,18 +1,4 @@
-/*
- * Copyright (C) 2014 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
- * in compliance with the License. You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under the License
- * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
- * or implied. See the License for the specific language governing permissions and limitations under
- * the License.
- */
-
-package xms.com.smarttv;
+package xms.com.smarttv.Presenter;
 
 import android.graphics.drawable.Drawable;
 import android.support.v17.leanback.widget.ImageCardView;
@@ -21,15 +7,15 @@ import android.util.Log;
 import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 
-/*
- * A CardPresenter is used to generate Views and bind Objects to them on demand.
- * It contains an Image CardView
- */
-public class CardPresenter extends Presenter {
+import xms.com.smarttv.R;
+import xms.com.smarttv.ojects.InstallAppsInfo;
+
+public class InstalledApplicationPresenter extends Presenter {
     private static final String TAG = "CardPresenter";
 
-    private static final int CARD_WIDTH = 313;
+    private static final int CARD_WIDTH = 376;
     private static final int CARD_HEIGHT = 176;
     private static int sSelectedBackgroundColor;
     private static int sDefaultBackgroundColor;
@@ -44,7 +30,7 @@ public class CardPresenter extends Presenter {
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent) {
+    public Presenter.ViewHolder onCreateViewHolder(ViewGroup parent) {
         Log.d(TAG, "onCreateViewHolder");
 
         sDefaultBackgroundColor = parent.getResources().getColor(R.color.default_background);
@@ -62,26 +48,28 @@ public class CardPresenter extends Presenter {
         cardView.setFocusable(true);
         cardView.setFocusableInTouchMode(true);
         updateCardBackgroundColor(cardView, false);
-        return new ViewHolder(cardView);
+        return new Presenter.ViewHolder(cardView);
     }
 
     @Override
     public void onBindViewHolder(Presenter.ViewHolder viewHolder, Object item) {
-        Movie movie = (Movie) item;
+        InstallAppsInfo installAppsInfo = (InstallAppsInfo) item;
         ImageCardView cardView = (ImageCardView) viewHolder.view;
 
         Log.d(TAG, "onBindViewHolder");
-        if (movie.getCardImageUrl() != null) {
-            cardView.setTitleText(movie.getTitle());
-            cardView.setContentText(movie.getStudio());
-            cardView.setMainImageDimensions(CARD_WIDTH, CARD_HEIGHT);
-            Glide.with(viewHolder.view.getContext())
-                    .load(movie.getCardImageUrl())
-                    .centerCrop()
-                    .error(mDefaultCardImage)
-                    .into(cardView.getMainImageView());
-        }
+
+        cardView.setTitleText(installAppsInfo.getAppname());
+        cardView.setContentText(installAppsInfo.getVersionName());
+        cardView.setMainImageDimensions(CARD_WIDTH, CARD_HEIGHT);
+        Glide.with(viewHolder.view.getContext())
+                .load("")
+                .placeholder(installAppsInfo.getIcon())
+                .centerCrop()
+                .error(mDefaultCardImage)
+                .into(cardView.getMainImageView());
+
     }
+
 
     @Override
     public void onUnbindViewHolder(Presenter.ViewHolder viewHolder) {
