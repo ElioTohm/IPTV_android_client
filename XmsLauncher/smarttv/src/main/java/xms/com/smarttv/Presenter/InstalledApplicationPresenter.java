@@ -7,10 +7,9 @@ import android.util.Log;
 import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.BitmapImageViewTarget;
 
 import xms.com.smarttv.R;
-import xms.com.smarttv.ojects.InstallAppsInfo;
+import xms.com.smarttv.objects.InstallAppsInfo;
 
 public class InstalledApplicationPresenter extends Presenter {
     private static final String TAG = "CardPresenter";

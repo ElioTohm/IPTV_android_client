@@ -22,7 +22,7 @@ import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
 
-import xms.com.smarttv.Movie;
+import xms.com.smarttv.objects.Movie;
 import xms.com.smarttv.R;
 
 /*

@@ -12,7 +12,7 @@
  * the License.
  */
 
-package xms.com.smarttv;
+package xms.com.smarttv.objects;
 
 import android.util.Log;
 

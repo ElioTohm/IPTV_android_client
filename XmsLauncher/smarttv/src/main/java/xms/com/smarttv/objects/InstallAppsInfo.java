@@ -1,4 +1,4 @@
-package xms.com.smarttv.ojects;
+package xms.com.smarttv.objects;
 
 import android.graphics.drawable.Drawable;
 
