@@ -47,6 +47,8 @@ import java.util.Collections;
 import java.util.List;
 
 import xms.com.smarttv.Presenter.CardPresenter;
+import xms.com.smarttv.objects.Movie;
+import xms.com.smarttv.objects.MovieList;
 
 /*
  * LeanbackDetailsFragment extends DetailsFragment, a Wrapper fragment for leanback details screens.

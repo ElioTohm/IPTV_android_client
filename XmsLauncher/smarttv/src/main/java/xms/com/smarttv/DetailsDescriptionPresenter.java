@@ -16,6 +16,8 @@ package xms.com.smarttv;
 
 import android.support.v17.leanback.widget.AbstractDetailsDescriptionPresenter;
 
+import xms.com.smarttv.objects.Movie;
+
 public class DetailsDescriptionPresenter extends AbstractDetailsDescriptionPresenter {
 
     @Override

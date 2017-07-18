@@ -59,7 +59,9 @@ import com.bumptech.glide.request.target.SimpleTarget;
 
 import xms.com.smarttv.Presenter.CardPresenter;
 import xms.com.smarttv.Presenter.InstalledApplicationPresenter;
-import xms.com.smarttv.ojects.InstallAppsInfo;
+import xms.com.smarttv.objects.InstallAppsInfo;
+import xms.com.smarttv.objects.Movie;
+import xms.com.smarttv.objects.MovieList;
 
 public class MainFragment extends BrowseFragment {
     private static final String TAG = "MainFragment";

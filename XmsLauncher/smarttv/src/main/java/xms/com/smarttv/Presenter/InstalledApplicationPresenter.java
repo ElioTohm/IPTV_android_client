@@ -14,7 +14,7 @@ import xms.com.smarttv.objects.InstallAppsInfo;
 public class InstalledApplicationPresenter extends Presenter {
     private static final String TAG = "CardPresenter";
 
-    private static final int CARD_WIDTH = 376;
+    private static final int CARD_WIDTH = 313;
     private static final int CARD_HEIGHT = 176;
     private static int sSelectedBackgroundColor;
     private static int sDefaultBackgroundColor;
