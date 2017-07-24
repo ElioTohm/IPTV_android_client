@@ -1,4 +1,4 @@
-package xms.com.xmsplayer;
+package xms.com.xmsplayer.objects;
 
 import android.net.Uri;
 
@@ -27,10 +27,6 @@ public class Channel {
         return uri;
     }
 
-    public void setUri(Uri uri) {
-        this.uri = uri;
-    }
-
     public String getDescription() {
         return description;
     }
@@ -43,7 +39,4 @@ public class Channel {
         return windowid;
     }
 
-    public void setWindowid(int windowid) {
-        this.windowid = windowid;
-    }
 }

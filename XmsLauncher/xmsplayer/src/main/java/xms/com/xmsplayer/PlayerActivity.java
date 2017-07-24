@@ -2,16 +2,18 @@ package xms.com.xmsplayer;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.SurfaceView;
 import android.view.View;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -34,9 +36,6 @@ import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.UdpDataSource;
 import com.google.android.exoplayer2.util.Util;
 
-import org.json.JSONObject;
-
-import java.lang.reflect.Array;
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
@@ -44,8 +43,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import xms.com.xmsplayer.adapter.ChannelAdapter;
+import xms.com.xmsplayer.adapter.GridSpacingItemDecoration;
+import xms.com.xmsplayer.adapter.RecyclerTouchListener;
+import xms.com.xmsplayer.objects.Channel;
 
 public class PlayerActivity extends AppCompatActivity {
+    String TAG  = "xms";
     private SimpleExoPlayer player;
     private TextView channelname;
     boolean playWhenReady;
@@ -157,6 +160,48 @@ public class PlayerActivity extends AppCompatActivity {
         }
     }
 
+    private void previouschannel() {
+        Timeline currentTimeline = player.getCurrentTimeline();
+        if (currentTimeline.isEmpty()) {
+            return;
+        }
+
+        int currentWindowIndex = player.getCurrentWindowIndex();
+
+        if (currentWindowIndex > 0 ) {
+            player.seekTo(currentWindowIndex - 1, 0);
+        } else {
+            player.seekTo(currentTimeline.getWindowCount() - 1, 0);
+        }
+    }
+
+    private void nextchannel() {
+        Timeline currentTimeline = player.getCurrentTimeline();
+        if (currentTimeline.isEmpty()) {
+            return;
+        }
+        int currentWindowIndex = player.getCurrentWindowIndex();
+        if (currentWindowIndex < currentTimeline.getWindowCount() - 1) {
+            player.seekTo(currentWindowIndex + 1, 0);
+        } else {
+            player.seekTo(0, 0);
+        }
+    }
+
+    private void showChannelInfo(Channel channel) {
+        currentChannel.setText(String.valueOf(channel.getWindowid() + 1));
+        channelName.setText(channel.getName());
+        channelInfo.setVisibility(View.VISIBLE);
+        Handler mChannelInfoHandler=new Handler();
+        Runnable mChannelInfoRunnable=new Runnable() {
+            public void run() {
+                channelInfo.setVisibility(View.INVISIBLE);
+            }
+        };
+        mChannelInfoHandler.removeCallbacks(mChannelInfoRunnable);
+        mChannelInfoHandler.postDelayed(mChannelInfoRunnable, 5000);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -167,7 +212,7 @@ public class PlayerActivity extends AppCompatActivity {
         currentChannel = (TextView) findViewById(R.id.current_channel);
         channelName = (TextView) findViewById(R.id.channel_name);
         channelIco= (ImageView) findViewById(R.id.channel_ico);
-        programLayout = (RecyclerView) findViewById(R.id.recycler_view_genre);
+        programLayout = (RecyclerView) findViewById(R.id.channel_recyclerview);
         channelArrayList = new ArrayList<>();
 
         Intent intent = getIntent();
@@ -183,12 +228,26 @@ public class PlayerActivity extends AppCompatActivity {
             Channel channel = new Channel(Uri.parse(uriStrings[i]), channelname[i], "", i);
             channelArrayList.add(channel);
         }
+
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+        programLayout.setLayoutManager(mLayoutManager);
+        programLayout.setItemAnimator(new DefaultItemAnimator());
+        programLayout.addItemDecoration(new GridSpacingItemDecoration(this, 1, 2, false));
         channelAdapter = new ChannelAdapter(this, channelArrayList);
         programLayout.setAdapter(channelAdapter);
 
         if (CookieHandler.getDefault() != DEFAULT_COOKIE_MANAGER) {
             CookieHandler.setDefault(DEFAULT_COOKIE_MANAGER);
         }
+
+        programLayout.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), programLayout, new RecyclerTouchListener.ClickListener() {
+            @Override
+            public void onTouch(View view, int position) {
+                player.seekTo(channelAdapter.getChannel(position).getWindowid(), 0);
+                showChannelInfo(channelAdapter.getChannel(position));
+            }
+        }));
+
     }
 
     @SuppressLint("InlinedApi")
@@ -243,70 +302,26 @@ public class PlayerActivity extends AppCompatActivity {
                 case KeyEvent.KEYCODE_CHANNEL_UP:
                     nextchannel();
                     showChannelInfo(channelArrayList.get(player.getCurrentWindowIndex()));
-                    Log.v("myApp", String.valueOf(player.getCurrentWindowIndex()));
-                    break;
+                    Log.d(TAG, String.valueOf(player.getCurrentWindowIndex()));
+                    return true;
                 case KeyEvent.KEYCODE_CHANNEL_DOWN:
                     previouschannel();
                     showChannelInfo(channelArrayList.get(player.getCurrentWindowIndex()));
-                    Log.v("myApp", String.valueOf(player.getCurrentWindowIndex()));
-                    break;
+                    Log.d(TAG, String.valueOf(player.getCurrentWindowIndex()));
+                    return true;
                 case KeyEvent.KEYCODE_MENU:
                     if (RecyclerView.VISIBLE == programLayout.getVisibility()) {
-                        programLayout.setVisibility(RecyclerView.INVISIBLE);
+                        programLayout.setVisibility(RecyclerView.GONE);
                     } else {
                         programLayout.setVisibility(RecyclerView.VISIBLE);
+                        programLayout.setFocusable(true);
                     }
-                    break;
+                    return true;
                 case KeyEvent.KEYCODE_BACK:
                     finish();
-                default:
-                    return false;
             }
         }
-        return false;
+        return super.dispatchKeyEvent(event);
     }
-
-    private void previouschannel() {
-        Timeline currentTimeline = player.getCurrentTimeline();
-        if (currentTimeline.isEmpty()) {
-            return;
-        }
-
-        int currentWindowIndex = player.getCurrentWindowIndex();
-
-        if (currentWindowIndex > 0 ) {
-            player.seekTo(currentWindowIndex - 1, 0);
-        } else {
-            player.seekTo(currentTimeline.getWindowCount() - 1, 0);
-        }
-    }
-
-    private void nextchannel() {
-        Timeline currentTimeline = player.getCurrentTimeline();
-        if (currentTimeline.isEmpty()) {
-            return;
-        }
-        int currentWindowIndex = player.getCurrentWindowIndex();
-        if (currentWindowIndex < currentTimeline.getWindowCount() - 1) {
-            player.seekTo(currentWindowIndex + 1, 0);
-        } else {
-            player.seekTo(0, 0);
-        }
-    }
-
-    private void showChannelInfo(Channel channel) {
-        currentChannel.setText(String.valueOf(channel.getWindowid() + 1));
-        channelName.setText(channel.getName());
-        channelInfo.setVisibility(View.VISIBLE);
-        Handler mChannelInfoHandler=new Handler();
-        Runnable mChannelInfoRunnable=new Runnable() {
-            public void run() {
-                channelInfo.setVisibility(View.INVISIBLE);
-            }
-        };
-        mChannelInfoHandler.removeCallbacks(mChannelInfoRunnable);
-        mChannelInfoHandler.postDelayed(mChannelInfoRunnable, 5000);
-    }
-
 
 }

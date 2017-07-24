@@ -58,10 +58,16 @@
 
     </RelativeLayout>
 
-    <include
+
+    <android.support.v7.widget.RecyclerView
         android:layout_height="wrap_content"
         android:layout_width="200dp"
-        android:layout_margin="20dp"
-        layout="@layout/program_list"/>
+        android:id="@+id/channel_recyclerview"
+        android:layout_marginTop="25dp"
+        android:focusableInTouchMode="true"
+        android:visibility="gone"
+        android:layout_alignParentTop="true"
+        android:background="@color/BlackTransparent">
+    </android.support.v7.widget.RecyclerView>
 
 </RelativeLayout>

@@ -172,6 +172,11 @@ public class MainFragment extends BrowseFragment {
         mRowsAdapter.add(new ListRow(gridHeader, gridRowAdapter));
 
         setAdapter(mRowsAdapter);
+        gridRowAdapter.add(getString(R.string.error_fragment));
+        gridRowAdapter.add(getResources().getString(R.string.personal_settings));
+        mRowsAdapter.add(new ListRow(gridHeader, gridRowAdapter));
+
+        setAdapter(mRowsAdapter);
 
     }
 
