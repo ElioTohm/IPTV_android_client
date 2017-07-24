@@ -3,21 +3,24 @@ package xms.com.xmsplayer;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.SurfaceView;
 import android.view.View;
+import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.TextView;
 
-import com.google.android.exoplayer2.C;
-import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlayerFactory;
-import com.google.android.exoplayer2.LoadControl;
 import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.extractor.Extractor;
+import com.google.android.exoplayer2.Timeline;
+import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.extractor.ExtractorsFactory;
-import com.google.android.exoplayer2.extractor.ts.DefaultTsPayloadReaderFactory;
-import com.google.android.exoplayer2.extractor.ts.TsExtractor;
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
@@ -27,20 +30,24 @@ import com.google.android.exoplayer2.trackselection.MappingTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.DataSource;
-import com.google.android.exoplayer2.upstream.DefaultAllocator;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.UdpDataSource;
-import com.google.android.exoplayer2.util.TimestampAdjuster;
 import com.google.android.exoplayer2.util.Util;
 
+import org.json.JSONObject;
+
+import java.lang.reflect.Array;
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
+import java.util.ArrayList;
+import java.util.List;
 
-import static com.google.android.exoplayer2.extractor.ts.TsExtractor.MODE_SINGLE_PMT;
+import xms.com.xmsplayer.adapter.ChannelAdapter;
 
-public class UdpPlayerActivity extends AppCompatActivity {
+public class PlayerActivity extends AppCompatActivity {
     private SimpleExoPlayer player;
+    private TextView channelname;
     boolean playWhenReady;
     int currentWindow;
     long playbackPosition;
@@ -48,6 +55,15 @@ public class UdpPlayerActivity extends AppCompatActivity {
     private SurfaceView playerView;
     public static final String URI_LIST_EXTRA = "uri_list";
     private static final CookieManager DEFAULT_COOKIE_MANAGER;
+    private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
+    private View channelInfo;
+    private TextView currentChannel;
+    private TextView channelName;
+    private ImageView channelIco;
+    private RecyclerView programLayout;
+    private ChannelAdapter channelAdapter;
+    private List<Channel> channelArrayList;
+    private String[] uriStrings;
 
     static {
         DEFAULT_COOKIE_MANAGER = new CookieManager();
@@ -68,19 +84,17 @@ public class UdpPlayerActivity extends AppCompatActivity {
             }
         };
 
-        // Initialize ExtractorFactory for UDP datasource
-        ExtractorsFactory tsExtractorFactory = new ExtractorsFactory() {
-            @Override
-            public Extractor[] createExtractors() {
-                return new TsExtractor[]{new TsExtractor(MODE_SINGLE_PMT,
-                        new TimestampAdjuster(0), new DefaultTsPayloadReaderFactory())};
-            }
-        };
+        // Initialize ExtractorFactory
+        ExtractorsFactory tsExtractorFactory = new DefaultExtractorsFactory();
 
         // Loop on URI list to create individual Media source
         MediaSource[] mediaSources = new MediaSource[uris.length];
         for (int i = 0; i < uris.length; i++) {
-            mediaSources[i] = new ExtractorMediaSource(uris[i], udsf, tsExtractorFactory, null, null);
+            mediaSources[i] = new ExtractorMediaSource(uris[i],
+                                    udsf,
+                                    tsExtractorFactory,
+                                    null,
+                                    null);
         }
 
         /*
@@ -95,13 +109,10 @@ public class UdpPlayerActivity extends AppCompatActivity {
         /*
         * Initialize ExoplayerFactory
         * */
-        Intent intent = getIntent();
 
-        // Create List of URI fetched from intent
-        String[] uriStrings = intent.getStringArrayExtra(URI_LIST_EXTRA);
-        Uri[] uris = new Uri[uriStrings.length];
-        for (int i = 0; i < uriStrings.length; i++) {
-            uris[i] = Uri.parse(uriStrings[i]);
+        Uri[] uris = new Uri[channelArrayList.size()];
+        for (int i = 0; i < channelArrayList.size(); i++) {
+            uris[i] = channelArrayList.get(i).getUri();
         }
 
         //default BandwidthMeter
@@ -130,6 +141,7 @@ public class UdpPlayerActivity extends AppCompatActivity {
         player.setVideoSurfaceView(playerView);
         player.prepare(buildUDPMediaSource(uris));
         player.setPlayWhenReady(true);
+        showChannelInfo(channelArrayList.get(player.getCurrentWindowIndex()));
     }
 
     private void releasePlayer() {
@@ -149,7 +161,31 @@ public class UdpPlayerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
+
         playerView = (SurfaceView) findViewById(R.id.surfaceView2);
+        channelInfo = (View) findViewById(R.id.channelInfo);
+        currentChannel = (TextView) findViewById(R.id.current_channel);
+        channelName = (TextView) findViewById(R.id.channel_name);
+        channelIco= (ImageView) findViewById(R.id.channel_ico);
+        programLayout = (RecyclerView) findViewById(R.id.recycler_view_genre);
+        channelArrayList = new ArrayList<>();
+
+        Intent intent = getIntent();
+        // get List of URI fetched from intent
+        uriStrings = intent.getStringArrayExtra(URI_LIST_EXTRA);
+
+        /*
+        * todo remove the following and fetch data from server
+        */
+        String[] channelname = {"LBCI", "OTV", "El Jadid", "MTV", "Manar"};
+
+        for (int i = 0; i < uriStrings.length; i++) {
+            Channel channel = new Channel(Uri.parse(uriStrings[i]), channelname[i], "", i);
+            channelArrayList.add(channel);
+        }
+        channelAdapter = new ChannelAdapter(this, channelArrayList);
+        programLayout.setAdapter(channelAdapter);
+
         if (CookieHandler.getDefault() != DEFAULT_COOKIE_MANAGER) {
             CookieHandler.setDefault(DEFAULT_COOKIE_MANAGER);
         }
@@ -197,5 +233,80 @@ public class UdpPlayerActivity extends AppCompatActivity {
             releasePlayer();
         }
     }
+
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        int action = event.getAction();
+        int keyCode = event.getKeyCode();
+        if (action == KeyEvent.ACTION_UP) {
+            switch (keyCode) {
+                case KeyEvent.KEYCODE_CHANNEL_UP:
+                    nextchannel();
+                    showChannelInfo(channelArrayList.get(player.getCurrentWindowIndex()));
+                    Log.v("myApp", String.valueOf(player.getCurrentWindowIndex()));
+                    break;
+                case KeyEvent.KEYCODE_CHANNEL_DOWN:
+                    previouschannel();
+                    showChannelInfo(channelArrayList.get(player.getCurrentWindowIndex()));
+                    Log.v("myApp", String.valueOf(player.getCurrentWindowIndex()));
+                    break;
+                case KeyEvent.KEYCODE_MENU:
+                    if (RecyclerView.VISIBLE == programLayout.getVisibility()) {
+                        programLayout.setVisibility(RecyclerView.INVISIBLE);
+                    } else {
+                        programLayout.setVisibility(RecyclerView.VISIBLE);
+                    }
+                    break;
+                case KeyEvent.KEYCODE_BACK:
+                    finish();
+                default:
+                    return false;
+            }
+        }
+        return false;
+    }
+
+    private void previouschannel() {
+        Timeline currentTimeline = player.getCurrentTimeline();
+        if (currentTimeline.isEmpty()) {
+            return;
+        }
+
+        int currentWindowIndex = player.getCurrentWindowIndex();
+
+        if (currentWindowIndex > 0 ) {
+            player.seekTo(currentWindowIndex - 1, 0);
+        } else {
+            player.seekTo(currentTimeline.getWindowCount() - 1, 0);
+        }
+    }
+
+    private void nextchannel() {
+        Timeline currentTimeline = player.getCurrentTimeline();
+        if (currentTimeline.isEmpty()) {
+            return;
+        }
+        int currentWindowIndex = player.getCurrentWindowIndex();
+        if (currentWindowIndex < currentTimeline.getWindowCount() - 1) {
+            player.seekTo(currentWindowIndex + 1, 0);
+        } else {
+            player.seekTo(0, 0);
+        }
+    }
+
+    private void showChannelInfo(Channel channel) {
+        currentChannel.setText(String.valueOf(channel.getWindowid() + 1));
+        channelName.setText(channel.getName());
+        channelInfo.setVisibility(View.VISIBLE);
+        Handler mChannelInfoHandler=new Handler();
+        Runnable mChannelInfoRunnable=new Runnable() {
+            public void run() {
+                channelInfo.setVisibility(View.INVISIBLE);
+            }
+        };
+        mChannelInfoHandler.removeCallbacks(mChannelInfoRunnable);
+        mChannelInfoHandler.postDelayed(mChannelInfoRunnable, 5000);
+    }
+
 
 }

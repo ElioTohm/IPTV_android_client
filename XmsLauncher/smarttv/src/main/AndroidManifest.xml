@@ -36,7 +36,7 @@
         </activity>
         <activity android:name=".DetailsActivity" />
         <activity android:name=".BrowseErrorActivity" />
-        <activity android:name="xms.com.xmsplayer.UdpPlayerActivity">
+        <activity android:name="xms.com.xmsplayer.PlayerActivity">
             <intent-filter>
                 <action android:name="xms.com.xmsplayer.UdpPlayerActivity" />
 

@@ -39,7 +39,12 @@
     <string name="oops">Oops</string>
 
     <!--TEST URI-->
-    <string name="URI_UDP_TEST">upd://@224.1.1.30:1234</string>
+    <string name="URI_UDP_TEST">udp://@224.1.1.30:1234</string>
+    <string name="URI_UDP_TEST1">udp://@224.1.1.26:1234</string>
+    <string name="URI_UDP_TEST2">udp://@224.1.1.27:1234</string>
+    <string name="URI_UDP_TEST3">udp://@224.1.1.28:1234</string>
+    <string name="URI_UDP_TEST4">udp://@224.1.1.29:1234</string>
+    <string name="URI_UDP_TEST5">udp://@224.1.242.4</string>
 
     <!--onboarding-->
     <string name="onboarding_title_welcome">Welcome to XMS pro Launcher</string>

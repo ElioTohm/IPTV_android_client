@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.RecyclerView
+    android:id="@+id/recycler_view_genre"
+    android:layout_width="200dp"
+    android:layout_margin="20dp"
+    android:layout_height="wrap_content"
+    android:scrollbars="vertical"
+    android:layout_alignParentBottom="false"
+    android:layout_alignParentLeft="false"
+    android:layout_alignParentRight="false"
+    android:layout_alignParentTop="false"
+    android:layout_centerHorizontal="false"
+    android:layout_centerInParent="true"
+    android:layout_centerVertical="false"
+    android:orientation="horizontal"
+    android:stretchMode="columnWidth"
+    android:verticalSpacing="10dp"
+    android:background="@color/BlackTransparent"
+    android:gravity="top"
+    android:visibility="invisible"
+    xmlns:android="http://schemas.android.com/apk/res/android" />
