@@ -2,18 +2,15 @@ package xms.com.xmsplayer;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.SurfaceView;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -36,21 +33,16 @@ import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.UdpDataSource;
 import com.google.android.exoplayer2.util.Util;
 
-import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
 import java.util.ArrayList;
 import java.util.List;
 
-import xms.com.xmsplayer.adapter.ChannelAdapter;
-import xms.com.xmsplayer.adapter.GridSpacingItemDecoration;
-import xms.com.xmsplayer.adapter.RecyclerTouchListener;
 import xms.com.xmsplayer.objects.Channel;
 
 public class PlayerActivity extends AppCompatActivity {
     String TAG  = "xms";
     private SimpleExoPlayer player;
-    private TextView channelname;
     boolean playWhenReady;
     int currentWindow;
     long playbackPosition;
@@ -63,10 +55,9 @@ public class PlayerActivity extends AppCompatActivity {
     private TextView currentChannel;
     private TextView channelName;
     private ImageView channelIco;
-    private RecyclerView programLayout;
-    private ChannelAdapter channelAdapter;
     private List<Channel> channelArrayList;
     private String[] uriStrings;
+    private FrameLayout channelList_frameLayout;
 
     static {
         DEFAULT_COOKIE_MANAGER = new CookieManager();
@@ -202,6 +193,11 @@ public class PlayerActivity extends AppCompatActivity {
         mChannelInfoHandler.postDelayed(mChannelInfoRunnable, 5000);
     }
 
+    public void itemClicked(Channel channel) {
+        player.seekTo(channel.getWindowid(), 0);
+        showChannelInfo(channel);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -212,10 +208,11 @@ public class PlayerActivity extends AppCompatActivity {
         currentChannel = (TextView) findViewById(R.id.current_channel);
         channelName = (TextView) findViewById(R.id.channel_name);
         channelIco= (ImageView) findViewById(R.id.channel_ico);
-        programLayout = (RecyclerView) findViewById(R.id.channel_recyclerview);
         channelArrayList = new ArrayList<>();
+        channelList_frameLayout = (FrameLayout) findViewById(R.id.main_channellist_fragment);
 
         Intent intent = getIntent();
+
         // get List of URI fetched from intent
         uriStrings = intent.getStringArrayExtra(URI_LIST_EXTRA);
 
@@ -229,24 +226,6 @@ public class PlayerActivity extends AppCompatActivity {
             channelArrayList.add(channel);
         }
 
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
-        programLayout.setLayoutManager(mLayoutManager);
-        programLayout.setItemAnimator(new DefaultItemAnimator());
-        programLayout.addItemDecoration(new GridSpacingItemDecoration(this, 1, 2, false));
-        channelAdapter = new ChannelAdapter(this, channelArrayList);
-        programLayout.setAdapter(channelAdapter);
-
-        if (CookieHandler.getDefault() != DEFAULT_COOKIE_MANAGER) {
-            CookieHandler.setDefault(DEFAULT_COOKIE_MANAGER);
-        }
-
-        programLayout.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), programLayout, new RecyclerTouchListener.ClickListener() {
-            @Override
-            public void onTouch(View view, int position) {
-                player.seekTo(channelAdapter.getChannel(position).getWindowid(), 0);
-                showChannelInfo(channelAdapter.getChannel(position));
-            }
-        }));
 
     }
 
@@ -310,17 +289,19 @@ public class PlayerActivity extends AppCompatActivity {
                     Log.d(TAG, String.valueOf(player.getCurrentWindowIndex()));
                     return true;
                 case KeyEvent.KEYCODE_MENU:
-                    if (RecyclerView.VISIBLE == programLayout.getVisibility()) {
-                        programLayout.setVisibility(RecyclerView.GONE);
+
+                    if (FrameLayout.VISIBLE == channelList_frameLayout.getVisibility()) {
+                        channelList_frameLayout.setVisibility(FrameLayout.GONE);
                     } else {
-                        programLayout.setVisibility(RecyclerView.VISIBLE);
-                        programLayout.setFocusable(true);
+                        channelList_frameLayout.setVisibility(FrameLayout.VISIBLE);
                     }
                     return true;
                 case KeyEvent.KEYCODE_BACK:
                     finish();
+                    return super.dispatchKeyEvent(event);
             }
         }
+
         return super.dispatchKeyEvent(event);
     }
 

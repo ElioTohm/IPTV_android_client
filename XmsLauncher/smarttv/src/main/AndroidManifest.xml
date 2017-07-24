@@ -43,11 +43,11 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".UI.OnboardingActivity"
+        <activity
+            android:name=".UI.OnboardingActivity"
             android:enabled="true"
             android:exported="true"
-            android:theme="@style/Theme.Leanback.Onboarding"
-            ></activity>
+            android:theme="@style/Theme.Leanback.Onboarding" />
     </application>
 
 </manifest>

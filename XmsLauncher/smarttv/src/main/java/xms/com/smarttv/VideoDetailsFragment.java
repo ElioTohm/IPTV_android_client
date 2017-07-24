@@ -55,7 +55,7 @@ import xms.com.smarttv.objects.MovieList;
  * It shows a detailed view of video and its meta plus related videos.
  */
 public class VideoDetailsFragment extends DetailsFragment {
-    private static final String TAG = "VideoDetailsFragment";
+    private static final String TAG = "xms";
 
     private static final int ACTION_WATCH_TRAILER = 1;
     private static final int ACTION_RENT = 2;
