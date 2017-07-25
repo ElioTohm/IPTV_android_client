@@ -12,6 +12,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.exoplayer2.DefaultRenderersFactory;
@@ -52,12 +53,13 @@ public class PlayerActivity extends AppCompatActivity {
     private static final CookieManager DEFAULT_COOKIE_MANAGER;
     private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
     private View channelInfo;
-    private TextView currentChannel;
-    private TextView channelName;
+    private TextView currentChannel, channel_number_idicator, channelName;
     private ImageView channelIco;
     private List<Channel> channelArrayList;
     private String[] uriStrings;
     private FrameLayout channelList_frameLayout;
+    private int channellistSize;
+    private Runnable setchannelnumberRunnable;
 
     static {
         DEFAULT_COOKIE_MANAGER = new CookieManager();
@@ -193,9 +195,13 @@ public class PlayerActivity extends AppCompatActivity {
         mChannelInfoHandler.postDelayed(mChannelInfoRunnable, 5000);
     }
 
-    public void itemClicked(Channel channel) {
-        player.seekTo(channel.getWindowid(), 0);
-        showChannelInfo(channel);
+    public void changeChannel(int channelid) {
+        if(channelid <= channellistSize){
+            if (player.getCurrentWindowIndex() != channelid) {
+                player.seekTo(channelid, 0);
+            }
+            showChannelInfo(channelArrayList.get(channelid));
+        }
     }
 
     @Override
@@ -210,6 +216,7 @@ public class PlayerActivity extends AppCompatActivity {
         channelIco= (ImageView) findViewById(R.id.channel_ico);
         channelArrayList = new ArrayList<>();
         channelList_frameLayout = (FrameLayout) findViewById(R.id.main_channellist_fragment);
+        channel_number_idicator = (TextView) findViewById(R.id.channel_number_idicator);
 
         Intent intent = getIntent();
 
@@ -220,8 +227,8 @@ public class PlayerActivity extends AppCompatActivity {
         * todo remove the following and fetch data from server
         */
         String[] channelname = {"LBCI", "OTV", "El Jadid", "MTV", "Manar"};
-
-        for (int i = 0; i < uriStrings.length; i++) {
+        channellistSize = uriStrings.length;
+        for (int i = 0; i < channellistSize; i++) {
             Channel channel = new Channel(Uri.parse(uriStrings[i]), channelname[i], "", i);
             channelArrayList.add(channel);
         }
@@ -277,6 +284,7 @@ public class PlayerActivity extends AppCompatActivity {
         int action = event.getAction();
         int keyCode = event.getKeyCode();
         if (action == KeyEvent.ACTION_UP) {
+            int channel_numberpressed = 10;
             switch (keyCode) {
                 case KeyEvent.KEYCODE_CHANNEL_UP:
                     nextchannel();
@@ -288,6 +296,46 @@ public class PlayerActivity extends AppCompatActivity {
                     showChannelInfo(channelArrayList.get(player.getCurrentWindowIndex()));
                     Log.d(TAG, String.valueOf(player.getCurrentWindowIndex()));
                     return true;
+                case KeyEvent.KEYCODE_0:
+                    channel_numberpressed = 0;
+                    channel_number_idicator.setVisibility(View.VISIBLE);
+                    break;
+                case KeyEvent.KEYCODE_1:
+                    channel_numberpressed = 1;
+                    channel_number_idicator.setVisibility(View.VISIBLE);
+                    break;
+                case KeyEvent.KEYCODE_2:
+                    channel_numberpressed = 2;
+                    channel_number_idicator.setVisibility(View.VISIBLE);
+                    break;
+                case KeyEvent.KEYCODE_3:
+                    channel_numberpressed = 3;
+                    channel_number_idicator.setVisibility(View.VISIBLE);
+                    break;
+                case KeyEvent.KEYCODE_4:
+                    channel_numberpressed = 4;
+                    channel_number_idicator.setVisibility(View.VISIBLE);
+                    break;
+                case KeyEvent.KEYCODE_5:
+                    channel_numberpressed = 5;
+                    channel_number_idicator.setVisibility(View.VISIBLE);
+                    break;
+                case KeyEvent.KEYCODE_6:
+                    channel_numberpressed = 6;
+                    channel_number_idicator.setVisibility(View.VISIBLE);
+                    break;
+                case KeyEvent.KEYCODE_7:
+                    channel_numberpressed = 7;
+                    channel_number_idicator.setVisibility(View.VISIBLE);
+                    break;
+                case KeyEvent.KEYCODE_8:
+                    channel_numberpressed = 8;
+                    channel_number_idicator.setVisibility(View.VISIBLE);
+                    break;
+                case KeyEvent.KEYCODE_9:
+                    channel_numberpressed = 9;
+                    channel_number_idicator.setVisibility(View.VISIBLE);
+                    break;
                 case KeyEvent.KEYCODE_MENU:
 
                     if (FrameLayout.VISIBLE == channelList_frameLayout.getVisibility()) {
@@ -296,13 +344,28 @@ public class PlayerActivity extends AppCompatActivity {
                         channelList_frameLayout.setVisibility(FrameLayout.VISIBLE);
                     }
                     return true;
-                case KeyEvent.KEYCODE_BACK:
-                    finish();
-                    return super.dispatchKeyEvent(event);
+            }
+
+            if (channel_numberpressed < 10){
+                Handler setchannelnumberHandler = new Handler();
+                final int finalChannel_numberpressed = channel_numberpressed;
+                channel_number_idicator.setText(channel_number_idicator.getText() + String.valueOf(finalChannel_numberpressed));
+                setchannelnumberRunnable = new Runnable() {
+                    public void run() {
+                        if (!channel_number_idicator.getText().equals("")){
+                            changeChannel(Integer.parseInt((String) channel_number_idicator.getText()) - 1 );
+                            channel_number_idicator.setText("");
+                            channel_number_idicator.setVisibility(View.INVISIBLE);
+                        }
+                    }
+                };
+                setchannelnumberHandler.postDelayed(setchannelnumberRunnable , 2000);
+
             }
         }
 
         return super.dispatchKeyEvent(event);
     }
+
 
 }

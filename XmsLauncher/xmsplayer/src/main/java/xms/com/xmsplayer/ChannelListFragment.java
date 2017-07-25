@@ -1,37 +1,29 @@
 package xms.com.xmsplayer;
 
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v17.leanback.app.BrowseFragment;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
 import android.support.v17.leanback.widget.HeaderItem;
-import android.support.v17.leanback.widget.ImageCardView;
 import android.support.v17.leanback.widget.ListRow;
 import android.support.v17.leanback.widget.ListRowPresenter;
 import android.support.v17.leanback.widget.OnItemViewClickedListener;
 import android.support.v17.leanback.widget.Presenter;
 import android.support.v17.leanback.widget.Row;
 import android.support.v17.leanback.widget.RowPresenter;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import xms.com.xmsplayer.objects.Channel;
 
 public class ChannelListFragment extends BrowseFragment {
-    private static final int GRID_ITEM_WIDTH = 200;
+    private static final int GRID_ITEM_WIDTH = 175;
     private static final int GRID_ITEM_HEIGHT = 100;
     private ArrayObjectAdapter mRowsAdapter;
 
@@ -72,11 +64,11 @@ public class ChannelListFragment extends BrowseFragment {
     }
 
     private void setupUIElements() {
-        setHeadersState(HEADERS_DISABLED);
+        setHeadersState(HEADERS_ENABLED);
+        setHeadersTransitionOnBackEnabled(true);
         // set fastLane (or headers) background color
         setBrandColor(getResources().getColor(R.color.fastlane_background));
         // set search icon color
-        setSearchAffordanceColor(getResources().getColor(R.color.search_opaque));
     }
 
     private void loadRows() {
@@ -99,7 +91,7 @@ public class ChannelListFragment extends BrowseFragment {
             gridRowAdapter.add(list.get(i));
         }
 
-        mRowsAdapter.add(new ListRow(gridRowAdapter));
+        mRowsAdapter.add(new ListRow(new HeaderItem(0, "Local Channels"), gridRowAdapter));
 
         setAdapter(mRowsAdapter);
 
@@ -112,7 +104,7 @@ public class ChannelListFragment extends BrowseFragment {
             Log.e("xms", String.valueOf(item));
             if (item instanceof Channel) {
                 Channel channel = (Channel) item;
-                ((PlayerActivity)getActivity()).itemClicked(channel);
+                ((PlayerActivity)getActivity()).changeChannel(channel.getWindowid());
             }
         }
     }
