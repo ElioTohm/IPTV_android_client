@@ -14,7 +14,7 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -25,8 +25,8 @@ dependencies {
     compile project(':xmsplayer')
     compile project(':ffmpeg')
 
-    compile 'com.android.support:leanback-v17:25.3.1'
-    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support:leanback-v17:' + project.ext.supportLibraryVersion
+    compile 'com.android.support:appcompat-v7:' + project.ext.supportLibraryVersion
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
 }
