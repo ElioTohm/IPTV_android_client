@@ -1,4 +1,5 @@
-package xms.com.xmsplayer.objects;
+package com.XmsPro.xmsproplayer.data;
+
 
 import android.net.Uri;
 

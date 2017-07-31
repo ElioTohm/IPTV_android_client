@@ -185,7 +185,7 @@ public class VideoDetailsFragment extends DetailsFragment {
                                         getString(R.string.URI_UDP_TEST3),
                                         getString(R.string.URI_UDP_TEST4),
                                         };
-                    Intent intent = new Intent("xms.com.xmsplayer.UdpPlayerActivity");
+                    Intent intent = new Intent("com.XmsPro.xmsproplayer.TvPlayer");
                     intent.putExtra("uri_list", uris);
                     startActivity(intent);
                 } else {

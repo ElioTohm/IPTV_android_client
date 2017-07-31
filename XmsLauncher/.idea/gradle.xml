@@ -10,7 +10,7 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/ffmpeg" />
             <option value="$PROJECT_DIR$/smarttv" />
-            <option value="$PROJECT_DIR$/xmsplayer" />
+            <option value="$PROJECT_DIR$/xmsproplayer" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

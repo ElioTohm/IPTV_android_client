@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.XmsPro.xmsproplayer.TvPlayer">
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <SurfaceView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/surfaceView2"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"/>
+
+
+        <fragment
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/main_channellist_fragment"
+            android:name="com.XmsPro.xmsproplayer.ChannelListFragment"
+            android:layout_width="450dip"
+            android:layout_height="250dip"
+            tools:context=".PlayerActivity"
+            tools:deviceIds="tv"
+            tools:ignore="MergeRootFrame"/>
+
+
+    </FrameLayout>
+
+
+    <TextView
+        android:id="@+id/channel_number_idicator"
+        android:layout_width="wrap_content"
+        android:layout_height="100dip"
+        android:layout_centerInParent="false"
+        android:layout_alignParentBottom="false"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="false"
+        android:layout_margin="20dp"
+        android:background="@color/BlackTransparent"
+        android:text=""
+        android:textColor="#FFF"
+        android:textSize="50dp" />
+
+    <RelativeLayout
+        android:id="@+id/channelInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="100dip"
+        android:layout_centerInParent="true"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentRight="false"
+        android:layout_alignParentTop="false"
+        android:layout_margin="20dp"
+        android:background="@color/BlackTransparent">
+
+        <TextView
+            android:id="@+id/current_channel"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:padding="20dp"
+            android:text="99"
+            android:textColor="#FFF"
+            android:textSize="50dp" />
+
+        <ImageView
+            android:id="@+id/channel_ico"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_margin="10dp"
+            android:layout_toRightOf="@id/current_channel"
+            android:contentDescription="@string/channel_ico"
+            android:scaleType="fitCenter" />
+
+        <TextView
+            android:id="@+id/channel_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/current_channel"
+            android:layout_alignBottom="@+id/current_channel"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_toRightOf="@+id/channel_ico"
+            android:text="Channel name"
+            android:textColor="#FFF"
+            android:textSize="50dp" />
+
+    </RelativeLayout>
+
+</android.support.constraint.ConstraintLayout>

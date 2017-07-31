@@ -35,10 +35,9 @@
         </activity>
         <activity android:name=".DetailsActivity" />
         <activity android:name=".BrowseErrorActivity" />
-        <activity android:name="xms.com.xmsplayer.PlayerActivity">
+        <activity android:name="com.XmsPro.xmsproplayer.TvPlayer">
             <intent-filter>
-                <action android:name="xms.com.xmsplayer.UdpPlayerActivity" />
-
+                <action android:name="com.XmsPro.xmsproplayer.TvPlayer" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>

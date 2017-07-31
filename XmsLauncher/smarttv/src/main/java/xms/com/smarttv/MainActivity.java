@@ -20,6 +20,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 
+import com.XmsPro.xmsproplayer.data.Channel;
+
 import xms.com.smarttv.UI.OnboardingActivity;
 import xms.com.smarttv.UI.OnboardingFragment;
 
@@ -40,6 +42,8 @@ public class MainActivity extends Activity {
             // This is the first time running the app, let's go to onboarding
             startActivity(new Intent(this, OnboardingActivity.class));
         }
+
+        Channel channel = new Channel();
     }
 
     @Override
