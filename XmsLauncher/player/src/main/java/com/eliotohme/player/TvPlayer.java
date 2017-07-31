@@ -1,4 +1,4 @@
-package com.XmsPro.xmsproplayer;
+package com.eliotohme.player;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -14,7 +14,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.XmsPro.xmsproplayer.data.Channel;
+import com.eliotohme.player.data.Channel;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
@@ -28,7 +28,6 @@ import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.MappingTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
-import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
@@ -40,9 +39,6 @@ import java.net.CookiePolicy;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.realm.Realm;
-import io.realm.RealmQuery;
-
 public class TvPlayer extends AppCompatActivity {
     String TAG  = "xms";
     private SimpleExoPlayer player;
@@ -50,14 +46,18 @@ public class TvPlayer extends AppCompatActivity {
     int currentWindow;
     long playbackPosition;
     private EventLogger eventlogger;
+    private SurfaceView playerView;
+    public static final String URI_LIST_EXTRA = "uri_list";
     private static final CookieManager DEFAULT_COOKIE_MANAGER;
+    private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
     private View channelInfo;
     private TextView currentChannel, channel_number_idicator, channelName;
     private ImageView channelIco;
     private List<Channel> channelArrayList;
+    private String[] uriStrings;
     private FrameLayout channelList_frameLayout;
     private int channellistSize;
-    private SimpleExoPlayerView simpleExoPlayerView;
+    private Runnable setchannelnumberRunnable;
 
     static {
         DEFAULT_COOKIE_MANAGER = new CookieManager();
@@ -106,7 +106,7 @@ public class TvPlayer extends AppCompatActivity {
 
         Uri[] uris = new Uri[channelArrayList.size()];
         for (int i = 0; i < channelArrayList.size(); i++) {
-            uris[i] = Uri.parse(channelArrayList.get(i).getUri());
+            uris[i] = channelArrayList.get(i).getUri();
         }
 
         //default BandwidthMeter
@@ -131,11 +131,9 @@ public class TvPlayer extends AppCompatActivity {
         player.setVideoDebugListener(eventlogger);
         player.setAudioDebugListener(eventlogger);
 
-        simpleExoPlayerView = (SimpleExoPlayerView) findViewById(R.id.simpleexoplayerview);
-
         // set surface of the player the mediasource and play when ready
+        player.setVideoSurfaceView(playerView);
         player.prepare(buildUDPMediaSource(uris));
-        simpleExoPlayerView.setPlayer(player);
         player.setPlayWhenReady(true);
         showChannelInfo(channelArrayList.get(player.getCurrentWindowIndex()));
     }
@@ -196,7 +194,7 @@ public class TvPlayer extends AppCompatActivity {
     }
 
     public void changeChannel(int channelid) {
-        if(channelid < channellistSize){
+        if(channelid <= channellistSize){
             if (player.getCurrentWindowIndex() != channelid) {
                 player.seekTo(channelid, 0);
             }
@@ -209,6 +207,7 @@ public class TvPlayer extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tv_player);
 
+        playerView = (SurfaceView) findViewById(R.id.surfaceView2);
         channelInfo = (View) findViewById(R.id.channelInfo);
         currentChannel = (TextView) findViewById(R.id.current_channel);
         channelName = (TextView) findViewById(R.id.channel_name);
@@ -217,17 +216,32 @@ public class TvPlayer extends AppCompatActivity {
         channelList_frameLayout = (FrameLayout) findViewById(R.id.main_channellist_fragment);
         channel_number_idicator = (TextView) findViewById(R.id.channel_number_idicator);
 
-        Realm.init(this);
+        Intent intent = getIntent();
 
-        // Get a Realm instance for this thread
-        Realm realm = Realm.getDefaultInstance();
+        // get List of URI fetched from intent
+        uriStrings = intent.getStringArrayExtra(URI_LIST_EXTRA);
 
-        RealmQuery<Channel> channels = realm.where(Channel.class);
+        /*
+        * todo remove the following and fetch data from server
+        */
+        String[] channelname = {"LBCI", "OTV", "El Jadid", "MTV", "Manar"};
+        channellistSize = uriStrings.length;
+        for (int i = 0; i < channellistSize; i++) {
+            Channel channel = new Channel(Uri.parse(uriStrings[i]), channelname[i], "", i);
+            channelArrayList.add(channel);
+        }
 
-        channelArrayList.addAll(channels.findAll());
 
-        channellistSize = channelArrayList.size();
+    }
 
+    @SuppressLint("InlinedApi")
+    private void hideSystemUi() {
+        playerView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
+                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
     }
 
     @Override
@@ -241,6 +255,7 @@ public class TvPlayer extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
+        hideSystemUi();
         if ((Util.SDK_INT <= 23 || player == null)) {
             initializePlayer();
         }
@@ -333,16 +348,16 @@ public class TvPlayer extends AppCompatActivity {
                 Handler setchannelnumberHandler = new Handler();
                 final int finalChannel_numberpressed = channel_numberpressed;
                 channel_number_idicator.setText(channel_number_idicator.getText() + String.valueOf(finalChannel_numberpressed));
-                Runnable setchannelnumberRunnable = new Runnable() {
+                setchannelnumberRunnable = new Runnable() {
                     public void run() {
-                        if (!channel_number_idicator.getText().equals("")) {
-                            changeChannel(Integer.parseInt((String) channel_number_idicator.getText()) - 1);
+                        if (!channel_number_idicator.getText().equals("")){
+                            changeChannel(Integer.parseInt((String) channel_number_idicator.getText()) - 1 );
                             channel_number_idicator.setText("");
                             channel_number_idicator.setVisibility(View.INVISIBLE);
                         }
                     }
                 };
-                setchannelnumberHandler.postDelayed(setchannelnumberRunnable, 2000);
+                setchannelnumberHandler.postDelayed(setchannelnumberRunnable , 2000);
 
             }
         }

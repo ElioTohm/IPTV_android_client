@@ -60,15 +60,19 @@ public class MainActivity extends Activity {
             }
         });
 
+        /*
+        * todo get data from http request
+        * */
         String [] uris = {
                 getString(R.string.URI_UDP_TEST),
                 getString(R.string.URI_UDP_TEST1),
                 getString(R.string.URI_UDP_TEST2),
                 getString(R.string.URI_UDP_TEST3),
                 getString(R.string.URI_UDP_TEST4),
+                getString(R.string.URI_UDP_TEST6)
             };
 
-        String[] channelname = {"LBCI", "OTV", "El Jadid", "MTV", "Manar"};
+        String[] channelname = {"LBCI", "OTV", "El Jadid", "MTV", "Manar", "Senses"};
 
         for (int i = 0; i < uris.length; i++) {
             Channel channel = new Channel();

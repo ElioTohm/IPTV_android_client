@@ -1,31 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.XmsPro.xmsproplayer.TvPlayer">
+    tools:context="com.eliotohme.player.TvPlayer">
 
-
-    <com.google.android.exoplayer2.ui.SimpleExoPlayerView
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/simpleexoplayerview"
-        app:use_controller="false"
-        app:resize_mode="fill">
+        android:layout_height="match_parent">
 
-    </com.google.android.exoplayer2.ui.SimpleExoPlayerView>
+        <SurfaceView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/surfaceView2"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"/>
 
-    <fragment
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/main_channellist_fragment"
-        android:name="com.XmsPro.xmsproplayer.ChannelListFragment"
-        android:layout_width="450dip"
-        android:layout_height="250dip"
-        tools:context=".PlayerActivity"
-        tools:deviceIds="tv"
-        tools:ignore="MergeRootFrame"/>
+
+        <fragment
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/main_channellist_fragment"
+            android:name="xms.com.xmsplayer.ChannelListFragment"
+            android:layout_width="450dip"
+            android:layout_height="250dip"
+            tools:context=".PlayerActivity"
+            tools:deviceIds="tv"
+            tools:ignore="MergeRootFrame"/>
+
+
+    </FrameLayout>
 
 
     <TextView
@@ -88,4 +93,4 @@
 
     </RelativeLayout>
 
-</RelativeLayout>
+</android.support.constraint.ConstraintLayout>
