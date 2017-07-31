@@ -3,18 +3,30 @@ package com.XmsPro.xmsproplayer.data;
 
 import android.net.Uri;
 
-public class Channel {
-    private Uri uri;
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
+public class Channel extends RealmObject {
+    @PrimaryKey
+    private int windowid;
+    private String uri;
     private String name;
     private String description;
-    private int windowid;
 
     public  Channel () {}
 
-    public Channel (Uri uri, String name, String description, int windowid) {
+    public Channel (String uri, String name, String description, int windowid) {
         this.uri = uri;
         this.name = name;
         this.description = description;
+        this.windowid = windowid;
+    }
+
+    public void setUri(String uri) {
+        this.uri = uri;
+    }
+
+    public void setWindowid(int windowid) {
         this.windowid = windowid;
     }
 
@@ -26,7 +38,7 @@ public class Channel {
         this.name = name;
     }
 
-    public Uri getUri() {
+    public String getUri() {
         return uri;
     }
 

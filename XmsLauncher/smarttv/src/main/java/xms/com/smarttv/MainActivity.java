@@ -17,11 +17,16 @@ package xms.com.smarttv;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.XmsPro.xmsproplayer.data.Channel;
 
+import io.realm.Realm;
+import io.realm.RealmQuery;
+import io.realm.RealmResults;
 import xms.com.smarttv.UI.OnboardingActivity;
 import xms.com.smarttv.UI.OnboardingFragment;
 
@@ -43,7 +48,39 @@ public class MainActivity extends Activity {
             startActivity(new Intent(this, OnboardingActivity.class));
         }
 
-        Channel channel = new Channel();
+        // Initialize Realm
+        Realm.init(this);
+        // Get a Realm instance for this thread
+        Realm realm = Realm.getDefaultInstance();
+
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.delete(Channel.class);
+            }
+        });
+
+        String [] uris = {
+                getString(R.string.URI_UDP_TEST),
+                getString(R.string.URI_UDP_TEST1),
+                getString(R.string.URI_UDP_TEST2),
+                getString(R.string.URI_UDP_TEST3),
+                getString(R.string.URI_UDP_TEST4),
+            };
+
+        String[] channelname = {"LBCI", "OTV", "El Jadid", "MTV", "Manar"};
+
+        for (int i = 0; i < uris.length; i++) {
+            Channel channel = new Channel();
+            channel.setName(channelname[i]);
+            channel.setWindowid(i);
+            channel.setUri(uris[i]);
+            realm.beginTransaction();
+            realm.copyToRealm(channel);
+            realm.commitTransaction();
+        }
+
+
     }
 
     @Override

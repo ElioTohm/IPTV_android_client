@@ -179,17 +179,14 @@ public class VideoDetailsFragment extends DetailsFragment {
             @Override
             public void onActionClicked(Action action) {
                 if (action.getId() == ACTION_WATCH_TRAILER) {
-                    String [] uris = {getString(R.string.URI_UDP_TEST),
-                                        getString(R.string.URI_UDP_TEST1),
-                                        getString(R.string.URI_UDP_TEST2),
-                                        getString(R.string.URI_UDP_TEST3),
-                                        getString(R.string.URI_UDP_TEST4),
-                                        };
+
                     Intent intent = new Intent("com.XmsPro.xmsproplayer.TvPlayer");
-                    intent.putExtra("uri_list", uris);
                     startActivity(intent);
+
                 } else {
+
                     Toast.makeText(getActivity(), action.toString(), Toast.LENGTH_SHORT).show();
+
                 }
             }
         });

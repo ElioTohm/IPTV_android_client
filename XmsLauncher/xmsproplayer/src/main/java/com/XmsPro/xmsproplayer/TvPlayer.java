@@ -39,6 +39,9 @@ import java.net.CookiePolicy;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.realm.Realm;
+import io.realm.RealmQuery;
+
 public class TvPlayer extends AppCompatActivity {
     String TAG  = "xms";
     private SimpleExoPlayer player;
@@ -106,7 +109,7 @@ public class TvPlayer extends AppCompatActivity {
 
         Uri[] uris = new Uri[channelArrayList.size()];
         for (int i = 0; i < channelArrayList.size(); i++) {
-            uris[i] = channelArrayList.get(i).getUri();
+            uris[i] = Uri.parse(channelArrayList.get(i).getUri());
         }
 
         //default BandwidthMeter
@@ -224,13 +227,15 @@ public class TvPlayer extends AppCompatActivity {
         /*
         * todo remove the following and fetch data from server
         */
-        String[] channelname = {"LBCI", "OTV", "El Jadid", "MTV", "Manar"};
-        channellistSize = uriStrings.length;
-        for (int i = 0; i < channellistSize; i++) {
-            Channel channel = new Channel(Uri.parse(uriStrings[i]), channelname[i], "", i);
-            channelArrayList.add(channel);
-        }
+        // Initialize Realm
+        Realm.init(this);
 
+        // Get a Realm instance for this thread
+        Realm realm = Realm.getDefaultInstance();
+
+        RealmQuery<Channel> channels = realm.where(Channel.class);
+
+        channelArrayList.addAll(channels.findAll());
 
     }
 

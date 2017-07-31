@@ -23,6 +23,9 @@ import com.XmsPro.xmsproplayer.data.Channel;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.realm.Realm;
+import io.realm.RealmQuery;
+
 public class ChannelListFragment extends BrowseFragment {
     private static final int GRID_ITEM_WIDTH = 175;
     private static final int GRID_ITEM_HEIGHT = 100;
@@ -73,24 +76,23 @@ public class ChannelListFragment extends BrowseFragment {
     }
 
     private void loadRows() {
-        List<Channel> list = new ArrayList<>();
-        String[] uriStrings = getActivity().getIntent().getStringArrayExtra("uri_list");
+//        List<Channel> list = new ArrayList<>();
 
-        String[] channelname = {"LBCI", "OTV", "El Jadid", "MTV", "Manar"};
+        Realm.init(getActivity());
 
-        for (int i = 0; i < uriStrings.length; i++) {
-            Channel channel = new Channel(Uri.parse(uriStrings[i]), channelname[i], "", i);
-            list.add(channel);
-        }
+        // Get a Realm instance for this thread
+        Realm realm = Realm.getDefaultInstance();
+
+        RealmQuery<Channel> channels = realm.where(Channel.class);
+
+//        list.addAll(channels.findAll());
 
         mRowsAdapter = new ArrayObjectAdapter(new ListRowPresenter());
 
         GridItemPresenter mGridPresenter = new GridItemPresenter();
         ArrayObjectAdapter gridRowAdapter = new ArrayObjectAdapter(mGridPresenter);
 
-        for (int i=0;  i < channelname.length; i++) {
-            gridRowAdapter.add(list.get(i));
-        }
+        gridRowAdapter.addAll(0, channels.findAll());
 
         mRowsAdapter.add(new ListRow(new HeaderItem(0, "Local Channels"), gridRowAdapter));
 

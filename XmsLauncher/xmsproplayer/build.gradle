@@ -36,4 +36,5 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:leanback-v17:' + project.ext.supportLibraryVersion
     compile project(':ffmpeg')
+    apply plugin: 'realm-android'
 }
