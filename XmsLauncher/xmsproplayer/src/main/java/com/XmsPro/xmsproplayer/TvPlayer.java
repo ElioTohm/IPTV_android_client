@@ -143,15 +143,7 @@ public class TvPlayer extends AppCompatActivity {
         showChannelInfo(channelArrayList.get(player.getCurrentWindowIndex()));
         player.setPlayWhenReady(true);
 
-        scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
-            @Override
-            public void run() {
-                // Initialize Realm
-                final Realm realm = Realm.getDefaultInstance();
-                RealmResults<Channel> realmResults  = realm.where(Channel.class).equalTo("window_id", player.getCurrentWindowIndex()).findAll();
-                Log.d("TEST", realmResults.get(0).getName());
-            }
-        }, 30, 30, TimeUnit.SECONDS);
+        monitor();
 
     }
 
@@ -223,7 +215,10 @@ public class TvPlayer extends AppCompatActivity {
     }
 
     public void monitor () {
-        scheduledExecutorService.shutdown();
+        if (scheduledExecutorService != null) {
+            scheduledExecutorService.shutdown();
+        }
+
         scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
         scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
             @Override
@@ -232,6 +227,7 @@ public class TvPlayer extends AppCompatActivity {
                 final Realm realm = Realm.getDefaultInstance();
                 RealmResults<Channel> realmResults  = realm.where(Channel.class).equalTo("window_id", player.getCurrentWindowIndex()).findAll();
                 Log.d("TEST", USER_NAME + realmResults.get(0).getName());
+                Log.d("TEST", String.valueOf(System.currentTimeMillis() / 1000));
             }
         }, 30, 30, TimeUnit.SECONDS);
     }

@@ -16,32 +16,18 @@
 -->
 <animation-list xmlns:android="http://schemas.android.com/apk/res/android"
     android:oneshot="false">
-    <item android:drawable="@drawable/tv_b_00005" android:duration="50" />
     <item android:drawable="@drawable/tv_b_00006" android:duration="50" />
-    <item android:drawable="@drawable/tv_b_00007" android:duration="50" />
     <item android:drawable="@drawable/tv_b_00008" android:duration="50" />
-    <item android:drawable="@drawable/tv_b_00009" android:duration="50" />
     <item android:drawable="@drawable/tv_b_00010" android:duration="50" />
-    <item android:drawable="@drawable/tv_b_00011" android:duration="50" />
     <item android:drawable="@drawable/tv_b_00012" android:duration="50" />
-    <item android:drawable="@drawable/tv_b_00013" android:duration="50" />
     <item android:drawable="@drawable/tv_b_00014" android:duration="50" />
-    <item android:drawable="@drawable/tv_b_00015" android:duration="50" />
     <item android:drawable="@drawable/tv_b_00016" android:duration="50" />
-    <item android:drawable="@drawable/tv_b_00017" android:duration="500" />
     <item android:drawable="@drawable/tv_b_00186" android:duration="50" />
-    <item android:drawable="@drawable/tv_b_00187" android:duration="50" />
     <item android:drawable="@drawable/tv_b_00188" android:duration="50" />
-    <item android:drawable="@drawable/tv_b_00189" android:duration="50" />
     <item android:drawable="@drawable/tv_b_00190" android:duration="50" />
-    <item android:drawable="@drawable/tv_b_00191" android:duration="50" />
     <item android:drawable="@drawable/tv_b_00192" android:duration="50" />
-    <item android:drawable="@drawable/tv_b_00193" android:duration="50" />
     <item android:drawable="@drawable/tv_b_00194" android:duration="50" />
-    <item android:drawable="@drawable/tv_b_00195" android:duration="50" />
     <item android:drawable="@drawable/tv_b_00196" android:duration="500" />
-    <item android:drawable="@drawable/tv_b_00301" android:duration="50" />
     <item android:drawable="@drawable/tv_b_00302" android:duration="50" />
-    <item android:drawable="@drawable/tv_b_00303" android:duration="50" />
     <item android:drawable="@drawable/tv_b_00304" android:duration="50" />
 </animation-list>
