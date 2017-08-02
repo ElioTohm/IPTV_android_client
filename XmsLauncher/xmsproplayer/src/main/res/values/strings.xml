@@ -3,4 +3,12 @@
     <string name="player">Xms Player</string>
     <string name="channel_ico">Channel Name</string>
     <string name="channelslist_title">Channels</string>
+
+    <!--DUMMY CHANNEL BUNDELS-->
+    <string name="BUNDLE_1">General</string>
+    <string name="BUNDLE_2">Kids</string>
+    <string name="BUNDLE_3">Action</string>
+    <string name="BUNDLE_4">Drama</string>
+    <string name="BUNDLE_5">Indian</string>
+
 </resources>

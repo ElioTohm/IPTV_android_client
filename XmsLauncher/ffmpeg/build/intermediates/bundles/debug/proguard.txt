@@ -1,6 +1,10 @@
 # Proguard rules specific to the FFmpeg extension.
 
 # This prevents the names of native methods from being obfuscated.
+-ignorewarnings
+-keep class * {
+    public private *;
+}
 -keepclasseswithmembernames class * {
     native <methods>;
 }

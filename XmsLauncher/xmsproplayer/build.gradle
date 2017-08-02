@@ -1,12 +1,12 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.3"
+    compileSdkVersion project.ext.compileSdkVersion
+    buildToolsVersion project.ext.buildToolsVersion
 
     defaultConfig {
-        minSdkVersion 17
-        targetSdkVersion 25
+        minSdkVersion project.ext.minSdkVersion
+        targetSdkVersion project.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
 
@@ -36,5 +36,5 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:leanback-v17:' + project.ext.supportLibraryVersion
     compile project(':ffmpeg')
-    apply plugin: 'realm-android'
+    compile project(path: ':data')
 }

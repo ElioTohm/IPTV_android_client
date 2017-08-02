@@ -1,20 +1,18 @@
 package com.XmsPro.xmsproplayer;
 
-import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.SurfaceView;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.XmsPro.xmsproplayer.data.Channel;
+import com.eliotohme.data.Channel;
+import com.eliotohme.data.User;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
@@ -39,9 +37,13 @@ import java.net.CookieManager;
 import java.net.CookiePolicy;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import io.realm.Realm;
 import io.realm.RealmQuery;
+import io.realm.RealmResults;
 
 public class TvPlayer extends AppCompatActivity {
     String TAG  = "xms";
@@ -58,6 +60,8 @@ public class TvPlayer extends AppCompatActivity {
     private FrameLayout channelList_frameLayout;
     private int channellistSize;
     private SimpleExoPlayerView simpleExoPlayerView;
+    private ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+    private String USER_NAME;
 
     static {
         DEFAULT_COOKIE_MANAGER = new CookieManager();
@@ -74,7 +78,7 @@ public class TvPlayer extends AppCompatActivity {
         DataSource.Factory udsf = new UdpDataSource.Factory() {
             @Override
             public DataSource createDataSource() {
-                return new UdpDataSource(null, 3000, 100000);
+                return new UdpDataSource(null);
             }
         };
 
@@ -136,8 +140,19 @@ public class TvPlayer extends AppCompatActivity {
         // set surface of the player the mediasource and play when ready
         player.prepare(buildUDPMediaSource(uris));
         simpleExoPlayerView.setPlayer(player);
-        player.setPlayWhenReady(true);
         showChannelInfo(channelArrayList.get(player.getCurrentWindowIndex()));
+        player.setPlayWhenReady(true);
+
+        scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+            @Override
+            public void run() {
+                // Initialize Realm
+                final Realm realm = Realm.getDefaultInstance();
+                RealmResults<Channel> realmResults  = realm.where(Channel.class).equalTo("window_id", player.getCurrentWindowIndex()).findAll();
+                Log.d("TEST", realmResults.get(0).getName());
+            }
+        }, 30, 30, TimeUnit.SECONDS);
+
     }
 
     private void releasePlayer() {
@@ -166,6 +181,7 @@ public class TvPlayer extends AppCompatActivity {
         } else {
             player.seekTo(currentTimeline.getWindowCount() - 1, 0);
         }
+        monitor();
     }
 
     private void nextchannel() {
@@ -179,6 +195,7 @@ public class TvPlayer extends AppCompatActivity {
         } else {
             player.seekTo(0, 0);
         }
+        monitor();
     }
 
     private void showChannelInfo(Channel channel) {
@@ -199,9 +216,24 @@ public class TvPlayer extends AppCompatActivity {
         if(channelid < channellistSize){
             if (player.getCurrentWindowIndex() != channelid) {
                 player.seekTo(channelid, 0);
+                monitor();
             }
             showChannelInfo(channelArrayList.get(channelid));
         }
+    }
+
+    public void monitor () {
+        scheduledExecutorService.shutdown();
+        scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+        scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+            @Override
+            public void run() {
+                // Initialize Realm
+                final Realm realm = Realm.getDefaultInstance();
+                RealmResults<Channel> realmResults  = realm.where(Channel.class).equalTo("window_id", player.getCurrentWindowIndex()).findAll();
+                Log.d("TEST", USER_NAME + realmResults.get(0).getName());
+            }
+        }, 30, 30, TimeUnit.SECONDS);
     }
 
     @Override
@@ -227,6 +259,10 @@ public class TvPlayer extends AppCompatActivity {
         channelArrayList.addAll(channels.findAll());
 
         channellistSize = channelArrayList.size();
+
+        RealmQuery<User> users = realm.where(User.class);
+        RealmResults<User> users1 = users.findAll();
+        USER_NAME = users1.get(0).getName();
 
     }
 

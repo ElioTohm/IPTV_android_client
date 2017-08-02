@@ -80,6 +80,7 @@ import java.util.Locale;
     public void onPlayerStateChanged(boolean playWhenReady, int state) {
         Log.d(TAG, "state [" + getSessionTimeString() + ", " + playWhenReady + ", "
                 + getStateString(state) + "]");
+
     }
 
     @Override

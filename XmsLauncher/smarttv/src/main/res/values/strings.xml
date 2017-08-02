@@ -39,14 +39,34 @@
     <string name="oops">Oops</string>
 
     <!--TEST URI-->
-    <string name="URI_UDP_TEST">udp://@224.1.1.30:1234</string>
-    <string name="URI_UDP_TEST1">udp://@224.1.1.26:1234</string>
-    <string name="URI_UDP_TEST2">udp://@224.1.1.27:1234</string>
-    <string name="URI_UDP_TEST3">udp://@224.1.1.28:1234</string>
-    <string name="URI_UDP_TEST4">udp://@224.1.1.29:1234</string>
-    <string name="URI_UDP_TEST5">udp://@224.1.242.4</string>
-    <string name="URI_UDP_TEST6">udp://@224.1.9.2:1234</string>
+    <string name="URI_UDP_MBC_1">udp://@224.1.1.26:1234</string>
+    <string name="URI_UDP_MBC_2">udp://@224.1.1.27:1234</string>
+    <string name="URI_UDP_MBC_3">udp://@224.1.1.28:1234</string>
+    <string name="URI_UDP_MBC_4">udp://@224.1.9.2:1234</string>
+    <string name="URI_UDP_MBC_ACTION">udp://@224.1.1.30:1234</string>
+    <string name="URI_UDP_MBC_DRAMA">udp://@224.1.1.27:1234</string>
+    <string name="URI_UDP_MBC_MAX">udp://@224.1.1.28:1234</string>
+    <string name="URI_UDP_MBC_BOLLYWOOD">udp://@224.1.9.2:1234</string>
 
+    <!--TEST CHANNEL NAMES-->
+    <string name="MBC_1">mbc 1</string>
+    <string name="MBC_2">mbc 2</string>
+    <string name="MBC_3">mbc 3</string>
+    <string name="MBC_4">mbc 4</string>
+    <string name="MBC_ACTION">mbc Action</string>
+    <string name="MBC_DRAMA">mbc Drama</string>
+    <string name="MBC_MAX">mbc Max</string>
+    <string name="MBC_BOLLYWOOD">mbc Bollywood</string>
+
+    <!--CHANNEL BUNDLES-->
+    <string name="BUNDLES_MBC_1">1</string>
+    <string name="BUNDLES_MBC_2">3</string>
+    <string name="BUNDLES_MBC_3">2</string>
+    <string name="BUNDLES_MBC_4">4</string>
+    <string name="BUNDLES_MBC_ACTION">3</string>
+    <string name="BUNDLES_MBC_DRAMA">4</string>
+    <string name="BUNDLES_MBC_MAX">3</string>
+    <string name="BUNDLES_MBC_BOLLYWOOD">5</string>
 
     <!--onboarding-->
     <string name="onboarding_title_welcome">Welcome to XMS pro Launcher</string>
@@ -58,5 +78,78 @@
     <string name="onboarding_description_design">Let us be your virtual guide.... With a press of a button check the hotel restaurant, resort and many more</string>
     <string name="onboarding_description_simple">No more waiting or asking around for information your room is where you need to be</string>
     <string name="onboarding_description_project">with 4seasons Hotel</string>
+    <string name="title_activity_settings">User Settings</string>
+
+    <!-- Strings related to Settings -->
+
+    <!-- Example General settings -->
+    <string name="pref_header_general">General</string>
+
+    <string name="pref_title_social_recommendations">Enable social recommendations</string>
+    <string name="pref_description_social_recommendations">Recommendations for people to contact
+        based on your message history
+    </string>
+
+    <string name="pref_title_display_name">Display name</string>
+    <string name="pref_default_display_name">John Smith</string>
+
+    <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
+    <string-array name="pref_example_list_titles">
+        <item>Always</item>
+        <item>When possible</item>
+        <item>Never</item>
+    </string-array>
+    <string-array name="pref_example_list_values">
+        <item>1</item>
+        <item>0</item>
+        <item>-1</item>
+    </string-array>
+
+    <!-- Example settings for Data & Sync -->
+    <string name="pref_header_data_sync">Data &amp; sync</string>
+
+    <string name="pref_title_sync_frequency">Sync frequency</string>
+    <string-array name="pref_sync_frequency_titles">
+        <item>15 minutes</item>
+        <item>30 minutes</item>
+        <item>1 hour</item>
+        <item>3 hours</item>
+        <item>6 hours</item>
+        <item>Never</item>
+    </string-array>
+    <string-array name="pref_sync_frequency_values">
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+        <item>180</item>
+        <item>360</item>
+        <item>-1</item>
+    </string-array>
+
+    <string-array name="list_preference_entries">
+        <item>Entry 1</item>
+        <item>Entry 2</item>
+        <item>Entry 3</item>
+    </string-array>
+
+    <string-array name="list_preference_entry_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
+    <string-array name="multi_select_list_preference_default_value" />
+
+    <string name="pref_title_system_sync_settings">System sync settings</string>
+
+    <!-- Example settings for Notifications -->
+    <string name="pref_header_notifications">Notifications</string>
+
+    <string name="pref_title_new_message_notifications">New message notifications</string>
+
+    <string name="pref_title_ringtone">Ringtone</string>
+    <string name="pref_ringtone_silent">Silent</string>
+
+    <string name="pref_title_vibrate">Vibrate</string>
 
 </resources>
