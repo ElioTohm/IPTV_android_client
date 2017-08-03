@@ -17,7 +17,7 @@ public final class MovieList {
     public static List<Movie> setupMovies() {
         list = new ArrayList<Movie>();
         String title[] = {
-                "Ip TV",
+                "Multimedia",
                 "Weather",
                 "Room Service",
                 "Reception"
@@ -49,10 +49,10 @@ public final class MovieList {
         };
 
         int[] drawables = {
-            R.drawable.ic_tv_svgrepo_com,
-            R.drawable.ic_sun_svgrepo_com,
-            R.drawable.ic_room_service_svgrepo_com,
-            R.drawable.ic_reception_svgrepo_com,
+            R.drawable.tv,
+            R.drawable.sunsvgrepocom,
+            R.drawable.roomservicesvgrepocom,
+            R.drawable.receptionsvgrepocom,
         };
 
         list.add(buildMovieInfo(0, title[0],

@@ -42,7 +42,7 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         if(!sharedPreferences.getBoolean(OnboardingFragment.COMPLETED_ONBOARDING, false)) {
-//            // This is the first time running the app, let's go to onboarding
+            // This is the first time running the app, let's go to onboarding
             startActivity(new Intent(this, OnboardingActivity.class));
         }
 

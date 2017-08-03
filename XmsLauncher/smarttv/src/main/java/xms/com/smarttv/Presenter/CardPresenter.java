@@ -65,7 +65,7 @@ public class CardPresenter extends Presenter {
 
         cardView.setFocusable(true);
         cardView.setFocusableInTouchMode(true);
-        cardView.setMainImageScaleType(ImageView.ScaleType.FIT_CENTER);
+        cardView.setMainImageScaleType(ImageView.ScaleType.CENTER_INSIDE);
         updateCardBackgroundColor(cardView, false);
         return new ViewHolder(cardView);
     }
@@ -80,11 +80,10 @@ public class CardPresenter extends Presenter {
             cardView.setTitleText(movie.getTitle());
             cardView.setContentText(movie.getStudio());
             cardView.setMainImageDimensions(CARD_WIDTH, CARD_HEIGHT);
-//            Glide.with(viewHolder.view.getContext())
-//                    .load(movie.getCardImageUrl())
-//                    .centerCrop()
-//                    .error(mDefaultCardImage)
-//                    .into(cardView.getMainImageView());
+            Glide.with(viewHolder.view.getContext())
+                    .load(movie.getSvgimage())
+                    .error(mDefaultCardImage)
+                    .into(cardView.getMainImageView());
             cardView.getMainImageView().setImageResource(movie.getSvgimage());
         }
     }

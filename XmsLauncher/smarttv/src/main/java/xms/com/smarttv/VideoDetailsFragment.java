@@ -16,6 +16,7 @@ package xms.com.smarttv;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.PictureDrawable;
 import android.os.Bundle;
 import android.support.v17.leanback.app.BackgroundManager;
 import android.support.v17.leanback.app.DetailsFragment;
@@ -39,6 +40,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
@@ -141,6 +143,7 @@ public class VideoDetailsFragment extends DetailsFragment {
                 .getApplicationContext(), DETAIL_THUMB_HEIGHT);
         Glide.with(getActivity())
                 .load(mSelectedMovie.getSvgimage())
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .centerCrop()
                 .error(R.drawable.default_background)
                 .into(new SimpleTarget<GlideDrawable>(width, height) {
@@ -180,8 +183,9 @@ public class VideoDetailsFragment extends DetailsFragment {
             public void onActionClicked(Action action) {
                 if (action.getId() == ACTION_WATCH_TRAILER) {
 
-                    Intent intent = new Intent("com.XmsPro.xmsproplayer.TvPlayer");
-                    startActivity(intent);
+                    Toast.makeText(getActivity(), action.toString(), Toast.LENGTH_SHORT).show();
+//                    Intent intent = new Intent("com.XmsPro.xmsproplayer.TvPlayer");
+//                    startActivity(intent);
 
                 } else {
 
