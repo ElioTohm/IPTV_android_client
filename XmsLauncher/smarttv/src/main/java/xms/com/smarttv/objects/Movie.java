@@ -14,6 +14,7 @@
 
 package xms.com.smarttv.objects;
 
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 
 import java.io.Serializable;
@@ -34,7 +35,16 @@ public class Movie implements Serializable {
     private String cardImageUrl;
     private String videoUrl;
     private String studio;
-    private String category;
+    private int category;
+    private int svgimage;
+
+    public int getSvgimage() {
+        return svgimage;
+    }
+
+    public void setSvgimage(int svgimage) {
+        this.svgimage = svgimage;
+    }
 
     public Movie() {
     }
@@ -103,11 +113,11 @@ public class Movie implements Serializable {
         this.cardImageUrl = cardImageUrl;
     }
 
-    public String getCategory() {
+    public int getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(int category) {
         this.category = category;
     }
 

@@ -40,11 +40,11 @@ public class MainActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-//        if(!sharedPreferences.getBoolean(OnboardingFragment.COMPLETED_ONBOARDING, false)) {
-            // This is the first time running the app, let's go to onboarding
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        if(!sharedPreferences.getBoolean(OnboardingFragment.COMPLETED_ONBOARDING, false)) {
+//            // This is the first time running the app, let's go to onboarding
             startActivity(new Intent(this, OnboardingActivity.class));
-//        }
+        }
 
         // Initialize Realm
         Realm.init(this);

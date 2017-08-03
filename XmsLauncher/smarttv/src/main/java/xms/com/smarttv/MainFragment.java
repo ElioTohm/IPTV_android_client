@@ -62,6 +62,7 @@ import xms.com.smarttv.Presenter.InstalledApplicationPresenter;
 import xms.com.smarttv.objects.InstallAppsInfo;
 import xms.com.smarttv.objects.Movie;
 import xms.com.smarttv.objects.MovieList;
+import xms.com.smarttv.weather.OpenUrlActivity;
 
 public class MainFragment extends BrowseFragment {
     private static final String TAG = "MainFragment";
@@ -70,7 +71,7 @@ public class MainFragment extends BrowseFragment {
     private static final int GRID_ITEM_WIDTH = 200;
     private static final int GRID_ITEM_HEIGHT = 200;
     private static final int NUM_ROWS = 1;
-    private static final int NUM_COLS = 5;
+    private static final int NUM_COLS = 4;
 
     private final Handler mHandler = new Handler();
     private ArrayObjectAdapter mRowsAdapter;
@@ -245,15 +246,26 @@ public class MainFragment extends BrowseFragment {
 
             if (item instanceof Movie) {
                 Movie movie = (Movie) item;
-                Log.d(TAG, "Item: " + item.toString());
-                Intent intent = new Intent(getActivity(), DetailsActivity.class);
-                intent.putExtra(DetailsActivity.MOVIE, movie);
+                if (movie.getCategory() == 1) {
+                    Log.d(TAG, "Item: " + item.toString());
+                    Intent intent = new Intent(getActivity(), DetailsActivity.class);
+                    intent.putExtra(DetailsActivity.MOVIE, movie);
 
-                Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                        getActivity(),
-                        ((ImageCardView) itemViewHolder.view).getMainImageView(),
-                        DetailsActivity.SHARED_ELEMENT_NAME).toBundle();
-                getActivity().startActivity(intent, bundle);
+                    Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                            getActivity(),
+                            ((ImageCardView) itemViewHolder.view).getMainImageView(),
+                            DetailsActivity.SHARED_ELEMENT_NAME).toBundle();
+                    getActivity().startActivity(intent, bundle);
+                } else {
+                    if (movie.getTitle().equals("Weather")) {
+                        Intent intent = new Intent(getActivity(), OpenUrlActivity.class);
+                        startActivity(intent);
+                    } else {
+                        Intent intent = new Intent("com.XmsPro.xmsproplayer.TvPlayer");
+                        startActivity(intent);
+                    }
+                }
+
             } else if (item instanceof String) {
                 if (((String) item).indexOf(getString(R.string.error_fragment)) >= 0) {
                     Intent intent = new Intent(getActivity(), BrowseErrorActivity.class);

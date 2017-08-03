@@ -1,11 +1,15 @@
 package xms.com.smarttv.objects;
 
+import android.graphics.drawable.Drawable;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import xms.com.smarttv.R;
+
 public final class MovieList {
     public static final String MOVIE_CATEGORY[] = {
-            "Videos",
+            "Services",
     };
 
     public static List<Movie> list;
@@ -13,10 +17,10 @@ public final class MovieList {
     public static List<Movie> setupMovies() {
         list = new ArrayList<Movie>();
         String title[] = {
-                "Google Demo Slam_ 20ft Search",
-                "Introducing Gmail Blue",
-                "Introducing Google Fiber to the Pole",
-                "Introducing Google Nose"
+                "Ip TV",
+                "Weather",
+                "Room Service",
+                "Reception"
         };
 
         String description = "Donec tristique, orci sed semper lacinia, quam erat rhoncus massa, non congue tellus est "
@@ -32,10 +36,10 @@ public final class MovieList {
                 "http://commondatastorage.googleapis.com/android-tv/Sample%20videos/April%20Fool's%202013/Introducing%20Google%20Nose.mp4"
         };
         String bgImageUrl[] = {
-                "http://commondatastorage.googleapis.com/android-tv/Sample%20videos/Demo%20Slam/Google%20Demo%20Slam_%2020ft%20Search/bg.jpg",
-                "http://commondatastorage.googleapis.com/android-tv/Sample%20videos/April%20Fool's%202013/Introducing%20Gmail%20Blue/bg.jpg",
-                "http://commondatastorage.googleapis.com/android-tv/Sample%20videos/April%20Fool's%202013/Introducing%20Google%20Fiber%20to%20the%20Pole/bg.jpg",
-                "http://commondatastorage.googleapis.com/android-tv/Sample%20videos/April%20Fool's%202013/Introducing%20Google%20Nose/bg.jpg",
+                "http://www.cityfilm.tv/uploads/tx_extpagesdb/media.jpg",
+                "http://images.kuoni.co.uk/73/dubai-33488291-1494255242-ImageGalleryLightboxLarge.jpg",
+                "http://amosphere.com/wp-content/uploads/2016/07/top-room-service.jpg",
+                "https://fthmb.tqn.com/YmVEs-1-qxo4JqSGTW0q2MuSYms=/2000x1333/filters:fill(auto,1)/about/receptionist_hotel-517791323-58a4ce485f9b58a3c95c1114.jpg",
         };
         String cardImageUrl[] = {
                 "http://commondatastorage.googleapis.com/android-tv/Sample%20videos/Demo%20Slam/Google%20Demo%20Slam_%2020ft%20Search/card.jpg",
@@ -44,21 +48,28 @@ public final class MovieList {
                 "http://commondatastorage.googleapis.com/android-tv/Sample%20videos/April%20Fool's%202013/Introducing%20Google%20Nose/card.jpg"
         };
 
-        list.add(buildMovieInfo("category", title[0],
-                description, "Studio Zero", videoUrl[0], cardImageUrl[0], bgImageUrl[0]));
-        list.add(buildMovieInfo("category", title[1],
-                description, "Studio One", videoUrl[1], cardImageUrl[1], bgImageUrl[1]));
-        list.add(buildMovieInfo("category", title[2],
-                description, "Studio Two", videoUrl[2], cardImageUrl[2], bgImageUrl[2]));
-        list.add(buildMovieInfo("category", title[3],
-                description, "Studio Three", videoUrl[3], cardImageUrl[3], bgImageUrl[3]));
+        int[] drawables = {
+            R.drawable.ic_tv_svgrepo_com,
+            R.drawable.ic_sun_svgrepo_com,
+            R.drawable.ic_room_service_svgrepo_com,
+            R.drawable.ic_reception_svgrepo_com,
+        };
+
+        list.add(buildMovieInfo(0, title[0],
+                description, "", videoUrl[0], cardImageUrl[0], bgImageUrl[0], drawables[0]));
+        list.add(buildMovieInfo(0, title[1],
+                description, "", videoUrl[1], cardImageUrl[1], bgImageUrl[1], drawables[1]));
+        list.add(buildMovieInfo(1, title[2],
+                description, "", videoUrl[2], cardImageUrl[2], bgImageUrl[2], drawables[2]));
+        list.add(buildMovieInfo(1, title[3],
+                description, "", videoUrl[3], cardImageUrl[3], bgImageUrl[3], drawables[3]));
 
         return list;
     }
 
-    private static Movie buildMovieInfo(String category, String title,
+    private static Movie buildMovieInfo(int category, String title,
                                         String description, String studio, String videoUrl, String cardImageUrl,
-                                        String bgImageUrl) {
+                                        String bgImageUrl, int drawable) {
         Movie movie = new Movie();
         movie.setId(Movie.getCount());
         Movie.incCount();
@@ -69,6 +80,7 @@ public final class MovieList {
         movie.setCardImageUrl(cardImageUrl);
         movie.setBackgroundImageUrl(bgImageUrl);
         movie.setVideoUrl(videoUrl);
+        movie.setSvgimage(drawable);
         return movie;
     }
 }

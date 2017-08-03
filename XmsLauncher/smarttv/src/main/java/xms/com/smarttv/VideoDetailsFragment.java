@@ -64,7 +64,7 @@ public class VideoDetailsFragment extends DetailsFragment {
     private static final int DETAIL_THUMB_WIDTH = 274;
     private static final int DETAIL_THUMB_HEIGHT = 274;
 
-    private static final int NUM_COLS = 10;
+    private static final int NUM_COLS = 4;
 
     private Movie mSelectedMovie;
 
@@ -140,7 +140,7 @@ public class VideoDetailsFragment extends DetailsFragment {
         int height = Utils.convertDpToPixel(getActivity()
                 .getApplicationContext(), DETAIL_THUMB_HEIGHT);
         Glide.with(getActivity())
-                .load(mSelectedMovie.getCardImageUrl())
+                .load(mSelectedMovie.getSvgimage())
                 .centerCrop()
                 .error(R.drawable.default_background)
                 .into(new SimpleTarget<GlideDrawable>(width, height) {
@@ -194,7 +194,7 @@ public class VideoDetailsFragment extends DetailsFragment {
     }
 
     private void setupMovieListRow() {
-        String subcategories[] = {getString(R.string.related_movies)};
+        String subcategories[] = {getString(R.string.Services)};
         List<Movie> list = MovieList.list;
 
         Collections.shuffle(list);

@@ -78,7 +78,7 @@ public class TvPlayer extends AppCompatActivity {
         DataSource.Factory udsf = new UdpDataSource.Factory() {
             @Override
             public DataSource createDataSource() {
-                return new UdpDataSource(null);
+                return new UdpDataSource(null, UdpDataSource.DEFAULT_MAX_PACKET_SIZE, 0);
             }
         };
 
@@ -215,10 +215,9 @@ public class TvPlayer extends AppCompatActivity {
     }
 
     public void monitor () {
-        if (scheduledExecutorService != null) {
+        if (scheduledExecutorService != null ) {
             scheduledExecutorService.shutdown();
         }
-
         scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
         scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
             @Override

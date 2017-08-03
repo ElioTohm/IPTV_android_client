@@ -57,8 +57,9 @@
             android:screenOrientation="landscape"
             android:theme="@style/Theme.Leanback.Onboarding" />
         <activity
-            android:name=".preference.SettingsActivity"
-            android:label="@string/title_activity_settings"></activity>
+            android:name=".weather.OpenUrlActivity"
+            android:theme="@style/WebViewActivityTheme"/>
+
     </application>
 
 </manifest>
