@@ -66,7 +66,7 @@ public class VideoDetailsFragment extends DetailsFragment {
     private static final int DETAIL_THUMB_WIDTH = 274;
     private static final int DETAIL_THUMB_HEIGHT = 274;
 
-    private static final int NUM_COLS = 4;
+    private static final int NUM_COLS = 5;
 
     private Movie mSelectedMovie;
 
@@ -157,11 +157,10 @@ public class VideoDetailsFragment extends DetailsFragment {
                     }
                 });
 
-        row.addAction(new Action(ACTION_WATCH_TRAILER, getResources().getString(
-                R.string.watch_trailer_1), getResources().getString(R.string.watch_trailer_2)));
-        row.addAction(new Action(ACTION_RENT, getResources().getString(R.string.rent_1),
+        row.addAction(new Action(ACTION_WATCH_TRAILER, "Call", getResources().getString(R.string.watch_trailer_2)));
+        row.addAction(new Action(ACTION_RENT, "Request Room Service",
                 getResources().getString(R.string.rent_2)));
-        row.addAction(new Action(ACTION_BUY, getResources().getString(R.string.buy_1),
+        row.addAction(new Action(ACTION_BUY, "Delivery",
                 getResources().getString(R.string.buy_2)));
 
         mAdapter.add(row);

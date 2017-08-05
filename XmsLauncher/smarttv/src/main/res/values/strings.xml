@@ -39,48 +39,6 @@
     <string name="dismiss_error">Dismiss</string>
     <string name="oops">Oops</string>
 
-    <!--TEST URI-->
-    <string name="URI_UDP_MBC_1">udp://@224.1.1.26:1234</string>
-    <string name="URI_UDP_MBC_2">udp://@224.1.1.27:1234</string>
-    <string name="URI_UDP_MBC_3">udp://@224.1.1.28:1234</string>
-    <string name="URI_UDP_MBC_4">udp://@224.1.9.2:1234</string>
-    <string name="URI_UDP_MBC_ACTION">udp://@224.1.1.30:1234</string>
-    <string name="URI_UDP_MBC_DRAMA">udp://@224.1.1.27:1234</string>
-    <string name="URI_UDP_MBC_MAX">udp://@224.1.1.28:1234</string>
-    <string name="URI_UDP_MBC_BOLLYWOOD">udp://@224.1.9.2:1234</string>
-
-    <!--TEST CHANNEL NAMES-->
-    <string name="MBC_1">mbc 1</string>
-    <string name="MBC_2">mbc 2</string>
-    <string name="MBC_3">mbc 3</string>
-    <string name="MBC_4">mbc 4</string>
-    <string name="MBC_ACTION">mbc Action</string>
-    <string name="MBC_DRAMA">mbc Drama</string>
-    <string name="MBC_MAX">mbc Max</string>
-    <string name="MBC_BOLLYWOOD">mbc Bollywood</string>
-
-    <!--CHANNEL BUNDLES-->
-    <string name="BUNDLES_MBC_1">1</string>
-    <string name="BUNDLES_MBC_2">3</string>
-    <string name="BUNDLES_MBC_3">2</string>
-    <string name="BUNDLES_MBC_4">4</string>
-    <string name="BUNDLES_MBC_ACTION">3</string>
-    <string name="BUNDLES_MBC_DRAMA">4</string>
-    <string name="BUNDLES_MBC_MAX">3</string>
-    <string name="BUNDLES_MBC_BOLLYWOOD">5</string>
-
-    <!--onboarding-->
-    <string name="onboarding_title_welcome">Welcome to XMS pro Launcher</string>
-    <string name="onboarding_title_design">The Smart TV that will be your guide in the hotel</string>
-    <string name="onboarding_title_simple">We wish you a pleasant stay</string>
-    <string name="onboarding_title_project">Enjoy your stay</string>
-
-    <string name="onboarding_description_welcome">This isn\'t your ordinary TV</string>
-    <string name="onboarding_description_design">Let us be your virtual guide.... With a press of a button check the hotel restaurant, resort and many more</string>
-    <string name="onboarding_description_simple">No more waiting or asking around for information your room is where you need to be</string>
-    <string name="onboarding_description_project">with 4seasons Hotel</string>
-    <string name="title_activity_settings">User Settings</string>
-
     <!-- Strings related to Settings -->
 
     <!-- Example General settings -->
@@ -154,5 +112,48 @@
     <string name="pref_title_vibrate">Vibrate</string>
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
+
+
+    <!--TEST URI-->
+    <string name="URI_UDP_MBC_1">udp://@224.1.1.26:1234</string>
+    <string name="URI_UDP_MBC_2">udp://@224.1.1.27:1234</string>
+    <string name="URI_UDP_MBC_3">udp://@224.1.1.28:1234</string>
+    <string name="URI_UDP_MBC_4">udp://@224.1.9.2:1234</string>
+    <string name="URI_UDP_MBC_ACTION">udp://@224.1.1.30:1234</string>
+    <string name="URI_UDP_MBC_DRAMA">udp://@224.1.1.27:1234</string>
+    <string name="URI_UDP_MBC_MAX">udp://@224.1.1.28:1234</string>
+    <string name="URI_UDP_MBC_BOLLYWOOD">udp://@224.1.9.2:1234</string>
+
+    <!--TEST CHANNEL NAMES-->
+    <string name="MBC_1">mbc 1</string>
+    <string name="MBC_2">mbc 2</string>
+    <string name="MBC_3">mbc 3</string>
+    <string name="MBC_4">mbc 4</string>
+    <string name="MBC_ACTION">mbc Action</string>
+    <string name="MBC_DRAMA">mbc Drama</string>
+    <string name="MBC_MAX">mbc Max</string>
+    <string name="MBC_BOLLYWOOD">mbc Bollywood</string>
+
+    <!--CHANNEL BUNDLES-->
+    <string name="BUNDLES_MBC_1">1</string>
+    <string name="BUNDLES_MBC_2">3</string>
+    <string name="BUNDLES_MBC_3">2</string>
+    <string name="BUNDLES_MBC_4">4</string>
+    <string name="BUNDLES_MBC_ACTION">3</string>
+    <string name="BUNDLES_MBC_DRAMA">4</string>
+    <string name="BUNDLES_MBC_MAX">3</string>
+    <string name="BUNDLES_MBC_BOLLYWOOD">5</string>
+
+    <!--onboarding-->
+    <string name="onboarding_title_welcome">Welcome to XMS pro Launcher</string>
+    <string name="onboarding_title_design">The Smart TV that will be your guide in the hotel</string>
+    <string name="onboarding_title_simple">We wish you a pleasant stay</string>
+    <string name="onboarding_title_project">Enjoy your stay</string>
+
+    <string name="onboarding_description_welcome">This isn\'t your ordinary TV</string>
+    <string name="onboarding_description_design">Let us be your virtual guide.... With a press of a button check the hotel restaurant, resort and many more</string>
+    <string name="onboarding_description_simple">No more waiting or asking around for information your room is where you need to be</string>
+    <string name="onboarding_description_project">with 4seasons Hotel</string>
+    <string name="title_activity_settings">User Settings</string>
 
 </resources>

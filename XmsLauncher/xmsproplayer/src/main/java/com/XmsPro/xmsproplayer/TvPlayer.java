@@ -39,7 +39,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 import io.realm.Realm;
 import io.realm.RealmQuery;
@@ -215,20 +214,19 @@ public class TvPlayer extends AppCompatActivity {
     }
 
     public void monitor () {
-        if (scheduledExecutorService != null ) {
-            scheduledExecutorService.shutdown();
-        }
-        scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
-        scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
-            @Override
-            public void run() {
-                // Initialize Realm
-                final Realm realm = Realm.getDefaultInstance();
-                RealmResults<Channel> realmResults  = realm.where(Channel.class).equalTo("window_id", player.getCurrentWindowIndex()).findAll();
-                Log.d("TEST", USER_NAME + realmResults.get(0).getName());
-                Log.d("TEST", String.valueOf(System.currentTimeMillis() / 1000));
-            }
-        }, 30, 30, TimeUnit.SECONDS);
+//        if (scheduledExecutorService !realf
+
+//        scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+//        scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+//            @Override
+//            public void run() {
+//                // Initialize Realm
+//                final Realm realm = Realm.getDefaultInstance();
+//                RealmResults<Channel> realmResults  = realm.where(Channel.class).equalTo("window_id", player.getCurrentWindowIndex()).findAll();
+//                Log.d("TEST", USER_NAME + realmResults.get(0).getName());
+//                Log.d("TEST", String.valueOf(System.currentTimeMillis() / 1000));
+//            }
+//        }, 30, 30, TimeUnit.SECONDS);
     }
 
     @Override

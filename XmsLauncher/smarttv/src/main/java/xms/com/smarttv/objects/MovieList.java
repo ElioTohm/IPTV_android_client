@@ -1,7 +1,5 @@
 package xms.com.smarttv.objects;
 
-import android.graphics.drawable.Drawable;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +18,8 @@ public final class MovieList {
                 "Multimedia",
                 "Weather",
                 "Room Service",
-                "Reception"
+                "Shoping",
+                "Where to go"
         };
 
         String description = "Donec tristique, orci sed semper lacinia, quam erat rhoncus massa, non congue tellus est "
@@ -33,18 +32,21 @@ public final class MovieList {
                 "http://commondatastorage.googleapis.com/android-tv/Sample%20videos/Demo%20Slam/Google%20Demo%20Slam_%2020ft%20Search.mp4",
                 "http://commondatastorage.googleapis.com/android-tv/Sample%20videos/April%20Fool's%202013/Introducing%20Gmail%20Blue.mp4",
                 "http://commondatastorage.googleapis.com/android-tv/Sample%20videos/April%20Fool's%202013/Introducing%20Google%20Fiber%20to%20the%20Pole.mp4",
+                "http://commondatastorage.googleapis.com/android-tv/Sample%20videos/April%20Fool's%202013/Introducing%20Google%20Nose.mp4",
                 "http://commondatastorage.googleapis.com/android-tv/Sample%20videos/April%20Fool's%202013/Introducing%20Google%20Nose.mp4"
         };
         String bgImageUrl[] = {
                 "http://www.cityfilm.tv/uploads/tx_extpagesdb/media.jpg",
                 "http://images.kuoni.co.uk/73/dubai-33488291-1494255242-ImageGalleryLightboxLarge.jpg",
                 "http://amosphere.com/wp-content/uploads/2016/07/top-room-service.jpg",
-                "https://fthmb.tqn.com/YmVEs-1-qxo4JqSGTW0q2MuSYms=/2000x1333/filters:fill(auto,1)/about/receptionist_hotel-517791323-58a4ce485f9b58a3c95c1114.jpg",
+                "http://gotourasia.info/wp-content/uploads/2016/03/3.jpg",
+                "http://arunnath.com/i/2017/04/dubai-night-wallpapers-widescreen.jpg"
         };
         String cardImageUrl[] = {
                 "http://commondatastorage.googleapis.com/android-tv/Sample%20videos/Demo%20Slam/Google%20Demo%20Slam_%2020ft%20Search/card.jpg",
                 "http://commondatastorage.googleapis.com/android-tv/Sample%20videos/April%20Fool's%202013/Introducing%20Gmail%20Blue/card.jpg",
                 "http://commondatastorage.googleapis.com/android-tv/Sample%20videos/April%20Fool's%202013/Introducing%20Google%20Fiber%20to%20the%20Pole/card.jpg",
+                "http://commondatastorage.googleapis.com/android-tv/Sample%20videos/April%20Fool's%202013/Introducing%20Google%20Nose/card.jpg",
                 "http://commondatastorage.googleapis.com/android-tv/Sample%20videos/April%20Fool's%202013/Introducing%20Google%20Nose/card.jpg"
         };
 
@@ -53,6 +55,7 @@ public final class MovieList {
             R.drawable.sunsvgrepocom,
             R.drawable.roomservicesvgrepocom,
             R.drawable.receptionsvgrepocom,
+            R.drawable.wheretogo
         };
 
         list.add(buildMovieInfo(0, title[0],
@@ -63,6 +66,8 @@ public final class MovieList {
                 description, "", videoUrl[2], cardImageUrl[2], bgImageUrl[2], drawables[2]));
         list.add(buildMovieInfo(1, title[3],
                 description, "", videoUrl[3], cardImageUrl[3], bgImageUrl[3], drawables[3]));
+        list.add(buildMovieInfo(1, title[4],
+                description, "", videoUrl[4], cardImageUrl[4], bgImageUrl[4], drawables[4]));
 
         return list;
     }
