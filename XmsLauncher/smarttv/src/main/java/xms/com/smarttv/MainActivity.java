@@ -20,11 +20,26 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.eliotohme.data.Channel;
 import com.eliotohme.data.User;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.net.URISyntaxException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+
 import io.realm.Realm;
+import io.socket.client.Ack;
+import io.socket.client.IO;
+import io.socket.client.Socket;
+import io.socket.emitter.Emitter;
+import io.socket.engineio.client.transports.WebSocket;
 import xms.com.smarttv.UI.OnboardingActivity;
 import xms.com.smarttv.UI.OnboardingFragment;
 
@@ -35,6 +50,7 @@ public class MainActivity extends Activity {
     /**
      * Called when the activity is first created.
      */
+    public String TAG = "test";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -117,12 +133,79 @@ public class MainActivity extends Activity {
         realm.copyToRealm(user);
         realm.commitTransaction();
         realm.close();
+        startEcho();
     }
 
     @Override
     public void onBackPressed() {
-
         return;
+    }
+
+    public void startEcho() {
+        Log.e(TAG, "ECHO START...");
+
+        try {
+            Socket socket = IO.socket(getString(R.string.URI_SOCKET));
+
+            socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    Log.e(TAG, "ECHO CONNECTED");
+                }
+            }).on("App\\Events\\NotificationEvent", new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    JSONObject obj = (JSONObject)args[1];
+                    String Message = null;
+                    try {
+                        Message = obj.getString("Message");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    Log.e(TAG, Message);
+                    final String finalMessage = Message;
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(MainActivity.this, finalMessage, Toast.LENGTH_LONG).show();
+                        }
+                    });
+
+
+                }
+            }).on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    Log.e(TAG, "ECHO DISCONNECTED");
+                }
+            });
+
+            socket.connect();
+
+            JSONObject object = new JSONObject();
+            JSONObject auth = new JSONObject();
+            JSONObject headers = new JSONObject();
+
+            try {
+                object.put("channel", "Notification");
+                object.put("name", "subscribe");
+
+                auth.put("headers", headers);
+                object.put("auth", auth);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            socket.emit("subscribe", object, new Ack() {
+                @Override
+                public void call(Object... args) {
+                    Log.e(TAG, "ECHO SUBSCRIBED"); // This event never occurs. I don't know why...
+                }
+            });
+        } catch (URISyntaxException e) {
+            Log.e(TAG, "ECHO ERROR");
+            e.printStackTrace();
+        }
     }
 
 }
