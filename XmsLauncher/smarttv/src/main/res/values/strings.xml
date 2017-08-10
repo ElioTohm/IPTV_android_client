@@ -115,7 +115,8 @@
 
 
     <!--TEST URI-->
-    <string name="URI_UDP_MBC_1">udp://@224.1.1.26:1234</string>
+    <string name="URI_UDP_MBC_1">udp://@224.1.10.59:1234</string>
+    <!--<string name="URI_UDP_MBC_1">udp://@224.1.1.26:1234</string>-->
     <string name="URI_UDP_MBC_2">udp://@224.1.1.27:1234</string>
     <string name="URI_UDP_MBC_3">udp://@224.1.1.28:1234</string>
     <string name="URI_UDP_MBC_4">udp://@224.1.9.2:1234</string>

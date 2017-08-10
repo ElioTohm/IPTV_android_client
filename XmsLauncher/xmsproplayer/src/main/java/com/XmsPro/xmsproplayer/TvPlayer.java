@@ -15,9 +15,11 @@ import com.eliotohme.data.Channel;
 import com.eliotohme.data.User;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
+import com.google.android.exoplayer2.extractor.Extractor;
 import com.google.android.exoplayer2.extractor.ExtractorsFactory;
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
@@ -39,10 +41,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import io.realm.Realm;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
+
+import static com.google.android.exoplayer2.extractor.ts.DefaultTsPayloadReaderFactory.FLAG_ALLOW_NON_IDR_KEYFRAMES;
 
 public class TvPlayer extends AppCompatActivity {
     String TAG  = "xms";
@@ -82,7 +87,7 @@ public class TvPlayer extends AppCompatActivity {
         };
 
         // Initialize ExtractorFactory
-        ExtractorsFactory tsExtractorFactory = new DefaultExtractorsFactory();
+        ExtractorsFactory tsExtractorFactory = new DefaultExtractorsFactory().setTsExtractorFlags(FLAG_ALLOW_NON_IDR_KEYFRAMES);
 
         // Loop on URI list to create individual Media source
         MediaSource[] mediaSources = new MediaSource[uris.length];
@@ -214,19 +219,19 @@ public class TvPlayer extends AppCompatActivity {
     }
 
     public void monitor () {
-//        if (scheduledExecutorService !realf
-
-//        scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
-//        scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
-//            @Override
-//            public void run() {
-//                // Initialize Realm
-//                final Realm realm = Realm.getDefaultInstance();
-//                RealmResults<Channel> realmResults  = realm.where(Channel.class).equalTo("window_id", player.getCurrentWindowIndex()).findAll();
-//                Log.d("TEST", USER_NAME + realmResults.get(0).getName());
-//                Log.d("TEST", String.valueOf(System.currentTimeMillis() / 1000));
-//            }
-//        }, 30, 30, TimeUnit.SECONDS);
+        if (scheduledExecutorService == null) {
+            scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+        }
+        scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+            @Override
+            public void run() {
+                // Initialize Realm
+                final Realm realm = Realm.getDefaultInstance();
+                RealmResults<Channel> realmResults  = realm.where(Channel.class).equalTo("window_id", player.getCurrentWindowIndex()).findAll();
+                Log.d("TEST", USER_NAME + realmResults.get(0).getName());
+                Log.d("TEST", String.valueOf(System.currentTimeMillis() / 1000));
+            }
+        }, 30, 30, TimeUnit.SECONDS);
     }
 
     @Override
