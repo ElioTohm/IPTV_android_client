@@ -113,10 +113,10 @@ public class MainActivity extends Activity {
 
         for (int i = 0; i < uris.length; i++) {
             Channel channel = new Channel();
-            channel.setName(channelname[i]);
-            channel.setWindowid(i);
-            channel.setUri(uris[i]);
-            channel.setBundle_id(Integer.parseInt(channel_bundles[i]));
+//            channel.setName(channelname[i]);
+//            channel.setWindowid(i);
+//            channel.setUri(uris[i]);
+//            channel.setBundle_id(Integer.parseInt(channel_bundles[i]));
             realm.beginTransaction();
             realm.copyToRealm(channel);
             realm.commitTransaction();
