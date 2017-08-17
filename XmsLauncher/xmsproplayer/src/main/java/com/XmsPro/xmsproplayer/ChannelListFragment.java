@@ -84,32 +84,33 @@ public class ChannelListFragment extends BrowseFragment {
         ArrayObjectAdapter gridRowAdapterAllChannels = new ArrayObjectAdapter(mGridPresenter);
         gridRowAdapterAllChannels.addAll(0, channels.findAll());
 
-        RealmQuery<Channel> channelsbundle1 = realm.where(Channel.class).equalTo("bundle_id", 1);
-        GridItemPresenter mGridPresenterbundle1 = new GridItemPresenter();
-        ArrayObjectAdapter gridRowAdapterbundle1 = new ArrayObjectAdapter(mGridPresenterbundle1);
-        gridRowAdapterbundle1.addAll(0, channelsbundle1.findAll());
-
-        RealmQuery<Channel> channelsbundle2 = realm.where(Channel.class).equalTo("bundle_id", 2);
-        GridItemPresenter mGridPresenterbundle2 = new GridItemPresenter();
-        ArrayObjectAdapter gridRowAdapterbundle2 = new ArrayObjectAdapter(mGridPresenterbundle2);
-        gridRowAdapterbundle2.addAll(0, channelsbundle2.findAll());
-
-        RealmQuery<Channel> channelsbundle3 = realm.where(Channel.class).equalTo("bundle_id", 3);
-        GridItemPresenter mGridPresenterbundle3 = new GridItemPresenter();
-        ArrayObjectAdapter gridRowAdapterbundle3 = new ArrayObjectAdapter(mGridPresenterbundle3);
-        gridRowAdapterbundle3.addAll(0, channelsbundle3.findAll());
-
-        RealmQuery<Channel> channelsbundle4 = realm.where(Channel.class).equalTo("bundle_id", 4);
-        GridItemPresenter mGridPresenterbundle4 = new GridItemPresenter();
-        ArrayObjectAdapter gridRowAdapterbundle4 = new ArrayObjectAdapter(mGridPresenterbundle4);
-        gridRowAdapterbundle4.addAll(0, channelsbundle4.findAll());
+//        RealmQuery<Channel> channelsbundle1 = realm.where(Channel.class).equalTo("bundle_id", 1);
+//        GridItemPresenter mGridPresenterbundle1 = new GridItemPresenter();
+//        ArrayObjectAdapter gridRowAdapterbundle1 = new ArrayObjectAdapter(mGridPresenterbundle1);
+//        gridRowAdapterbundle1.addAll(0, channelsbundle1.findAll());
+//
+//        RealmQuery<Channel> channelsbundle2 = realm.where(Channel.class).equalTo("bundle_id", 2);
+//        GridItemPresenter mGridPresenterbundle2 = new GridItemPresenter();
+//        ArrayObjectAdapter gridRowAdapterbundle2 = new ArrayObjectAdapter(mGridPresenterbundle2);
+//        gridRowAdapterbundle2.addAll(0, channelsbundle2.findAll());
+//
+//        RealmQuery<Channel> channelsbundle3 = realm.where(Channel.class).equalTo("bundle_id", 3);
+//        GridItemPresenter mGridPresenterbundle3 = new GridItemPresenter();
+//        ArrayObjectAdapter gridRowAdapterbundle3 = new ArrayObjectAdapter(mGridPresenterbundle3);
+//        gridRowAdapterbundle3.addAll(0, channelsbundle3.findAll());
+//
+//        RealmQuery<Channel> channelsbundle4 = realm.where(Channel.class).equalTo("bundle_id", 4);
+//        GridItemPresenter mGridPresenterbundle4 = new GridItemPresenter();
+//        ArrayObjectAdapter gridRowAdapterbundle4 = new ArrayObjectAdapter(mGridPresenterbundle4);
+//        gridRowAdapterbundle4.addAll(0, channelsbundle4.findAll());
 
 
         mRowsAdapter.add(new ListRow(new HeaderItem(0, "        All Channels"), gridRowAdapterAllChannels));
-        mRowsAdapter.add(new ListRow(new HeaderItem(1, "        " + getString(R.string.BUNDLE_1)), gridRowAdapterbundle1));
-        mRowsAdapter.add(new ListRow(new HeaderItem(2, "        " + getString(R.string.BUNDLE_2)), gridRowAdapterbundle2));
-        mRowsAdapter.add(new ListRow(new HeaderItem(3, "        " + getString(R.string.BUNDLE_3)), gridRowAdapterbundle3));
-        mRowsAdapter.add(new ListRow(new HeaderItem(4, "        " + getString(R.string.BUNDLE_4)), gridRowAdapterbundle4));
+
+//        mRowsAdapter.add(new ListRow(new HeaderItem(1, "        " + getString(R.string.BUNDLE_1)), gridRowAdapterbundle1));
+//        mRowsAdapter.add(new ListRow(new HeaderItem(2, "        " + getString(R.string.BUNDLE_2)), gridRowAdapterbundle2));
+//        mRowsAdapter.add(new ListRow(new HeaderItem(3, "        " + getString(R.string.BUNDLE_3)), gridRowAdapterbundle3));
+//        mRowsAdapter.add(new ListRow(new HeaderItem(4, "        " + getString(R.string.BUNDLE_4)), gridRowAdapterbundle4));
 
         setAdapter(mRowsAdapter);
 
@@ -122,7 +123,7 @@ public class ChannelListFragment extends BrowseFragment {
             Log.e("xms", String.valueOf(item));
             if (item instanceof Channel) {
                 Channel channel = (Channel) item;
-                ((TvPlayer)getActivity()).changeChannel(channel.getWindowid());
+                ((TvPlayer)getActivity()).changeChannel(channel.getId());
             }
         }
     }

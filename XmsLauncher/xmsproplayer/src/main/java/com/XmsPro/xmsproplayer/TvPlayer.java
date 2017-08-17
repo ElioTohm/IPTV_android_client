@@ -114,7 +114,7 @@ public class TvPlayer extends AppCompatActivity {
 
         Uri[] uris = new Uri[channelArrayList.size()];
         for (int i = 0; i < channelArrayList.size(); i++) {
-            uris[i] = Uri.parse(channelArrayList.get(i).getUri());
+            uris[i] = Uri.parse(channelArrayList.get(i).getStream());
         }
 
         //default BandwidthMeter
@@ -195,7 +195,7 @@ public class TvPlayer extends AppCompatActivity {
     }
 
     private void showChannelInfo(Channel channel) {
-        currentChannel.setText(String.valueOf(channel.getWindowid() + 1));
+        currentChannel.setText(String.valueOf(channel.getId() + 1));
         channelName.setText(channel.getName());
         channelInfo.setVisibility(View.VISIBLE);
         Handler mChannelInfoHandler=new Handler();

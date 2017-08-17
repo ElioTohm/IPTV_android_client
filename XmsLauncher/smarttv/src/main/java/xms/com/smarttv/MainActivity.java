@@ -20,26 +20,35 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.eliotohme.data.Channel;
+import com.eliotohme.data.Genre;
 import com.eliotohme.data.User;
+import com.eliotohme.data.network.ApiInterface;
+import com.eliotohme.data.network.ApiService;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
 import io.socket.client.Ack;
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 import io.socket.engineio.client.transports.WebSocket;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import xms.com.smarttv.UI.OnboardingActivity;
 import xms.com.smarttv.UI.OnboardingFragment;
 
@@ -51,11 +60,13 @@ public class MainActivity extends Activity {
      * Called when the activity is first created.
      */
     public String TAG = "test";
+    private Realm realm;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         if(!sharedPreferences.getBoolean(OnboardingFragment.COMPLETED_ONBOARDING, false)) {
             // This is the first time running the app, let's go to onboarding
@@ -64,75 +75,52 @@ public class MainActivity extends Activity {
 
         // Initialize Realm
         Realm.init(this);
+
+        final RealmConfiguration realmConfiguration = new RealmConfiguration.Builder()
+                .name(Realm.DEFAULT_REALM_NAME)
+                .schemaVersion(0)
+                .deleteRealmIfMigrationNeeded()
+                .build();
+
+        Realm.setDefaultConfiguration(realmConfiguration);
+
         // Get a Realm instance for this thread
-        Realm realm = Realm.getDefaultInstance();
+        realm = Realm.getDefaultInstance();
+
 
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                realm.delete(Channel.class);
+                realm.deleteAll();
             }
         });
 
         /*
         * todo get data from http request
-        *
         * */
-        String [] uris = {
-                    getString(R.string.URI_UDP_MBC_1),
-                    getString(R.string.URI_UDP_MBC_2),
-                    getString(R.string.URI_UDP_MBC_3),
-                    getString(R.string.URI_UDP_MBC_4),
-                    getString(R.string.URI_UDP_MBC_ACTION),
-                    getString(R.string.URI_UDP_MBC_MAX),
-                    getString(R.string.URI_UDP_MBC_DRAMA),
-                    getString(R.string.URI_UDP_MBC_BOLLYWOOD),
-                };
+        ApiInterface apiInterface = ApiService.createService(ApiInterface.class, "");
+        Call<List<Channel>> channelCall = apiInterface.getChannel();
+        channelCall.enqueue(new Callback<List<Channel>>() {
+            @Override
+            public void onResponse(Call<List<Channel>> call, Response<List<Channel>> response) {
+                Realm innerrealm = Realm.getDefaultInstance();
+                innerrealm.beginTransaction();
+                innerrealm.insertOrUpdate(response.body());
+                innerrealm.commitTransaction();
+            }
 
-        String[] channelname = {
-                            getString(R.string.MBC_1),
-                            getString(R.string.MBC_2),
-                            getString(R.string.MBC_3),
-                            getString(R.string.MBC_4),
-                            getString(R.string.MBC_ACTION),
-                            getString(R.string.MBC_MAX),
-                            getString(R.string.MBC_DRAMA),
-                            getString(R.string.MBC_BOLLYWOOD)
-                        };
+            @Override
+            public void onFailure(@NonNull Call<List<Channel>> call, @NonNull Throwable t) {
 
-        String[] channel_bundles = {
-                            getString(R.string.BUNDLES_MBC_1),
-                            getString(R.string.BUNDLES_MBC_2),
-                            getString(R.string.BUNDLES_MBC_3),
-                            getString(R.string.BUNDLES_MBC_4),
-                            getString(R.string.BUNDLES_MBC_ACTION),
-                            getString(R.string.BUNDLES_MBC_MAX),
-                            getString(R.string.BUNDLES_MBC_DRAMA),
-                            getString(R.string.BUNDLES_MBC_BOLLYWOOD),
-                        };
-
-        for (int i = 0; i < uris.length; i++) {
-            Channel channel = new Channel();
-//            channel.setName(channelname[i]);
-//            channel.setWindowid(i);
-//            channel.setUri(uris[i]);
-//            channel.setBundle_id(Integer.parseInt(channel_bundles[i]));
-            realm.beginTransaction();
-            realm.copyToRealm(channel);
-            realm.commitTransaction();
-        }
-
-        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString("USER_NAME", "GEORGE");
-        editor.apply();
+            }
+        });
 
         User user = new User();
         user.setName("Dubai_Demo_1");
         realm.beginTransaction();
         realm.copyToRealm(user);
         realm.commitTransaction();
-        realm.close();
+
         startEcho();
     }
 
@@ -206,6 +194,11 @@ public class MainActivity extends Activity {
             Log.e(TAG, "ECHO ERROR");
             e.printStackTrace();
         }
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        realm.close();
     }
 
 }
