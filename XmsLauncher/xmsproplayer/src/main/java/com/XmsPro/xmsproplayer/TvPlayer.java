@@ -1,9 +1,9 @@
 package com.XmsPro.xmsproplayer;
 
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -15,11 +15,9 @@ import com.eliotohme.data.Channel;
 import com.eliotohme.data.User;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlayerFactory;
-import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
-import com.google.android.exoplayer2.extractor.Extractor;
 import com.google.android.exoplayer2.extractor.ExtractorsFactory;
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
@@ -59,7 +57,7 @@ public class TvPlayer extends AppCompatActivity {
     private static final CookieManager DEFAULT_COOKIE_MANAGER;
     private View channelInfo;
     private TextView currentChannel, channel_number_idicator, channelName;
-    private ImageView channelIco;
+    private ImageView channelIcon;
     private List<Channel> channelArrayList;
     private FrameLayout channelList_frameLayout;
     private int channellistSize;
@@ -72,7 +70,7 @@ public class TvPlayer extends AppCompatActivity {
         DEFAULT_COOKIE_MANAGER.setCookiePolicy(CookiePolicy.ACCEPT_ORIGINAL_SERVER);
     }
 
-    private MediaSource buildUDPMediaSource(Uri[] uris) {
+    private MediaSource buildUDPMediaSource(final Uri[] uris) {
         /*
         * Function that handles creating a ConcatenatingMediaSource
         * Of UDP URIs
@@ -89,9 +87,22 @@ public class TvPlayer extends AppCompatActivity {
         // Initialize ExtractorFactory
         ExtractorsFactory tsExtractorFactory = new DefaultExtractorsFactory().setTsExtractorFlags(FLAG_ALLOW_NON_IDR_KEYFRAMES);
 
+        Realm.init(this);
+
+        // Get a Realm instance for this thread
+        Realm realm = Realm.getDefaultInstance();
+
         // Loop on URI list to create individual Media source
         MediaSource[] mediaSources = new MediaSource[uris.length];
         for (int i = 0; i < uris.length; i++) {
+            final int finalI = i;
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    Channel channel= realm.where(Channel.class).equalTo("stream", String.valueOf(uris[finalI])).findFirst();
+                    channel.setWindowid(finalI);
+                }
+            });
             mediaSources[i] = new ExtractorMediaSource(uris[i],
                     udsf,
                     tsExtractorFactory,
@@ -195,7 +206,7 @@ public class TvPlayer extends AppCompatActivity {
     }
 
     private void showChannelInfo(Channel channel) {
-        currentChannel.setText(String.valueOf(channel.getId() + 1));
+        currentChannel.setText(String.valueOf(channel.getWindowid() + 1));
         channelName.setText(channel.getName());
         channelInfo.setVisibility(View.VISIBLE);
         Handler mChannelInfoHandler=new Handler();
@@ -239,10 +250,10 @@ public class TvPlayer extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tv_player);
 
-        channelInfo = (View) findViewById(R.id.channelInfo);
+        channelInfo = findViewById(R.id.channelInfo);
         currentChannel = (TextView) findViewById(R.id.current_channel);
         channelName = (TextView) findViewById(R.id.channel_name);
-        channelIco= (ImageView) findViewById(R.id.channel_ico);
+        channelIcon = (ImageView) findViewById(R.id.channel_ico);
         channelArrayList = new ArrayList<>();
         channelList_frameLayout = (FrameLayout) findViewById(R.id.main_channellist_fragment);
         channel_number_idicator = (TextView) findViewById(R.id.channel_number_idicator);

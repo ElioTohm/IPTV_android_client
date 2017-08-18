@@ -15,7 +15,6 @@
 package xms.com.smarttv;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -25,7 +24,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.eliotohme.data.Channel;
-import com.eliotohme.data.Genre;
 import com.eliotohme.data.User;
 import com.eliotohme.data.network.ApiInterface;
 import com.eliotohme.data.network.ApiService;
@@ -34,10 +32,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -45,7 +40,6 @@ import io.socket.client.Ack;
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
-import io.socket.engineio.client.transports.WebSocket;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -88,12 +82,6 @@ public class MainActivity extends Activity {
         realm = Realm.getDefaultInstance();
 
 
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                realm.deleteAll();
-            }
-        });
 
         /*
         * todo get data from http request
@@ -102,11 +90,16 @@ public class MainActivity extends Activity {
         Call<List<Channel>> channelCall = apiInterface.getChannel();
         channelCall.enqueue(new Callback<List<Channel>>() {
             @Override
-            public void onResponse(Call<List<Channel>> call, Response<List<Channel>> response) {
-                Realm innerrealm = Realm.getDefaultInstance();
-                innerrealm.beginTransaction();
-                innerrealm.insertOrUpdate(response.body());
-                innerrealm.commitTransaction();
+            public void onResponse(Call<List<Channel>> call, final Response<List<Channel>> response) {
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        realm.insertOrUpdate(response.body());
+                        User user = new User();
+                        user.setName("Dubai_Demo_1");
+                        realm.insertOrUpdate(user);
+                    }
+                });
             }
 
             @Override
@@ -115,13 +108,12 @@ public class MainActivity extends Activity {
             }
         });
 
-        User user = new User();
-        user.setName("Dubai_Demo_1");
-        realm.beginTransaction();
-        realm.copyToRealm(user);
-        realm.commitTransaction();
 
         startEcho();
+
+        Intent intent = new Intent("com.XmsPro.xmsproplayer.TvPlayer");
+        startActivity(intent);
+
     }
 
     @Override
