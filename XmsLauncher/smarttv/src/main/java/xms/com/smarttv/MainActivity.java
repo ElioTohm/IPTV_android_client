@@ -81,8 +81,6 @@ public class MainActivity extends Activity {
         // Get a Realm instance for this thread
         realm = Realm.getDefaultInstance();
 
-
-
         /*
         * todo get data from http request
         * */
@@ -94,6 +92,7 @@ public class MainActivity extends Activity {
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
+                        realm.deleteAll();
                         realm.insertOrUpdate(response.body());
                         User user = new User();
                         user.setName("Dubai_Demo_1");

@@ -1,9 +1,9 @@
 package com.XmsPro.xmsproplayer;
 
+import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -47,7 +47,7 @@ import io.realm.RealmResults;
 
 import static com.google.android.exoplayer2.extractor.ts.DefaultTsPayloadReaderFactory.FLAG_ALLOW_NON_IDR_KEYFRAMES;
 
-public class TvPlayer extends AppCompatActivity {
+public class TvPlayer extends Activity {
     String TAG  = "xms";
     private SimpleExoPlayer player;
     boolean playWhenReady;
@@ -70,7 +70,7 @@ public class TvPlayer extends AppCompatActivity {
         DEFAULT_COOKIE_MANAGER.setCookiePolicy(CookiePolicy.ACCEPT_ORIGINAL_SERVER);
     }
 
-    private MediaSource buildUDPMediaSource(final Uri[] uris) {
+    private MediaSource buildUDPMediaSource(Uri[] uris) {
         /*
         * Function that handles creating a ConcatenatingMediaSource
         * Of UDP URIs
@@ -87,22 +87,11 @@ public class TvPlayer extends AppCompatActivity {
         // Initialize ExtractorFactory
         ExtractorsFactory tsExtractorFactory = new DefaultExtractorsFactory().setTsExtractorFlags(FLAG_ALLOW_NON_IDR_KEYFRAMES);
 
-        Realm.init(this);
-
-        // Get a Realm instance for this thread
-        Realm realm = Realm.getDefaultInstance();
 
         // Loop on URI list to create individual Media source
         MediaSource[] mediaSources = new MediaSource[uris.length];
         for (int i = 0; i < uris.length; i++) {
-            final int finalI = i;
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    Channel channel= realm.where(Channel.class).equalTo("stream", String.valueOf(uris[finalI])).findFirst();
-                    channel.setWindowid(finalI);
-                }
-            });
+
             mediaSources[i] = new ExtractorMediaSource(uris[i],
                     udsf,
                     tsExtractorFactory,
@@ -206,7 +195,7 @@ public class TvPlayer extends AppCompatActivity {
     }
 
     private void showChannelInfo(Channel channel) {
-        currentChannel.setText(String.valueOf(channel.getWindowid() + 1));
+        currentChannel.setText(String.valueOf(channel.getId()));
         channelName.setText(channel.getName());
         channelInfo.setVisibility(View.VISIBLE);
         Handler mChannelInfoHandler=new Handler();

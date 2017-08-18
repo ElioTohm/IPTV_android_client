@@ -9,8 +9,6 @@ import io.realm.annotations.PrimaryKey;
 
 public class Channel extends RealmObject {
     @PrimaryKey
-    @SerializedName("id")
-    @Expose
     private int id;
 
     @SerializedName("name")
@@ -24,16 +22,6 @@ public class Channel extends RealmObject {
     @SerializedName("thumbnail")
     @Expose
     private String thumbnail;
-
-    public int getWindowid() {
-        return Windowid;
-    }
-
-    public void setWindowid(int windowid) {
-        Windowid = windowid;
-    }
-
-    private int Windowid;
 
     private RealmList<Genre> genres = null;
 

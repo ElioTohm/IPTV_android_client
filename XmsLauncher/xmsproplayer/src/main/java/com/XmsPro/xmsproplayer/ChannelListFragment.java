@@ -12,11 +12,11 @@ import android.support.v17.leanback.widget.OnItemViewClickedListener;
 import android.support.v17.leanback.widget.Presenter;
 import android.support.v17.leanback.widget.Row;
 import android.support.v17.leanback.widget.RowPresenter;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.XmsPro.xmsproplayer.presenter.ChannelCardPresenter;
 import com.eliotohme.data.Channel;
 import com.eliotohme.data.Genre;
 
@@ -77,14 +77,14 @@ public class ChannelListFragment extends BrowseFragment {
 
         Realm.init(getActivity());
         mRowsAdapter = new ArrayObjectAdapter(new ListRowPresenter());
+        ChannelCardPresenter channelCardPresenter = new ChannelCardPresenter();
 
         // Get a Realm instance for this thread
         Realm realm = Realm.getDefaultInstance();
 
         // Put all channel in all channels group (row)
         RealmQuery<Channel> channels = realm.where(Channel.class);
-        GridItemPresenter mGridPresenter = new GridItemPresenter();
-        ArrayObjectAdapter gridRowAdapterAllChannels = new ArrayObjectAdapter(mGridPresenter);
+        ArrayObjectAdapter gridRowAdapterAllChannels = new ArrayObjectAdapter(channelCardPresenter);
         gridRowAdapterAllChannels.addAll(0, channels.findAll());
 
         mRowsAdapter.add(new ListRow(new HeaderItem(0, "        All Channels"), gridRowAdapterAllChannels));
@@ -96,8 +96,7 @@ public class ChannelListFragment extends BrowseFragment {
         // loop in result genre to create row genre for channels
         for (Genre genre : genreRealmResults) {
             RealmQuery<Channel> channelsbundle = realm.where(Channel.class).equalTo("genres.id", genre.getId());
-            GridItemPresenter mGridPresenterbundle = new GridItemPresenter();
-            ArrayObjectAdapter gridRowAdapterbundle = new ArrayObjectAdapter(mGridPresenterbundle);
+            ArrayObjectAdapter gridRowAdapterbundle = new ArrayObjectAdapter(channelCardPresenter);
             gridRowAdapterbundle.addAll(0, channelsbundle.findAll());
             mRowsAdapter.add(new ListRow(new HeaderItem(1, "        " + genre.getName()), gridRowAdapterbundle));
 
@@ -111,9 +110,8 @@ public class ChannelListFragment extends BrowseFragment {
         @Override
         public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item,
                                   RowPresenter.ViewHolder rowViewHolder, Row row) {
-            Log.e("xms", String.valueOf(item));
             if (item instanceof Channel) {
-                ((TvPlayer)getActivity()).changeChannel(((Channel) item).getWindowid());
+                ((TvPlayer)getActivity()).changeChannel(((Channel) item).getId() - 1 );
             }
         }
     }

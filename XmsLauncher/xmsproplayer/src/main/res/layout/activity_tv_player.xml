@@ -23,7 +23,7 @@
         android:name="com.XmsPro.xmsproplayer.ChannelListFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".PlayerActivity"
+        tools:context=".MainActivity"
         tools:deviceIds="tv"
         tools:ignore="MergeRootFrame"/>
 
