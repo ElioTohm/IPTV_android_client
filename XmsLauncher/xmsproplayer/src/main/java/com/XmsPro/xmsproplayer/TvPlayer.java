@@ -227,8 +227,8 @@ public class TvPlayer extends Activity {
             public void run() {
                 // Initialize Realm
                 final Realm realm = Realm.getDefaultInstance();
-                RealmResults<Channel> realmResults  = realm.where(Channel.class).equalTo("window_id", player.getCurrentWindowIndex()).findAll();
-                Log.d("TEST", USER_NAME + realmResults.get(0).getName());
+                Channel channel = realm.where(Channel.class).equalTo("window_id", player.getCurrentWindowIndex()).findFirst();
+                Log.d("TEST", USER_NAME + channel.getName());
                 Log.d("TEST", String.valueOf(System.currentTimeMillis() / 1000));
             }
         }, 30, 30, TimeUnit.SECONDS);
@@ -254,7 +254,7 @@ public class TvPlayer extends Activity {
 
         RealmQuery<Channel> channels = realm.where(Channel.class);
 
-        channelArrayList.addAll(channels.findAll());
+        channelArrayList.addAll(channels.findAllSorted("id"));
 
         channellistSize = channelArrayList.size();
 
