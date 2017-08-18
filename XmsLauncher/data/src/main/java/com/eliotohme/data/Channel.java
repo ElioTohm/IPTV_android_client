@@ -9,6 +9,8 @@ import io.realm.annotations.PrimaryKey;
 
 public class Channel extends RealmObject {
     @PrimaryKey
+    @SerializedName("number")
+    @Expose
     private int id;
 
     @SerializedName("name")

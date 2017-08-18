@@ -85,9 +85,9 @@ public class ChannelListFragment extends BrowseFragment {
         // Put all channel in all channels group (row)
         RealmQuery<Channel> channels = realm.where(Channel.class);
         ArrayObjectAdapter gridRowAdapterAllChannels = new ArrayObjectAdapter(channelCardPresenter);
-        gridRowAdapterAllChannels.addAll(0, channels.findAll());
+        gridRowAdapterAllChannels.addAll(0, channels.findAllSorted("id"));
 
-        mRowsAdapter.add(new ListRow(new HeaderItem(0, "        All Channels"), gridRowAdapterAllChannels));
+        mRowsAdapter.add(new ListRow(new HeaderItem(0, "All Channels"), gridRowAdapterAllChannels));
 
         // get all genre
         RealmQuery<Genre> genreRealmQuery = realm.where(Genre.class);
@@ -97,8 +97,8 @@ public class ChannelListFragment extends BrowseFragment {
         for (Genre genre : genreRealmResults) {
             RealmQuery<Channel> channelsbundle = realm.where(Channel.class).equalTo("genres.id", genre.getId());
             ArrayObjectAdapter gridRowAdapterbundle = new ArrayObjectAdapter(channelCardPresenter);
-            gridRowAdapterbundle.addAll(0, channelsbundle.findAll());
-            mRowsAdapter.add(new ListRow(new HeaderItem(1, "        " + genre.getName()), gridRowAdapterbundle));
+            gridRowAdapterbundle.addAll(0, channelsbundle.findAllSorted("id"));
+            mRowsAdapter.add(new ListRow(new HeaderItem(1, genre.getName()), gridRowAdapterbundle));
 
         }
 
