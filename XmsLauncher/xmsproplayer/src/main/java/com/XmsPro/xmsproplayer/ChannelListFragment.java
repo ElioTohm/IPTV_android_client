@@ -67,7 +67,7 @@ public class ChannelListFragment extends BrowseFragment {
 
     private void setupUIElements() {
         setHeadersState(HEADERS_ENABLED);
-        setHeadersTransitionOnBackEnabled(true);
+        setHeadersTransitionOnBackEnabled(false);
         // set fastLane (or headers) background color
         setBrandColor(getResources().getColor(R.color.fastlane_background));
         // set search icon color

@@ -12,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.eliotohme.data.Channel;
-import com.eliotohme.data.User;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
@@ -43,7 +42,6 @@ import java.util.concurrent.TimeUnit;
 
 import io.realm.Realm;
 import io.realm.RealmQuery;
-import io.realm.RealmResults;
 
 import static com.google.android.exoplayer2.extractor.ts.DefaultTsPayloadReaderFactory.FLAG_ALLOW_NON_IDR_KEYFRAMES;
 
@@ -63,7 +61,7 @@ public class TvPlayer extends Activity {
     private int channellistSize;
     private SimpleExoPlayerView simpleExoPlayerView;
     private ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
-    private String USER_NAME;
+    private int USER_NAME;
 
     static {
         DEFAULT_COOKIE_MANAGER = new CookieManager();
@@ -87,11 +85,9 @@ public class TvPlayer extends Activity {
         // Initialize ExtractorFactory
         ExtractorsFactory tsExtractorFactory = new DefaultExtractorsFactory().setTsExtractorFlags(FLAG_ALLOW_NON_IDR_KEYFRAMES);
 
-
         // Loop on URI list to create individual Media source
         MediaSource[] mediaSources = new MediaSource[uris.length];
         for (int i = 0; i < uris.length; i++) {
-
             mediaSources[i] = new ExtractorMediaSource(uris[i],
                     udsf,
                     tsExtractorFactory,
@@ -258,9 +254,7 @@ public class TvPlayer extends Activity {
 
         channellistSize = channelArrayList.size();
 
-        RealmQuery<User> users = realm.where(User.class);
-        RealmResults<User> users1 = users.findAll();
-        USER_NAME = users1.get(0).getName();
+        USER_NAME = 1;
 
     }
 

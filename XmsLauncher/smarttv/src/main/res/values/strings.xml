@@ -160,4 +160,7 @@
     <string name="onboarding_description_project">with 4seasons Hotel</string>
     <string name="title_activity_settings">User Settings</string>
 
+    <!-- preference key names -->
+    <string name="preference_file_key">smarttvpref</string>
+
 </resources>

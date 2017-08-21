@@ -11,15 +11,26 @@ public class User extends RealmObject {
     @SerializedName("id")
     private int id;
 
-    @SerializedName("name")
-    private String name;
+    @SerializedName("access_token")
+    private String access_token;
 
-    public String getName() {
-        return name;
+    @SerializedName("expires_in")
+    private long tkn_expires_in;
+
+    @SerializedName("token_type")
+    private String token_type;
+
+    public User() {}
+
+    public String getAccess_token() {
+        return access_token;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public long getTkn_expires_in() {
+        return tkn_expires_in;
     }
 
+    public String getToken_type() {
+        return token_type;
+    }
 }
