@@ -74,6 +74,7 @@ public class MainActivity extends Activity {
         // Initialize Realm
         Realm.init(this);
 
+        // set @realmConfiguration for development database will be rewritten on change
         final RealmConfiguration realmConfiguration = new RealmConfiguration.Builder()
                 .name(Realm.DEFAULT_REALM_NAME)
                 .schemaVersion(0)
@@ -86,10 +87,7 @@ public class MainActivity extends Activity {
         realm = Realm.getDefaultInstance();
 
         // check device registration
-        if (checkdevicereg()) {
-            startTVplayer ();
-        }
-
+        checkdevicereg();
 
         // connec to echo server for notification
         startEcho();
@@ -107,20 +105,22 @@ public class MainActivity extends Activity {
         realm.close();
     }
 
-    private boolean checkdevicereg () {
+    private void checkdevicereg () {
         // select user from database
         User user = realm.where(User.class).findFirst();
 
-        if (user != null) {
+        if (user != null && user.getAccess_token() != null) {
             // if user is found continue
-            return true;
+            getChannels();
         } else {
             // if user row is null register device
             registerdevice();
         }
-        return false;
     }
 
+    /*
+    * Register Device set token for api authentication
+    */
     private void registerdevice () {
         // initialize apiInterface
         final ApiInterface apiInterface = ApiService.createService(ApiInterface.class);
@@ -160,7 +160,7 @@ public class MainActivity extends Activity {
 
                     @Override
                     public void onFailure(Call<User> call, Throwable t) {
-
+                        Log.e("TEST", String.valueOf(t));
                     }
                 });
 
@@ -171,6 +171,10 @@ public class MainActivity extends Activity {
 
     }
 
+    /*
+    * Get Channels and save them in database
+    * function will always be called when device is turned on
+    */
     private void getChannels () {
         User user = realm.where(User.class).findFirst();
         ApiInterface apiInterface = ApiService.createService(ApiInterface.class, user.getToken_type(), user.getAccess_token());
@@ -183,7 +187,10 @@ public class MainActivity extends Activity {
                     public void execute(Realm realm) {
                     if (response.code() == 200) {
                         realm.insertOrUpdate(response.body());
-                        startTVplayer();
+
+                        // start TVplayer
+                        startTVplayer ();
+
                     } else {
                         realm.deleteAll();
                     }
@@ -194,18 +201,23 @@ public class MainActivity extends Activity {
 
             @Override
             public void onFailure(@NonNull Call<List<Channel>> call, @NonNull Throwable t) {
-
+                Log.e("TEST", String.valueOf(t));
             }
         });
-
     }
 
+    /*
+    * Start Tvplayer bydefault
+    */
     private void startTVplayer () {
         // start TVplayer
         Intent intent = new Intent("com.XmsPro.xmsproplayer.TvPlayer");
         startActivity(intent);
     }
 
+    /*
+    * Start echo connection to receive notifications
+    */
     public void startEcho() {
         Log.e(TAG, "ECHO START...");
 
