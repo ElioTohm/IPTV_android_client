@@ -105,6 +105,11 @@ public class MainActivity extends Activity {
         realm.close();
     }
 
+    /*
+    * Check if device has tokens
+    * if HAS tokens getchannel list
+    * if NOT register and get token
+    */
     private void checkdevicereg () {
         // select user from database
         User user = realm.where(User.class).findFirst();
