@@ -101,6 +101,111 @@ public class MainActivity extends Activity {
         return;
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        realm.close();
+    }
+
+    private boolean checkdevicereg () {
+        // select user from database
+        User user = realm.where(User.class).findFirst();
+
+        if (user != null) {
+            // if user is found continue
+            return true;
+        } else {
+            // if user row is null register device
+            registerdevice();
+        }
+        return false;
+    }
+
+    private void registerdevice () {
+        // initialize apiInterface
+        final ApiInterface apiInterface = ApiService.createService(ApiInterface.class);
+
+        // set dialog inflator
+        final View view = getLayoutInflater().inflate(R.layout.client_register_dialog, null);
+
+        // initalize dialog
+        AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
+        dialog.setView(view);
+        // set cancelable to true to be able to fix network before registery
+        dialog.setCancelable(true);
+        dialog.setPositiveButton("Register", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // get android id
+                EditText user_id = (EditText) view.findViewById(R.id.text_ID);
+                EditText user_secret = (EditText) view.findViewById(R.id.text_secret);
+
+                // register client
+                Call<User> userCall = apiInterface.registerdevice("client_credentials",
+                                                            Integer.parseInt(user_id.getText().toString()),
+                                                            "ihud6Kk7E9OAfbNKRxYdGR8nwAUZOLRQLJnjXrj1",
+                                                            "*");
+
+                userCall.enqueue(new Callback<User>() {
+                    @Override
+                    public void onResponse(Call<User> call, final Response<User> response) {
+                        realm.executeTransaction(new Realm.Transaction() {
+                            @Override
+                            public void execute(Realm realm) {
+                                // save token
+                                realm.insertOrUpdate(response.body());
+                            }
+                        });
+                        getChannels();
+                    }
+
+                    @Override
+                    public void onFailure(Call<User> call, Throwable t) {
+
+                    }
+                });
+
+
+            }
+        });
+        dialog.show();
+
+    }
+
+    private void getChannels () {
+        User user = realm.where(User.class).findFirst();
+        ApiInterface apiInterface = ApiService.createService(ApiInterface.class, user.getToken_type(), user.getAccess_token());
+        Call<List<Channel>> channelCall = apiInterface.getChannel();
+        channelCall.enqueue(new Callback<List<Channel>>() {
+            @Override
+            public void onResponse(Call<List<Channel>> call, final Response<List<Channel>> response) {
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                    if (response.code() == 200) {
+                        realm.insertOrUpdate(response.body());
+                        startTVplayer();
+                    } else {
+                        realm.deleteAll();
+                    }
+                    }
+                });
+
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<List<Channel>> call, @NonNull Throwable t) {
+
+            }
+        });
+
+    }
+
+    private void startTVplayer () {
+        // start TVplayer
+        Intent intent = new Intent("com.XmsPro.xmsproplayer.TvPlayer");
+        startActivity(intent);
+    }
+
     public void startEcho() {
         Log.e(TAG, "ECHO START...");
 
@@ -167,107 +272,5 @@ public class MainActivity extends Activity {
             e.printStackTrace();
         }
     }
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        realm.close();
-    }
 
-    private boolean checkdevicereg () {
-        // select user from database
-        User user = realm.where(User.class).greaterThan("id", 0).findFirst();
-
-        if (user != null) {
-            // if user is found continue
-            return true;
-        } else {
-            // if user row is null register device
-            registerdevice();
-        }
-        return false;
-    }
-
-    private void registerdevice () {
-        // initialize apiInterface
-        final ApiInterface apiInterface = ApiService.createService(ApiInterface.class);
-
-        // set dialog inflator
-        final View view = getLayoutInflater().inflate(R.layout.client_register_dialog, null);
-
-        // initalize dialog
-        AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
-        dialog.setView(view);
-        // set cancelable to true to be able to fix network before registery
-        dialog.setCancelable(true);
-        dialog.setPositiveButton("Register", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                // get android id
-                EditText user_id = (EditText) view.findViewById(R.id.text_ID);
-                EditText user_secret = (EditText) view.findViewById(R.id.text_secret);
-
-                // register client
-                Call<User> channelCall = apiInterface.registerdevice("client_credentials",
-                                                            Integer.parseInt(user_id.getText().toString()),
-                                                            "ihud6Kk7E9OAfbNKRxYdGR8nwAUZOLRQLJnjXrj1",
-                                                            "*");
-                channelCall.enqueue(new Callback<User>() {
-                    @Override
-                    public void onResponse(Call<User> call, final Response<User> response) {
-                        realm.executeTransaction(new Realm.Transaction() {
-                            @Override
-                            public void execute(Realm realm) {
-                                // save token
-                                realm.insertOrUpdate(response.body());
-                            }
-                        });
-                        getChannels();
-                    }
-
-                    @Override
-                    public void onFailure(Call<User> call, Throwable t) {
-
-                    }
-                });
-
-
-            }
-        });
-        dialog.show();
-
-    }
-
-    private void getChannels () {
-        User user = realm.where(User.class).findFirst();
-        ApiInterface apiInterface = ApiService.createService(ApiInterface.class, user.getToken_type(), user.getAccess_token());
-        Call<List<Channel>> channelCall = apiInterface.getChannel();
-        channelCall.enqueue(new Callback<List<Channel>>() {
-            @Override
-            public void onResponse(Call<List<Channel>> call, final Response<List<Channel>> response) {
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                    if (response.code() == 200) {
-                        realm.insertOrUpdate(response.body());
-                        startTVplayer();
-                    } else {
-                        realm.deleteAll();
-                    }
-                    }
-                });
-
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<List<Channel>> call, @NonNull Throwable t) {
-
-            }
-        });
-
-    }
-
-    private void startTVplayer () {
-        // start TVplayer
-        Intent intent = new Intent("com.XmsPro.xmsproplayer.TvPlayer");
-        startActivity(intent);
-    }
 }
