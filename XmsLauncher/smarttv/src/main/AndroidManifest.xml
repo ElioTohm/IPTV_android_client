@@ -19,6 +19,7 @@
         android:largeHeap="true"
         android:supportsRtl="true"
         android:theme="@style/Theme.Leanback">
+
         <activity
             android:name=".MainActivity"
             android:banner="@drawable/xmsprologosmall"
@@ -35,12 +36,15 @@
                 <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".DetailsActivity"
             android:screenOrientation="landscape" />
+
         <activity
             android:name=".BrowseErrorActivity"
             android:screenOrientation="landscape" />
+
         <activity
             android:name="com.XmsPro.xmsproplayer.TvPlayer"
             android:screenOrientation="landscape">
@@ -50,16 +54,28 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".UI.OnboardingActivity"
             android:enabled="true"
             android:exported="true"
             android:screenOrientation="landscape"
             android:theme="@style/Theme.Leanback.Onboarding" />
+
         <activity
             android:name=".weather.OpenUrlActivity"
-            android:theme="@style/WebViewActivityTheme"/>
+            android:theme="@style/WebViewActivityTheme" />
 
+        <service
+            android:name=".services.onBootService"
+            android:exported="false" />
+        <service
+            android:name=".services.NotificationService"
+            android:exported="false" />
+
+        <activity
+            android:name=".services.DialogActivity"
+            android:theme="@android:style/Theme.Dialog" />
     </application>
 
 </manifest>
