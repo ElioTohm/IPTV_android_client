@@ -135,7 +135,7 @@ public class TvPlayer extends Activity {
         player.setVideoDebugListener(eventlogger);
         player.setAudioDebugListener(eventlogger);
 
-        simpleExoPlayerView = (SimpleExoPlayerView) findViewById(R.id.simpleexoplayerview);
+        simpleExoPlayerView = findViewById(R.id.simpleexoplayerview);
 
         // set surface of the player the mediasource and play when ready
         player.prepare(buildUDPMediaSource(uris));
@@ -236,12 +236,12 @@ public class TvPlayer extends Activity {
         setContentView(R.layout.activity_tv_player);
 
         channelInfo = findViewById(R.id.channelInfo);
-        currentChannel = (TextView) findViewById(R.id.current_channel);
-        channelName = (TextView) findViewById(R.id.channel_name);
-        channelIcon = (ImageView) findViewById(R.id.channel_ico);
+        currentChannel = findViewById(R.id.current_channel);
+        channelName = findViewById(R.id.channel_name);
+        channelIcon = findViewById(R.id.channel_ico);
         channelArrayList = new ArrayList<>();
-        channelList_frameLayout = (FrameLayout) findViewById(R.id.main_channellist_fragment);
-        channel_number_idicator = (TextView) findViewById(R.id.channel_number_idicator);
+        channelList_frameLayout = findViewById(R.id.main_channellist_fragment);
+        channel_number_idicator = findViewById(R.id.channel_number_idicator);
 
         Realm.init(this);
 

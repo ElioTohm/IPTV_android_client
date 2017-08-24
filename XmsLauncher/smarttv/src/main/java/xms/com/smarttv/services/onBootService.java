@@ -84,20 +84,6 @@ public class onBootService extends IntentService {
         channelCall.enqueue(new Callback<List<Channel>>() {
             @Override
             public void onResponse(Call<List<Channel>> call, final Response<List<Channel>> response) {
-//                realm.executeTransaction(new Realm.Transaction() {
-//                    @Override
-//                    public void execute(Realm realm) {
-//                        if (response.code() == 200) {
-//                            realm.insertOrUpdate(response.body());
-//
-//                            // start TVplayer
-//                            startTVplayer ();
-//
-//                        } else {
-//                            realm.deleteAll();
-//                        }
-//                    }
-//                });
                 Realm backgroundRealm = Realm.getDefaultInstance();
                 backgroundRealm.executeTransactionAsync(new Realm.Transaction() {
                     @Override

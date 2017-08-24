@@ -1,9 +1,7 @@
 package xms.com.smarttv.weather;
 
 import android.app.Activity;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 
 import xms.com.smarttv.R;
@@ -18,7 +16,7 @@ public class OpenUrlActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web_preview);
 
-        WebView webView = (WebView) findViewById(R.id.webView);
+        WebView webView = findViewById(R.id.webView);
         webView.getSettings().setJavaScriptEnabled(true);
         webView.loadUrl(WEATHER_WEB_URL);
 

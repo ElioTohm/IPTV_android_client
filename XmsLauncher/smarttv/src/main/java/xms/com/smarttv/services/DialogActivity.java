@@ -55,8 +55,8 @@ public class DialogActivity extends Activity {
         dialog.setPositiveButton("Register", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // get android id
-                final EditText user_id = (EditText) view.findViewById(R.id.text_ID);
-                EditText user_secret = (EditText) view.findViewById(R.id.text_secret);
+                final EditText user_id = view.findViewById(R.id.text_ID);
+                EditText user_secret = view.findViewById(R.id.text_secret);
 
                 // register client
                 Call<User> userCall = apiInterface.registerdevice("client_credentials",
