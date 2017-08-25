@@ -2,6 +2,8 @@ package xms.com.smarttv.services;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -17,17 +19,41 @@ import io.realm.RealmConfiguration;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import xms.com.smarttv.BroadcastRecievers.ConnectionStateReceiver;
 
 public class onBootService extends IntentService {
     private Realm realm;
+    private ConnectionStateReceiver mNetworkReceiver;
 
     public onBootService() {
         super("onBootService");
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(mNetworkReceiver);
+    }
 
     @Override
     protected void onHandleIntent(Intent workIntent) {
+
+        mNetworkReceiver = new ConnectionStateReceiver(new ConnectionStateReceiver.ConnectionStateInterface() {
+            @Override
+            public void result(Boolean connected) {
+                if (connected) startService ();
+            }
+        });
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(mNetworkReceiver,intentFilter);
+
+    }
+
+    /**
+     * main service
+     */
+    private void startService () {
         // Initialize Realm
         Realm.init(this);
 

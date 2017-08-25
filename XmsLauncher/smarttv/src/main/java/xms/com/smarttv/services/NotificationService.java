@@ -80,7 +80,7 @@ public class NotificationService extends IntentService {
             JSONObject headers = new JSONObject();
 
             try {
-                object.put("channel", "Notification");
+                object.put("channel", "Notification_To_1");
                 object.put("name", "subscribe");
 
                 auth.put("headers", headers);

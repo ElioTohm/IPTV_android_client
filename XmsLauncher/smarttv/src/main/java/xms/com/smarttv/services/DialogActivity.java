@@ -5,8 +5,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
@@ -15,6 +13,7 @@ import com.eliotohme.data.User;
 import com.eliotohme.data.network.ApiInterface;
 import com.eliotohme.data.network.ApiService;
 
+import java.io.IOException;
 import java.util.List;
 
 import io.realm.Realm;
@@ -61,31 +60,31 @@ public class DialogActivity extends Activity {
                 // register client
                 Call<User> userCall = apiInterface.registerdevice("client_credentials",
                         Integer.parseInt(user_id.getText().toString()),
-                        "HZSXLfZwk6PXeNnRIQCcpc8DMEthMmJDe9ZqRY4s",
+                        "Ztw33xV3khh2RqMd0oayn0teIwlLoz3P0XCMq7cu",
                         "*");
-
                 userCall.enqueue(new Callback<User>() {
                     @Override
                     public void onResponse(Call<User> call, final Response<User> response) {
-                        realm.executeTransaction(new Realm.Transaction() {
-                            @Override
-                            public void execute(Realm realm) {
-                                // save token
-                                User user = new User();
-                                user.setId(Integer.parseInt(String.valueOf(user_id.getText())));
-                                user.setAccess_token(response.body().getAccess_token());
-                                user.setTkn_expires_in(response.body().getTkn_expires_in());
-                                user.setToken_type(response.body().getToken_type());
-
-                                realm.insertOrUpdate(response.body());
-                            }
-                        });
-                        getChannels();
+                        if (response.code() == 200 && response.body() != null) {
+                            realm.executeTransaction(new Realm.Transaction() {
+                                @Override
+                                public void execute(Realm realm) {
+                                    // save token
+                                    User user = new User();
+                                    user.setId(Integer.parseInt(String.valueOf(user_id.getText())));
+                                    user.setAccess_token(response.body().getAccess_token());
+                                    user.setTkn_expires_in(response.body().getTkn_expires_in());
+                                    user.setToken_type(response.body().getToken_type());
+                                    realm.insertOrUpdate(user);
+                                }
+                            });
+                            getChannels();
+                        }
                     }
 
                     @Override
                     public void onFailure(Call<User> call, Throwable t) {
-                        Log.e("TEST", String.valueOf(t));
+
                     }
                 });
 
@@ -103,31 +102,15 @@ public class DialogActivity extends Activity {
         User user = realm.where(User.class).findFirst();
         ApiInterface apiInterface = ApiService.createService(ApiInterface.class, user.getToken_type(), user.getAccess_token());
         Call<List<Channel>> channelCall = apiInterface.getChannel();
-        channelCall.enqueue(new Callback<List<Channel>>() {
-            @Override
-            public void onResponse(Call<List<Channel>> call, final Response<List<Channel>> response) {
-                Realm backgroundRealm = Realm.getDefaultInstance();
-                backgroundRealm.executeTransactionAsync(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        if (response.code() == 200) {
-                            realm.insertOrUpdate(response.body());
-
-                            // start TVplayer
-                            startTVplayer ();
-
-                        } else {
-                            realm.deleteAll();
-                        }
-                    }
-                });
+        try {
+            Response<List<Channel>> responseChannel = channelCall.execute();
+            if(responseChannel.code() == 200) {
+                realm.insertOrUpdate(responseChannel.body());
+                startTVplayer ();
             }
-
-            @Override
-            public void onFailure(@NonNull Call<List<Channel>> call, @NonNull Throwable t) {
-                Log.e("TEST", String.valueOf(t));
-            }
-        });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /*
