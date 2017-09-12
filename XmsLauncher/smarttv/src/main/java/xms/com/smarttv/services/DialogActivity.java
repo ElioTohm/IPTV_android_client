@@ -60,7 +60,7 @@ public class DialogActivity extends Activity {
                 // register client
                 Call<User> userCall = apiInterface.registerdevice("client_credentials",
                         Integer.parseInt(user_id.getText().toString()),
-                        "Ztw33xV3khh2RqMd0oayn0teIwlLoz3P0XCMq7cu",
+                        "QM0Jr5Ag6VlbP5NSE0rfX0PcsDhw4bz9Y3AtKovw",
                         "*");
                 userCall.enqueue(new Callback<User>() {
                     @Override

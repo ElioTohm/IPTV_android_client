@@ -16,12 +16,8 @@ package xms.com.smarttv;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 
-import xms.com.smarttv.UI.OnboardingActivity;
-import xms.com.smarttv.UI.OnboardingFragment;
 import xms.com.smarttv.services.NotificationService;
 import xms.com.smarttv.services.onBootService;
 
@@ -35,13 +31,6 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        if(!sharedPreferences.getBoolean(OnboardingFragment.COMPLETED_ONBOARDING, false)) {
-            // This is the first time running the app, let's go to onboarding
-            startActivity(new Intent(this, OnboardingActivity.class));
-        }
-
         // init notification intent
         Intent notificationIntent = new Intent(this, NotificationService.class);
 
@@ -53,6 +42,7 @@ public class MainActivity extends Activity {
 
         //start the onboot service
         this.startService(onBootServiceIntent);
+
     }
 
     @Override

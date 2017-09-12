@@ -18,7 +18,6 @@ public class User extends RealmObject {
     @SerializedName("token_type")
     private String token_type;
 
-
     public User() {}
 
     public int getId() {
