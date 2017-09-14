@@ -17,7 +17,6 @@ import java.io.IOException;
 import java.util.List;
 
 import io.realm.Realm;
-import io.realm.RealmConfiguration;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -31,14 +30,6 @@ public class DialogActivity extends Activity {
 
         // Initialize Realm
         Realm.init(this);
-
-        // set @realmConfiguration for development database will be rewritten on change
-        final RealmConfiguration realmConfiguration = new RealmConfiguration.Builder()
-                .name(Realm.DEFAULT_REALM_NAME)
-                .schemaVersion(0)
-                .deleteRealmIfMigrationNeeded()
-                .build();
-        Realm.setDefaultConfiguration(realmConfiguration);
 
         // Get a Realm instance for this thread
         realm = Realm.getDefaultInstance();
