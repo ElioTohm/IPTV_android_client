@@ -43,8 +43,6 @@ import java.util.concurrent.TimeUnit;
 import io.realm.Realm;
 import io.realm.RealmQuery;
 
-import static com.google.android.exoplayer2.extractor.ts.DefaultTsPayloadReaderFactory.FLAG_ALLOW_NON_IDR_KEYFRAMES;
-
 public class TvPlayer extends Activity {
     String TAG  = "xms";
     private SimpleExoPlayer player;
@@ -68,6 +66,10 @@ public class TvPlayer extends Activity {
         DEFAULT_COOKIE_MANAGER.setCookiePolicy(CookiePolicy.ACCEPT_ORIGINAL_SERVER);
     }
 
+    /**
+     * @param uris
+     * @return ConcatenatingMediaSource / single MediaSource
+     */
     private MediaSource buildUDPMediaSource(Uri[] uris) {
         /*
         * Function that handles creating a ConcatenatingMediaSource
@@ -83,7 +85,7 @@ public class TvPlayer extends Activity {
         };
 
         // Initialize ExtractorFactory
-        ExtractorsFactory tsExtractorFactory = new DefaultExtractorsFactory().setTsExtractorFlags(FLAG_ALLOW_NON_IDR_KEYFRAMES);
+        ExtractorsFactory tsExtractorFactory = new DefaultExtractorsFactory();//.setTsExtractorFlags(FLAG_ALLOW_NON_IDR_KEYFRAMES);
 
         // Loop on URI list to create individual Media source
         MediaSource[] mediaSources = new MediaSource[uris.length];
@@ -103,6 +105,10 @@ public class TvPlayer extends Activity {
                 : new ConcatenatingMediaSource(mediaSources);
     }
 
+    /**
+     * initializing player calling buildUDPMediaSource
+     * and showChannelInfo
+     */
     private void initializePlayer () {
         /*
         * Initialize ExoplayerFactory
@@ -147,6 +153,9 @@ public class TvPlayer extends Activity {
 
     }
 
+    /**
+     * release player on activity destroyed
+     */
     private void releasePlayer() {
         if (player != null) {
             playbackPosition = player.getCurrentPosition();
@@ -160,6 +169,10 @@ public class TvPlayer extends Activity {
         }
     }
 
+    /**
+     * in ConcatenatingMediaSource -1 windows index in player
+     * and loop
+     */
     private void previouschannel() {
         Timeline currentTimeline = player.getCurrentTimeline();
         if (currentTimeline.isEmpty()) {
@@ -176,6 +189,10 @@ public class TvPlayer extends Activity {
         monitor();
     }
 
+    /**
+     * in ConcatenatingMediaSource -1 windows index in player
+     * and loop
+     */
     private void nextchannel() {
         Timeline currentTimeline = player.getCurrentTimeline();
         if (currentTimeline.isEmpty()) {
@@ -190,6 +207,10 @@ public class TvPlayer extends Activity {
         monitor();
     }
 
+    /**
+     * @param channel
+     * show info of channel which was switched to
+     */
     private void showChannelInfo(Channel channel) {
         currentChannel.setText(String.valueOf(channel.getId()));
         channelName.setText(channel.getName());
@@ -204,6 +225,12 @@ public class TvPlayer extends Activity {
         mChannelInfoHandler.postDelayed(mChannelInfoRunnable, 5000);
     }
 
+    /**
+     * @param channelid
+     * changed current window index of exoplayer
+     * thus changing channel
+     * works with dispatchKeyEvent
+     */
     public void changeChannel(int channelid) {
         if(channelid < channellistSize){
             if (player.getCurrentWindowIndex() != channelid) {
@@ -214,6 +241,10 @@ public class TvPlayer extends Activity {
         }
     }
 
+    /**
+     * Monitoring background worker to monitor user current channel
+     * todo should change to service
+     */
     public void monitor () {
         if (scheduledExecutorService == null) {
             scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();

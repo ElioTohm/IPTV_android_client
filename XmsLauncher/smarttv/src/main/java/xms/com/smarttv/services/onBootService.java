@@ -107,22 +107,22 @@ public class onBootService extends IntentService {
             @Override
             public void onResponse(Call<List<Channel>> call, final Response<List<Channel>> response) {
                 Realm backgroundRealm = Realm.getDefaultInstance();
-                backgroundRealm.executeTransactionAsync(new Realm.Transaction() {
+                backgroundRealm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
                         if (response.code() == 200) {
                             realm.insertOrUpdate(response.body());
-                            startTVplayer();
-                            try {
-                                getClientInfo();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
                         } else {
                             realm.deleteAll();
                         }
                     }
                 });
+                try {
+                    getClientInfo();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                startTVplayer();
             }
 
             @Override
@@ -147,25 +147,36 @@ public class onBootService extends IntentService {
         User subuser =  subrealm.where(User.class).findFirst();
         ApiInterface apiInterface = ApiService.createService(ApiInterface.class, subuser.getToken_type(), subuser.getAccess_token());
         Call<Client> clientCall= apiInterface.getClientInfo(subuser.getId());
-        final Response<Client> clientResponse = clientCall.execute();
-        if (clientResponse.code() == 200 && (subrealm.where(Client.class).findFirst() ==  null
-            || !clientResponse.body().getEmail().equals(subrealm.where(Client.class).findFirst().getEmail()))) {
+//        final Response<Client> clientResponse = clientCall.execute();
+        clientCall.enqueue(new Callback<Client>() {
+            @Override
+            public void onResponse(Call<Client> call, final Response<Client> response) {
+                Realm subrealm = Realm.getDefaultInstance();
+                if (response.code() == 200 && (subrealm.where(Client.class).findFirst() ==  null
+                        || !response.body().getEmail().equals(subrealm.where(Client.class).findFirst().getEmail()))) {
 
-            subrealm.executeTransactionAsync(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    realm.delete(Client.class);
-                    realm.insert(clientResponse.body());
+                    subrealm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            realm.delete(Client.class);
+                            realm.insert(response.body());
+                        }
+                    });
+
+                    // This is the first time running the app, let's go to onboarding
+                    Intent intent = new Intent(getApplicationContext(), OnboardingActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    getApplication().startActivity(intent);
+
                 }
-            });
 
+            }
 
-            // This is the first time running the app, let's go to onboarding
-            Intent intent = new Intent(this, OnboardingActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            getApplication().startActivity(intent);
+            @Override
+            public void onFailure(Call<Client> call, Throwable t) {
 
-        }
+            }
+        });
         subrealm.close();
     }
 }

@@ -24,6 +24,8 @@ import xms.com.smarttv.R;
 
 public class DialogActivity extends Activity {
     private Realm realm;
+    private  String TKN_TYPE;
+    private String TKN;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,7 +53,7 @@ public class DialogActivity extends Activity {
                 // register client
                 Call<User> userCall = apiInterface.registerdevice("client_credentials",
                         Integer.parseInt(user_id.getText().toString()),
-                        "QM0Jr5Ag6VlbP5NSE0rfX0PcsDhw4bz9Y3AtKovw",
+                        "aGGIusRyUyCkB1GHFKAdvj86ywxhjlidkpMz9RBZ",
                         "*");
                 userCall.enqueue(new Callback<User>() {
                     @Override
@@ -61,6 +63,8 @@ public class DialogActivity extends Activity {
                                 @Override
                                 public void execute(Realm realm) {
                                     // save token
+                                    TKN = response.body().getAccess_token();
+                                    TKN_TYPE = response.body().getToken_type();
                                     User user = new User();
                                     user.setId(Integer.parseInt(String.valueOf(user_id.getText())));
                                     user.setAccess_token(response.body().getAccess_token());
@@ -75,10 +79,9 @@ public class DialogActivity extends Activity {
 
                     @Override
                     public void onFailure(Call<User> call, Throwable t) {
-
                     }
-                });
 
+                });
 
             }
         });
@@ -90,8 +93,7 @@ public class DialogActivity extends Activity {
     * function will always be called when device is turned on
     */
     private void getChannels () {
-        User user = realm.where(User.class).findFirst();
-        ApiInterface apiInterface = ApiService.createService(ApiInterface.class, user.getToken_type(), user.getAccess_token());
+        ApiInterface apiInterface = ApiService.createService(ApiInterface.class, TKN_TYPE, TKN);
         Call<List<Channel>> channelCall = apiInterface.getChannel();
         try {
             Response<List<Channel>> responseChannel = channelCall.execute();
