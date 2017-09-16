@@ -5,6 +5,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
@@ -13,7 +15,6 @@ import com.eliotohme.data.User;
 import com.eliotohme.data.network.ApiInterface;
 import com.eliotohme.data.network.ApiService;
 
-import java.io.IOException;
 import java.util.List;
 
 import io.realm.Realm;
@@ -95,15 +96,28 @@ public class DialogActivity extends Activity {
     private void getChannels () {
         ApiInterface apiInterface = ApiService.createService(ApiInterface.class, TKN_TYPE, TKN);
         Call<List<Channel>> channelCall = apiInterface.getChannel();
-        try {
-            Response<List<Channel>> responseChannel = channelCall.execute();
-            if(responseChannel.code() == 200) {
-                realm.insertOrUpdate(responseChannel.body());
-                startTVplayer ();
+        channelCall.enqueue(new Callback<List<Channel>>() {
+            @Override
+            public void onResponse(Call<List<Channel>> call, final Response<List<Channel>> response) {
+                Realm backgroundRealm = Realm.getDefaultInstance();
+                backgroundRealm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        if (response.code() == 200) {
+                            realm.insertOrUpdate(response.body());
+                        } else {
+                            realm.deleteAll();
+                        }
+                    }
+                });
+                startTVplayer();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
+            @Override
+            public void onFailure(@NonNull Call<List<Channel>> call, @NonNull Throwable t) {
+                Log.e("TEST", String.valueOf(t));
+            }
+        });
     }
 
     /*
