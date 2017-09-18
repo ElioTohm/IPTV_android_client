@@ -52,10 +52,8 @@ public class DialogActivity extends Activity {
                 EditText user_secret = view.findViewById(R.id.text_secret);
 
                 // register client
-                Call<User> userCall = apiInterface.registerdevice("client_credentials",
-                        Integer.parseInt(user_id.getText().toString()),
-                        "aGGIusRyUyCkB1GHFKAdvj86ywxhjlidkpMz9RBZ",
-                        "*");
+                Call<User> userCall = apiInterface.registerdevice(Integer.parseInt(user_id.toString()),
+                        user_secret.toString());
                 userCall.enqueue(new Callback<User>() {
                     @Override
                     public void onResponse(Call<User> call, final Response<User> response) {
