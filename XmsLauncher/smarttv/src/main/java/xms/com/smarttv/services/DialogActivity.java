@@ -46,14 +46,15 @@ public class DialogActivity extends Activity {
         // set cancelable to true to be able to fix network before registery
         dialog.setCancelable(true);
         dialog.setPositiveButton("Register", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
+            public void onClick(final DialogInterface dialog, int id) {
                 // get android id
                 final EditText user_id = view.findViewById(R.id.text_ID);
                 EditText user_secret = view.findViewById(R.id.text_secret);
 
                 // register client
-                Call<User> userCall = apiInterface.registerdevice(Integer.parseInt(user_id.toString()),
-                        user_secret.toString());
+                Call<User> userCall = apiInterface.registerdevice(Integer.parseInt(user_id.getText().toString()),
+                        user_secret.getText().toString());
+
                 userCall.enqueue(new Callback<User>() {
                     @Override
                     public void onResponse(Call<User> call, final Response<User> response) {
@@ -67,12 +68,12 @@ public class DialogActivity extends Activity {
                                     User user = new User();
                                     user.setId(Integer.parseInt(String.valueOf(user_id.getText())));
                                     user.setAccess_token(response.body().getAccess_token());
-                                    user.setTkn_expires_in(response.body().getTkn_expires_in());
                                     user.setToken_type(response.body().getToken_type());
                                     realm.insertOrUpdate(user);
                                 }
                             });
                             getChannels();
+                            DialogActivity.this.finish();
                         }
                     }
 

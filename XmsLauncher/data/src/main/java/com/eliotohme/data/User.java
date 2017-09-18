@@ -12,7 +12,6 @@ public class User extends RealmObject {
     @SerializedName("access_token")
     private String access_token;
 
-    @SerializedName("expires_in")
     private long tkn_expires_in;
 
     @SerializedName("token_type")
