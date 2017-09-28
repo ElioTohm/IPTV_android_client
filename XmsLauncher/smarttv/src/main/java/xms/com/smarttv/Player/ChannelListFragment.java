@@ -1,5 +1,4 @@
-package com.XmsPro.xmsproplayer;
-
+package xms.com.smarttv.Player;
 
 import android.os.Bundle;
 import android.support.v17.leanback.app.BrowseFragment;
@@ -12,13 +11,14 @@ import android.support.v17.leanback.widget.Presenter;
 import android.support.v17.leanback.widget.Row;
 import android.support.v17.leanback.widget.RowPresenter;
 
-import com.XmsPro.xmsproplayer.presenter.ChannelCardPresenter;
+import com.XmsPro.xmsproplayer.XmsPlayer;
 import com.eliotohme.data.Channel;
 import com.eliotohme.data.Genre;
 
 import io.realm.Realm;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
+import xms.com.smarttv.Presenter.ChannelCardPresenter;
 
 public class ChannelListFragment extends BrowseFragment {
     private ArrayObjectAdapter mRowsAdapter;
@@ -39,7 +39,7 @@ public class ChannelListFragment extends BrowseFragment {
         setHeadersState(HEADERS_ENABLED);
         setHeadersTransitionOnBackEnabled(false);
         // set fastLane (or headers) background color
-        setBrandColor(getResources().getColor(R.color.fastlane_background));
+        setBrandColor(getResources().getColor(com.XmsPro.xmsproplayer.R.color.fastlane_background));
         // set search icon color
     }
 

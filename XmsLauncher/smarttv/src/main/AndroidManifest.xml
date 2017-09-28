@@ -19,7 +19,8 @@
         android:label="@string/app_name"
         android:largeHeap="true"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Leanback">
+        android:theme="@style/Theme.Leanback"
+        android:banner="@drawable/xmsprologosmall">
         <activity
             android:name=".MainActivity"
             android:banner="@drawable/xmsprologosmall"
@@ -27,14 +28,6 @@
             android:label="@string/app_name"
             android:logo="@drawable/xmsprologosmall"
             android:screenOrientation="landscape">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.HOME" />
-                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".DetailsActivity"
@@ -47,7 +40,16 @@
             android:enabled="true"
             android:exported="true"
             android:screenOrientation="landscape"
-            android:theme="@style/Theme.Leanback.Onboarding" />
+            android:theme="@style/Theme.Leanback.Onboarding">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.HOME" />
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".weather.OpenUrlActivity"
             android:theme="@style/WebViewActivityTheme" />
@@ -63,24 +65,22 @@
             android:name=".services.DialogActivity"
             android:theme="@android:style/Theme.Dialog" />
         <activity android:name=".Player.TVPlayerActivity"
-            android:enabled="true"
-            android:exported="true"
-            android:screenOrientation="landscape"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
-            android:label="@string/player"
-            android:theme="@style/Theme.Leanback" >
-                <intent-filter>
-                    <action android:name="com.google.android.exoplayer.demo.action.VIEW" />
+            android:resizeableActivity="true"
+            android:supportsPictureInPicture="true"
+            android:hardwareAccelerated="true"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:launchMode="singleInstance">
+            <intent-filter>
+                <action android:name="com.google.android.exoplayer.demo.action.VIEW" />
 
-                    <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.DEFAULT" />
 
-                    <data android:scheme="UDP" />
-                    <data android:scheme="http" />
-                    <data android:scheme="https" />
-                    <data android:scheme="content" />
-                    <data android:scheme="asset" />
-                    <data android:scheme="file" />
-                </intent-filter>
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:scheme="content" />
+                <data android:scheme="asset" />
+                <data android:scheme="file" />
+            </intent-filter>
         </activity>
     </application>
 

@@ -4,10 +4,9 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
-import android.content.SharedPreferences;
+import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,10 +15,10 @@ import android.widget.ImageView;
 
 import java.util.ArrayList;
 
+import xms.com.smarttv.Player.TVPlayerActivity;
 import xms.com.smarttv.R;
 
 public class OnboardingFragment extends android.support.v17.leanback.app.OnboardingFragment {
-    public static final String COMPLETED_ONBOARDING = "completed_onboarding";
 
     private static final int[] pageTitles = {
             R.string.onboarding_title_welcome,
@@ -54,13 +53,8 @@ public class OnboardingFragment extends android.support.v17.leanback.app.Onboard
     @Override
     protected void onFinishFragment() {
         super.onFinishFragment();
-        // Our onboarding is done
-        // Update the shared preferences
-        SharedPreferences.Editor sharedPreferencesEditor =
-                PreferenceManager.getDefaultSharedPreferences(getActivity()).edit();
-        sharedPreferencesEditor.putBoolean(COMPLETED_ONBOARDING, true);
-        sharedPreferencesEditor.apply();
-        // Let's go back to the MainActivity
+        // Start TVPlayerActivity
+        startActivity(new Intent(getActivity(), TVPlayerActivity.class));
         getActivity().finish();
     }
 
@@ -83,6 +77,7 @@ public class OnboardingFragment extends android.support.v17.leanback.app.Onboard
     @Override
     protected View onCreateBackgroundView(LayoutInflater inflater, ViewGroup container) {
         View bgView = new View(getActivity());
+//        bgView.setBackground(getResources().getDrawable(R.drawable.default_background));
         bgView.setBackgroundColor(getResources().getColor(R.color.fastlane_background));
         return bgView;
     }

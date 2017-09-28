@@ -7,6 +7,6 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.Leanback"
-        android:largeHeap="true"></application>
+        android:largeHeap="true"/>
 
 </manifest>

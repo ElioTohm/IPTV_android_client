@@ -15,11 +15,7 @@
 package xms.com.smarttv;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-
-import xms.com.smarttv.services.NotificationService;
-import xms.com.smarttv.services.onBootService;
 
 /*
  * MainActivity class that loads MainFragment
@@ -30,24 +26,6 @@ public class MainActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        // init notification intent
-        Intent notificationIntent = new Intent(this, NotificationService.class);
-
-        // Starts the IntentService
-        this.startService(notificationIntent);
-
-        // init onBootService
-        Intent onBootServiceIntent = new Intent(this, onBootService.class);
-
-        //start the onboot service
-        this.startService(onBootServiceIntent);
-
-    }
-
-    @Override
-    public void onBackPressed() {
-        return;
     }
 
     @Override

@@ -35,6 +35,8 @@ import java.util.concurrent.TimeUnit;
 
 import io.realm.Realm;
 
+import static com.google.android.exoplayer2.extractor.ts.DefaultTsPayloadReaderFactory.FLAG_ALLOW_NON_IDR_KEYFRAMES;
+
 public class XmsPlayer  {
     String TAG  = "xms";
     private SimpleExoPlayer player;
@@ -102,12 +104,12 @@ public class XmsPlayer  {
         DataSource.Factory udsf = new UdpDataSource.Factory() {
             @Override
             public DataSource createDataSource() {
-                return new UdpDataSource(null, UdpDataSource.DEFAULT_MAX_PACKET_SIZE, 0);
+                return new UdpDataSource(null, UdpDataSource.DEFAULT_MAX_PACKET_SIZE, UdpDataSource.DEAFULT_SOCKET_TIMEOUT_MILLIS);
             }
         };
 
         // Initialize ExtractorFactory
-        ExtractorsFactory tsExtractorFactory = new DefaultExtractorsFactory();//.setTsExtractorFlags(FLAG_ALLOW_NON_IDR_KEYFRAMES);
+        ExtractorsFactory tsExtractorFactory = new DefaultExtractorsFactory().setTsExtractorFlags(FLAG_ALLOW_NON_IDR_KEYFRAMES);
 
         // Loop on URI list to create individual Media source
         MediaSource[] mediaSources = new MediaSource[uris.length];
@@ -154,7 +156,7 @@ public class XmsPlayer  {
         eventlogger = new EventLogger(trackSelector);
 
         DefaultRenderersFactory renderersFactory = new DefaultRenderersFactory(this.context,
-                null, DefaultRenderersFactory.EXTENSION_RENDERER_MODE_ON);
+                null, DefaultRenderersFactory.EXTENSION_RENDERER_MODE_PREFER);
 
         player = ExoPlayerFactory.newSimpleInstance(renderersFactory, trackSelector);
 

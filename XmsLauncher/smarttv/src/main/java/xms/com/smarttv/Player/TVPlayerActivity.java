@@ -1,6 +1,7 @@
 package xms.com.smarttv.Player;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.KeyEvent;
@@ -19,7 +20,7 @@ import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmQuery;
-
+import xms.com.smarttv.MainActivity;
 
 public class TVPlayerActivity extends Activity {
     String TAG  = "xms";
@@ -34,14 +35,14 @@ public class TVPlayerActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(com.XmsPro.xmsproplayer.R.layout.activity_tv_player);
+        setContentView(xms.com.smarttv.R.layout.activity_tvplayer);
 
-        channelInfo = findViewById(com.XmsPro.xmsproplayer.R.id.channelInfo);
-        currentChannel = findViewById(com.XmsPro.xmsproplayer.R.id.current_channel);
-        channelName = findViewById(com.XmsPro.xmsproplayer.R.id.channel_name);
+        channelInfo = findViewById(xms.com.smarttv.R.id.channelInfo);
+        currentChannel = findViewById(xms.com.smarttv.R.id.current_channel);
+        channelName = findViewById(xms.com.smarttv.R.id.channel_name);
         channelArrayList = new ArrayList<>();
-        channelList_frameLayout = findViewById(com.XmsPro.xmsproplayer.R.id.main_channellist_fragment);
-        channel_number_selector = findViewById(com.XmsPro.xmsproplayer.R.id.channel_number_selector);
+        channelList_frameLayout = findViewById(xms.com.smarttv.R.id.main_channellist_fragment);
+        channel_number_selector = findViewById(xms.com.smarttv.R.id.channel_number_selector);
 
         Realm.init(this);
 
@@ -51,7 +52,7 @@ public class TVPlayerActivity extends Activity {
         RealmQuery<Channel> channels = realm.where(Channel.class);
 
         channelArrayList.addAll(channels.findAllSorted("id"));
-        simpleExoPlayerView = findViewById(com.XmsPro.xmsproplayer.R.id.simpleexoplayerview);
+        simpleExoPlayerView = findViewById(xms.com.smarttv.R.id.simpleexoplayerview);
 
         USER_NAME = 1;
 
@@ -114,12 +115,32 @@ public class TVPlayerActivity extends Activity {
         if (action == KeyEvent.ACTION_UP) {
             int channel_numberpressed = 10;
             switch (keyCode) {
-                case KeyEvent.KEYCODE_CHANNEL_UP:
-                    xmsPlayer.nextchannel();
-                    return true;
-                case KeyEvent.KEYCODE_CHANNEL_DOWN:
-                    xmsPlayer.previouschannel();
-                    return true;
+                case KeyEvent.KEYCODE_BACK:
+                    if (FrameLayout.VISIBLE == channelList_frameLayout.getVisibility()) {
+                        channelList_frameLayout.setVisibility(FrameLayout.GONE);
+                        return false;
+                    }
+                    return super.dispatchKeyEvent(event);
+                case KeyEvent.KEYCODE_MENU:
+                    startActivity(new Intent(this, MainActivity.class));
+                case KeyEvent.KEYCODE_DPAD_CENTER:
+                    if (FrameLayout.VISIBLE != channelList_frameLayout.getVisibility()) {
+                        channelList_frameLayout.setVisibility(FrameLayout.VISIBLE);
+                        return false;
+                    }
+                    return super.dispatchKeyEvent(event);
+                case KeyEvent.KEYCODE_DPAD_UP:
+                    if (FrameLayout.VISIBLE != channelList_frameLayout.getVisibility()) {
+                        xmsPlayer.nextchannel();
+                        return true;
+                    }
+                    return super.dispatchKeyEvent(event);
+                case KeyEvent.KEYCODE_DPAD_DOWN:
+                    if (FrameLayout.VISIBLE != channelList_frameLayout.getVisibility()) {
+                        xmsPlayer.previouschannel();
+                        return true;
+                    }
+                    return super.dispatchKeyEvent(event);
                 case KeyEvent.KEYCODE_0:
                     channel_numberpressed = 0;
                     channel_number_selector.setVisibility(View.VISIBLE);
@@ -160,14 +181,6 @@ public class TVPlayerActivity extends Activity {
                     channel_numberpressed = 9;
                     channel_number_selector.setVisibility(View.VISIBLE);
                     break;
-                case KeyEvent.KEYCODE_MENU:
-
-                    if (FrameLayout.VISIBLE == channelList_frameLayout.getVisibility()) {
-                        channelList_frameLayout.setVisibility(FrameLayout.GONE);
-                    } else {
-                        channelList_frameLayout.setVisibility(FrameLayout.VISIBLE);
-                    }
-                    return true;
             }
 
             if (channel_numberpressed < 10){
@@ -189,5 +202,10 @@ public class TVPlayerActivity extends Activity {
         }
 
         return super.dispatchKeyEvent(event);
+    }
+
+    @Override
+    public void onBackPressed() {
+        return;
     }
 }
