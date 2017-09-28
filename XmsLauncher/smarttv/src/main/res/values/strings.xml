@@ -125,9 +125,6 @@
     <string name="URI_UDP_MBC_MAX">udp://@224.1.1.28:1234</string>
     <string name="URI_UDP_MBC_BOLLYWOOD">udp://@224.1.9.2:1234</string>
 
-    <!--TEST SOCKET URI-->
-    <string name="URI_SOCKET">http://192.168.0.62:6001</string>
-
     <!--TEST CHANNEL NAMES-->
     <string name="MBC_1">mbc 1</string>
     <string name="MBC_2">mbc 2</string>

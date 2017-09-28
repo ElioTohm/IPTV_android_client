@@ -22,6 +22,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import xms.com.smarttv.BroadcastRecievers.ConnectionStateReceiver;
+import xms.com.smarttv.Player.TVPlayerActivity;
 import xms.com.smarttv.UI.OnboardingActivity;
 
 public class onBootService extends IntentService {
@@ -137,7 +138,7 @@ public class onBootService extends IntentService {
     */
     private void startTVplayer (){
         // start TVplayer
-        Intent intent = new Intent("com.XmsPro.xmsproplayer.TvPlayer");
+        Intent intent = new Intent(getApplication(), TVPlayerActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         getApplication().startActivity(intent);
     }

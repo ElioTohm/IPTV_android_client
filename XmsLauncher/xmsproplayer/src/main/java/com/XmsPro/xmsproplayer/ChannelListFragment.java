@@ -21,8 +21,6 @@ import io.realm.RealmQuery;
 import io.realm.RealmResults;
 
 public class ChannelListFragment extends BrowseFragment {
-    private static final int GRID_ITEM_WIDTH = 175;
-    private static final int GRID_ITEM_HEIGHT = 100;
     private ArrayObjectAdapter mRowsAdapter;
 
     @Override
@@ -83,7 +81,7 @@ public class ChannelListFragment extends BrowseFragment {
         public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item,
                                   RowPresenter.ViewHolder rowViewHolder, Row row) {
             if (item instanceof Channel) {
-                ((TvPlayer)getActivity()).changeChannel(((Channel) item).getId() - 1 );
+                XmsPlayer.getPlayerInstance().changeChannel(((Channel) item).getId() - 1 );
             }
         }
     }

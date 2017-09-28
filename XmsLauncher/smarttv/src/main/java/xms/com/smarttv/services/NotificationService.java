@@ -8,6 +8,8 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.eliotohme.data.network.ApiService;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -17,7 +19,6 @@ import io.socket.client.Ack;
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
-import xms.com.smarttv.R;
 
 public class NotificationService extends IntentService {
     private String TAG = "TEST";
@@ -38,7 +39,7 @@ public class NotificationService extends IntentService {
         Log.e(TAG, "ECHO START...");
 
         try {
-            Socket socket = IO.socket(getString(R.string.URI_SOCKET));
+            Socket socket = IO.socket(ApiService.SOCKET_URL);
 
             socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
                 @Override

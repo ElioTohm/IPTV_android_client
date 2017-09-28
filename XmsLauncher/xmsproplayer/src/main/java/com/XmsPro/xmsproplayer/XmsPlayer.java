@@ -1,16 +1,11 @@
 package com.XmsPro.xmsproplayer;
 
-import android.app.Activity;
+import android.content.Context;
 import android.net.Uri;
-import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
-import android.view.KeyEvent;
-import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.TextView;
 
+import com.XmsPro.xmsproplayer.Interface.XmsPlayerUICallback;
 import com.eliotohme.data.Channel;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -30,20 +25,17 @@ import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.UdpDataSource;
-import com.google.android.exoplayer2.util.Util;
 
 import java.net.CookieManager;
 import java.net.CookiePolicy;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import io.realm.Realm;
-import io.realm.RealmQuery;
 
-public class TvPlayer extends Activity {
+public class XmsPlayer  {
     String TAG  = "xms";
     private SimpleExoPlayer player;
     boolean playWhenReady;
@@ -51,21 +43,51 @@ public class TvPlayer extends Activity {
     long playbackPosition;
     private EventLogger eventlogger;
     private static final CookieManager DEFAULT_COOKIE_MANAGER;
-    private View channelInfo;
-    private TextView currentChannel, channel_number_idicator, channelName;
-    private ImageView channelIcon;
     private List<Channel> channelArrayList;
     private FrameLayout channelList_frameLayout;
     private int channellistSize;
     private SimpleExoPlayerView simpleExoPlayerView;
     private ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
     private int USER_NAME;
+    private Context context;
+    private static XmsPlayer instance;
+    private XmsPlayerUICallback xmsPlayerUICallback;
 
     static {
         DEFAULT_COOKIE_MANAGER = new CookieManager();
         DEFAULT_COOKIE_MANAGER.setCookiePolicy(CookiePolicy.ACCEPT_ORIGINAL_SERVER);
     }
 
+    public static XmsPlayer getPlayerInstance() {
+        if(instance !=null){
+            return instance;
+        }
+        return null;
+    }
+    /**
+     * @param context
+     * @param simpleExoPlayerView
+     * initialize both param to use in class
+     */
+    public XmsPlayer(Context context, SimpleExoPlayerView simpleExoPlayerView,
+                     List<Channel> channelArrayList, int user_name, XmsPlayerUICallback xmsPlayerUICallback) {
+
+        // set surface of the player
+        this.context = context;
+        this.simpleExoPlayerView = simpleExoPlayerView;
+        this.channelArrayList = channelArrayList;
+        this.channellistSize = channelArrayList.size();
+        this.USER_NAME = user_name;
+        this.xmsPlayerUICallback = xmsPlayerUICallback;
+        instance = this;
+
+    }
+
+
+
+    public boolean hasPlayer() {
+        return player == null;
+    }
     /**
      * @param uris
      * @return ConcatenatingMediaSource / single MediaSource
@@ -109,7 +131,7 @@ public class TvPlayer extends Activity {
      * initializing player calling buildUDPMediaSource
      * and showChannelInfo
      */
-    private void initializePlayer () {
+    public void initializePlayer() {
         /*
         * Initialize ExoplayerFactory
         * */
@@ -131,7 +153,7 @@ public class TvPlayer extends Activity {
         //add trackselector to EventLogger constructor
         eventlogger = new EventLogger(trackSelector);
 
-        DefaultRenderersFactory renderersFactory = new DefaultRenderersFactory(this,
+        DefaultRenderersFactory renderersFactory = new DefaultRenderersFactory(this.context,
                 null, DefaultRenderersFactory.EXTENSION_RENDERER_MODE_ON);
 
         player = ExoPlayerFactory.newSimpleInstance(renderersFactory, trackSelector);
@@ -141,12 +163,12 @@ public class TvPlayer extends Activity {
         player.setVideoDebugListener(eventlogger);
         player.setAudioDebugListener(eventlogger);
 
-        simpleExoPlayerView = findViewById(R.id.simpleexoplayerview);
-
-        // set surface of the player the mediasource and play when ready
+        // set the mediasource and play when ready
         player.prepare(buildUDPMediaSource(uris));
         simpleExoPlayerView.setPlayer(player);
-        showChannelInfo(channelArrayList.get(player.getCurrentWindowIndex()));
+//        showChannelInfo();
+        xmsPlayerUICallback.showChannelInfo(player.getCurrentWindowIndex());
+
         player.setPlayWhenReady(true);
 
         monitor();
@@ -156,7 +178,7 @@ public class TvPlayer extends Activity {
     /**
      * release player on activity destroyed
      */
-    private void releasePlayer() {
+    public void releasePlayer() {
         if (player != null) {
             playbackPosition = player.getCurrentPosition();
             currentWindow = player.getCurrentWindowIndex();
@@ -173,7 +195,7 @@ public class TvPlayer extends Activity {
      * in ConcatenatingMediaSource -1 windows index in player
      * and loop
      */
-    private void previouschannel() {
+    public void previouschannel() {
         Timeline currentTimeline = player.getCurrentTimeline();
         if (currentTimeline.isEmpty()) {
             return;
@@ -186,6 +208,7 @@ public class TvPlayer extends Activity {
         } else {
             player.seekTo(currentTimeline.getWindowCount() - 1, 0);
         }
+        xmsPlayerUICallback.showChannelInfo(player.getCurrentWindowIndex());
         monitor();
     }
 
@@ -193,7 +216,7 @@ public class TvPlayer extends Activity {
      * in ConcatenatingMediaSource -1 windows index in player
      * and loop
      */
-    private void nextchannel() {
+    public void nextchannel() {
         Timeline currentTimeline = player.getCurrentTimeline();
         if (currentTimeline.isEmpty()) {
             return;
@@ -204,26 +227,27 @@ public class TvPlayer extends Activity {
         } else {
             player.seekTo(0, 0);
         }
+        xmsPlayerUICallback.showChannelInfo(player.getCurrentWindowIndex());
         monitor();
     }
 
     /**
-     * @param channel
      * show info of channel which was switched to
      */
-    private void showChannelInfo(Channel channel) {
-        currentChannel.setText(String.valueOf(channel.getId()));
-        channelName.setText(channel.getName());
-        channelInfo.setVisibility(View.VISIBLE);
-        Handler mChannelInfoHandler=new Handler();
-        Runnable mChannelInfoRunnable=new Runnable() {
-            public void run() {
-                channelInfo.setVisibility(View.INVISIBLE);
-            }
-        };
-        mChannelInfoHandler.removeCallbacks(mChannelInfoRunnable);
-        mChannelInfoHandler.postDelayed(mChannelInfoRunnable, 5000);
-    }
+//    public void showChannelInfo() {
+//        Channel channel = channelArrayList.get(player.getCurrentWindowIndex());
+//        currentChannel.setText(String.valueOf(channel.getId()));
+//        channelName.setText(channel.getName());
+//        channelInfo.setVisibility(View.VISIBLE);
+//        Handler mChannelInfoHandler=new Handler();
+//        Runnable mChannelInfoRunnable=new Runnable() {
+//            public void run() {
+//                channelInfo.setVisibility(View.INVISIBLE);
+//            }
+//        };
+//        mChannelInfoHandler.removeCallbacks(mChannelInfoRunnable);
+//        mChannelInfoHandler.postDelayed(mChannelInfoRunnable, 5000);
+//    }
 
     /**
      * @param channelid
@@ -237,7 +261,8 @@ public class TvPlayer extends Activity {
                 player.seekTo(channelid, 0);
                 monitor();
             }
-            showChannelInfo(channelArrayList.get(channelid));
+//            showChannelInfo();
+            xmsPlayerUICallback.showChannelInfo(player.getCurrentWindowIndex());
         }
     }
 
@@ -260,154 +285,5 @@ public class TvPlayer extends Activity {
             }
         }, 30, 30, TimeUnit.SECONDS);
     }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tv_player);
-
-        channelInfo = findViewById(R.id.channelInfo);
-        currentChannel = findViewById(R.id.current_channel);
-        channelName = findViewById(R.id.channel_name);
-        channelIcon = findViewById(R.id.channel_ico);
-        channelArrayList = new ArrayList<>();
-        channelList_frameLayout = findViewById(R.id.main_channellist_fragment);
-        channel_number_idicator = findViewById(R.id.channel_number_idicator);
-
-        Realm.init(this);
-
-        // Get a Realm instance for this thread
-        Realm realm = Realm.getDefaultInstance();
-
-        RealmQuery<Channel> channels = realm.where(Channel.class);
-
-        channelArrayList.addAll(channels.findAllSorted("id"));
-
-        channellistSize = channelArrayList.size();
-
-        USER_NAME = 1;
-
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        if (Util.SDK_INT > 23) {
-            initializePlayer();
-        }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if ((Util.SDK_INT <= 23 || player == null)) {
-            initializePlayer();
-        }
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (Util.SDK_INT <= 23) {
-            releasePlayer();
-        }
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (Util.SDK_INT > 23) {
-            releasePlayer();
-        }
-    }
-
-    @Override
-    public boolean dispatchKeyEvent(KeyEvent event) {
-        int action = event.getAction();
-        int keyCode = event.getKeyCode();
-        if (action == KeyEvent.ACTION_UP) {
-            int channel_numberpressed = 10;
-            switch (keyCode) {
-                case KeyEvent.KEYCODE_CHANNEL_UP:
-                    nextchannel();
-                    showChannelInfo(channelArrayList.get(player.getCurrentWindowIndex()));
-                    Log.d(TAG, String.valueOf(player.getCurrentWindowIndex()));
-                    return true;
-                case KeyEvent.KEYCODE_CHANNEL_DOWN:
-                    previouschannel();
-                    showChannelInfo(channelArrayList.get(player.getCurrentWindowIndex()));
-                    Log.d(TAG, String.valueOf(player.getCurrentWindowIndex()));
-                    return true;
-                case KeyEvent.KEYCODE_0:
-                    channel_numberpressed = 0;
-                    channel_number_idicator.setVisibility(View.VISIBLE);
-                    break;
-                case KeyEvent.KEYCODE_1:
-                    channel_numberpressed = 1;
-                    channel_number_idicator.setVisibility(View.VISIBLE);
-                    break;
-                case KeyEvent.KEYCODE_2:
-                    channel_numberpressed = 2;
-                    channel_number_idicator.setVisibility(View.VISIBLE);
-                    break;
-                case KeyEvent.KEYCODE_3:
-                    channel_numberpressed = 3;
-                    channel_number_idicator.setVisibility(View.VISIBLE);
-                    break;
-                case KeyEvent.KEYCODE_4:
-                    channel_numberpressed = 4;
-                    channel_number_idicator.setVisibility(View.VISIBLE);
-                    break;
-                case KeyEvent.KEYCODE_5:
-                    channel_numberpressed = 5;
-                    channel_number_idicator.setVisibility(View.VISIBLE);
-                    break;
-                case KeyEvent.KEYCODE_6:
-                    channel_numberpressed = 6;
-                    channel_number_idicator.setVisibility(View.VISIBLE);
-                    break;
-                case KeyEvent.KEYCODE_7:
-                    channel_numberpressed = 7;
-                    channel_number_idicator.setVisibility(View.VISIBLE);
-                    break;
-                case KeyEvent.KEYCODE_8:
-                    channel_numberpressed = 8;
-                    channel_number_idicator.setVisibility(View.VISIBLE);
-                    break;
-                case KeyEvent.KEYCODE_9:
-                    channel_numberpressed = 9;
-                    channel_number_idicator.setVisibility(View.VISIBLE);
-                    break;
-                case KeyEvent.KEYCODE_MENU:
-
-                    if (FrameLayout.VISIBLE == channelList_frameLayout.getVisibility()) {
-                        channelList_frameLayout.setVisibility(FrameLayout.GONE);
-                    } else {
-                        channelList_frameLayout.setVisibility(FrameLayout.VISIBLE);
-                    }
-                    return true;
-            }
-
-            if (channel_numberpressed < 10){
-                Handler setchannelnumberHandler = new Handler();
-                final int finalChannel_numberpressed = channel_numberpressed;
-                channel_number_idicator.setText(channel_number_idicator.getText() + String.valueOf(finalChannel_numberpressed));
-                Runnable setchannelnumberRunnable = new Runnable() {
-                    public void run() {
-                        if (!channel_number_idicator.getText().equals("")) {
-                            changeChannel(Integer.parseInt((String) channel_number_idicator.getText()) - 1);
-                            channel_number_idicator.setText("");
-                            channel_number_idicator.setVisibility(View.INVISIBLE);
-                        }
-                    }
-                };
-                setchannelnumberHandler.postDelayed(setchannelnumberRunnable, 2000);
-
-            }
-        }
-
-        return super.dispatchKeyEvent(event);
-    }
-
-
 }
+

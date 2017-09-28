@@ -43,15 +43,6 @@
             android:name=".BrowseErrorActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name="com.XmsPro.xmsproplayer.TvPlayer"
-            android:screenOrientation="landscape">
-            <intent-filter>
-                <action android:name="com.XmsPro.xmsproplayer.TvPlayer" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-        <activity
             android:name=".UI.OnboardingActivity"
             android:enabled="true"
             android:exported="true"
@@ -71,7 +62,26 @@
         <activity
             android:name=".services.DialogActivity"
             android:theme="@android:style/Theme.Dialog" />
+        <activity android:name=".Player.TVPlayerActivity"
+            android:enabled="true"
+            android:exported="true"
+            android:screenOrientation="landscape"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:label="@string/player"
+            android:theme="@style/Theme.Leanback" >
+                <intent-filter>
+                    <action android:name="com.google.android.exoplayer.demo.action.VIEW" />
 
+                    <category android:name="android.intent.category.DEFAULT" />
+
+                    <data android:scheme="UDP" />
+                    <data android:scheme="http" />
+                    <data android:scheme="https" />
+                    <data android:scheme="content" />
+                    <data android:scheme="asset" />
+                    <data android:scheme="file" />
+                </intent-filter>
+        </activity>
     </application>
 
 </manifest>

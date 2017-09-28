@@ -21,6 +21,7 @@ import io.realm.Realm;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import xms.com.smarttv.Player.TVPlayerActivity;
 import xms.com.smarttv.R;
 
 public class DialogActivity extends Activity {
@@ -124,7 +125,7 @@ public class DialogActivity extends Activity {
     */
     private void startTVplayer () {
         // start TVplayer
-        Intent intent = new Intent("com.XmsPro.xmsproplayer.TvPlayer");
+        Intent intent = new Intent(this, TVPlayerActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         getApplication().startActivity(intent);
     }

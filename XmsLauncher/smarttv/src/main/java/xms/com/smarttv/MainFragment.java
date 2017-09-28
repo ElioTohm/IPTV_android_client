@@ -55,6 +55,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import xms.com.smarttv.Player.TVPlayerActivity;
 import xms.com.smarttv.Presenter.CardPresenter;
 import xms.com.smarttv.Presenter.InstalledApplicationPresenter;
 import xms.com.smarttv.objects.InstallAppsInfo;
@@ -248,7 +249,7 @@ public class MainFragment extends BrowseFragment {
                         Intent intent = new Intent(getActivity(), OpenUrlActivity.class);
                         startActivity(intent);
                     } else {
-                        Intent intent = new Intent("com.XmsPro.xmsproplayer.TvPlayer");
+                        Intent intent = new Intent(getActivity(), TVPlayerActivity.class);
                         startActivity(intent);
                     }
                 }
