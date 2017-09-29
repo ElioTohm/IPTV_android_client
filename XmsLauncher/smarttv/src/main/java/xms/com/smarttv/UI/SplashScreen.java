@@ -32,6 +32,7 @@ public class SplashScreen extends Activity {
     private User user;
     private  String TKN_TYPE;
     private String TKN;
+    private int USER_ID;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,6 +77,7 @@ public class SplashScreen extends Activity {
             User user = realm.where(User.class).findFirst();
             TKN_TYPE = user.getToken_type();
             TKN = user.getAccess_token();
+            USER_ID = user.getId();
             getChannels();
 
         } else {
@@ -186,10 +188,8 @@ public class SplashScreen extends Activity {
     }
 
     private void getClientInfo() throws IOException {
-        Realm subrealm = Realm.getDefaultInstance();
-        User subuser =  subrealm.where(User.class).findFirst();
-        ApiInterface apiInterface = ApiService.createService(ApiInterface.class, subuser.getToken_type(), subuser.getAccess_token());
-        Call<Client> clientCall= apiInterface.getClientInfo(subuser.getId());
+        ApiInterface apiInterface = ApiService.createService(ApiInterface.class, TKN_TYPE, TKN);
+        Call<Client> clientCall= apiInterface.getClientInfo(USER_ID);
         clientCall.enqueue(new Callback<Client>() {
             @Override
             public void onResponse(Call<Client> call, final Response<Client> response) {
@@ -218,6 +218,5 @@ public class SplashScreen extends Activity {
 
             }
         });
-        subrealm.close();
     }
 }
