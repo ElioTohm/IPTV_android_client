@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.eliotohme.data.User;
 import com.eliotohme.data.network.ApiService;
 
 import org.json.JSONException;
@@ -15,6 +16,7 @@ import org.json.JSONObject;
 
 import java.net.URISyntaxException;
 
+import io.realm.Realm;
 import io.socket.client.Ack;
 import io.socket.client.IO;
 import io.socket.client.Socket;
@@ -81,7 +83,9 @@ public class NotificationService extends IntentService {
             JSONObject headers = new JSONObject();
 
             try {
-                object.put("channel", "Notification_To_1");
+                Realm realm = Realm.getDefaultInstance();
+                User user = realm.where(User.class).findFirst();
+                object.put("channel", "Notification_To_" + user.getId());
                 object.put("name", "subscribe");
 
                 auth.put("headers", headers);
