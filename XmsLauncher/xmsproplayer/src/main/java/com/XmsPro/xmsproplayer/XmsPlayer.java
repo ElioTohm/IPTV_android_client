@@ -3,7 +3,6 @@ package com.XmsPro.xmsproplayer;
 import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
-import android.widget.FrameLayout;
 
 import com.XmsPro.xmsproplayer.Interface.XmsPlayerUICallback;
 import com.eliotohme.data.Channel;
@@ -46,7 +45,6 @@ public class XmsPlayer  {
     private EventLogger eventlogger;
     private static final CookieManager DEFAULT_COOKIE_MANAGER;
     private List<Channel> channelArrayList;
-    private FrameLayout channelList_frameLayout;
     private int channellistSize;
     private SimpleExoPlayerView simpleExoPlayerView;
     private ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
