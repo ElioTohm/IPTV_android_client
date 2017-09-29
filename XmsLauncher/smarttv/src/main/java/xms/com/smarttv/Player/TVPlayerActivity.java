@@ -22,6 +22,7 @@ import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.RealmQuery;
 import xms.com.smarttv.MainActivity;
+import xms.com.smarttv.services.NotificationService;
 
 public class TVPlayerActivity extends Activity {
     String TAG  = "xms";
@@ -37,7 +38,11 @@ public class TVPlayerActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(xms.com.smarttv.R.layout.activity_tvplayer);
+        // init notification intent
+        Intent notificationIntent = new Intent(this, NotificationService.class);
 
+        // Starts the IntentService
+        this.startService(notificationIntent);
         channelInfo = findViewById(xms.com.smarttv.R.id.channelInfo);
         currentChannel = findViewById(xms.com.smarttv.R.id.current_channel);
         channelName = findViewById(xms.com.smarttv.R.id.channel_name);

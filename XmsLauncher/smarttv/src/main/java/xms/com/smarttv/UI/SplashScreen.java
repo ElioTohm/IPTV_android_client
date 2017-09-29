@@ -26,7 +26,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import xms.com.smarttv.Player.TVPlayerActivity;
 import xms.com.smarttv.R;
-import xms.com.smarttv.services.NotificationService;
 
 public class SplashScreen extends Activity {
     private Realm realm;
@@ -37,12 +36,6 @@ public class SplashScreen extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
-
-        // init notification intent
-        Intent notificationIntent = new Intent(this, NotificationService.class);
-
-        // Starts the IntentService
-        this.startService(notificationIntent);
 //        ConnectionStateReceiver mNetworkReceiver = new ConnectionStateReceiver(new ConnectionStateReceiver.ConnectionStateInterface() {
 //            @Override
 //            public void result(Boolean connected) {
