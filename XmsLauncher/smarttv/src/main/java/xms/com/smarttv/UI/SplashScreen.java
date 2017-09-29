@@ -1,11 +1,14 @@
-package xms.com.smarttv.services;
+package xms.com.smarttv.UI;
 
-import android.app.IntentService;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.net.ConnectivityManager;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
 
 import com.eliotohme.data.Channel;
 import com.eliotohme.data.Client;
@@ -21,37 +24,35 @@ import io.realm.RealmConfiguration;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import xms.com.smarttv.BroadcastRecievers.ConnectionStateReceiver;
 import xms.com.smarttv.Player.TVPlayerActivity;
-import xms.com.smarttv.UI.OnboardingActivity;
+import xms.com.smarttv.R;
+import xms.com.smarttv.services.NotificationService;
 
-public class onBootService extends IntentService {
+public class SplashScreen extends Activity {
     private Realm realm;
-    private ConnectionStateReceiver mNetworkReceiver;
     private User user;
-
-    public onBootService() {
-        super("onBootService");
-    }
-
+    private  String TKN_TYPE;
+    private String TKN;
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        unregisterReceiver(mNetworkReceiver);
-        realm.close();
-    }
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_splash_screen);
 
-    @Override
-    protected void onHandleIntent(Intent workIntent) {
-        mNetworkReceiver = new ConnectionStateReceiver(new ConnectionStateReceiver.ConnectionStateInterface() {
-            @Override
-            public void result(Boolean connected) {
-                if (connected) checkdevicereg ();
-            }
-        });
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-        registerReceiver(mNetworkReceiver,intentFilter);
+        // init notification intent
+        Intent notificationIntent = new Intent(this, NotificationService.class);
+
+        // Starts the IntentService
+        this.startService(notificationIntent);
+//        ConnectionStateReceiver mNetworkReceiver = new ConnectionStateReceiver(new ConnectionStateReceiver.ConnectionStateInterface() {
+//            @Override
+//            public void result(Boolean connected) {
+//                if (connected) checkdevicereg ();
+//            }
+//        });
+//        IntentFilter intentFilter = new IntentFilter();
+//        intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+//        registerReceiver(mNetworkReceiver,intentFilter);
+        checkdevicereg();
 
     }
 
@@ -67,7 +68,7 @@ public class onBootService extends IntentService {
         // set @realmConfiguration for development database will be rewritten on change
         final RealmConfiguration realmConfiguration = new RealmConfiguration.Builder()
                 .name(Realm.DEFAULT_REALM_NAME)
-                .schemaVersion(0)
+                .schemaVersion(1)
                 .deleteRealmIfMigrationNeeded()
                 .build();
         Realm.setDefaultConfiguration(realmConfiguration);
@@ -79,6 +80,9 @@ public class onBootService extends IntentService {
         // select user from database
         if (user != null && user.getAccess_token() != null) {
             // if user is found continue
+            User user = realm.where(User.class).findFirst();
+            TKN_TYPE = user.getToken_type();
+            TKN = user.getAccess_token();
             getChannels();
 
         } else {
@@ -91,10 +95,56 @@ public class onBootService extends IntentService {
     * Register Device set token for api authentication
     */
     private void registerdevice () {
-        // initialize apiInterface
-        Intent dialogIntent = new Intent(getBaseContext(), DialogActivity.class);
-        dialogIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        getApplication().startActivity(dialogIntent);
+        // initalize dialog
+        final ApiInterface apiInterface = ApiService.createService(ApiInterface.class);
+
+        final View view = getLayoutInflater().inflate(R.layout.client_register_dialog, null);
+
+        AlertDialog.Builder dialog = new AlertDialog.Builder(SplashScreen.this);
+        dialog.setView(view);
+        // set cancelable to true to be able to fix network before registery
+        dialog.setCancelable(true);
+        dialog.setPositiveButton("Register", new DialogInterface.OnClickListener() {
+            public void onClick(final DialogInterface dialog, int id) {
+                // get android id
+                final EditText user_id = view.findViewById(R.id.text_ID);
+                EditText user_secret = view.findViewById(R.id.text_secret);
+
+                // register client
+                Call<User> userCall = apiInterface.registerdevice(Integer.parseInt(user_id.getText().toString()),
+                        user_secret.getText().toString());
+
+                userCall.enqueue(new Callback<User>() {
+                    @Override
+                    public void onResponse(Call<User> call, final Response<User> response) {
+                        if (response.code() == 200 && response.body() != null) {
+                            realm.executeTransaction(new Realm.Transaction() {
+                                @Override
+                                public void execute(Realm realm) {
+                                    // save token
+                                    TKN = response.body().getAccess_token();
+                                    TKN_TYPE = response.body().getToken_type();
+                                    User user = new User();
+                                    user.setId(Integer.parseInt(String.valueOf(user_id.getText())));
+                                    user.setAccess_token(response.body().getAccess_token());
+                                    user.setToken_type(response.body().getToken_type());
+                                    realm.insertOrUpdate(user);
+                                }
+                            });
+                            getChannels();
+                            finish();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<User> call, Throwable t) {
+                    }
+
+                });
+
+            }
+        });
+        dialog.show();
     }
 
     /*
@@ -102,7 +152,7 @@ public class onBootService extends IntentService {
     * function will always be called when device is turned on
     */
     private void getChannels () {
-        ApiInterface apiInterface = ApiService.createService(ApiInterface.class, user.getToken_type(), user.getAccess_token());
+        ApiInterface apiInterface = ApiService.createService(ApiInterface.class, TKN_TYPE, TKN);
         Call<List<Channel>> channelCall = apiInterface.getChannel();
         channelCall.enqueue(new Callback<List<Channel>>() {
             @Override
@@ -124,6 +174,7 @@ public class onBootService extends IntentService {
                     e.printStackTrace();
                 }
                 startTVplayer();
+                finish();
             }
 
             @Override
@@ -138,9 +189,7 @@ public class onBootService extends IntentService {
     */
     private void startTVplayer (){
         // start TVplayer
-        Intent intent = new Intent(getApplication(), TVPlayerActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        getApplication().startActivity(intent);
+        startActivity(new Intent(getApplication(), TVPlayerActivity.class));
     }
 
     private void getClientInfo() throws IOException {
@@ -148,7 +197,6 @@ public class onBootService extends IntentService {
         User subuser =  subrealm.where(User.class).findFirst();
         ApiInterface apiInterface = ApiService.createService(ApiInterface.class, subuser.getToken_type(), subuser.getAccess_token());
         Call<Client> clientCall= apiInterface.getClientInfo(subuser.getId());
-//        final Response<Client> clientResponse = clientCall.execute();
         clientCall.enqueue(new Callback<Client>() {
             @Override
             public void onResponse(Call<Client> call, final Response<Client> response) {
@@ -168,7 +216,6 @@ public class onBootService extends IntentService {
                     Intent intent = new Intent(getApplicationContext(), OnboardingActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     getApplication().startActivity(intent);
-
                 }
 
             }
