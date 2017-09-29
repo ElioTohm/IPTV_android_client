@@ -17,6 +17,7 @@ import org.json.JSONObject;
 import java.net.URISyntaxException;
 
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
 import io.socket.client.Ack;
 import io.socket.client.IO;
 import io.socket.client.Socket;
@@ -83,6 +84,16 @@ public class NotificationService extends IntentService {
             JSONObject headers = new JSONObject();
 
             try {
+                Realm.init(this);
+
+                final RealmConfiguration realmConfiguration = new RealmConfiguration.Builder()
+                        .name(Realm.DEFAULT_REALM_NAME)
+                        .schemaVersion(1)
+                        .deleteRealmIfMigrationNeeded()
+                        .build();
+                Realm.setDefaultConfiguration(realmConfiguration);
+
+                // Get a Realm instance for this thread
                 Realm realm = Realm.getDefaultInstance();
                 User user = realm.where(User.class).findFirst();
                 object.put("channel", "Notification_To_" + user.getId());
@@ -90,6 +101,7 @@ public class NotificationService extends IntentService {
 
                 auth.put("headers", headers);
                 object.put("auth", auth);
+                realm.close();
             } catch (JSONException e) {
                 e.printStackTrace();
             }
