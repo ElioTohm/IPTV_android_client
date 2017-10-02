@@ -39,10 +39,7 @@ import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.Locale;
 
-/**
- * Logs player events using {@link Log}.
- */
-/* package */ final class EventLogger implements ExoPlayer.EventListener,
+final class EventLogger implements ExoPlayer.EventListener,
         AudioRendererEventListener, VideoRendererEventListener, AdaptiveMediaSourceEventListener,
         ExtractorMediaSource.EventListener, DefaultDrmSessionManager.EventListener,
         MetadataRenderer.Output {
@@ -80,6 +77,11 @@ import java.util.Locale;
     public void onPlayerStateChanged(boolean playWhenReady, int state) {
         Log.d(TAG, "state [" + getSessionTimeString() + ", " + playWhenReady + ", "
                 + getStateString(state) + "]");
+
+    }
+
+    @Override
+    public void onRepeatModeChanged(int repeatMode) {
 
     }
 
