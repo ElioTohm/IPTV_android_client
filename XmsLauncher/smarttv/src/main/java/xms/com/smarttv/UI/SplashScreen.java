@@ -103,7 +103,7 @@ public class SplashScreen extends Activity {
             public void onClick(final DialogInterface dialog, int id) {
                 // get android id
                 final EditText user_id = view.findViewById(R.id.text_ID);
-                EditText user_secret = view.findViewById(R.id.text_secret);
+                final EditText user_secret = view.findViewById(R.id.text_secret);
 
                 // register client
                 Call<User> userCall = apiInterface.registerdevice(Integer.parseInt(user_id.getText().toString()),
@@ -112,7 +112,7 @@ public class SplashScreen extends Activity {
                 userCall.enqueue(new Callback<User>() {
                     @Override
                     public void onResponse(Call<User> call, final Response<User> response) {
-                        if (response.code() == 200 && response.body() != null) {
+                        if (response.code() == 200 && response.body().getError() != 401) {
                             realm.executeTransaction(new Realm.Transaction() {
                                 @Override
                                 public void execute(Realm realm) {
@@ -129,12 +129,13 @@ public class SplashScreen extends Activity {
                             getChannels();
                             finish();
                         } else {
-                            Log.e("TEST", "500");
+                            registerdevice();
                         }
                     }
 
                     @Override
                     public void onFailure(Call<User> call, Throwable t) {
+                        t.printStackTrace();
                     }
 
                 });
@@ -192,7 +193,7 @@ public class SplashScreen extends Activity {
 
     private void getClientInfo() throws IOException {
         ApiInterface apiInterface = ApiService.createService(ApiInterface.class, TKN_TYPE, TKN);
-        Call<Client> clientCall= apiInterface.getClientInfo(USER_ID);
+        Call<Client> clientCall = apiInterface.getClientInfo(USER_ID);
         clientCall.enqueue(new Callback<Client>() {
             @Override
             public void onResponse(Call<Client> call, final Response<Client> response) {

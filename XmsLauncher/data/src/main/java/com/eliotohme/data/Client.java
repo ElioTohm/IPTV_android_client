@@ -28,6 +28,10 @@ public class Client extends RealmObject{
     @Expose
     private String welcomeMessage;
 
+    @SerializedName("welcome_image")
+    @Expose
+    private String welcomeImage;
+
     @SerializedName("credit")
     @Expose
     private int credit;

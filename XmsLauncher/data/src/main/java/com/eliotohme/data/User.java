@@ -9,6 +9,9 @@ public class User extends RealmObject {
     @SerializedName("id")
     private int id;
 
+    @SerializedName("error")
+    private int error;
+
     @SerializedName("access_token")
     private String access_token;
 
@@ -50,4 +53,6 @@ public class User extends RealmObject {
     public String getToken_type() {
         return token_type;
     }
+
+    public int getError() { return error; }
 }
