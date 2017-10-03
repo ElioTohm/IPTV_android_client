@@ -120,7 +120,7 @@ public class SplashScreen extends Activity {
                                     TKN = response.body().getAccess_token();
                                     TKN_TYPE = response.body().getToken_type();
                                     User user = new User();
-                                    user.setId(Integer.parseInt(String.valueOf(user_id.getText())));
+                                    user.setId(response.body().getId());
                                     user.setAccess_token(response.body().getAccess_token());
                                     user.setToken_type(response.body().getToken_type());
                                     realm.insertOrUpdate(user);
@@ -128,6 +128,8 @@ public class SplashScreen extends Activity {
                             });
                             getChannels();
                             finish();
+                        } else {
+                            Log.e("TEST", "500");
                         }
                     }
 
@@ -160,6 +162,7 @@ public class SplashScreen extends Activity {
                             realm.insertOrUpdate(response.body());
                         } else {
                             realm.deleteAll();
+                            registerdevice();
                         }
                     }
                 });

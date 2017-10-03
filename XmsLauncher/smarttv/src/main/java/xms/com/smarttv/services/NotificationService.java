@@ -29,7 +29,6 @@ import org.json.JSONObject;
 import java.net.URISyntaxException;
 
 import io.realm.Realm;
-import io.realm.RealmConfiguration;
 import io.socket.client.Ack;
 import io.socket.client.IO;
 import io.socket.client.Socket;
@@ -37,7 +36,9 @@ import io.socket.emitter.Emitter;
 import xms.com.smarttv.R;
 
 public class NotificationService extends IntentService {
+
     private String TAG = "TEST";
+
     public NotificationService() {
         super("NotificationService");
     }
@@ -52,84 +53,17 @@ public class NotificationService extends IntentService {
     */
     public void startEcho() {
         Log.e(TAG, "ECHO START...");
-
         try {
-            Socket socket = IO.socket(ApiService.SOCKET_URL);
 
-            socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
-                @Override
-                public void call(Object... args) {
-                    Log.e(TAG, "ECHO CONNECTED");
-                }
-            }).on("App\\Events\\NotificationEvent", new Emitter.Listener() {
-                @Override
-                public void call(Object... args) {
-                    JSONObject obj = (JSONObject)args[1];
-                    Notification notification = new Notification();
-                    try {
-                        notification.setType(obj.getInt("type"));
-                        notification.setMessage(obj.getString("message"));
-                        notification.setImage(obj.getString("image"));
+            connectNotificationChannel();
+//            connectOnlineChannel();
 
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    final Notification finalNotification = notification;
-                    new Handler(Looper.getMainLooper()).post(new Runnable() {
-                        @Override
-                        public void run() {
-                            checkDrawOverlayPermission(finalNotification);
-                        }
-                    });
-
-                }
-            }).on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
-                @Override
-                public void call(Object... args) {
-                    Log.e(TAG, "ECHO DISCONNECTED");
-                }
-            });
-
-            socket.connect();
-
-            JSONObject object = new JSONObject();
-            JSONObject auth = new JSONObject();
-            JSONObject headers = new JSONObject();
-
-            try {
-                Realm.init(this);
-
-                final RealmConfiguration realmConfiguration = new RealmConfiguration.Builder()
-                        .name(Realm.DEFAULT_REALM_NAME)
-                        .schemaVersion(1)
-                        .deleteRealmIfMigrationNeeded()
-                        .build();
-                Realm.setDefaultConfiguration(realmConfiguration);
-
-                // Get a Realm instance for this thread
-                Realm realm = Realm.getDefaultInstance();
-                User user = realm.where(User.class).findFirst();
-                object.put("channel", "Notification_To_" + user.getId());
-                object.put("name", "subscribe");
-
-                auth.put("headers", headers);
-                object.put("auth", auth);
-                realm.close();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            socket.emit("subscribe", object, new Ack() {
-                @Override
-                public void call(Object... args) {
-                    Log.e(TAG, "ECHO SUBSCRIBED"); // This event never occurs. I don't know why...
-                }
-            });
         } catch (URISyntaxException e) {
             Log.e(TAG, "ECHO ERROR");
             e.printStackTrace();
         }
     }
+
     public void checkDrawOverlayPermission(Notification notification) {
         if (Build.VERSION.SDK_INT >= 23) {
             if (!Settings.canDrawOverlays(getApplicationContext())) {
@@ -180,5 +114,92 @@ public class NotificationService extends IntentService {
 
     }
 
+    private void connectNotificationChannel () throws URISyntaxException {
+        final Socket socket = IO.socket(ApiService.SOCKET_URL);
+        socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                JSONObject object = new JSONObject();
 
+                // Get a Realm instance for this thread
+                Realm realm = Realm.getDefaultInstance();
+                User user = realm.where(User.class).findFirst();
+                try {
+                    object.put("channel", "Notification_To_" + user.getId());
+                    object.put("name", "subscribe");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                realm.close();
+
+                socket.emit("subscribe", object, new Ack() {
+                    @Override
+                    public void call(Object... args) {
+                        Log.e(TAG, "ECHO SUBSCRIBED");
+                    }
+                });
+
+            }
+        }).on("App\\Events\\NotificationEvent", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                JSONObject obj = (JSONObject)args[1];
+                Notification notification = new Notification();
+                try {
+                    notification.setType(obj.getInt("type"));
+                    notification.setMessage(obj.getString("message"));
+                    notification.setImage(obj.getString("image"));
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                final Notification finalNotification = notification;
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        checkDrawOverlayPermission(finalNotification);
+                    }
+                });
+
+            }
+        }).on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+            Log.e(TAG, "ECHO DISCONNECTED");
+            }
+        });
+
+        socket.connect();
+    }
+
+//    private void connectOnlineChannel () throws URISyntaxException{
+//        final Socket socket = IO.socket(ApiService.SOCKET_URL);
+//        Log.e(TAG, "ECHO START...");
+//
+//        socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
+//            @Override
+//            public void call(Object... args) {
+//                Log.e(TAG, "ECHO CONNECTED to ONLINE");
+//                JSONObject object = new JSONObject();
+//
+//                try {
+//                    object.put("channel", "presence-Online");
+//                    object.put("name", "subscribe");
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//
+//                socket.emit("subscribe", object);
+//            }
+//        }).on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
+//            @Override
+//            public void call(Object... args) {
+//                Log.e(TAG, "ECHO DISCONNECTED from ONLINE");
+//            }
+//        });
+//
+//        socket.connect();
+//
+//    }
 }
