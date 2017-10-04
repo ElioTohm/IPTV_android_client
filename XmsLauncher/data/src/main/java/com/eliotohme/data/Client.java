@@ -78,7 +78,7 @@ public class Client extends RealmObject{
 
     public void setRoom(int room) { this.room = room; }
 
-    public Object getWelcomeMessage() { return welcomeMessage; }
+    public String getWelcomeMessage() { return this.welcomeMessage; }
 
     public void setWelcomeMessage(String welcomeMessage) { this.welcomeMessage = welcomeMessage; }
 
@@ -90,4 +90,5 @@ public class Client extends RealmObject{
 
     public void setDebit(int debit) { this.debit = debit; }
 
+    public String getWelcomeImage() { return this.welcomeImage; }
 }

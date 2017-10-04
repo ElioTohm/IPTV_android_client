@@ -5,13 +5,23 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
 import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 
 import java.util.ArrayList;
 
@@ -19,7 +29,9 @@ import xms.com.smarttv.Player.TVPlayerActivity;
 import xms.com.smarttv.R;
 
 public class OnboardingFragment extends android.support.v17.leanback.app.OnboardingFragment {
-
+    private String name;
+    private String welcome_message;
+    private String welcome_image;
     private static final int[] pageTitles = {
             R.string.onboarding_title_welcome,
             R.string.onboarding_title_design,
@@ -47,6 +59,12 @@ public class OnboardingFragment extends android.support.v17.leanback.app.Onboard
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Set the logo to display a splash animation
         setLogoResourceId(R.drawable.xmsprologosmall);
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            name = bundle.getString("name");
+            welcome_message = bundle.getString("welcome_message");
+            welcome_image = bundle.getString("welcome_image");
+        }
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
@@ -65,7 +83,7 @@ public class OnboardingFragment extends android.support.v17.leanback.app.Onboard
 
     @Override
     protected String getPageTitle(int pageIndex) {
-        return getString(pageTitles[pageIndex]);
+        return (pageIndex == 0) ? name + welcome_message : getString(pageTitles[pageIndex]);
     }
 
     @Override
@@ -73,12 +91,26 @@ public class OnboardingFragment extends android.support.v17.leanback.app.Onboard
         return getString(pageDescriptions[pageIndex]);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Nullable
     @Override
     protected View onCreateBackgroundView(LayoutInflater inflater, ViewGroup container) {
-        View bgView = new View(getActivity());
-//        bgView.setBackground(getResources().getDrawable(R.drawable.default_background));
-        bgView.setBackgroundColor(getResources().getColor(R.color.fastlane_background));
+        final View bgView = new View(getActivity());
+        Glide.with(getActivity())
+                .load(welcome_image)
+                .asBitmap()
+                .error(getResources().getDrawable(R.drawable.default_background))
+                .into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                        Drawable drawable = new BitmapDrawable(resource);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                            bgView.setBackground(drawable);
+                        }
+                    }
+                });
+        bgView.setBackgroundTintMode(android.graphics.PorterDuff.Mode.MULTIPLY);
+        bgView.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.WhiteSmokeTransparent)));
         return bgView;
     }
 
@@ -126,6 +158,7 @@ public class OnboardingFragment extends android.support.v17.leanback.app.Onboard
         mContentAnimator = createFadeInAnimator(mContentView);
         return mContentAnimator;
     }
+
     private Animator createFadeInAnimator(View view) {
         return ObjectAnimator.ofFloat(view, View.ALPHA, 0.0f, 1.0f).setDuration(ANIMATION_DURATION);
     }

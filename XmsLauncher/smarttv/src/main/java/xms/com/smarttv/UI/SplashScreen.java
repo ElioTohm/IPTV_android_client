@@ -212,6 +212,9 @@ public class SplashScreen extends Activity {
                     // This is the first time running the app, let's go to onboarding
                     Intent intent = new Intent(getApplicationContext(), OnboardingActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra("name", response.body().getName());
+                    intent.putExtra("welcome_message", response.body().getWelcomeMessage());
+                    intent.putExtra("welcome_image", response.body().getWelcomeImage());
                     getApplication().startActivity(intent);
                 }
 
