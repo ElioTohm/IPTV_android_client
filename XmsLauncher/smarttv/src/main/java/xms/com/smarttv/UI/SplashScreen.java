@@ -159,12 +159,12 @@ public class SplashScreen extends Activity {
                 backgroundRealm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
-                        if (response.code() == 200) {
-                            realm.insertOrUpdate(response.body());
-                        } else {
-                            realm.deleteAll();
-                            registerdevice();
-                        }
+                    if (response.code() == 200) {
+                        realm.insertOrUpdate(response.body());
+                    } else {
+                        realm.deleteAll();
+                        registerdevice();
+                    }
                     }
                 });
                 try {

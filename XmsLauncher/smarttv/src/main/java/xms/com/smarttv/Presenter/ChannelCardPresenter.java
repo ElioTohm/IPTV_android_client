@@ -9,7 +9,6 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.eliotohme.data.Channel;
-import com.eliotohme.data.network.ApiService;
 
 /**
  * Created by Elio on 9/28/2017.
@@ -51,7 +50,7 @@ public class ChannelCardPresenter extends Presenter {
             cardView.setTitleText(channel.getName());
             cardView.setMainImageDimensions(CARD_WIDTH, CARD_HEIGHT);
             Glide.with(viewHolder.view.getContext())
-                    .load(ApiService.BASE_URL + "images/" + channel.getThumbnail())
+                    .load(channel.getThumbnail())
                     .error(mDefaultCardImage)
                     .into(cardView.getMainImageView());
         }

@@ -83,7 +83,7 @@ public class OnboardingFragment extends android.support.v17.leanback.app.Onboard
 
     @Override
     protected String getPageTitle(int pageIndex) {
-        return (pageIndex == 0) ? name + welcome_message : getString(pageTitles[pageIndex]);
+        return (pageIndex == 0) ? name + " " + welcome_message : getString(pageTitles[pageIndex]);
     }
 
     @Override
