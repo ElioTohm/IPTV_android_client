@@ -52,10 +52,10 @@ public final class ServiceAppList {
 
         int[] drawables = {
             R.drawable.tv,
-            R.drawable.sunsvgrepocom,
-            R.drawable.roomservicesvgrepocom,
-            R.drawable.receptionsvgrepocom,
-            R.drawable.wheretogo
+            R.drawable.weather,
+            R.drawable.serviceroom,
+            R.drawable.shop,
+            R.drawable.map
         };
 
         list.add(buildMovieInfo(0, title[0],
