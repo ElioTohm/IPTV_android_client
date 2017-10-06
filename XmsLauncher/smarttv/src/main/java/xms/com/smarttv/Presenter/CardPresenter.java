@@ -23,8 +23,8 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 
-import xms.com.smarttv.objects.Movie;
 import xms.com.smarttv.R;
+import xms.com.smarttv.objects.ServiceApp;
 
 /*
  * A CardPresenter is used to generate Views and bind Objects to them on demand.
@@ -72,19 +72,19 @@ public class CardPresenter extends Presenter {
 
     @Override
     public void onBindViewHolder(Presenter.ViewHolder viewHolder, Object item) {
-        Movie movie = (Movie) item;
+        ServiceApp serviceApp = (ServiceApp) item;
         ImageCardView cardView = (ImageCardView) viewHolder.view;
 
         Log.d(TAG, "onBindViewHolder");
-        if (movie.getCardImageUrl() != null) {
-            cardView.setTitleText(movie.getTitle());
-            cardView.setContentText(movie.getStudio());
+        if (serviceApp.getCardImageUrl() != null) {
+            cardView.setTitleText(serviceApp.getTitle());
+            cardView.setContentText(serviceApp.getStudio());
             cardView.setMainImageDimensions(CARD_WIDTH, CARD_HEIGHT);
             Glide.with(viewHolder.view.getContext())
-                    .load(movie.getSvgimage())
+                    .load(serviceApp.getSvgimage())
                     .error(mDefaultCardImage)
                     .into(cardView.getMainImageView());
-            cardView.getMainImageView().setImageResource(movie.getSvgimage());
+            cardView.getMainImageView().setImageResource(serviceApp.getSvgimage());
         }
     }
 

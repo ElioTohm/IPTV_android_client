@@ -14,7 +14,6 @@
 
 package xms.com.smarttv.objects;
 
-import android.graphics.drawable.Drawable;
 import android.util.Log;
 
 import java.io.Serializable;
@@ -25,7 +24,7 @@ import java.net.URISyntaxException;
  * Movie class represents video entity with title, description, image thumbs and video url.
  *
  */
-public class Movie implements Serializable {
+public class ServiceApp implements Serializable {
     static final long serialVersionUID = 727566175075960653L;
     private static long count = 0;
     private long id;
@@ -46,7 +45,7 @@ public class Movie implements Serializable {
         this.svgimage = svgimage;
     }
 
-    public Movie() {
+    public ServiceApp() {
     }
 
     public static long getCount() {

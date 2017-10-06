@@ -5,15 +5,15 @@ import java.util.List;
 
 import xms.com.smarttv.R;
 
-public final class MovieList {
+public final class ServiceAppList {
     public static final String MOVIE_CATEGORY[] = {
             "Services",
     };
 
-    public static List<Movie> list;
+    public static List<ServiceApp> list;
 
-    public static List<Movie> setupMovies() {
-        list = new ArrayList<Movie>();
+    public static List<ServiceApp> setupMovies() {
+        list = new ArrayList<ServiceApp>();
         String title[] = {
                 "Multimedia",
                 "Weather",
@@ -72,20 +72,20 @@ public final class MovieList {
         return list;
     }
 
-    private static Movie buildMovieInfo(int category, String title,
-                                        String description, String studio, String videoUrl, String cardImageUrl,
-                                        String bgImageUrl, int drawable) {
-        Movie movie = new Movie();
-        movie.setId(Movie.getCount());
-        Movie.incCount();
-        movie.setTitle(title);
-        movie.setDescription(description);
-        movie.setStudio(studio);
-        movie.setCategory(category);
-        movie.setCardImageUrl(cardImageUrl);
-        movie.setBackgroundImageUrl(bgImageUrl);
-        movie.setVideoUrl(videoUrl);
-        movie.setSvgimage(drawable);
-        return movie;
+    private static ServiceApp buildMovieInfo(int category, String title,
+                                             String description, String studio, String videoUrl, String cardImageUrl,
+                                             String bgImageUrl, int drawable) {
+        ServiceApp serviceApp = new ServiceApp();
+        serviceApp.setId(ServiceApp.getCount());
+        ServiceApp.incCount();
+        serviceApp.setTitle(title);
+        serviceApp.setDescription(description);
+        serviceApp.setStudio(studio);
+        serviceApp.setCategory(category);
+        serviceApp.setCardImageUrl(cardImageUrl);
+        serviceApp.setBackgroundImageUrl(bgImageUrl);
+        serviceApp.setVideoUrl(videoUrl);
+        serviceApp.setSvgimage(drawable);
+        return serviceApp;
     }
 }

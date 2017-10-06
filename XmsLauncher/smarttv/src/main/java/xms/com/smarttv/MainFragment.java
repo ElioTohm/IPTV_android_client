@@ -59,8 +59,8 @@ import xms.com.smarttv.Player.TVPlayerActivity;
 import xms.com.smarttv.Presenter.CardPresenter;
 import xms.com.smarttv.Presenter.InstalledApplicationPresenter;
 import xms.com.smarttv.objects.InstallAppsInfo;
-import xms.com.smarttv.objects.Movie;
-import xms.com.smarttv.objects.MovieList;
+import xms.com.smarttv.objects.ServiceApp;
+import xms.com.smarttv.objects.ServiceAppList;
 import xms.com.smarttv.weather.OpenUrlActivity;
 
 public class MainFragment extends BrowseFragment {
@@ -131,7 +131,7 @@ public class MainFragment extends BrowseFragment {
     }
 
     private void loadRows() {
-        List<Movie> list = MovieList.setupMovies();
+        List<ServiceApp> list = ServiceAppList.setupMovies();
 
         mRowsAdapter = new ArrayObjectAdapter(new ListRowPresenter());
         CardPresenter cardPresenter = new CardPresenter();
@@ -145,7 +145,7 @@ public class MainFragment extends BrowseFragment {
             for (int j = 0; j < NUM_COLS; j++) {
                 listRowAdapter.add(list.get(j % 5));
             }
-            HeaderItem header = new HeaderItem(i, MovieList.MOVIE_CATEGORY[i]);
+            HeaderItem header = new HeaderItem(i, ServiceAppList.MOVIE_CATEGORY[i]);
             mRowsAdapter.add(new ListRow(header, listRowAdapter));
         }
 
@@ -232,12 +232,12 @@ public class MainFragment extends BrowseFragment {
         public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item,
                                   RowPresenter.ViewHolder rowViewHolder, Row row) {
 
-            if (item instanceof Movie) {
-                Movie movie = (Movie) item;
-                if (movie.getCategory() == 1) {
+            if (item instanceof ServiceApp) {
+                ServiceApp serviceApp = (ServiceApp) item;
+                if (serviceApp.getCategory() == 1) {
                     Log.d(TAG, "Item: " + item.toString());
                     Intent intent = new Intent(getActivity(), DetailsActivity.class);
-                    intent.putExtra(DetailsActivity.MOVIE, movie);
+                    intent.putExtra(DetailsActivity.MOVIE, serviceApp);
 
                     Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(
                             getActivity(),
@@ -245,7 +245,7 @@ public class MainFragment extends BrowseFragment {
                             DetailsActivity.SHARED_ELEMENT_NAME).toBundle();
                     getActivity().startActivity(intent, bundle);
                 } else {
-                    if (movie.getTitle().equals("Weather")) {
+                    if (serviceApp.getTitle().equals("Weather")) {
                         Intent intent = new Intent(getActivity(), OpenUrlActivity.class);
                         startActivity(intent);
                     } else {
@@ -276,8 +276,8 @@ public class MainFragment extends BrowseFragment {
         @Override
         public void onItemSelected(Presenter.ViewHolder itemViewHolder, Object item,
                                    RowPresenter.ViewHolder rowViewHolder, Row row) {
-            if (item instanceof Movie) {
-                mBackgroundURI = ((Movie) item).getBackgroundImageURI();
+            if (item instanceof ServiceApp) {
+                mBackgroundURI = ((ServiceApp) item).getBackgroundImageURI();
                 startBackgroundTimer();
             }
 

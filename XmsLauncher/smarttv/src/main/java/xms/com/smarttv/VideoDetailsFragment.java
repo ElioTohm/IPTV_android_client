@@ -16,7 +16,6 @@ package xms.com.smarttv;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.PictureDrawable;
 import android.os.Bundle;
 import android.support.v17.leanback.app.BackgroundManager;
 import android.support.v17.leanback.app.DetailsFragment;
@@ -49,8 +48,8 @@ import java.util.Collections;
 import java.util.List;
 
 import xms.com.smarttv.Presenter.CardPresenter;
-import xms.com.smarttv.objects.Movie;
-import xms.com.smarttv.objects.MovieList;
+import xms.com.smarttv.objects.ServiceApp;
+import xms.com.smarttv.objects.ServiceAppList;
 
 /*
  * LeanbackDetailsFragment extends DetailsFragment, a Wrapper fragment for leanback details screens.
@@ -68,7 +67,7 @@ public class VideoDetailsFragment extends DetailsFragment {
 
     private static final int NUM_COLS = 5;
 
-    private Movie mSelectedMovie;
+    private ServiceApp mSelectedServiceApp;
 
     private ArrayObjectAdapter mAdapter;
     private ClassPresenterSelector mPresenterSelector;
@@ -84,15 +83,15 @@ public class VideoDetailsFragment extends DetailsFragment {
 
         prepareBackgroundManager();
 
-        mSelectedMovie = (Movie) getActivity().getIntent()
+        mSelectedServiceApp = (ServiceApp) getActivity().getIntent()
                 .getSerializableExtra(DetailsActivity.MOVIE);
-        if (mSelectedMovie != null) {
+        if (mSelectedServiceApp != null) {
             setupAdapter();
             setupDetailsOverviewRow();
             setupDetailsOverviewRowPresenter();
             setupMovieListRow();
             setupMovieListRowPresenter();
-            updateBackground(mSelectedMovie.getBackgroundImageUrl());
+            updateBackground(mSelectedServiceApp.getBackgroundImageUrl());
             setOnItemViewClickedListener(new ItemViewClickedListener());
         } else {
             Intent intent = new Intent(getActivity(), MainActivity.class);
@@ -134,15 +133,15 @@ public class VideoDetailsFragment extends DetailsFragment {
     }
 
     private void setupDetailsOverviewRow() {
-        Log.d(TAG, "doInBackground: " + mSelectedMovie.toString());
-        final DetailsOverviewRow row = new DetailsOverviewRow(mSelectedMovie);
+        Log.d(TAG, "doInBackground: " + mSelectedServiceApp.toString());
+        final DetailsOverviewRow row = new DetailsOverviewRow(mSelectedServiceApp);
         row.setImageDrawable(getResources().getDrawable(R.drawable.default_background));
         int width = Utils.convertDpToPixel(getActivity()
                 .getApplicationContext(), DETAIL_THUMB_WIDTH);
         int height = Utils.convertDpToPixel(getActivity()
                 .getApplicationContext(), DETAIL_THUMB_HEIGHT);
         Glide.with(getActivity())
-                .load(mSelectedMovie.getSvgimage())
+                .load(mSelectedServiceApp.getSvgimage())
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .centerCrop()
                 .error(R.drawable.default_background)
@@ -198,7 +197,7 @@ public class VideoDetailsFragment extends DetailsFragment {
 
     private void setupMovieListRow() {
         String subcategories[] = {getString(R.string.Services)};
-        List<Movie> list = MovieList.list;
+        List<ServiceApp> list = ServiceAppList.list;
 
         Collections.shuffle(list);
         ArrayObjectAdapter listRowAdapter = new ArrayObjectAdapter(new CardPresenter());
@@ -219,11 +218,11 @@ public class VideoDetailsFragment extends DetailsFragment {
         public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item,
                                   RowPresenter.ViewHolder rowViewHolder, Row row) {
 
-            if (item instanceof Movie) {
-                Movie movie = (Movie) item;
+            if (item instanceof ServiceApp) {
+                ServiceApp serviceApp = (ServiceApp) item;
                 Log.d(TAG, "Item: " + item.toString());
                 Intent intent = new Intent(getActivity(), DetailsActivity.class);
-                intent.putExtra(getResources().getString(R.string.movie), movie);
+                intent.putExtra(getResources().getString(R.string.movie), serviceApp);
                 intent.putExtra(getResources().getString(R.string.should_start), true);
                 startActivity(intent);
 

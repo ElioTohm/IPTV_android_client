@@ -3,14 +3,16 @@ package com.eliotohme.data.network;
 import android.support.v4.BuildConfig;
 import android.text.TextUtils;
 
+import java.util.concurrent.TimeUnit;
+
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiService {
-    public static final String BASE_URL  = "http://192.168.0.78/";//"http://xmsiptv.ddns.net:8080/";
-    public static final String SOCKET_URL = "http://192.168.0.78:6001";
+    public static final String BASE_URL  = "http://192.168.0.62/";//"http://192.168.0.78/";
+    public static final String SOCKET_URL = "http://192.168.0.62:6001";
 
     private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
@@ -28,6 +30,8 @@ public class ApiService {
                 debuginterceptor.setLevel(HttpLoggingInterceptor.Level.HEADERS);
 
                 httpClient.addInterceptor(debuginterceptor);
+                httpClient.readTimeout(20, TimeUnit.SECONDS);
+                httpClient.connectTimeout(20, TimeUnit.SECONDS);
             }
 
 
@@ -42,6 +46,7 @@ public class ApiService {
         if (!TextUtils.isEmpty(authToken)) {
             AuthenticationInterceptor interceptor =
                     new AuthenticationInterceptor(tokenType, authToken);
+
             if (BuildConfig.DEBUG) {
                 HttpLoggingInterceptor debuginterceptor = new HttpLoggingInterceptor();
                 debuginterceptor.setLevel(HttpLoggingInterceptor.Level.HEADERS);
@@ -51,6 +56,8 @@ public class ApiService {
 
             if (!httpClient.interceptors().contains(interceptor)) {
                 httpClient.addInterceptor(interceptor);
+                httpClient.readTimeout(20, TimeUnit.SECONDS);
+                httpClient.connectTimeout(20, TimeUnit.SECONDS);
 
                 builder.client(httpClient.build());
                 retrofit = builder.build();
