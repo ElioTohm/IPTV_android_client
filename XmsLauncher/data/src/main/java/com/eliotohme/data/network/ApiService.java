@@ -11,8 +11,8 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiService {
-    public static final String BASE_URL  = "http://192.168.0.62/";//"http://192.168.0.78/";
-    public static final String SOCKET_URL = "http://192.168.0.62:6001";
+    public static final String BASE_URL  = "http://xmsgit.ddns.net/";//"http://192.168.0.78/";
+    public static final String SOCKET_URL = "http://xmsgit.ddns.net:6001";
 
     private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
@@ -35,8 +35,8 @@ public class ApiService {
             }
 
 
-                builder.client(httpClient.build());
-                retrofit = builder.build();
+            builder.client(httpClient.build());
+            retrofit = builder.build();
 
         return retrofit.create(serviceClass);
     }
