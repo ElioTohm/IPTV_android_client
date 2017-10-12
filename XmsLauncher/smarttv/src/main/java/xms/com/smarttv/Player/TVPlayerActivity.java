@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
-import io.realm.RealmConfiguration;
 import io.realm.RealmQuery;
 import xms.com.smarttv.MainActivity;
 import xms.com.smarttv.services.NotificationService;
@@ -49,15 +48,6 @@ public class TVPlayerActivity extends Activity {
         channelArrayList = new ArrayList<>();
         channelList_frameLayout = findViewById(xms.com.smarttv.R.id.main_channellist_fragment);
         channel_number_selector = findViewById(xms.com.smarttv.R.id.channel_number_selector);
-
-        Realm.init(this);
-
-        final RealmConfiguration realmConfiguration = new RealmConfiguration.Builder()
-                .name(Realm.DEFAULT_REALM_NAME)
-                .schemaVersion(1)
-                .deleteRealmIfMigrationNeeded()
-                .build();
-        Realm.setDefaultConfiguration(realmConfiguration);
 
         // Get a Realm instance for this thread
         Realm realm = Realm.getDefaultInstance();

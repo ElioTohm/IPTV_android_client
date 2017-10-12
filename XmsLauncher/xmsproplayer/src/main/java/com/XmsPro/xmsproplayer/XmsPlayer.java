@@ -15,6 +15,7 @@ import com.google.android.exoplayer2.extractor.ExtractorsFactory;
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.hls.HlsMediaSource;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.MappingTrackSelector;
@@ -23,7 +24,11 @@ import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
+import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.google.android.exoplayer2.upstream.UdpDataSource;
+import com.google.android.exoplayer2.util.Util;
 
 import java.net.CookieManager;
 import java.net.CookiePolicy;
@@ -38,6 +43,8 @@ import static com.google.android.exoplayer2.extractor.ts.DefaultTsPayloadReaderF
 
 public class XmsPlayer  {
     String TAG  = "xms";
+    protected String userAgent;
+    private DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
     private SimpleExoPlayer player;
     boolean playWhenReady;
     int currentWindow;
@@ -88,15 +95,13 @@ public class XmsPlayer  {
     public boolean hasPlayer() {
         return player == null;
     }
-    /**
-     * @param uris
-     * @return ConcatenatingMediaSource / single MediaSource
-     */
-    private MediaSource buildUDPMediaSource(Uri[] uris) {
+
+    private MediaSource buildMediaSource(Uri[] uris) {
         /*
         * Function that handles creating a ConcatenatingMediaSource
         * Of UDP URIs
         */
+        DataSource.Factory mediaDataSourceFactory = buildDataSourceFactory(true);
 
         // Initialize UDP DataSource
         DataSource.Factory udsf = new UdpDataSource.Factory() {
@@ -108,15 +113,20 @@ public class XmsPlayer  {
 
         // Initialize ExtractorFactory
         ExtractorsFactory tsExtractorFactory = new DefaultExtractorsFactory().setTsExtractorFlags(FLAG_ALLOW_NON_IDR_KEYFRAMES);
-
         // Loop on URI list to create individual Media source
         MediaSource[] mediaSources = new MediaSource[uris.length];
         for (int i = 0; i < uris.length; i++) {
-            mediaSources[i] = new ExtractorMediaSource(uris[i],
-                    udsf,
-                    tsExtractorFactory,
-                    null,
-                    null);
+            if (i < uris.length - 1 ){
+                mediaSources[i] = new ExtractorMediaSource(uris[i],
+                        udsf,
+                        tsExtractorFactory,
+                        null,
+                        null);
+
+            } else {
+                // TODO: 10/12/2017  generalize
+                mediaSources[i]  = new HlsMediaSource(uris[i], mediaDataSourceFactory, null, null);
+            }
         }
 
         /*
@@ -135,6 +145,7 @@ public class XmsPlayer  {
         /*
         * Initialize ExoplayerFactory
         * */
+        userAgent = Util.getUserAgent(context, "ExoPlayerDemo");
 
         Uri[] uris = new Uri[channelArrayList.size()];
         for (int i = 0; i < channelArrayList.size(); i++) {
@@ -164,9 +175,8 @@ public class XmsPlayer  {
         player.setAudioDebugListener(eventlogger);
 
         // set the mediasource and play when ready
-        player.prepare(buildUDPMediaSource(uris));
+        player.prepare(buildMediaSource(uris));
         simpleExoPlayerView.setPlayer(player);
-//        showChannelInfo();
         xmsPlayerUICallback.showChannelInfo(player.getCurrentWindowIndex());
 
         player.setPlayWhenReady(true);
@@ -266,5 +276,18 @@ public class XmsPlayer  {
             }
         }, 30, 30, TimeUnit.SECONDS);
     }
+
+    private DataSource.Factory buildDataSourceFactory(boolean useBandwidthMeter) {
+        return buildDataSourceFactory(useBandwidthMeter ? BANDWIDTH_METER : null);
+    }
+    public DataSource.Factory buildDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
+        return new DefaultDataSourceFactory(context, bandwidthMeter,
+                buildHttpDataSourceFactory(bandwidthMeter));
+    }
+
+    public HttpDataSource.Factory buildHttpDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
+        return new DefaultHttpDataSourceFactory(userAgent, bandwidthMeter);
+    }
+
 }
 

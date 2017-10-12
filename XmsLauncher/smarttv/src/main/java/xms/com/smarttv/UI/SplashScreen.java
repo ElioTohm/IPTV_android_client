@@ -26,10 +26,10 @@ import retrofit2.Response;
 import xms.com.smarttv.Player.TVPlayerActivity;
 import xms.com.smarttv.R;
 import xms.com.smarttv.app.Preferences;
-import xms.com.smarttv.app.SmartTv;
 
 public class SplashScreen extends Activity {
     private Realm realm;
+    private User user;
     private  String TKN_TYPE;
     private String TKN;
     private int USER_ID;
@@ -44,12 +44,13 @@ public class SplashScreen extends Activity {
 
 
         if (!Preferences.getServerUrl().equals("")) {
+            user = realm.where(User.class).findFirst();
             // select user from database
-            if (SmartTv.getUser() != null && SmartTv.getUser().getAccess_token() != null) {
+            if (user != null && user.getAccess_token() != null) {
                 // if user is found continue
-                TKN_TYPE = SmartTv.getUser().getToken_type();
-                TKN = SmartTv.getUser().getAccess_token();
-                USER_ID = SmartTv.getUser().getId();
+                TKN_TYPE = user.getToken_type();
+                TKN = user.getAccess_token();
+                USER_ID = user.getId();
                 getChannels();
 
             } else {
@@ -99,8 +100,11 @@ public class SplashScreen extends Activity {
                                     // save token
                                     TKN = response.body().getAccess_token();
                                     TKN_TYPE = response.body().getToken_type();
-                                    SmartTv.setUser(response.body());
-                                    realm.insertOrUpdate(SmartTv.getUser());
+                                    User user = new User();
+                                    user.setId(response.body().getId());
+                                    user.setAccess_token(response.body().getAccess_token());
+                                    user.setToken_type(response.body().getToken_type());
+                                    realm.insertOrUpdate(user);
                                 }
                             });
                             getChannels();
@@ -135,6 +139,7 @@ public class SplashScreen extends Activity {
                     @Override
                     public void execute(Realm realm) {
                     if (response.code() == 200) {
+                        realm.delete(Channel.class);
                         realm.insertOrUpdate(response.body());
                     } else {
                         realm.deleteAll();
