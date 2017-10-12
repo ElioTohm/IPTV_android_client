@@ -137,17 +137,12 @@ public class NotificationService extends IntentService {
             public void call(Object... args) {
                 JSONObject object = new JSONObject();
 
-                // Get a Realm instance for this thread
-                Realm realm = Realm.getDefaultInstance();
-                User user = realm.where(User.class).findFirst();
                 try {
-                    object.put("channel", "Notification_To_" + user.getId());
+                    object.put("channel", "Notification_To_" + Realm.getDefaultInstance().where(User.class).findFirst().getId());
                     object.put("name", "subscribe");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
-                realm.close();
 
                 socket.emit("subscribe", object, new Ack() {
                     @Override
