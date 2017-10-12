@@ -21,7 +21,6 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.eliotohme.data.User;
-import com.eliotohme.data.network.ApiService;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,7 +33,14 @@ import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 import xms.com.smarttv.R;
+import xms.com.smarttv.app.Preferences;
 
+/**
+ * Notification background service
+ * Connects to SocketIO port
+ * listens to channel Notification
+ * subscribes to presence-Online channel
+ */
 public class NotificationService extends IntentService {
 
     private String TAG = "TEST";
@@ -45,18 +51,10 @@ public class NotificationService extends IntentService {
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
-        startEcho();
-    }
-
-    /*
-    * Start echo connection to receive notifications
-    */
-    public void startEcho() {
         Log.e(TAG, "ECHO START...");
         try {
 
             connectNotificationChannel();
-//            connectOnlineChannel();
 
         } catch (URISyntaxException e) {
             Log.e(TAG, "ECHO ERROR");
@@ -77,6 +75,10 @@ public class NotificationService extends IntentService {
         }
     }
 
+    /**
+     * User window manager to show notification message and image
+     * @param notification
+     */
     private void showNotification (Notification notification) {
         Context context = getApplicationContext();
         LayoutInflater inflater = (LayoutInflater) context
@@ -87,10 +89,18 @@ public class NotificationService extends IntentService {
         ImageView notificationImage = notificationView.findViewById(R.id.notification_background);
         Button button = notificationView.findViewById(R.id.close_notification);
 
-        WindowManager.LayoutParams params = new WindowManager.LayoutParams(
+        int layouttype;
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            layouttype = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
+        } else {
+            layouttype = WindowManager.LayoutParams.TYPE_PHONE;
+        }
+
+        WindowManager.LayoutParams  params = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.MATCH_PARENT,
                 WindowManager.LayoutParams.MATCH_PARENT,
-                WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,
+                layouttype,
                 WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
                         | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
                 PixelFormat.TRANSLUCENT
@@ -114,8 +124,14 @@ public class NotificationService extends IntentService {
 
     }
 
+    /**
+     * connects to private notification channel
+     * connects tp presence channel
+     * @throws URISyntaxException
+     */
     private void connectNotificationChannel () throws URISyntaxException {
-        final Socket socket = IO.socket(ApiService.SOCKET_URL);
+        final Socket socket = IO.socket(Preferences.getNotificationPort());
+
         socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
             @Override
             public void call(Object... args) {
@@ -140,6 +156,21 @@ public class NotificationService extends IntentService {
                     }
                 });
 
+                Log.e(TAG, "ECHO CONNECTED to ONLINE");
+                object = new JSONObject();
+                JSONObject auth = new JSONObject();
+                JSONObject headers = new JSONObject();
+                try {
+                    object.put("channel", "presence-Online");
+                    object.put("name", "subscribe");
+                    headers.put("Authorization", "Bearer " + Realm.getDefaultInstance().where(User.class).findFirst().getAccess_token());
+                    auth.put("headers", headers);
+                    object.put("auth", auth);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                socket.emit("subscribe", object);
             }
         }).on("App\\Events\\NotificationEvent", new Emitter.Listener() {
             @Override
@@ -173,33 +204,4 @@ public class NotificationService extends IntentService {
         socket.connect();
     }
 
-//    private void connectOnlineChannel () throws URISyntaxException{
-//        final Socket socket = IO.socket(ApiService.SOCKET_URL);
-//        Log.e(TAG, "ECHO START...");
-//
-//        socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
-//            @Override
-//            public void call(Object... args) {
-//                Log.e(TAG, "ECHO CONNECTED to ONLINE");
-//                JSONObject object = new JSONObject();
-//
-//                try {
-//                    object.put("channel", "presence-Online");
-//                    object.put("name", "subscribe");
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//
-//                socket.emit("subscribe", object);
-//            }
-//        }).on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
-//            @Override
-//            public void call(Object... args) {
-//                Log.e(TAG, "ECHO DISCONNECTED from ONLINE");
-//            }
-//        });
-//
-//        socket.connect();
-//
-//    }
 }

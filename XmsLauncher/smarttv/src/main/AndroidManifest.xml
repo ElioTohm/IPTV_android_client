@@ -16,6 +16,7 @@
 
     <application
         android:allowBackup="true"
+        android:name=".app.SmartTv"
         android:banner="@drawable/xmsprologosmall"
         android:icon="@drawable/xmsprologosmall"
         android:label="@string/app_name"

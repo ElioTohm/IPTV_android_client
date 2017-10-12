@@ -1,7 +1,6 @@
 package com.eliotohme.data.network;
 
 import android.support.v4.BuildConfig;
-import android.text.TextUtils;
 
 import java.util.concurrent.TimeUnit;
 
@@ -11,58 +10,40 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiService {
-    public static final String BASE_URL  = "http://192.168.0.62/";//"http://192.168.0.78/";
-    public static final String SOCKET_URL = "http://192.168.0.62:6001";
 
-    private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
-
-    private static Retrofit.Builder builder =
-            new Retrofit.Builder()
-                    .baseUrl(BASE_URL )
-                    .addConverterFactory(GsonConverterFactory.create());
-
-    private static Retrofit retrofit = builder.build();
-
-    public static <S> S createService(
-            Class<S> serviceClass) {
-            if (BuildConfig.DEBUG) {
-                HttpLoggingInterceptor debuginterceptor = new HttpLoggingInterceptor();
-                debuginterceptor.setLevel(HttpLoggingInterceptor.Level.HEADERS);
-
-                httpClient.addInterceptor(debuginterceptor);
-                httpClient.readTimeout(20, TimeUnit.SECONDS);
-                httpClient.connectTimeout(20, TimeUnit.SECONDS);
-            }
-
-
-                builder.client(httpClient.build());
-                retrofit = builder.build();
-
-        return retrofit.create(serviceClass);
+    public static <S> S createService(Class<S> serviceClass, String BASE_URL) {
+        return createService(serviceClass, BASE_URL, null, null);
     }
 
-    public static <S> S createService(
-            Class<S> serviceClass, final String tokenType, final String authToken) {
-        if (!TextUtils.isEmpty(authToken)) {
-            AuthenticationInterceptor interceptor =
-                    new AuthenticationInterceptor(tokenType, authToken);
+    public static <S> S createService(Class<S> serviceClass, String BASE_URL, final String tokenType, final String authToken) {
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
-            if (BuildConfig.DEBUG) {
-                HttpLoggingInterceptor debuginterceptor = new HttpLoggingInterceptor();
-                debuginterceptor.setLevel(HttpLoggingInterceptor.Level.HEADERS);
+        Retrofit.Builder builder =
+                new Retrofit.Builder()
+                        .baseUrl(BASE_URL)
+                        .addConverterFactory(GsonConverterFactory.create());
 
-                httpClient.addInterceptor(debuginterceptor);
-            }
+        Retrofit retrofit = builder.build();
 
+        if (BuildConfig.DEBUG) {
+            HttpLoggingInterceptor debuginterceptor = new HttpLoggingInterceptor();
+            debuginterceptor.setLevel(HttpLoggingInterceptor.Level.HEADERS);
+
+            httpClient.addInterceptor(debuginterceptor);
+        }
+
+        if (authToken != null && tokenType != null) {
+            AuthenticationInterceptor interceptor = new AuthenticationInterceptor(tokenType, authToken);
             if (!httpClient.interceptors().contains(interceptor)) {
                 httpClient.addInterceptor(interceptor);
-                httpClient.readTimeout(20, TimeUnit.SECONDS);
-                httpClient.connectTimeout(20, TimeUnit.SECONDS);
-
-                builder.client(httpClient.build());
-                retrofit = builder.build();
             }
         }
+        httpClient.readTimeout(20, TimeUnit.SECONDS);
+        httpClient.connectTimeout(20, TimeUnit.SECONDS);
+
+        builder.client(httpClient.build());
+        retrofit = builder.build();
+
 
         return retrofit.create(serviceClass);
     }

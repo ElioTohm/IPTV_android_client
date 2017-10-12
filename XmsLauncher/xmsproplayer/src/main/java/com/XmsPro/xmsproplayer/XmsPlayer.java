@@ -232,24 +232,6 @@ public class XmsPlayer  {
     }
 
     /**
-     * show info of channel which was switched to
-     */
-//    public void showChannelInfo() {
-//        Channel channel = channelArrayList.get(player.getCurrentWindowIndex());
-//        currentChannel.setText(String.valueOf(channel.getId()));
-//        channelName.setText(channel.getName());
-//        channelInfo.setVisibility(View.VISIBLE);
-//        Handler mChannelInfoHandler=new Handler();
-//        Runnable mChannelInfoRunnable=new Runnable() {
-//            public void run() {
-//                channelInfo.setVisibility(View.INVISIBLE);
-//            }
-//        };
-//        mChannelInfoHandler.removeCallbacks(mChannelInfoRunnable);
-//        mChannelInfoHandler.postDelayed(mChannelInfoRunnable, 5000);
-//    }
-
-    /**
      * @param channelid
      * changed current window index of exoplayer
      * thus changing channel
@@ -261,7 +243,6 @@ public class XmsPlayer  {
                 player.seekTo(channelid, 0);
                 monitor();
             }
-//            showChannelInfo();
             xmsPlayerUICallback.showChannelInfo(player.getCurrentWindowIndex());
         }
     }
