@@ -25,18 +25,13 @@ public class Channel extends RealmObject {
     @Expose
     private String thumbnail;
 
+    @SerializedName("stream_type")
+    @Expose
+    private int stream_type;
+
     private RealmList<Genre> genres = null;
 
     public Channel() {}
-
-    public Channel(int id, String name, String stream, String thumbnail, RealmList<Genre> genres) {
-        super();
-        this.id = id;
-        this.name = name;
-        this.stream = stream;
-        this.thumbnail = thumbnail;
-        this.genres = genres;
-    }
 
     public int getId() { return id; }
 
@@ -58,4 +53,11 @@ public class Channel extends RealmObject {
 
     public void setGenres(RealmList<Genre> genres) { this.genres = genres; }
 
+    public int getStream_type() {
+        return stream_type;
+    }
+
+    public void setStream_type(int stream_type) {
+        this.stream_type = stream_type;
+    }
 }

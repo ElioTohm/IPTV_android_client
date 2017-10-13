@@ -15,6 +15,9 @@ import com.google.android.exoplayer2.extractor.ExtractorsFactory;
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.dash.DashChunkSource;
+import com.google.android.exoplayer2.source.dash.DashMediaSource;
+import com.google.android.exoplayer2.source.dash.DefaultDashChunkSource;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
@@ -96,7 +99,7 @@ public class XmsPlayer  {
         return player == null;
     }
 
-    private MediaSource buildMediaSource(Uri[] uris) {
+    private MediaSource buildMediaSource(List<Channel> channels) {
         /*
         * Function that handles creating a ConcatenatingMediaSource
         * Of UDP URIs
@@ -114,19 +117,32 @@ public class XmsPlayer  {
         // Initialize ExtractorFactory
         ExtractorsFactory tsExtractorFactory = new DefaultExtractorsFactory().setTsExtractorFlags(FLAG_ALLOW_NON_IDR_KEYFRAMES);
         // Loop on URI list to create individual Media source
-        MediaSource[] mediaSources = new MediaSource[uris.length];
-        for (int i = 0; i < uris.length; i++) {
-            if (i < uris.length - 1 ){
-                mediaSources[i] = new ExtractorMediaSource(uris[i],
-                        udsf,
-                        tsExtractorFactory,
-                        null,
-                        null);
+        MediaSource[] mediaSources = new MediaSource[channels.size()];
 
-            } else {
-                // TODO: 10/12/2017  generalize
-                mediaSources[i]  = new HlsMediaSource(uris[i], mediaDataSourceFactory, null, null);
+        DashChunkSource.Factory dashChunkSourceFactory =
+                new DefaultDashChunkSource.Factory(mediaDataSourceFactory);
+
+        for (int i = 0; i < channels.size(); i++) {
+            Uri channel_stream_uri = Uri.parse(channels.get(i).getStream());
+            int channel_type = channels.get(i).getStream_type();
+            switch (channel_type) {
+                case  1:
+                    mediaSources[i] = new ExtractorMediaSource(channel_stream_uri,
+                            udsf,
+                            tsExtractorFactory,
+                            null,
+                            null);
+                    break;
+                case 2:
+                    mediaSources[i]  = new HlsMediaSource(channel_stream_uri, mediaDataSourceFactory, null, null);
+                    break;
+                case 3:
+                    mediaSources[i]  = new DashMediaSource(channel_stream_uri, mediaDataSourceFactory,
+                                                                    dashChunkSourceFactory, null, null);
+                    break;
+
             }
+
         }
 
         /*
@@ -147,10 +163,10 @@ public class XmsPlayer  {
         * */
         userAgent = Util.getUserAgent(context, "ExoPlayerDemo");
 
-        Uri[] uris = new Uri[channelArrayList.size()];
-        for (int i = 0; i < channelArrayList.size(); i++) {
-            uris[i] = Uri.parse(channelArrayList.get(i).getStream());
-        }
+//        Uri[] uris = new Uri[channelArrayList.size()];
+//        for (int i = 0; i < channelArrayList.size(); i++) {
+//            uris[i] = Uri.parse(channelArrayList.get(i).getStream());
+//        }
 
         //default BandwidthMeter
         BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
@@ -175,7 +191,7 @@ public class XmsPlayer  {
         player.setAudioDebugListener(eventlogger);
 
         // set the mediasource and play when ready
-        player.prepare(buildMediaSource(uris));
+        player.prepare(buildMediaSource(channelArrayList));
         simpleExoPlayerView.setPlayer(player);
         xmsPlayerUICallback.showChannelInfo(player.getCurrentWindowIndex());
 

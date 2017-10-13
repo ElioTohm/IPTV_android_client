@@ -42,7 +42,6 @@ public class SplashScreen extends Activity {
         // Get a Realm instance for this thread
         realm = Realm.getDefaultInstance();
 
-
         if (!Preferences.getServerUrl().equals("")) {
             user = realm.where(User.class).findFirst();
             // select user from database
@@ -115,6 +114,15 @@ public class SplashScreen extends Activity {
                     @Override
                     public void onFailure(@NonNull Call<User> call, @NonNull Throwable t) {
                         t.printStackTrace();
+                        new AlertDialog.Builder(SplashScreen.this)
+                                .setMessage("Can not connect please try again")
+                                .setCancelable(false)
+                                .setNegativeButton("Retry", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        registerdevice();
+                                    }
+                                })
+                                .show();
                     }
                 });
 
@@ -161,6 +169,15 @@ public class SplashScreen extends Activity {
             @Override
             public void onFailure(@NonNull Call<List<Channel>> call, @NonNull Throwable t) {
                 Log.e("TEST", String.valueOf(t));
+                new AlertDialog.Builder(SplashScreen.this)
+                        .setMessage("Can not connect please try again")
+                        .setCancelable(false)
+                        .setNegativeButton("Retry", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                getChannels();
+                            }
+                        })
+                        .show();
             }
         });
     }
@@ -179,7 +196,7 @@ public class SplashScreen extends Activity {
      * @throws IOException
      */
     private void getClientInfo() throws IOException {
-        ApiInterface apiInterface = ApiService.createService(ApiInterface.class,"http://192.168.0.78/", TKN_TYPE, TKN);
+        ApiInterface apiInterface = ApiService.createService(ApiInterface.class,Preferences.getServerUrl(), TKN_TYPE, TKN);
         Call<Client> clientCall = apiInterface.getClientInfo(USER_ID);
         clientCall.enqueue(new Callback<Client>() {
             @Override
