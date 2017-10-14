@@ -19,6 +19,8 @@ import com.google.android.exoplayer2.source.dash.DashChunkSource;
 import com.google.android.exoplayer2.source.dash.DashMediaSource;
 import com.google.android.exoplayer2.source.dash.DefaultDashChunkSource;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
+import com.google.android.exoplayer2.source.smoothstreaming.DefaultSsChunkSource;
+import com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.MappingTrackSelector;
@@ -128,19 +130,37 @@ public class XmsPlayer  {
             switch (channel_type) {
                 case  1:
                     mediaSources[i] = new ExtractorMediaSource(channel_stream_uri,
-                            udsf,
-                            tsExtractorFactory,
-                            null,
-                            null);
+                                            udsf,
+                                            tsExtractorFactory,
+                                            null,
+                                            null);
                     break;
                 case 2:
-                    mediaSources[i]  = new HlsMediaSource(channel_stream_uri, mediaDataSourceFactory, null, null);
+                    mediaSources[i]  = new HlsMediaSource(channel_stream_uri,
+                                            mediaDataSourceFactory,
+                                            null,
+                                            null);
                     break;
                 case 3:
-                    mediaSources[i]  = new DashMediaSource(channel_stream_uri, mediaDataSourceFactory,
-                                                                    dashChunkSourceFactory, null, null);
+                    mediaSources[i]  = new DashMediaSource(channel_stream_uri,
+                                            mediaDataSourceFactory,
+                                            dashChunkSourceFactory,
+                                            null,
+                                            null);
                     break;
-
+                case 4:
+                    mediaSources[i]  = new SsMediaSource(channel_stream_uri,
+                                            buildDataSourceFactory(false),
+                                            new DefaultSsChunkSource.Factory(mediaDataSourceFactory),
+                                            null,
+                                            null);
+                    break;
+                case 5:
+                    mediaSources[i]  = new ExtractorMediaSource(channel_stream_uri,
+                                            mediaDataSourceFactory,
+                                            new DefaultExtractorsFactory(),
+                                            null,
+                                            null);
             }
 
         }
@@ -162,11 +182,6 @@ public class XmsPlayer  {
         * Initialize ExoplayerFactory
         * */
         userAgent = Util.getUserAgent(context, "ExoPlayerDemo");
-
-//        Uri[] uris = new Uri[channelArrayList.size()];
-//        for (int i = 0; i < channelArrayList.size(); i++) {
-//            uris[i] = Uri.parse(channelArrayList.get(i).getStream());
-//        }
 
         //default BandwidthMeter
         BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
