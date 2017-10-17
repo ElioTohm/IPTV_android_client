@@ -6,6 +6,7 @@ import com.eliotohme.data.User;
 
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
@@ -14,6 +15,9 @@ import retrofit2.http.Query;
  * API Interface for retofit library network calls
  */
 public interface ApiInterface {
+    @GET("/api/launcherUpdate")
+    Call<ResponseBody> checkUpdate(@Query("version") double version);
+
     @GET("/api/channel")
     Call<List<Channel>> getChannel();
 

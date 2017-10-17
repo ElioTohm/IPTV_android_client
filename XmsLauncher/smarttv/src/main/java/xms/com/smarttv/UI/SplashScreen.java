@@ -4,7 +4,12 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
@@ -16,10 +21,15 @@ import com.eliotohme.data.User;
 import com.eliotohme.data.network.ApiInterface;
 import com.eliotohme.data.network.ApiService;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
 
 import io.realm.Realm;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -50,8 +60,9 @@ public class SplashScreen extends Activity {
                 TKN_TYPE = user.getToken_type();
                 TKN = user.getAccess_token();
                 USER_ID = user.getId();
-                getChannels();
 
+                // update if not getchannels
+                checkForUpdate();
             } else {
                 // if user row is null register device
                 registerdevice();
@@ -219,20 +230,129 @@ public class SplashScreen extends Activity {
                 .setCancelable(false)
                 .setNegativeButton("Retry", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        getChannels();
+                    getChannels();
                     }
                 })
                 .setPositiveButton("Register", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        registerdevice();
+                    registerdevice();
                     }
                 })
                 .setNeutralButton("Settigns", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        startActivityForResult(new Intent(android.provider.Settings.ACTION_SETTINGS), 0);
+                    startActivityForResult(new Intent(android.provider.Settings.ACTION_SETTINGS), 0);
                     }
                 })
                 .show();
+    }
+
+    private void checkForUpdate () {
+        Double appversion = null;
+        try {
+            PackageInfo appInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            appversion =  Double.parseDouble(appInfo.versionName);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        ApiInterface apiInterface = ApiService.createService(ApiInterface.class,Preferences.getServerUrl(), TKN_TYPE, TKN);
+        Call<ResponseBody> call = apiInterface.checkUpdate(appversion);
+
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull final Response<ResponseBody> response) {
+                if (!response.body().contentType().type().equals("text")) {
+                    File apkpdate = new File(SplashScreen.this.getExternalCacheDir().getAbsolutePath() + "/xmslauncher.apk");
+                    if (apkpdate.exists()) {
+                        apkpdate.delete();
+                    }
+                    new AsyncTask<Void, Void, Void>() {
+                        @Override
+                        protected Void doInBackground(Void... voids) {
+
+                            writeResponseBodyToDisk(response.body());
+                            // start apk as intent to update code
+                            try {
+                                StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+                                StrictMode.setVmPolicy(builder.build());
+
+                                File apkpdate = new File(SplashScreen.this.getExternalCacheDir().getAbsolutePath() + "/xmslauncher.apk");
+                                Intent promptInstall = new Intent(Intent.ACTION_VIEW);
+                                promptInstall.setDataAndType(Uri.fromFile(apkpdate), "application/vnd.android.package-archive");
+                                promptInstall.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(promptInstall);
+                            } catch (Exception e) {
+                                new AlertDialog.Builder(SplashScreen.this)
+                                        .setMessage("XMS launcher Could not update please download latest version manually")
+                                        .setCancelable(false)
+                                        .setPositiveButton("Exit", new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                SplashScreen.this.finish();
+                                            }
+                                        })
+                                        .show();
+                            }
+
+                            return null;
+                        }
+                    }.execute();
+                } else {
+                    getChannels();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
+                Log.e("TEST", t.toString());
+            }
+        });
+    }
+    private void writeResponseBodyToDisk(ResponseBody body) {
+        try {
+            File apkpdate = new File(SplashScreen.this.getExternalCacheDir().getAbsolutePath() + "/xmslauncher.apk");
+
+            InputStream inputStream = null;
+            OutputStream outputStream = null;
+
+            try {
+                byte[] fileReader = new byte[4096];
+
+                long fileSize = body.contentLength();
+                long fileSizeDownloaded = 0;
+
+                inputStream = body.byteStream();
+                outputStream = new FileOutputStream(apkpdate);
+
+                while (true) {
+                    int read = inputStream.read(fileReader);
+
+                    if (read == -1) {
+                        break;
+                    }
+
+                    outputStream.write(fileReader, 0, read);
+
+                    fileSizeDownloaded += read;
+
+                    Log.d("TEST", "file download: " + (fileSize/fileSizeDownloaded) + "%");
+                }
+
+                outputStream.flush();
+
+            } catch (IOException e) {
+                Log.e("test", e.toString());
+            } finally {
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+
+                if (outputStream != null) {
+                    outputStream.close();
+                }
+            }
+        } catch (IOException e) {
+
+        }
     }
 }
