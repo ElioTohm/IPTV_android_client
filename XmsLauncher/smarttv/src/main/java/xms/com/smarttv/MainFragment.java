@@ -236,7 +236,7 @@ public class MainFragment extends BrowseFragment {
                 if (serviceApp.getCategory() == 1) {
                     Log.d(TAG, "Item: " + item.toString());
                     Intent intent = new Intent(getActivity(), DetailsActivity.class);
-                    intent.putExtra(DetailsActivity.MOVIE, serviceApp);
+                    intent.putExtra(DetailsActivity.SERVICE, serviceApp);
 
                     Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(
                             getActivity(),
@@ -279,7 +279,6 @@ public class MainFragment extends BrowseFragment {
                 mBackgroundURI = ((ServiceApp) item).getBackgroundImageURI();
                 startBackgroundTimer();
             }
-
         }
     }
 

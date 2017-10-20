@@ -38,8 +38,8 @@ public class ApiService {
                 httpClient.addInterceptor(interceptor);
             }
         }
-        httpClient.readTimeout(20, TimeUnit.SECONDS);
-        httpClient.connectTimeout(20, TimeUnit.SECONDS);
+        httpClient.readTimeout(10, TimeUnit.SECONDS);
+        httpClient.connectTimeout(10, TimeUnit.SECONDS);
 
         builder.client(httpClient.build());
         retrofit = builder.build();

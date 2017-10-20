@@ -55,7 +55,7 @@ import xms.com.smarttv.objects.ServiceAppList;
  * LeanbackDetailsFragment extends DetailsFragment, a Wrapper fragment for leanback details screens.
  * It shows a detailed view of video and its meta plus related videos.
  */
-public class VideoDetailsFragment extends DetailsFragment {
+public class ServiceDetailsFragment extends DetailsFragment {
     private static final String TAG = "xms";
 
     private static final int ACTION_WATCH_TRAILER = 1;
@@ -84,7 +84,7 @@ public class VideoDetailsFragment extends DetailsFragment {
         prepareBackgroundManager();
 
         mSelectedServiceApp = (ServiceApp) getActivity().getIntent()
-                .getSerializableExtra(DetailsActivity.MOVIE);
+                .getSerializableExtra(DetailsActivity.SERVICE);
         if (mSelectedServiceApp != null) {
             setupAdapter();
             setupDetailsOverviewRow();
@@ -182,9 +182,11 @@ public class VideoDetailsFragment extends DetailsFragment {
                 if (action.getId() == ACTION_WATCH_TRAILER) {
 
                     Toast.makeText(getActivity(), action.toString(), Toast.LENGTH_SHORT).show();
-//                    Intent intent = new Intent("com.XmsPro.xmsproplayer.TvPlayer");
-//                    startActivity(intent);
-
+//                    ItemFragment nextFrag= new ItemFragment();
+//                    getActivity().getFragmentManager().beginTransaction()
+//                            .replace(R.id.details_fragment, nextFrag, null)
+//                            .addToBackStack(null)
+//                            .commit();
                 } else {
 
                     Toast.makeText(getActivity(), action.toString(), Toast.LENGTH_SHORT).show();
