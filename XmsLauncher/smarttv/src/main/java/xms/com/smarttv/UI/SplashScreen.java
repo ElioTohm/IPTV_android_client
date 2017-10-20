@@ -267,6 +267,7 @@ public class SplashScreen extends Activity {
                     if (apkpdate.exists()) {
                         apkpdate.delete();
                     }
+
                     new AsyncTask<Void, Void, Void>() {
                         @Override
                         protected Void doInBackground(Void... voids) {
@@ -293,7 +294,6 @@ public class SplashScreen extends Activity {
                                         })
                                         .show();
                             }
-
                             return null;
                         }
                     }.execute();
@@ -305,6 +305,7 @@ public class SplashScreen extends Activity {
             @Override
             public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
                 Log.e("TEST", t.toString());
+                Connectiondialoghandler();
             }
         });
     }
@@ -352,7 +353,7 @@ public class SplashScreen extends Activity {
                 }
             }
         } catch (IOException e) {
-
+            Log.d("TEST", "writeResponseBodyToDisk: " + e);
         }
     }
 }
