@@ -26,7 +26,7 @@ allprojects {
         supportLibraryVersion = '26.0.1'
         dexmakerVersion = '1.2'
         mockitoVersion = '1.9.5'
-        releaseVersion = 'r2.5.3'
+        releaseVersion = 'r2.5.4'
     }
     if (it.hasProperty('externalBuildDir')) {
         if (!new File(externalBuildDir).isAbsolute()) {

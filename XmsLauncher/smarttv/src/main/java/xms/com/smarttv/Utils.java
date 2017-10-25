@@ -20,6 +20,9 @@ import android.view.Display;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 /**
  * A collection of utility methods, all static.
  */
@@ -87,5 +90,16 @@ public class Utils {
             result += "0" + sec;
         }
         return result;
+    }
+
+    public static String inputStreamToString(InputStream inputStream) {
+        try {
+            byte[] bytes = new byte[inputStream.available()];
+            inputStream.read(bytes, 0, bytes.length);
+            String json = new String(bytes);
+            return json;
+        } catch (IOException e) {
+            return null;
+        }
     }
 }
