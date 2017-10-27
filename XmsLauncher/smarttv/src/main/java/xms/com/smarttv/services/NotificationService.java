@@ -136,10 +136,15 @@ public class NotificationService extends IntentService {
             @Override
             public void call(Object... args) {
                 JSONObject object = new JSONObject();
+                JSONObject auth = new JSONObject();
+                JSONObject headers = new JSONObject();
 
                 try {
-                    object.put("channel", "Notification_To_" + Realm.getDefaultInstance().where(User.class).findFirst().getId());
+                    object.put("channel", "private-Notification_To_" + Realm.getDefaultInstance().where(User.class).findFirst().getId());
                     object.put("name", "subscribe");
+                    headers.put("Authorization", "Bearer " + Realm.getDefaultInstance().where(User.class).findFirst().getAccess_token());
+                    auth.put("headers", headers);
+                    object.put("auth", auth);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -153,13 +158,10 @@ public class NotificationService extends IntentService {
 
                 Log.e(TAG, "ECHO CONNECTED to ONLINE");
                 object = new JSONObject();
-                JSONObject auth = new JSONObject();
-                JSONObject headers = new JSONObject();
+
                 try {
                     object.put("channel", "presence-Online");
                     object.put("name", "subscribe");
-                    headers.put("Authorization", "Bearer " + Realm.getDefaultInstance().where(User.class).findFirst().getAccess_token());
-                    auth.put("headers", headers);
                     object.put("auth", auth);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -167,7 +169,7 @@ public class NotificationService extends IntentService {
 
                 socket.emit("subscribe", object);
             }
-        }).on("App\\Events\\NotificationEvent", new Emitter.Listener() {
+        }).on("Illuminate\\Notifications\\Events\\BroadcastNotificationCreated", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
                 JSONObject obj = (JSONObject)args[1];
