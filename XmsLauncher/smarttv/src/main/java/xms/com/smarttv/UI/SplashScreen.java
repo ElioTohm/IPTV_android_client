@@ -61,7 +61,6 @@ public class SplashScreen extends Activity {
                 TKN = user.getAccess_token();
                 USER_ID = user.getId();
 
-                // update if not getchannels
                 checkForUpdate();
             } else {
                 // if user row is null register device

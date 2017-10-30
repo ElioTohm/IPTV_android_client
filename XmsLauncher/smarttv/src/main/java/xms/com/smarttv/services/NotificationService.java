@@ -169,7 +169,7 @@ public class NotificationService extends IntentService {
 
                 socket.emit("subscribe", object);
             }
-        }).on("Illuminate\\Notifications\\Events\\BroadcastNotificationCreated", new Emitter.Listener() {
+        }).on("App\\Events\\NotificationEvent", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
                 JSONObject obj = (JSONObject)args[1];
