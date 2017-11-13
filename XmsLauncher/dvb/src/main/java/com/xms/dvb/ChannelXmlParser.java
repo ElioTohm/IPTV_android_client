@@ -1,8 +1,12 @@
 package com.xms.dvb;
 
+import android.content.Context;
 import android.util.Xml;
 
 import com.eliotohme.data.Channel;
+import com.github.hiteshsondhi88.libffmpeg.ExecuteBinaryResponseHandler;
+import com.github.hiteshsondhi88.libffmpeg.FFmpeg;
+import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegCommandAlreadyRunningException;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -12,10 +16,16 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.realm.Realm;
+
 public class ChannelXmlParser {
     // We don't use namespaces
     private static final String ns = null;
     private int CHANNEL_NUMBER = 1;
+    private Context context;
+    public ChannelXmlParser(Context context) {
+        this.context = context;
+    }
 
     public List parse(InputStream in) throws XmlPullParserException, IOException {
         try {
@@ -73,6 +83,7 @@ public class ChannelXmlParser {
         channel.setId(CHANNEL_NUMBER);
         channel.setName("Channel " + CHANNEL_NUMBER);
         CHANNEL_NUMBER++;
+        getServiceName(channel.getStream());
         return channel;
     }
 
@@ -116,6 +127,42 @@ public class ChannelXmlParser {
                     depth++;
                     break;
             }
+        }
+    }
+
+    public void getServiceName (final String stream) {
+        FFmpeg ffmpeg = FFmpeg.getInstance(this.context);
+        String[] cmd = {"-i", stream, "-hide_banner"};
+        try {
+            ffmpeg.execute(cmd, new ExecuteBinaryResponseHandler() {
+
+                @Override
+                public void onStart() {}
+
+                @Override
+                public void onProgress(String message) {
+                    if (message.contains("service_name")) {
+                        Realm realm = Realm.getDefaultInstance();
+                        Channel channel = realm.where(Channel.class)
+                                .equalTo("stream", stream)
+                                .findFirst();
+                        realm.beginTransaction();
+                        channel.setName(message.split(":")[1]);
+                        realm.commitTransaction();
+                    }
+                }
+
+                @Override
+                public void onFailure(String message) {}
+
+                @Override
+                public void onSuccess(String message) {}
+
+                @Override
+                public void onFinish() {}
+            });
+        } catch (FFmpegCommandAlreadyRunningException e) {
+            e.printStackTrace();
         }
     }
 }

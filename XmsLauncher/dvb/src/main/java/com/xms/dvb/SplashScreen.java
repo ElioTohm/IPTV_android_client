@@ -26,13 +26,14 @@ import io.realm.Realm;
 import static android.content.ContentValues.TAG;
 
 public class SplashScreen extends Activity {
-
+    private String URL = "udp.xml";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         if (!Preferences.getServerUrl().equals("")) {
-            new DownloadXmlTask().execute("http://192.168.39.177/udp.xml");
+            startActivity(new Intent(this, DVBPlayer.class));
+            finish();
         } else {
             registerdevice();
         }
@@ -56,7 +57,7 @@ public class SplashScreen extends Activity {
                 final EditText serverURI = view.findViewById(R.id.server_url);
 
                 Preferences.setServerUrl(String.valueOf(serverURI.getText()));
-                new DownloadXmlTask().execute("http://192.168.39.177/udp.xml");
+                new DownloadXmlTask().execute(URL);
 
             }
         });
@@ -76,18 +77,17 @@ public class SplashScreen extends Activity {
             }
             return false;
         }
-
     }
 
     // Uploads XML from , parses it,
     private void loadXmlFromNetwork(String urlString) throws XmlPullParserException, IOException {
         InputStream stream = null;
         // Instantiate the parser
-        ChannelXmlParser channelXmlParser = new ChannelXmlParser();
+        ChannelXmlParser channelXmlParser = new ChannelXmlParser(SplashScreen.this);
         List<Channel> channels = null;
 
         try {
-            stream = downloadUrl(urlString);
+            stream = downloadUrl(Preferences.getServerUrl() +   urlString);
             channels = channelXmlParser.parse(stream);
             // Makes sure that the InputStream is closed after the app is
             // finished using it.

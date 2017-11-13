@@ -19,8 +19,6 @@ import java.util.List;
 import io.realm.Realm;
 
 public class DVBPlayer extends Activity {
-
-
     private View channelInfo;
     private TextView currentChannel, channel_number_selector, channelName;
     private List<Channel> channelArrayList;
@@ -33,7 +31,6 @@ public class DVBPlayer extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dvbplayer);
-        // init notification intent
 
         // Starts the IntentService
         channelInfo = findViewById(R.id.channelInfo);
@@ -47,6 +44,7 @@ public class DVBPlayer extends Activity {
         Realm realm = Realm.getDefaultInstance();
 
         channelArrayList.addAll(realm.where(Channel.class).findAllSorted("id"));
+
 
         simpleExoPlayerView = findViewById(R.id.simpleexoplayerview);
 
