@@ -1,12 +1,16 @@
 package com.xms.dvb;
 
 import android.content.Context;
+import android.os.Handler;
 import android.util.Xml;
+import android.widget.Toast;
 
 import com.eliotohme.data.Channel;
 import com.github.hiteshsondhi88.libffmpeg.ExecuteBinaryResponseHandler;
 import com.github.hiteshsondhi88.libffmpeg.FFmpeg;
+import com.github.hiteshsondhi88.libffmpeg.LoadBinaryResponseHandler;
 import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegCommandAlreadyRunningException;
+import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegNotSupportedException;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -41,6 +45,13 @@ public class ChannelXmlParser {
     private List readFeed(XmlPullParser parser) throws XmlPullParserException, IOException {
         List entries = new ArrayList();
         parser.require(XmlPullParser.START_TAG, ns, "Group");
+        Handler handler =  new Handler(context.getMainLooper());
+        handler.post( new Runnable(){
+            public void run(){
+                Toast.makeText(context , "Loading Channel info", Toast.LENGTH_LONG).show();
+            }
+        });
+
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
@@ -134,6 +145,11 @@ public class ChannelXmlParser {
         FFmpeg ffmpeg = FFmpeg.getInstance(this.context);
         String[] cmd = {"-i", stream, "-hide_banner"};
         try {
+            ffmpeg.loadBinary(new LoadBinaryResponseHandler() {
+                @Override
+                public void onFailure() {
+                }
+            });
             ffmpeg.execute(cmd, new ExecuteBinaryResponseHandler() {
 
                 @Override
@@ -163,6 +179,9 @@ public class ChannelXmlParser {
             });
         } catch (FFmpegCommandAlreadyRunningException e) {
             e.printStackTrace();
+        } catch (FFmpegNotSupportedException e) {
+            e.printStackTrace();
         }
     }
+
 }

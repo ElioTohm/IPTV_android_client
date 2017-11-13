@@ -18,7 +18,7 @@ allprojects {
         maven {url "https://maven.google.com"}
     }
     project.ext {
-        minSdkVersion = 19
+        minSdkVersion = 17
         compileSdkVersion = 26
         targetSdkVersion = 26
         buildToolsVersion = '26.0.1'

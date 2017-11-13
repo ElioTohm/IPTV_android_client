@@ -8,7 +8,6 @@ import android.preference.PreferenceManager;
 public class Preferences {
     private static SharedPreferences sPreferences;
     private static String SERVER_URL = "SERVER_URL";
-    private static String NOTIFICATION_PORT = ":6001";
 
     /**
      * init Preference Manager
@@ -35,14 +34,6 @@ public class Preferences {
      */
     public static String getServerUrl () {
         return getString(SERVER_URL, "");
-    }
-
-    /**
-     * Pass static key SERVER_URL addd port number
-     * @return String preference
-     */
-    public  static String getNotificationPort () {
-        return getServerUrl() + NOTIFICATION_PORT;
     }
 
     /**

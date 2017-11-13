@@ -2,6 +2,7 @@ package com.xms.dvb;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -26,6 +27,7 @@ import io.realm.Realm;
 import static android.content.ContentValues.TAG;
 
 public class SplashScreen extends Activity {
+    ProgressDialog progress;
     private String URL = "udp.xml";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,18 +66,17 @@ public class SplashScreen extends Activity {
         dialog.show();
     }
 
-    private class DownloadXmlTask extends AsyncTask<String, Void, Boolean> {
+    private class DownloadXmlTask extends AsyncTask<String, Void, Void> {
         @Override
-        protected Boolean doInBackground(String... urls) {
+        protected Void doInBackground(String... urls) {
             try {
                 loadXmlFromNetwork(urls[0]);
-                return true;
             } catch (IOException e) {
                 Log.e(TAG,"error connections");
             } catch (XmlPullParserException e) {
                 Log.e(TAG, "error parsing");
             }
-            return false;
+            return null;
         }
     }
 
