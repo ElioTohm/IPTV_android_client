@@ -23,25 +23,45 @@ import java.util.List;
 import io.realm.Realm;
 
 public class ChannelXmlParser {
-    // We don't use namespaces
     private static final String ns = null;
     private int CHANNEL_NUMBER = 1;
     private Context context;
+    private List<Channel> channels;
     public ChannelXmlParser(Context context) {
         this.context = context;
     }
 
-    public List parse(InputStream in) throws XmlPullParserException, IOException {
+    public void  parse(InputStream in) throws XmlPullParserException, IOException {
         try {
             XmlPullParser parser = Xml.newPullParser();
             parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
             parser.setInput(in, null);
             parser.nextTag();
-            return readFeed(parser);
+            channels =  readFeed(parser);
+            Realm realm = Realm.getDefaultInstance();
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    realm.delete(Channel.class);
+                    realm.insertOrUpdate(channels);
+                }
+            });
+            int progress = 0;
+            for (int i=0; i<channels.size(); i++) {
+                int total = (int) (100.0 * i / channels.size());
+                if (progress < total) {
+                    progress = total;
+                    getServiceName(channels.get(i).getStream(), String.valueOf(progress));
+                } else {
+                    getServiceName(channels.get(i).getStream(), "");
+                }
+
+            }
         } finally {
             in.close();
         }
     }
+
     private List readFeed(XmlPullParser parser) throws XmlPullParserException, IOException {
         List entries = new ArrayList();
         parser.require(XmlPullParser.START_TAG, ns, "Group");
@@ -51,7 +71,6 @@ public class ChannelXmlParser {
                 Toast.makeText(context , "Loading Channel info", Toast.LENGTH_LONG).show();
             }
         });
-
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
@@ -67,7 +86,6 @@ public class ChannelXmlParser {
         return entries;
     }
 
-
     // Parses the contents of an entry. If it encounters a title, summary, or link tag, hands them off
     // to their respective "read" methods for processing. Otherwise, skips the tag.
     private Channel readEntry(XmlPullParser parser) throws XmlPullParserException, IOException {
@@ -80,9 +98,9 @@ public class ChannelXmlParser {
             }
             String name = parser.getName();
             if (name.equals("ip")) {
-                ip = readTitle(parser);
+                ip = readIP(parser);
             } else if (name.equals("port")) {
-                port = readSummary(parser);
+                port = readPort(parser);
             } else {
                 skip(parser);
             }
@@ -94,12 +112,11 @@ public class ChannelXmlParser {
         channel.setId(CHANNEL_NUMBER);
         channel.setName("Channel " + CHANNEL_NUMBER);
         CHANNEL_NUMBER++;
-        getServiceName(channel.getStream());
         return channel;
     }
 
     // Processes title tags in the feed.
-    private String readTitle(XmlPullParser parser) throws IOException, XmlPullParserException {
+    private String readIP(XmlPullParser parser) throws IOException, XmlPullParserException {
         parser.require(XmlPullParser.START_TAG, ns, "ip");
         String title = readText(parser);
         parser.require(XmlPullParser.END_TAG, ns, "ip");
@@ -107,7 +124,7 @@ public class ChannelXmlParser {
     }
 
     // Processes summary tags in the feed.
-    private String readSummary(XmlPullParser parser) throws IOException, XmlPullParserException {
+    private String readPort(XmlPullParser parser) throws IOException, XmlPullParserException {
         parser.require(XmlPullParser.START_TAG, ns, "port");
         String summary = readText(parser);
         parser.require(XmlPullParser.END_TAG, ns, "port");
@@ -141,8 +158,9 @@ public class ChannelXmlParser {
         }
     }
 
-    public void getServiceName (final String stream) {
+    public void getServiceName (final String stream, final String progresspercentage) {
         FFmpeg ffmpeg = FFmpeg.getInstance(this.context);
+
         String[] cmd = {"-i", stream, "-hide_banner"};
         try {
             ffmpeg.loadBinary(new LoadBinaryResponseHandler() {
@@ -158,13 +176,26 @@ public class ChannelXmlParser {
                 @Override
                 public void onProgress(String message) {
                     if (message.contains("service_name")) {
+                        final String name = message.split(":")[1];
                         Realm realm = Realm.getDefaultInstance();
-                        Channel channel = realm.where(Channel.class)
-                                .equalTo("stream", stream)
-                                .findFirst();
-                        realm.beginTransaction();
-                        channel.setName(message.split(":")[1]);
-                        realm.commitTransaction();
+                        realm.executeTransactionAsync(new Realm.Transaction() {
+                            @Override
+                            public void execute(Realm realm) {
+                                Channel channel = realm.where(Channel.class)
+                                        .equalTo("stream", stream)
+                                        .contains("name", "Channel")
+                                        .findFirst();
+                                channel.setName(name);
+                            }
+                        });
+                        if (!progresspercentage.equals("")) {
+                            Handler handler =  new Handler(context.getMainLooper());
+                            handler.post( new Runnable(){
+                                public void run(){
+                                    Toast.makeText(context , "Loaded " + progresspercentage + "%", Toast.LENGTH_LONG).show();
+                                }
+                            });
+                        }
                     }
                 }
 
@@ -176,12 +207,10 @@ public class ChannelXmlParser {
 
                 @Override
                 public void onFinish() {}
+
             });
-        } catch (FFmpegCommandAlreadyRunningException e) {
-            e.printStackTrace();
-        } catch (FFmpegNotSupportedException e) {
+        } catch (FFmpegCommandAlreadyRunningException | FFmpegNotSupportedException e) {
             e.printStackTrace();
         }
     }
-
 }

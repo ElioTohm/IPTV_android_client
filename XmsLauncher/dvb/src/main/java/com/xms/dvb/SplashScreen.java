@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
-import com.eliotohme.data.Channel;
 import com.xms.dvb.app.Preferences;
 
 import org.xmlpull.v1.XmlPullParserException;
@@ -19,9 +18,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.List;
-
-import io.realm.Realm;
 
 import static android.content.ContentValues.TAG;
 
@@ -55,14 +51,16 @@ public class SplashScreen extends Activity {
                 final EditText serverURI = view.findViewById(R.id.server_url);
 
                 Preferences.setServerUrl(String.valueOf(serverURI.getText()));
-                new DownloadXmlTask().execute();
 
+                // Start a new thread that will download all the data
+                new DownloadXmlTask().execute();
             }
         });
         dialog.show();
     }
 
     private class DownloadXmlTask extends AsyncTask<Void, Void, Void> {
+
         @Override
         protected Void doInBackground(Void... voids) {
             try {
@@ -81,11 +79,10 @@ public class SplashScreen extends Activity {
         InputStream stream = null;
         // Instantiate the parser
         ChannelXmlParser channelXmlParser = new ChannelXmlParser(SplashScreen.this);
-        List<Channel> channels = null;
 
         try {
             stream = downloadUrl(Preferences.getServerUrl());
-            channels = channelXmlParser.parse(stream);
+            channelXmlParser.parse(stream);
             // Makes sure that the InputStream is closed after the app is
             // finished using it.
         } finally {
@@ -93,15 +90,6 @@ public class SplashScreen extends Activity {
                 stream.close();
             }
         }
-        Realm realm = Realm.getDefaultInstance();
-        final List<Channel> finalChannels = channels;
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                realm.delete(Channel.class);
-                realm.insertOrUpdate(finalChannels);
-            }
-        });
         startActivity(new Intent(this, DVBPlayer.class));
         finish();
     }
