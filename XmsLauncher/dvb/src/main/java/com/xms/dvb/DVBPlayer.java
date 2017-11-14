@@ -1,10 +1,12 @@
 package com.xms.dvb;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.XmsPro.xmsproplayer.Interface.XmsPlayerUICallback;
@@ -22,7 +24,7 @@ public class DVBPlayer extends Activity {
     private View channelInfo;
     private TextView currentChannel, channel_number_selector, channelName;
     private List<Channel> channelArrayList;
-//    private FrameLayout channelList_frameLayout;
+    private FrameLayout channelList_frameLayout;
     private SimpleExoPlayerView simpleExoPlayerView;
     private int USER_NAME;
     private XmsPlayer xmsPlayer;
@@ -37,7 +39,7 @@ public class DVBPlayer extends Activity {
         currentChannel = findViewById(R.id.current_channel);
         channelName = findViewById(R.id.channel_name);
         channelArrayList = new ArrayList<>();
-//        channelList_frameLayout = findViewById(R.id.main_channellist_fragment);
+//        channelList_frameLayout = findViewById(R.id.channellist_fragment);
         channel_number_selector = findViewById(R.id.channel_number_selector);
 
         // Get a Realm instance for this thread
@@ -115,8 +117,8 @@ public class DVBPlayer extends Activity {
 //                        return false;
 //                    }
 //                    return super.dispatchKeyEvent(event);
-//                case KeyEvent.KEYCODE_MENU:
-//                    startActivity(new Intent(this, MainActivity.class));
+                case KeyEvent.KEYCODE_MENU:
+                    startActivity(new Intent(this, HomeActivity.class));
 //                case KeyEvent.KEYCODE_DPAD_CENTER:
 //                    if (FrameLayout.VISIBLE != channelList_frameLayout.getVisibility()) {
 //                        channelList_frameLayout.setVisibility(FrameLayout.VISIBLE);
