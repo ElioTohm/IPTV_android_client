@@ -2,7 +2,6 @@ package com.xms.dvb;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -27,8 +26,6 @@ import io.realm.Realm;
 import static android.content.ContentValues.TAG;
 
 public class SplashScreen extends Activity {
-    ProgressDialog progress;
-    private String URL = "udp.xml";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,7 +36,6 @@ public class SplashScreen extends Activity {
         } else {
             registerdevice();
         }
-
     }
 
     /**
@@ -59,18 +55,18 @@ public class SplashScreen extends Activity {
                 final EditText serverURI = view.findViewById(R.id.server_url);
 
                 Preferences.setServerUrl(String.valueOf(serverURI.getText()));
-                new DownloadXmlTask().execute(URL);
+                new DownloadXmlTask().execute();
 
             }
         });
         dialog.show();
     }
 
-    private class DownloadXmlTask extends AsyncTask<String, Void, Void> {
+    private class DownloadXmlTask extends AsyncTask<Void, Void, Void> {
         @Override
-        protected Void doInBackground(String... urls) {
+        protected Void doInBackground(Void... voids) {
             try {
-                loadXmlFromNetwork(urls[0]);
+                loadXmlFromNetwork();
             } catch (IOException e) {
                 Log.e(TAG,"error connections");
             } catch (XmlPullParserException e) {
@@ -81,14 +77,14 @@ public class SplashScreen extends Activity {
     }
 
     // Uploads XML from , parses it,
-    private void loadXmlFromNetwork(String urlString) throws XmlPullParserException, IOException {
+    private void loadXmlFromNetwork() throws XmlPullParserException, IOException {
         InputStream stream = null;
         // Instantiate the parser
         ChannelXmlParser channelXmlParser = new ChannelXmlParser(SplashScreen.this);
         List<Channel> channels = null;
 
         try {
-            stream = downloadUrl(Preferences.getServerUrl() +   urlString);
+            stream = downloadUrl(Preferences.getServerUrl());
             channels = channelXmlParser.parse(stream);
             // Makes sure that the InputStream is closed after the app is
             // finished using it.
@@ -111,7 +107,7 @@ public class SplashScreen extends Activity {
     }
 
     // Given a string representation of a URL, sets up a connection and gets
-// an input stream.
+    // an input stream.
     private InputStream downloadUrl(String urlString) throws IOException {
         URL url = new URL(urlString);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -123,4 +119,5 @@ public class SplashScreen extends Activity {
         conn.connect();
         return conn.getInputStream();
     }
+
 }
