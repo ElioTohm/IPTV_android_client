@@ -2,7 +2,6 @@ package com.XmsPro.xmsproplayer;
 
 import android.content.Context;
 import android.net.Uri;
-import android.util.Log;
 
 import com.XmsPro.xmsproplayer.Interface.XmsPlayerUICallback;
 import com.eliotohme.data.Channel;
@@ -40,15 +39,11 @@ import java.net.CookiePolicy;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
-import io.realm.Realm;
 
 import static com.google.android.exoplayer2.extractor.ts.DefaultTsPayloadReaderFactory.FLAG_ALLOW_NON_IDR_KEYFRAMES;
 import static com.google.android.exoplayer2.extractor.ts.TsExtractor.MODE_SINGLE_PMT;
 
 public class XmsPlayer  {
-    String TAG  = "xms";
     protected String userAgent;
     private DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
     private SimpleExoPlayer player;
@@ -216,8 +211,6 @@ public class XmsPlayer  {
 
         player.setPlayWhenReady(true);
 
-        monitor();
-
     }
 
     /**
@@ -254,7 +247,6 @@ public class XmsPlayer  {
             player.seekTo(currentTimeline.getWindowCount() - 1, 0);
         }
         xmsPlayerUICallback.showChannelInfo(player.getCurrentWindowIndex());
-        monitor();
     }
 
     /**
@@ -273,7 +265,6 @@ public class XmsPlayer  {
             player.seekTo(0, 0);
         }
         xmsPlayerUICallback.showChannelInfo(player.getCurrentWindowIndex());
-        monitor();
     }
 
     /**
@@ -286,30 +277,9 @@ public class XmsPlayer  {
         if(channelid < channellistSize){
             if (player.getCurrentWindowIndex() != channelid) {
                 player.seekTo(channelid, 0);
-                monitor();
             }
             xmsPlayerUICallback.showChannelInfo(player.getCurrentWindowIndex());
         }
-    }
-
-    /**
-     * Monitoring background worker to monitor user current channel
-     * todo should change to service
-     */
-    public void monitor () {
-        if (scheduledExecutorService == null) {
-            scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
-        }
-        scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
-            @Override
-            public void run() {
-                // Initialize Realm
-                final Realm realm = Realm.getDefaultInstance();
-                Channel channel = realm.where(Channel.class).equalTo("window_id", player.getCurrentWindowIndex()).findFirst();
-                Log.d("TEST", USER_NAME + channel.getName());
-                Log.d("TEST", String.valueOf(System.currentTimeMillis() / 1000));
-            }
-        }, 30, 30, TimeUnit.SECONDS);
     }
 
     private DataSource.Factory buildDataSourceFactory(boolean useBandwidthMeter) {
@@ -322,6 +292,10 @@ public class XmsPlayer  {
 
     public HttpDataSource.Factory buildHttpDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
         return new DefaultHttpDataSourceFactory(userAgent, bandwidthMeter);
+    }
+
+    public int getCurrentChannelIndex () {
+        return player.getCurrentWindowIndex();
     }
 
 }

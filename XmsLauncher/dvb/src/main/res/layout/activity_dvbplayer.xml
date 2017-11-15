@@ -17,6 +17,17 @@
 
     </com.google.android.exoplayer2.ui.SimpleExoPlayerView>
 
+    <fragment
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/main_channellist_fragment"
+        android:name="com.xms.dvb.fragment.ChannelGridFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".DVBPlayer"
+        tools:deviceIds="tv"
+        tools:ignore="MergeRootFrame"/>
+
     <TextView
         android:id="@+id/channel_number_selector"
         android:layout_width="wrap_content"

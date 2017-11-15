@@ -8,6 +8,7 @@ import android.preference.PreferenceManager;
 public class Preferences {
     private static SharedPreferences sPreferences;
     private static String SERVER_URL = "SERVER_URL";
+    private static String LAST_CHANNEL = "LAST_CHANNEL";
 
     /**
      * init Preference Manager
@@ -28,6 +29,10 @@ public class Preferences {
         return sPreferences.getString(key, defaultValue);
     }
 
+    private static int getInt(String key, int defaultValue) {
+        return sPreferences.getInt(key, defaultValue);
+    }
+
     /**
      * Pass static key SERVER_URL
      * @return String preference
@@ -44,5 +49,15 @@ public class Preferences {
         if (sPreferences != null) {
             sPreferences.edit().putString(SERVER_URL, value).commit();
         }
+    }
+
+    public static void setLastChannel (int value) {
+        if(sPreferences != null) {
+            sPreferences.edit().putInt(LAST_CHANNEL, value).commit();
+        }
+    }
+
+    public static int getLastChannel () {
+        return getInt(LAST_CHANNEL, 0);
     }
 }

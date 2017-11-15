@@ -35,7 +35,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".DVBPlayer" />
+        <activity android:name=".DVBPlayer"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:hardwareAccelerated="true"
+            android:launchMode="singleInstance"/>
         <activity android:name=".HomeActivity" />
     </application>
 
