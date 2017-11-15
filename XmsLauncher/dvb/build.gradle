@@ -33,6 +33,7 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:leanback-v17:' + project.ext.supportLibraryVersion
+    compile 'com.android.support:appcompat-v7:' + project.ext.supportLibraryVersion
     compile project(':xmsproplayer')
     compile('io.socket:socket.io-client:1.0.0') {
         // excluding org.json which is provided by Android
