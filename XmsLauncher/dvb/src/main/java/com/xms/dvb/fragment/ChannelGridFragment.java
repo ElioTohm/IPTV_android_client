@@ -23,7 +23,15 @@ public class ChannelGridFragment extends HeadersFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        //load rows
         loadRows();
+
+        // set the channel select
+        if (Preferences.getLastChannel() > 0) {
+            setSelectedPosition(Preferences.getLastChannel());
+        }
+
+        // set click handler for header item / channel
         setOnHeaderClickedListener(new OnHeaderClickedListener() {
             @Override
             public void onHeaderClicked(RowHeaderPresenter.ViewHolder viewHolder, Row row) {
