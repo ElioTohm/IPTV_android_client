@@ -110,7 +110,7 @@ public class ChannelXmlParser {
         channel.setStream_type(1);
         channel.setStream("udp://@"+ip+":"+port);
         channel.setId(CHANNEL_NUMBER);
-        channel.setName("Channel " + CHANNEL_NUMBER);
+        channel.setName("Unkown");
         CHANNEL_NUMBER++;
         return channel;
     }
@@ -158,7 +158,7 @@ public class ChannelXmlParser {
         }
     }
 
-    public void getServiceName (final String stream, final String progresspercentage) {
+    public void getServiceName(final String stream, final String progresspercentage) {
         FFmpeg ffmpeg = FFmpeg.getInstance(this.context);
 
         String[] cmd = {"-i", stream, "-hide_banner"};
@@ -169,10 +169,6 @@ public class ChannelXmlParser {
                 }
             });
             ffmpeg.execute(cmd, new ExecuteBinaryResponseHandler() {
-
-                @Override
-                public void onStart() {}
-
                 @Override
                 public void onProgress(String message) {
                     if (message.contains("service_name")) {
@@ -183,7 +179,7 @@ public class ChannelXmlParser {
                             public void execute(Realm realm) {
                                 Channel channel = realm.where(Channel.class)
                                         .equalTo("stream", stream)
-                                        .contains("name", "Channel")
+                                        .contains("name", "Unkown")
                                         .findFirst();
                                 channel.setName(name);
                             }
@@ -198,16 +194,6 @@ public class ChannelXmlParser {
                         }
                     }
                 }
-
-                @Override
-                public void onFailure(String message) {}
-
-                @Override
-                public void onSuccess(String message) {}
-
-                @Override
-                public void onFinish() {}
-
             });
         } catch (FFmpegCommandAlreadyRunningException | FFmpegNotSupportedException e) {
             e.printStackTrace();

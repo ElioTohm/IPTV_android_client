@@ -196,9 +196,9 @@ public class DVBPlayer extends Activity {
                     public void run() {
                         if (!channel_number_selector.getText().equals("")) {
                             xmsPlayer.changeChannel(Integer.parseInt((String) channel_number_selector.getText()) - 1);
+                            Preferences.setLastChannel(Integer.parseInt((String) channel_number_selector.getText()) - 1);
                             channel_number_selector.setText("");
                             channel_number_selector.setVisibility(View.INVISIBLE);
-                            Preferences.setLastChannel(Integer.parseInt((String) channel_number_selector.getText()) - 1);
                         }
                     }
                 };

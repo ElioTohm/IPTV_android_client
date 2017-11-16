@@ -6,10 +6,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import com.eliotohme.data.Channel;
 import com.xms.dvb.app.Preferences;
 
 import org.xmlpull.v1.XmlPullParserException;
@@ -18,6 +21,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
+
+import io.realm.Realm;
 
 import static android.content.ContentValues.TAG;
 
@@ -26,7 +32,9 @@ public class SplashScreen extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        if (!Preferences.getServerUrl().equals("")) {
+        Realm realm = Realm.getDefaultInstance();
+        if (!Preferences.getServerUrl().equals("") && realm.where(Channel.class).count() > 0) {
+            new checkChannelsLoaded().execute();
             startActivity(new Intent(this, DVBPlayer.class));
             finish();
         } else {
@@ -108,4 +116,32 @@ public class SplashScreen extends Activity {
         return conn.getInputStream();
     }
 
+    private class checkChannelsLoaded extends AsyncTask<Void, Void, Void>  {
+        @Override
+        protected Void doInBackground(Void... voids) {
+            Realm realm = Realm.getDefaultInstance();
+            List<Channel> Unloaded_channels = realm.where(Channel.class).contains("name", "Unkown").findAll();
+            if (Unloaded_channels.size() > 0 ) {
+                Handler handler =  new Handler(SplashScreen.this.getMainLooper());
+                handler.post( new Runnable(){
+                    public void run(){
+                        Toast.makeText(SplashScreen.this , "Resuming loading channel info...", Toast.LENGTH_LONG).show();
+                    }
+                });
+                ChannelXmlParser channelXmlParser_resume = new ChannelXmlParser(SplashScreen.this);
+                long allChannelSize = realm.where(Channel.class).count();
+                int progress = 0;
+                for (int i=0; i<Unloaded_channels.size(); i++) {
+                    int total = (int) (100.0 * (i + allChannelSize - Unloaded_channels.size())  / allChannelSize);
+                    if (progress < total) {
+                        progress = total;
+                        channelXmlParser_resume.getServiceName(Unloaded_channels.get(i).getStream(), String.valueOf(progress));
+                    } else {
+                        channelXmlParser_resume.getServiceName(Unloaded_channels.get(i).getStream(), "");
+                    }
+                }
+            }
+            return null;
+        }
+    }
 }
