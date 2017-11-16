@@ -18,6 +18,7 @@ import io.realm.RealmResults;
 
 public class ChannelGridFragment extends HeadersFragment {
     private ArrayObjectAdapter mRowsAdapter;
+    private RealmResults<Channel> channelRealmResults;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -45,19 +46,40 @@ public class ChannelGridFragment extends HeadersFragment {
     private void loadRows() {
         Realm.init(getActivity());
         mRowsAdapter = new ArrayObjectAdapter(new ListRowPresenter());
+
         // Get a Realm instance for this thread
-        Realm realm = Realm.getDefaultInstance();
+        final Realm realm = Realm.getDefaultInstance();
 
         // get all genre
-        RealmResults<Channel> channelRealmResults= realm.where(Channel.class).findAllSorted("id");
+        channelRealmResults = realm.where(Channel.class).findAllSorted("id");
 
         // loop in result genre to create row genre for channels
         for (Channel channel : channelRealmResults) {
+
             int channel_id = channel.getId();
             HeaderItem headerItem1 = new HeaderItem(channel_id, channel_id + " " +channel.getName());
             PageRow pageRow1 = new PageRow(headerItem1);
             mRowsAdapter.add(pageRow1);
         }
         setAdapter(mRowsAdapter);
+//        channelRealmResults.addChangeListener(new OrderedRealmCollectionChangeListener<RealmResults<Channel>>() {
+//            @Override
+//            public void onChange(RealmResults<Channel> channels, @Nullable OrderedCollectionChangeSet orderedCollectionChangeSet) {
+//                OrderedCollectionChangeSet.Range[] modifications = orderedCollectionChangeSet.getChangeRanges();
+//                for (OrderedCollectionChangeSet.Range range : modifications) {
+//                    Log.d("ELIO", "onChange: "+ range.startIndex);
+//                    mRowsAdapter.replace(
+//                            range.startIndex,
+//                            new HeaderItem(
+//                                    range.startIndex,
+//                                    range.startIndex + " " +
+//                                            realm.where(Channel.class)
+//                                                    .equalTo("id", range.startIndex)
+//                                                    .findFirst().getName())
+//
+//                    );
+//                }
+//            }
+//        });
     }
 }
