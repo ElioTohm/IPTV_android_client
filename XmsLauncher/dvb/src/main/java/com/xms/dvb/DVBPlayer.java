@@ -16,6 +16,7 @@ import com.eliotohme.data.Channel;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.util.Util;
 import com.xms.dvb.app.Preferences;
+import com.xms.dvb.fragment.ChannelGridFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,7 @@ public class DVBPlayer extends Activity {
     private SimpleExoPlayerView simpleExoPlayerView;
     private int USER_NAME;
     private XmsPlayer xmsPlayer;
+    private ChannelGridFragment channelGridFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +45,7 @@ public class DVBPlayer extends Activity {
         channelArrayList = new ArrayList<>();
         channelList_frameLayout = findViewById(R.id.main_channellist_fragment);
         channel_number_selector = findViewById(R.id.channel_number_selector);
-
+        channelGridFragment= (ChannelGridFragment) getFragmentManager().findFragmentById(R.id.main_channellist_fragment);
         // Get a Realm instance for this thread
         Realm realm = Realm.getDefaultInstance();
 
@@ -135,14 +137,16 @@ public class DVBPlayer extends Activity {
                 case KeyEvent.KEYCODE_DPAD_UP:
                     if (FrameLayout.VISIBLE != channelList_frameLayout.getVisibility()) {
                         xmsPlayer.nextchannel();
-                        Preferences.setLastChannel(xmsPlayer.getCurrentChannelIndex() + 1);
+                        Preferences.setLastChannel(xmsPlayer.getCurrentChannelIndex());
+                        channelGridFragment.setSelectedPosition(xmsPlayer.getCurrentChannelIndex());
                         return true;
                     }
                     return super.dispatchKeyEvent(event);
                 case KeyEvent.KEYCODE_DPAD_DOWN:
                     if (FrameLayout.VISIBLE != channelList_frameLayout.getVisibility()) {
                         xmsPlayer.previouschannel();
-                        Preferences.setLastChannel(xmsPlayer.getCurrentChannelIndex() - 1);
+                        Preferences.setLastChannel(xmsPlayer.getCurrentChannelIndex());
+                        channelGridFragment.setSelectedPosition(xmsPlayer.getCurrentChannelIndex());
                         return true;
                     }
                     return super.dispatchKeyEvent(event);
@@ -195,15 +199,16 @@ public class DVBPlayer extends Activity {
                 Runnable setchannelnumberRunnable = new Runnable() {
                     public void run() {
                         if (!channel_number_selector.getText().equals("")) {
-                            xmsPlayer.changeChannel(Integer.parseInt((String) channel_number_selector.getText()) - 1);
-                            Preferences.setLastChannel(Integer.parseInt((String) channel_number_selector.getText()) - 1);
+                            int channel_number = Integer.parseInt((String) channel_number_selector.getText()) - 1;
+                            xmsPlayer.changeChannel(channel_number);
+                            Preferences.setLastChannel(channel_number);
+                            channelGridFragment.setSelectedPosition(channel_number);
                             channel_number_selector.setText("");
                             channel_number_selector.setVisibility(View.INVISIBLE);
                         }
                     }
                 };
                 setchannelnumberHandler.postDelayed(setchannelnumberRunnable, 2000);
-
             }
         }
 
