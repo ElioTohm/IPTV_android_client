@@ -75,6 +75,13 @@ public class SplashScreen extends Activity {
                 loadXmlFromNetwork();
             } catch (IOException e) {
                 Log.e(TAG,"error connections");
+                Handler handler =  new Handler(SplashScreen.this.getMainLooper());
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        registerdevice();
+                    }
+                });
             } catch (XmlPullParserException e) {
                 Log.e(TAG, "error parsing");
             }

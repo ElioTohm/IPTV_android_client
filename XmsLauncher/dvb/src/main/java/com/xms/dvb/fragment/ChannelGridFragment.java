@@ -65,16 +65,17 @@ public class ChannelGridFragment extends HeadersFragment {
             mRowsAdapter.add(pageRow1);
         }
         setAdapter(mRowsAdapter);
+
         channelRealmResults.addChangeListener(new OrderedRealmCollectionChangeListener<RealmResults<Channel>>() {
             @Override
             public void onChange(RealmResults<Channel> channels, @Nullable OrderedCollectionChangeSet orderedCollectionChangeSet) {
                 OrderedCollectionChangeSet.Range[] modifications = orderedCollectionChangeSet.getChangeRanges();
                 for (OrderedCollectionChangeSet.Range range : modifications) {
-                    int index = range.startIndex + 1;
+                    int index = range.startIndex + 1 ;
                     mRowsAdapter.replace(
-                            index,
-                            new PageRow(new HeaderItem(index,
-                                            index + " " + realm.where(Channel.class)
+                            range.startIndex,
+                            new PageRow(new HeaderItem(range.startIndex,
+                                    index + " " + realm.where(Channel.class)
                                                             .equalTo("id", index)
                                                             .findFirst().getName())
                             )
@@ -82,5 +83,6 @@ public class ChannelGridFragment extends HeadersFragment {
                 }
             }
         });
+
     }
 }
