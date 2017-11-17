@@ -1,6 +1,7 @@
 package com.xms.dvb.fragment;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v17.leanback.app.HeadersFragment;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
 import android.support.v17.leanback.widget.HeaderItem;
@@ -13,6 +14,8 @@ import com.XmsPro.xmsproplayer.XmsPlayer;
 import com.eliotohme.data.Channel;
 import com.xms.dvb.app.Preferences;
 
+import io.realm.OrderedCollectionChangeSet;
+import io.realm.OrderedRealmCollectionChangeListener;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -62,24 +65,22 @@ public class ChannelGridFragment extends HeadersFragment {
             mRowsAdapter.add(pageRow1);
         }
         setAdapter(mRowsAdapter);
-//        channelRealmResults.addChangeListener(new OrderedRealmCollectionChangeListener<RealmResults<Channel>>() {
-//            @Override
-//            public void onChange(RealmResults<Channel> channels, @Nullable OrderedCollectionChangeSet orderedCollectionChangeSet) {
-//                OrderedCollectionChangeSet.Range[] modifications = orderedCollectionChangeSet.getChangeRanges();
-//                for (OrderedCollectionChangeSet.Range range : modifications) {
-//                    Log.d("ELIO", "onChange: "+ range.startIndex);
-//                    mRowsAdapter.replace(
-//                            range.startIndex,
-//                            new HeaderItem(
-//                                    range.startIndex,
-//                                    range.startIndex + " " +
-//                                            realm.where(Channel.class)
-//                                                    .equalTo("id", range.startIndex)
-//                                                    .findFirst().getName())
-//
-//                    );
-//                }
-//            }
-//        });
+        channelRealmResults.addChangeListener(new OrderedRealmCollectionChangeListener<RealmResults<Channel>>() {
+            @Override
+            public void onChange(RealmResults<Channel> channels, @Nullable OrderedCollectionChangeSet orderedCollectionChangeSet) {
+                OrderedCollectionChangeSet.Range[] modifications = orderedCollectionChangeSet.getChangeRanges();
+                for (OrderedCollectionChangeSet.Range range : modifications) {
+                    int index = range.startIndex + 1;
+                    mRowsAdapter.replace(
+                            index,
+                            new PageRow(new HeaderItem(index,
+                                            index + " " + realm.where(Channel.class)
+                                                            .equalTo("id", index)
+                                                            .findFirst().getName())
+                            )
+                    );
+                }
+            }
+        });
     }
 }
