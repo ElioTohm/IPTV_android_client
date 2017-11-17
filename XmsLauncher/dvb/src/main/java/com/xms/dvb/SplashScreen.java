@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -34,9 +35,9 @@ public class SplashScreen extends Activity {
         setContentView(R.layout.activity_splash);
         Realm realm = Realm.getDefaultInstance();
         if (!Preferences.getServerUrl().equals("") && realm.where(Channel.class).count() > 0) {
+            // Start a new thread that will download all the data
+            new DownloadXmlTask().execute();
             new checkChannelsLoaded().execute();
-            startActivity(new Intent(this, DVBPlayer.class));
-            finish();
         } else {
             registerdevice();
         }
@@ -57,8 +58,10 @@ public class SplashScreen extends Activity {
             public void onClick(final DialogInterface dialog, int id) {
                 // get android id
                 final EditText serverURI = view.findViewById(R.id.server_url);
+                final EditText udpFileName =  view.findViewById(R.id.udpfilename);
 
                 Preferences.setServerUrl(String.valueOf(serverURI.getText()));
+                Preferences.setXmlFileName(String.valueOf(udpFileName.getText()));
 
                 // Start a new thread that will download all the data
                 new DownloadXmlTask().execute();
@@ -93,13 +96,15 @@ public class SplashScreen extends Activity {
     private void loadXmlFromNetwork() throws XmlPullParserException, IOException {
         InputStream stream = null;
         // Instantiate the parser
-        ChannelXmlParser channelXmlParser = new ChannelXmlParser(SplashScreen.this);
+        XmlParser XmlParser = new XmlParser(SplashScreen.this);
 
         try {
-            stream = downloadUrl(Preferences.getServerUrl());
-            channelXmlParser.parse(stream);
+            stream = downloadUrl(Preferences.getServerUrl()+Preferences.getXmlFileName());
+            XmlParser.parse(stream);
             // Makes sure that the InputStream is closed after the app is
             // finished using it.
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
         } finally {
             if (stream != null) {
                 stream.close();
@@ -135,7 +140,7 @@ public class SplashScreen extends Activity {
                         Toast.makeText(SplashScreen.this , "Resuming loading channel info...", Toast.LENGTH_LONG).show();
                     }
                 });
-                ChannelXmlParser channelXmlParser_resume = new ChannelXmlParser(SplashScreen.this);
+                XmlParser channelXmlParser_resume = new XmlParser(SplashScreen.this);
                 long allChannelSize = realm.where(Channel.class).count();
                 int progress = 0;
                 for (int i=0; i<Unloaded_channels.size(); i++) {

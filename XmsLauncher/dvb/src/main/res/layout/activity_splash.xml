@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.xms.dvb.SplashScreen">
+    tools:context="com.xms.dvb.SplashScreen"
+    android:background="@drawable/bootimage">
 
 
 

@@ -20,8 +20,17 @@
         android:layout_height="wrap_content"
         android:layout_weight="0.11"
         android:ems="10"
-        android:text="http://192.168.39.167/udp.xml"
+        android:text="http://192.168.39.167/"
         android:hint="Server URL"
+        android:inputType="textUri" />
+    <EditText
+        android:id="@+id/udpfilename"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.11"
+        android:ems="10"
+        android:text="udp.xml"
+        android:hint="xml file name"
         android:inputType="textUri" />
 
 

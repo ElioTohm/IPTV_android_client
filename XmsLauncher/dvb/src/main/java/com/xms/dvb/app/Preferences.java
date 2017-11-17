@@ -8,7 +8,9 @@ import android.preference.PreferenceManager;
 public class Preferences {
     private static SharedPreferences sPreferences;
     private static String SERVER_URL = "SERVER_URL";
+    private static String XML_FILE_NAME = "XML_FILE_NAME";
     private static String LAST_CHANNEL = "LAST_CHANNEL";
+    private static String XML_VERSION = "XML_VERSION";
 
     /**
      * init Preference Manager
@@ -20,25 +22,23 @@ public class Preferences {
     }
 
     /**
-     * Get String Preferences by
-     * @param key
-     * @param defaultValue
-     * @return
-     */
-    private static String getString(String key, String defaultValue) {
-        return sPreferences.getString(key, defaultValue);
-    }
-
-    private static int getInt(String key, int defaultValue) {
-        return sPreferences.getInt(key, defaultValue);
-    }
-
-    /**
      * Pass static key SERVER_URL
      * @return String preference
      */
     public static String getServerUrl () {
-        return getString(SERVER_URL, "");
+        return sPreferences.getString(SERVER_URL, "");
+    }
+
+    public static int getLastChannel () {
+        return sPreferences.getInt(LAST_CHANNEL, 0);
+    }
+
+    public static String getXmlVersion () {
+        return sPreferences.getString(XML_VERSION, "");
+    }
+
+    public static String getXmlFileName () {
+        return sPreferences.getString(XML_FILE_NAME, "");
     }
 
     /**
@@ -57,7 +57,15 @@ public class Preferences {
         }
     }
 
-    public static int getLastChannel () {
-        return getInt(LAST_CHANNEL, 0);
+    public static void setXmlVersion (String value) {
+        if(sPreferences != null) {
+            sPreferences.edit().putString(XML_VERSION, value).commit();
+        }
+    }
+
+    public static void setXmlFileName(String value) {
+        if(sPreferences != null) {
+            sPreferences.edit().putString(XML_FILE_NAME, value).commit();
+        }
     }
 }
