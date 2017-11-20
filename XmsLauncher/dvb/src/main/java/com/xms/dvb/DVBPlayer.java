@@ -2,6 +2,8 @@ package com.xms.dvb;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.KeyEvent;
@@ -120,6 +122,12 @@ public class DVBPlayer extends Activity {
         if (action == KeyEvent.ACTION_UP) {
             int channel_numberpressed = 10;
             switch (keyCode) {
+                case KeyEvent.KEYCODE_PERIOD:
+                    if (isPackageInstalled("xmspro.com.vod")) {
+                        Intent i = this.getPackageManager().getLaunchIntentForPackage("xmspro.com.vod");
+                        startActivity(i);
+                    }
+                    return true;
                 case KeyEvent.KEYCODE_BACK:
                     if (FrameLayout.VISIBLE == channelList_frameLayout.getVisibility()) {
                         channelList_frameLayout.setVisibility(FrameLayout.GONE);
@@ -220,4 +228,13 @@ public class DVBPlayer extends Activity {
         return;
     }
 
+    public boolean isPackageInstalled(String targetPackage){
+        PackageManager pm=getPackageManager();
+        try {
+            PackageInfo info=pm.getPackageInfo(targetPackage,PackageManager.GET_META_DATA);
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
+        return true;
+    }
 }

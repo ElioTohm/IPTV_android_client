@@ -45,6 +45,7 @@ public class HomeFragment extends VerticalGridFragment {
         applistRowAdapter = new ArrayObjectAdapter(new InstalledApplicationPresenter());
 
         prepareEntranceTransition();
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -53,6 +54,7 @@ public class HomeFragment extends VerticalGridFragment {
                 startEntranceTransition();
             }
         }, 500);
+
     }
 
     private ArrayList<InstallAppsInfo> getInstalledApps() throws PackageManager.NameNotFoundException {

@@ -82,9 +82,10 @@ public class SplashScreen extends Activity {
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        registerdevice();
+                        Connectiondialoghandler ();
                     }
                 });
+
             } catch (XmlPullParserException e) {
                 Log.e(TAG, "error parsing");
             }
@@ -155,5 +156,28 @@ public class SplashScreen extends Activity {
             }
             return null;
         }
+    }
+
+    private void Connectiondialoghandler () {
+        new AlertDialog.Builder(SplashScreen.this)
+                .setMessage("Can not connect please try again")
+                .setCancelable(false)
+                .setNegativeButton("Retry", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        new DownloadXmlTask().execute();
+                    }
+                })
+                .setPositiveButton("Register", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        registerdevice();
+                    }
+                })
+                .setNeutralButton("Settigns", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        startActivityForResult(new Intent(android.provider.Settings.ACTION_SETTINGS), 0);
+                    }
+                })
+                .show();
     }
 }
