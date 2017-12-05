@@ -1,4 +1,4 @@
-package com.xms.dvb.fragment;
+package com.xms.dvb.ui;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

@@ -1,4 +1,4 @@
-package com.xms.dvb;
+package com.xms.dvb.data;
 
 
 import android.graphics.drawable.Drawable;

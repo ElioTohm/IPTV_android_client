@@ -66,7 +66,7 @@ public class XmlParser {
             } catch (PackageManager.NameNotFoundException e) {
                 e.printStackTrace();
             }
-            if (!XML_VERSION.equals(Preferences.getXmlVersion())) {
+            if (!XML_VERSION.equals(appVersion)) {
                 Handler handler =  new Handler(context.getMainLooper());
                 handler.post( new Runnable(){
                     public void run(){

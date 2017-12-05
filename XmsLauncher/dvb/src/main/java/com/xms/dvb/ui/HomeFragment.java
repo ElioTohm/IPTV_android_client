@@ -1,4 +1,4 @@
-package com.xms.dvb.fragment;
+package com.xms.dvb.ui;
 
 import android.app.Activity;
 import android.content.Context;
@@ -17,8 +17,8 @@ import android.support.v17.leanback.widget.Row;
 import android.support.v17.leanback.widget.RowPresenter;
 import android.support.v17.leanback.widget.VerticalGridPresenter;
 
-import com.xms.dvb.InstallAppsInfo;
 import com.xms.dvb.R;
+import com.xms.dvb.data.InstallAppsInfo;
 import com.xms.dvb.presenter.InstalledApplicationPresenter;
 
 import java.util.ArrayList;
@@ -53,7 +53,7 @@ public class HomeFragment extends VerticalGridFragment {
                 setOnItemViewClickedListener(new ItemViewClickedListener());
                 startEntranceTransition();
             }
-        }, 500);
+        }, 10);
 
     }
 
@@ -78,15 +78,6 @@ public class HomeFragment extends VerticalGridFragment {
                 newInfo.setVersionCode(packinfo.versionCode);
                 newInfo.setIcon(packinfo.applicationInfo.loadIcon(thisactivity.getPackageManager()));
                 res.add(newInfo);
-            } else if (packinfo.applicationInfo.loadLabel(thisactivity.getPackageManager()).toString().equals("Browser") ||
-                    packinfo.applicationInfo.loadLabel(thisactivity.getPackageManager()).toString().equals("FileBrowser")) {
-                InstallAppsInfo newInfo = new InstallAppsInfo();
-                newInfo.setAppname(packinfo.applicationInfo.loadLabel(thisactivity.getPackageManager()).toString());
-                newInfo.setPname(packinfo.packageName);
-                newInfo.setVersionName(packinfo.versionName);
-                newInfo.setVersionCode(packinfo.versionCode);
-                newInfo.setIcon(packinfo.applicationInfo.loadIcon(thisactivity.getPackageManager()));
-                res.add(newInfo);
             }
         }
         return res;
@@ -103,14 +94,24 @@ public class HomeFragment extends VerticalGridFragment {
             e.printStackTrace();
         }
 
+        // add settings icon to access android settings
         InstallAppsInfo settingsapp = new InstallAppsInfo();
         settingsapp.setAppname("Settings");
         settingsapp.setPname("");
         settingsapp.setVersionName("1");
         settingsapp.setVersionCode(1);
         settingsapp.setIcon(getActivity().getResources().getDrawable(R.drawable.ic_settings_settings));
-
+        //add item to list
         applistRowAdapter.add(settingsapp);
+
+        InstallAppsInfo searchChannels = new InstallAppsInfo();
+        searchChannels.setAppname("Search for channels");
+        searchChannels.setPname("");
+        searchChannels.setVersionName("1");
+        searchChannels.setVersionCode(1);
+        searchChannels.setIcon(getActivity().getResources().getDrawable(R.drawable.lb_ic_in_app_search));
+        applistRowAdapter.add(searchChannels);
+
         setAdapter(applistRowAdapter);
 
     }
@@ -122,12 +123,14 @@ public class HomeFragment extends VerticalGridFragment {
 
                 InstallAppsInfo installAppsInfo = (InstallAppsInfo) item;
 
-                if(!installAppsInfo.getAppname().equals("Settings")){
+                if(installAppsInfo.getAppname().equals("Settings")){
+                    startActivityForResult(new Intent(android.provider.Settings.ACTION_SETTINGS), 0);
+                } else if (installAppsInfo.getAppname().equals("Search for channels")) {
+                    getActivity().startActivity(new Intent(getActivity(), DialogActivity.class));
+                } else {
                     Context ctx = getActivity();
                     Intent i = ctx.getPackageManager().getLaunchIntentForPackage(installAppsInfo.getPname());
                     ctx.startActivity(i);
-                }else {
-                    startActivityForResult(new Intent(android.provider.Settings.ACTION_SETTINGS), 0);
                 }
             }
         }

@@ -1,4 +1,4 @@
-package com.xms.dvb;
+package com.xms.dvb.ui;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -17,8 +17,8 @@ import com.XmsPro.xmsproplayer.XmsPlayer;
 import com.eliotohme.data.Channel;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.util.Util;
+import com.xms.dvb.R;
 import com.xms.dvb.app.Preferences;
-import com.xms.dvb.fragment.ChannelGridFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,47 +34,13 @@ public class DVBPlayer extends Activity {
     private int USER_NAME;
     private XmsPlayer xmsPlayer;
     private ChannelGridFragment channelGridFragment;
-
+    Realm realm;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dvbplayer);
 
-        // Starts the IntentService
-        channelInfo = findViewById(R.id.channelInfo);
-        currentChannel = findViewById(R.id.current_channel);
-        channelName = findViewById(R.id.channel_name);
-        channelArrayList = new ArrayList<>();
-        channelList_frameLayout = findViewById(R.id.main_channellist_fragment);
-        channel_number_selector = findViewById(R.id.channel_number_selector);
-        channelGridFragment= (ChannelGridFragment) getFragmentManager().findFragmentById(R.id.main_channellist_fragment);
-        // Get a Realm instance for this thread
-        Realm realm = Realm.getDefaultInstance();
-
-        channelArrayList.addAll(realm.where(Channel.class).findAllSorted("id"));
-
-        simpleExoPlayerView = findViewById(R.id.simpleexoplayerview);
-
-        USER_NAME = 1;
-
-        xmsPlayer = new XmsPlayer(this, simpleExoPlayerView, channelArrayList, USER_NAME,
-                new XmsPlayerUICallback() {
-                    @Override
-                    public void showChannelInfo(int channelindex) {
-                        Channel channel = channelArrayList.get(channelindex);
-                        currentChannel.setText(String.valueOf(channel.getId()));
-                        channelName.setText(channel.getName());
-                        channelInfo.setVisibility(View.VISIBLE);
-                        Handler mChannelInfoHandler=new Handler();
-                        Runnable mChannelInfoRunnable=new Runnable() {
-                            public void run() {
-                                channelInfo.setVisibility(View.INVISIBLE);
-                            }
-                        };
-                        mChannelInfoHandler.removeCallbacks(mChannelInfoRunnable);
-                        mChannelInfoHandler.postDelayed(mChannelInfoRunnable, 5000);
-                    }
-                });
+        localeinit ();
     }
 
     @Override
@@ -92,6 +58,7 @@ public class DVBPlayer extends Activity {
     public void onResume() {
         super.onResume();
         if ((Util.SDK_INT <= 23 || !xmsPlayer.hasPlayer())) {
+            localeinit ();
             xmsPlayer.initializePlayer();
             if(Preferences.getLastChannel() > 0){
                 xmsPlayer.changeChannel(Preferences.getLastChannel());
@@ -236,5 +203,43 @@ public class DVBPlayer extends Activity {
             return false;
         }
         return true;
+    }
+
+    private void localeinit () {
+        // Starts the IntentService
+        channelInfo = findViewById(R.id.channelInfo);
+        currentChannel = findViewById(R.id.current_channel);
+        channelName = findViewById(R.id.channel_name);
+        channelArrayList = new ArrayList<>();
+        channelList_frameLayout = findViewById(R.id.main_channellist_fragment);
+        channel_number_selector = findViewById(R.id.channel_number_selector);
+        channelGridFragment= (ChannelGridFragment) getFragmentManager().findFragmentById(R.id.main_channellist_fragment);
+        // Get a Realm instance for this thread
+        realm = Realm.getDefaultInstance();
+
+        channelArrayList.addAll(realm.where(Channel.class).findAllSorted("id"));
+
+        simpleExoPlayerView = findViewById(R.id.simpleexoplayerview);
+
+        USER_NAME = 1;
+
+        xmsPlayer = new XmsPlayer(this, simpleExoPlayerView, channelArrayList, USER_NAME,
+                new XmsPlayerUICallback() {
+                    @Override
+                    public void showChannelInfo(int channelindex) {
+                        Channel channel = channelArrayList.get(channelindex);
+                        currentChannel.setText(String.valueOf(channel.getId()));
+                        channelName.setText(channel.getName());
+                        channelInfo.setVisibility(View.VISIBLE);
+                        Handler mChannelInfoHandler=new Handler();
+                        Runnable mChannelInfoRunnable=new Runnable() {
+                            public void run() {
+                                channelInfo.setVisibility(View.INVISIBLE);
+                            }
+                        };
+                        mChannelInfoHandler.removeCallbacks(mChannelInfoRunnable);
+                        mChannelInfoHandler.postDelayed(mChannelInfoRunnable, 5000);
+                    }
+                });
     }
 }

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.xms.dvb.DVBPlayer">
+    tools:context="com.xms.dvb.ui.DVBPlayer">
 
 
     <com.google.android.exoplayer2.ui.SimpleExoPlayerView
@@ -21,10 +21,10 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/main_channellist_fragment"
-        android:name="com.xms.dvb.fragment.ChannelGridFragment"
+        android:name="com.xms.dvb.ui.ChannelGridFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".DVBPlayer"
+        tools:context=".ui.DVBPlayer"
         tools:deviceIds="tv"
         tools:ignore="MergeRootFrame"/>
 

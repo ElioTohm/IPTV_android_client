@@ -7,5 +7,7 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
-
+    <style name="Theme.Example.LeanbackDialog" parent="Theme.Leanback.GuidedStep">
+        <item name="guidedActionsBackground">@color/app_guidedstep_dialog_actions_background</item>
+    </style>
 </resources>

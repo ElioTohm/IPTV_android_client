@@ -1,4 +1,4 @@
-package com.xms.dvb;
+package com.xms.dvb.ui;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -18,6 +18,8 @@ import com.eliotohme.data.Channel;
 import com.eliotohme.data.User;
 import com.eliotohme.data.network.ApiInterface;
 import com.eliotohme.data.network.ApiService;
+import com.xms.dvb.R;
+import com.xms.dvb.XmlParser;
 import com.xms.dvb.app.Preferences;
 
 import org.xmlpull.v1.XmlPullParserException;
@@ -41,6 +43,8 @@ public class SplashScreen extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        new DownloadXmlTask().cancel(true);
+        new checkChannelsLoaded().cancel(true);
         setContentView(R.layout.activity_splash);
         realm = Realm.getDefaultInstance();
         User user = realm.where(User.class).findFirst();
@@ -119,6 +123,7 @@ public class SplashScreen extends Activity {
         try {
             stream = downloadUrl(Preferences.getServerUrl()+Preferences.getXmlFileName());
             XmlParser.parse(stream);
+
             // Makes sure that the InputStream is closed after the app is
             // finished using it.
         } catch (PackageManager.NameNotFoundException e) {
@@ -126,10 +131,9 @@ public class SplashScreen extends Activity {
         } finally {
             if (stream != null) {
                 stream.close();
+                startActivity(new Intent(SplashScreen.this, DVBPlayer.class));
             }
         }
-        startActivity(new Intent(this, DVBPlayer.class));
-        finish();
     }
 
     // Given a string representation of a URL, sets up a connection and gets
@@ -171,6 +175,7 @@ public class SplashScreen extends Activity {
                     }
                 }
             }
+            realm.close();
             return null;
         }
     }
@@ -259,6 +264,8 @@ public class SplashScreen extends Activity {
     private void chooseFetchStreamsMethod () {
 
         AlertDialog.Builder dialog = new AlertDialog.Builder(SplashScreen.this);
+        dialog.setTitle("Search method");
+        dialog.setMessage("Please select search method");
         // set cancelable to true to be able to fix network before registery
         dialog.setCancelable(false);
         dialog.setNeutralButton("Online Search", new DialogInterface.OnClickListener() {
@@ -335,14 +342,13 @@ public class SplashScreen extends Activity {
                     public void execute(Realm realm) {
                         realm.delete(Channel.class);
                         realm.insert(channels);
+                        // Start a new thread that will download all the data
+                        new checkChannelsLoaded().cancel(true);
+                        new checkChannelsLoaded().execute();
+                        startActivity(new Intent(SplashScreen.this, DVBPlayer.class));
+                        finish();
                     }
                 });
-
-                // Start a new thread that will download all the data
-                new checkChannelsLoaded().execute();
-
-                startActivity(new Intent(SplashScreen.this, DVBPlayer.class));
-                finish();
             }
         });
         dialog.show();

@@ -6,8 +6,8 @@ import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.xms.dvb.InstallAppsInfo;
 import com.xms.dvb.R;
+import com.xms.dvb.data.InstallAppsInfo;
 
 public class InstalledApplicationPresenter  extends Presenter {
     private static final String TAG = "CardPresenter";
