@@ -1,5 +1,13 @@
 [
     {
+        "merged": "C:\\Users\\Elio\\Desktop\\Work\\androidlauncher\\XmsLauncher\\ffmpeg\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\exo_simple_player_view.xml",
+        "source": "C:\\Users\\Elio\\.android\\build-cache\\cfe42de63e1ea1cf1073ab44e1cd37c84735fb9b\\output\\res\\layout\\exo_simple_player_view.xml"
+    },
+    {
+        "merged": "C:\\Users\\Elio\\Desktop\\Work\\androidlauncher\\XmsLauncher\\ffmpeg\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\exo_playback_control_view.xml",
+        "source": "C:\\Users\\Elio\\.android\\build-cache\\cfe42de63e1ea1cf1073ab44e1cd37c84735fb9b\\output\\res\\layout\\exo_playback_control_view.xml"
+    },
+    {
         "merged": "C:\\Users\\Elio\\Desktop\\androidlauncher\\XmsLauncher\\ffmpeg\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\exo_playback_control_view.xml",
         "source": "C:\\Users\\Elio\\.android\\build-cache\\cfe42de63e1ea1cf1073ab44e1cd37c84735fb9b\\output\\res\\layout\\exo_playback_control_view.xml"
     },

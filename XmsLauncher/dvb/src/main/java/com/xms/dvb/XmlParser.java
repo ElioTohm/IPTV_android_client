@@ -233,7 +233,10 @@ public class XmlParser {
                                         .equalTo("stream", stream)
                                         .contains("name", "Unkown")
                                         .findFirst();
-                                channel.setName(name);
+                                if (channel != null) {
+                                    channel.setName(name);
+                                }
+
                             }
                         });
                         if (!progresspercentage.equals("")) {

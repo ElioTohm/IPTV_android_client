@@ -8,12 +8,28 @@
         "source": "C:\\Users\\Elio\\.android\\build-cache\\cfe42de63e1ea1cf1073ab44e1cd37c84735fb9b\\output\\res\\drawable-anydpi-v21\\exo_controls_next.xml"
     },
     {
+        "merged": "C:\\Users\\Elio\\Desktop\\Work\\androidlauncher\\XmsLauncher\\ffmpeg\\build\\intermediates\\res\\merged\\debug\\drawable-anydpi-v21\\exo_controls_fastforward.xml",
+        "source": "C:\\Users\\Elio\\.android\\build-cache\\cfe42de63e1ea1cf1073ab44e1cd37c84735fb9b\\output\\res\\drawable-anydpi-v21\\exo_controls_fastforward.xml"
+    },
+    {
         "merged": "C:\\Users\\Elio\\Desktop\\androidlauncher\\XmsLauncher\\ffmpeg\\build\\intermediates\\res\\merged\\debug\\drawable-anydpi-v21\\exo_controls_rewind.xml",
         "source": "C:\\Users\\Elio\\.android\\build-cache\\cfe42de63e1ea1cf1073ab44e1cd37c84735fb9b\\output\\res\\drawable-anydpi-v21\\exo_controls_rewind.xml"
     },
     {
         "merged": "C:\\Users\\Elio\\Desktop\\androidlauncher\\XmsLauncher\\ffmpeg\\build\\intermediates\\res\\merged\\debug\\drawable-anydpi-v21\\exo_edit_mode_logo.xml",
         "source": "C:\\Users\\Elio\\.android\\build-cache\\cfe42de63e1ea1cf1073ab44e1cd37c84735fb9b\\output\\res\\drawable-anydpi-v21\\exo_edit_mode_logo.xml"
+    },
+    {
+        "merged": "C:\\Users\\Elio\\Desktop\\Work\\androidlauncher\\XmsLauncher\\ffmpeg\\build\\intermediates\\res\\merged\\debug\\drawable-anydpi-v21\\exo_controls_previous.xml",
+        "source": "C:\\Users\\Elio\\.android\\build-cache\\cfe42de63e1ea1cf1073ab44e1cd37c84735fb9b\\output\\res\\drawable-anydpi-v21\\exo_controls_previous.xml"
+    },
+    {
+        "merged": "C:\\Users\\Elio\\Desktop\\Work\\androidlauncher\\XmsLauncher\\ffmpeg\\build\\intermediates\\res\\merged\\debug\\drawable-anydpi-v21\\exo_edit_mode_logo.xml",
+        "source": "C:\\Users\\Elio\\.android\\build-cache\\cfe42de63e1ea1cf1073ab44e1cd37c84735fb9b\\output\\res\\drawable-anydpi-v21\\exo_edit_mode_logo.xml"
+    },
+    {
+        "merged": "C:\\Users\\Elio\\Desktop\\Work\\androidlauncher\\XmsLauncher\\ffmpeg\\build\\intermediates\\res\\merged\\debug\\drawable-anydpi-v21\\exo_controls_play.xml",
+        "source": "C:\\Users\\Elio\\.android\\build-cache\\cfe42de63e1ea1cf1073ab44e1cd37c84735fb9b\\output\\res\\drawable-anydpi-v21\\exo_controls_play.xml"
     },
     {
         "merged": "C:\\Users\\Elio\\Desktop\\androidlauncher\\XmsLauncher\\ffmpeg\\build\\intermediates\\res\\merged\\debug\\drawable-anydpi-v21\\exo_controls_play.xml",
@@ -24,7 +40,19 @@
         "source": "C:\\Users\\Elio\\.android\\build-cache\\cfe42de63e1ea1cf1073ab44e1cd37c84735fb9b\\output\\res\\drawable-anydpi-v21\\exo_controls_previous.xml"
     },
     {
+        "merged": "C:\\Users\\Elio\\Desktop\\Work\\androidlauncher\\XmsLauncher\\ffmpeg\\build\\intermediates\\res\\merged\\debug\\drawable-anydpi-v21\\exo_controls_pause.xml",
+        "source": "C:\\Users\\Elio\\.android\\build-cache\\cfe42de63e1ea1cf1073ab44e1cd37c84735fb9b\\output\\res\\drawable-anydpi-v21\\exo_controls_pause.xml"
+    },
+    {
         "merged": "C:\\Users\\Elio\\Desktop\\androidlauncher\\XmsLauncher\\ffmpeg\\build\\intermediates\\res\\merged\\debug\\drawable-anydpi-v21\\exo_controls_pause.xml",
         "source": "C:\\Users\\Elio\\.android\\build-cache\\cfe42de63e1ea1cf1073ab44e1cd37c84735fb9b\\output\\res\\drawable-anydpi-v21\\exo_controls_pause.xml"
+    },
+    {
+        "merged": "C:\\Users\\Elio\\Desktop\\Work\\androidlauncher\\XmsLauncher\\ffmpeg\\build\\intermediates\\res\\merged\\debug\\drawable-anydpi-v21\\exo_controls_rewind.xml",
+        "source": "C:\\Users\\Elio\\.android\\build-cache\\cfe42de63e1ea1cf1073ab44e1cd37c84735fb9b\\output\\res\\drawable-anydpi-v21\\exo_controls_rewind.xml"
+    },
+    {
+        "merged": "C:\\Users\\Elio\\Desktop\\Work\\androidlauncher\\XmsLauncher\\ffmpeg\\build\\intermediates\\res\\merged\\debug\\drawable-anydpi-v21\\exo_controls_next.xml",
+        "source": "C:\\Users\\Elio\\.android\\build-cache\\cfe42de63e1ea1cf1073ab44e1cd37c84735fb9b\\output\\res\\drawable-anydpi-v21\\exo_controls_next.xml"
     }
 ]
