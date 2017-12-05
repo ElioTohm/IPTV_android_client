@@ -19,7 +19,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0.11"
-        android:text="http://192.168.0.62/"
         android:ems="10"
         android:hint="Server URL ex:http://192.168.1.1/"
         android:inputType="textUri" />
@@ -29,7 +28,6 @@
         android:layout_height="wrap_content"
         android:layout_weight="0.11"
         android:ems="10"
-        android:text="udp.xml"
         android:hint="xml file name ex:udp.xml"
         android:inputType="textUri" />
 
