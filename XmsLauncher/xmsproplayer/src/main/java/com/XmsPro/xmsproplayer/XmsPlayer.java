@@ -124,8 +124,8 @@ public class XmsPlayer  {
                 new DefaultDashChunkSource.Factory(mediaDataSourceFactory);
 
         for (int i = 0; i < channels.size(); i++) {
-            Uri channel_stream_uri = Uri.parse(channels.get(i).getStream());
-            int channel_type = channels.get(i).getStream_type();
+            Uri channel_stream_uri = Uri.parse(channels.get(i).getStream().getVid_stream());
+            int channel_type = channels.get(i).getStream().getType();
             switch (channel_type) {
                 case  1:
                     mediaSources[i] = new ExtractorMediaSource(channel_stream_uri,

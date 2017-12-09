@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.eliotohme.data.Channel;
+import com.eliotohme.data.Stream;
 import com.eliotohme.data.User;
 import com.eliotohme.data.network.ApiInterface;
 import com.eliotohme.data.network.ApiService;
@@ -169,9 +170,9 @@ public class SplashScreen extends Activity {
                     int total = (int) (100.0 * (i + allChannelSize - Unloaded_channels.size())  / allChannelSize);
                     if (progress < total) {
                         progress = total;
-                        channelXmlParser_resume.getServiceName(Unloaded_channels.get(i).getStream(), String.valueOf(progress));
+                        channelXmlParser_resume.getServiceName(Unloaded_channels.get(i).getStream().getSub_stream(), String.valueOf(progress));
                     } else {
-                        channelXmlParser_resume.getServiceName(Unloaded_channels.get(i).getStream(), "");
+                        channelXmlParser_resume.getServiceName(Unloaded_channels.get(i).getStream().getSub_stream(), "");
                     }
                 }
             }
@@ -312,9 +313,9 @@ public class SplashScreen extends Activity {
 
                 final ArrayList<Channel> channels = new ArrayList<Channel>();
                 int CHANNEL_NUMBER = 1;
+                Stream initstream = new Stream(startUrl + ":" + port, null, 1);
                 Channel initchannel = new Channel();
-                initchannel.setStream_type(1);
-                initchannel.setStream(startUrl + ":" + port);
+                initchannel.setStream(initstream);
                 initchannel.setId(CHANNEL_NUMBER);
                 initchannel.setName("Unkown");
                 channels.add(initchannel);
@@ -325,12 +326,11 @@ public class SplashScreen extends Activity {
                 CHANNEL_NUMBER++;
                 for (int i = 1; i < Integer.parseInt(String.valueOf(channelNumber)); i ++ ) {
                     Channel channel = new Channel();
-
-
+                    Stream stream = new Stream(startUrl.substring(0,lastindex)+ "." + increamented + ":" + increamnetedport,
+                            null, 1);
                     increamented  = (increamented  + uri_hopes);
                     increamnetedport = increamnetedport + port_hope;
-                    channel.setStream_type(1);
-                    channel.setStream(startUrl.substring(0,lastindex)+ "." + increamented + ":" + increamnetedport);
+                    channel.setStream(stream);
                     channel.setId(CHANNEL_NUMBER);
                     channel.setName("Unkown");
                     channels.add(channel);

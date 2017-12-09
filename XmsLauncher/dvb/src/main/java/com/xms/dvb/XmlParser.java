@@ -15,6 +15,7 @@ import android.util.Xml;
 import android.widget.Toast;
 
 import com.eliotohme.data.Channel;
+import com.eliotohme.data.Stream;
 import com.eliotohme.data.network.ApiInterface;
 import com.eliotohme.data.network.ApiService;
 import com.github.hiteshsondhi88.libffmpeg.ExecuteBinaryResponseHandler;
@@ -87,9 +88,9 @@ public class XmlParser {
                     int total = (int) (100.0 * i / channels.size());
                     if (progress < total) {
                         progress = total;
-                        getServiceName(channels.get(i).getStream(), String.valueOf(progress));
+                        getServiceName(channels.get(i).getStream().getVid_stream(), String.valueOf(progress));
                     } else {
-                        getServiceName(channels.get(i).getStream(), "");
+                        getServiceName(channels.get(i).getStream().getSub_stream(), "");
                     }
                 }
             }
@@ -141,9 +142,9 @@ public class XmlParser {
             }
         }
         Channel channel = new Channel();
-
-        channel.setStream_type(1);
-        channel.setStream("udp://@"+ip+":"+port);
+        Stream stream = new Stream("udp://@"+ip+":"+port, null, 1);
+//        channel.setStream_type(1);
+        channel.setStream(stream);
         channel.setId(CHANNEL_NUMBER);
         channel.setName("Unkown");
         CHANNEL_NUMBER++;
@@ -230,7 +231,7 @@ public class XmlParser {
                             @Override
                             public void execute(Realm realm) {
                                 Channel channel = realm.where(Channel.class)
-                                        .equalTo("stream", stream)
+                                        .equalTo("stream.vid_stream", stream)
                                         .contains("name", "Unkown")
                                         .findFirst();
                                 if (channel != null) {
