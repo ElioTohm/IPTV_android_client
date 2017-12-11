@@ -90,7 +90,7 @@ public class XmlParser {
                         progress = total;
                         getServiceName(channels.get(i).getStream().getVid_stream(), String.valueOf(progress));
                     } else {
-                        getServiceName(channels.get(i).getStream().getSub_stream(), "");
+                        getServiceName(channels.get(i).getStream().getVid_stream(), "");
                     }
                 }
             }

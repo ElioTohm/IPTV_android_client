@@ -49,9 +49,10 @@ public class SplashScreen extends Activity {
         setContentView(R.layout.activity_splash);
         realm = Realm.getDefaultInstance();
         User user = realm.where(User.class).findFirst();
-        if (user == null || user.getAccess_token().equals(null) || user.getAccess_token().equals("")) {
-            registerdevice();
-        } else if (realm.where(Channel.class).count() > 0) {
+//        if (user == null || user.getAccess_token().equals(null) || user.getAccess_token().equals("")) {
+//            registerdevice();
+//        } else
+        if (realm.where(Channel.class).count() > 0) {
             // Start a new thread that will download all the data
             new checkChannelsLoaded().execute();
             if (Preferences.getStartingUrl().equals("")) {
@@ -170,9 +171,9 @@ public class SplashScreen extends Activity {
                     int total = (int) (100.0 * (i + allChannelSize - Unloaded_channels.size())  / allChannelSize);
                     if (progress < total) {
                         progress = total;
-                        channelXmlParser_resume.getServiceName(Unloaded_channels.get(i).getStream().getSub_stream(), String.valueOf(progress));
+                        channelXmlParser_resume.getServiceName(Unloaded_channels.get(i).getStream().getVid_stream(), String.valueOf(progress));
                     } else {
-                        channelXmlParser_resume.getServiceName(Unloaded_channels.get(i).getStream().getSub_stream(), "");
+                        channelXmlParser_resume.getServiceName(Unloaded_channels.get(i).getStream().getVid_stream(), "");
                     }
                 }
             }

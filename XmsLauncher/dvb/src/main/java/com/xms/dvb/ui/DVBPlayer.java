@@ -216,7 +216,7 @@ public class DVBPlayer extends Activity {
         channelGridFragment= (ChannelGridFragment) getFragmentManager().findFragmentById(R.id.main_channellist_fragment);
         // Get a Realm instance for this thread
         realm = Realm.getDefaultInstance();
-
+ 
         channelArrayList.addAll(realm.where(Channel.class).findAllSorted("id"));
 
         simpleExoPlayerView = findViewById(R.id.simpleexoplayerview);

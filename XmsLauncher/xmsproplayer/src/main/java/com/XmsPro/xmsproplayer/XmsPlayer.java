@@ -37,8 +37,6 @@ import com.google.android.exoplayer2.util.Util;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
 import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 
 import static com.google.android.exoplayer2.extractor.ts.DefaultTsPayloadReaderFactory.FLAG_ALLOW_NON_IDR_KEYFRAMES;
 import static com.google.android.exoplayer2.extractor.ts.TsExtractor.MODE_SINGLE_PMT;
@@ -55,7 +53,6 @@ public class XmsPlayer  {
     private List<Channel> channelArrayList;
     private int channellistSize;
     private SimpleExoPlayerView simpleExoPlayerView;
-    private ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
     private int USER_NAME;
     private Context context;
     private static XmsPlayer instance;
@@ -104,30 +101,23 @@ public class XmsPlayer  {
         */
         DataSource.Factory mediaDataSourceFactory = buildDataSourceFactory(true);
 
-        // Initialize UDP DataSource
-        DataSource.Factory udsf = new UdpDataSource.Factory() {
-            @Override
-            public DataSource createDataSource() {
-                return new UdpDataSource(null, 1316, UdpDataSource.DEAFULT_SOCKET_TIMEOUT_MILLIS);
-            }
-        };
-
-        // Initialize ExtractorFactory
-        ExtractorsFactory tsExtractorFactory = new DefaultExtractorsFactory()
-                                            .setTsExtractorFlags(FLAG_ALLOW_NON_IDR_KEYFRAMES)
-                                            .setTsExtractorMode(MODE_SINGLE_PMT);
-
         // Loop on URI list to create individual Media source
         MediaSource[] mediaSources = new MediaSource[channels.size()];
-
-        DashChunkSource.Factory dashChunkSourceFactory =
-                new DefaultDashChunkSource.Factory(mediaDataSourceFactory);
 
         for (int i = 0; i < channels.size(); i++) {
             Uri channel_stream_uri = Uri.parse(channels.get(i).getStream().getVid_stream());
             int channel_type = channels.get(i).getStream().getType();
             switch (channel_type) {
                 case  1:
+                    DataSource.Factory udsf = new UdpDataSource.Factory() {
+                        @Override
+                        public DataSource createDataSource() {
+                            return new UdpDataSource(null, 1316, UdpDataSource.DEAFULT_SOCKET_TIMEOUT_MILLIS);
+                        }
+                    };
+                    ExtractorsFactory tsExtractorFactory = new DefaultExtractorsFactory()
+                            .setTsExtractorFlags(FLAG_ALLOW_NON_IDR_KEYFRAMES)
+                            .setTsExtractorMode(MODE_SINGLE_PMT);
                     mediaSources[i] = new ExtractorMediaSource(channel_stream_uri,
                                             udsf,
                                             tsExtractorFactory,
@@ -141,6 +131,8 @@ public class XmsPlayer  {
                                             null);
                     break;
                 case 3:
+                    DashChunkSource.Factory dashChunkSourceFactory =
+                            new DefaultDashChunkSource.Factory(mediaDataSourceFactory);
                     mediaSources[i]  = new DashMediaSource(channel_stream_uri,
                                             mediaDataSourceFactory,
                                             dashChunkSourceFactory,
