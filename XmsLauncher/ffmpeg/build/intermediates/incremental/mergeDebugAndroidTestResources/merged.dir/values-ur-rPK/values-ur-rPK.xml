@@ -5,6 +5,10 @@
     <string name="exo_controls_pause_description">"موقوف کریں"</string>
     <string name="exo_controls_play_description">"چلائیں"</string>
     <string name="exo_controls_previous_description">"پچھلا ٹریک"</string>
+    <string name="exo_controls_repeat_all_description">"سبھی کو دہرائیں"</string>
+    <string name="exo_controls_repeat_off_description">"کسی کو نہ دہرائیں"</string>
+    <string name="exo_controls_repeat_one_description">"ایک کو دہرائیں"</string>
     <string name="exo_controls_rewind_description">"ریوائینڈ کریں"</string>
+    <string name="exo_controls_shuffle_description">"شفل کریں"</string>
     <string name="exo_controls_stop_description">"روکیں"</string>
 </resources>

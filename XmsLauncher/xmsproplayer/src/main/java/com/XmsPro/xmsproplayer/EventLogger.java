@@ -86,14 +86,24 @@ final class EventLogger implements ExoPlayer.EventListener,
     }
 
     @Override
-    public void onPositionDiscontinuity() {
-        Log.d(TAG, "positionDiscontinuity");
+    public void onShuffleModeEnabledChanged(boolean b) {
+
     }
+
+//    @Override
+//    public void onPositionDiscontinuity() {
+//        Log.d(TAG, "positionDiscontinuity");
+//    }
 
     @Override
     public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
         Log.d(TAG, "playbackParameters " + String.format(
                 "[speed=%.2f, pitch=%.2f]", playbackParameters.speed, playbackParameters.pitch));
+    }
+
+    @Override
+    public void onSeekProcessed() {
+
     }
 
     @Override
@@ -122,6 +132,11 @@ final class EventLogger implements ExoPlayer.EventListener,
     @Override
     public void onPlayerError(ExoPlaybackException e) {
         Log.e(TAG, "playerFailed [" + getSessionTimeString() + "]", e);
+    }
+
+    @Override
+    public void onPositionDiscontinuity(int i) {
+
     }
 
     @Override
@@ -223,15 +238,20 @@ final class EventLogger implements ExoPlayer.EventListener,
     }
 
     @Override
+    public void onAudioSinkUnderrun(int i, long l, long l1) {
+
+    }
+
+    @Override
     public void onAudioDisabled(DecoderCounters counters) {
         Log.d(TAG, "audioDisabled [" + getSessionTimeString() + "]");
     }
 
-    @Override
-    public void onAudioTrackUnderrun(int bufferSize, long bufferSizeMs, long elapsedSinceLastFeedMs) {
-        printInternalError("audioTrackUnderrun [" + bufferSize + ", " + bufferSizeMs + ", "
-                + elapsedSinceLastFeedMs + "]", null);
-    }
+//    @Override
+//    public void onAudioTrackUnderrun(int bufferSize, long bufferSizeMs, long elapsedSinceLastFeedMs) {
+//        printInternalError("audioTrackUnderrun [" + bufferSize + ", " + bufferSizeMs + ", "
+//                + elapsedSinceLastFeedMs + "]", null);
+//    }
 
     // VideoRendererEventListener
 

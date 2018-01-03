@@ -11,7 +11,7 @@
                     "endOffset": 127
                 },
                 "from": {
-                    "file": "C:\\Users\\Elio\\.android\\build-cache\\cfe42de63e1ea1cf1073ab44e1cd37c84735fb9b\\output\\res\\values-eu-rES\\values-eu-rES.xml",
+                    "file": "C:\\Users\\Elio\\.android\\build-cache\\b14f793b8ad88f009186a16e52f4be5c72feda80\\output\\res\\values-eu-rES\\values-eu-rES.xml",
                     "position": {
                         "startLine": 2,
                         "startColumn": 4,
@@ -30,7 +30,7 @@
                     "endOffset": 202
                 },
                 "from": {
-                    "file": "C:\\Users\\Elio\\.android\\build-cache\\cfe42de63e1ea1cf1073ab44e1cd37c84735fb9b\\output\\res\\values-eu-rES\\values-eu-rES.xml",
+                    "file": "C:\\Users\\Elio\\.android\\build-cache\\b14f793b8ad88f009186a16e52f4be5c72feda80\\output\\res\\values-eu-rES\\values-eu-rES.xml",
                     "position": {
                         "startLine": 3,
                         "startColumn": 4,
@@ -49,7 +49,7 @@
                     "endOffset": 271
                 },
                 "from": {
-                    "file": "C:\\Users\\Elio\\.android\\build-cache\\cfe42de63e1ea1cf1073ab44e1cd37c84735fb9b\\output\\res\\values-eu-rES\\values-eu-rES.xml",
+                    "file": "C:\\Users\\Elio\\.android\\build-cache\\b14f793b8ad88f009186a16e52f4be5c72feda80\\output\\res\\values-eu-rES\\values-eu-rES.xml",
                     "position": {
                         "startLine": 4,
                         "startColumn": 4,
@@ -68,7 +68,7 @@
                     "endOffset": 345
                 },
                 "from": {
-                    "file": "C:\\Users\\Elio\\.android\\build-cache\\cfe42de63e1ea1cf1073ab44e1cd37c84735fb9b\\output\\res\\values-eu-rES\\values-eu-rES.xml",
+                    "file": "C:\\Users\\Elio\\.android\\build-cache\\b14f793b8ad88f009186a16e52f4be5c72feda80\\output\\res\\values-eu-rES\\values-eu-rES.xml",
                     "position": {
                         "startLine": 5,
                         "startColumn": 4,
@@ -87,7 +87,7 @@
                     "endOffset": 423
                 },
                 "from": {
-                    "file": "C:\\Users\\Elio\\.android\\build-cache\\cfe42de63e1ea1cf1073ab44e1cd37c84735fb9b\\output\\res\\values-eu-rES\\values-eu-rES.xml",
+                    "file": "C:\\Users\\Elio\\.android\\build-cache\\b14f793b8ad88f009186a16e52f4be5c72feda80\\output\\res\\values-eu-rES\\values-eu-rES.xml",
                     "position": {
                         "startLine": 6,
                         "startColumn": 4,
@@ -102,17 +102,17 @@
                     "startLine": 7,
                     "startColumn": 4,
                     "startOffset": 428,
-                    "endColumn": 70,
-                    "endOffset": 494
+                    "endColumn": 84,
+                    "endOffset": 508
                 },
                 "from": {
-                    "file": "C:\\Users\\Elio\\.android\\build-cache\\cfe42de63e1ea1cf1073ab44e1cd37c84735fb9b\\output\\res\\values-eu-rES\\values-eu-rES.xml",
+                    "file": "C:\\Users\\Elio\\.android\\build-cache\\b14f793b8ad88f009186a16e52f4be5c72feda80\\output\\res\\values-eu-rES\\values-eu-rES.xml",
                     "position": {
                         "startLine": 7,
                         "startColumn": 4,
                         "startOffset": 428,
-                        "endColumn": 70,
-                        "endOffset": 494
+                        "endColumn": 84,
+                        "endOffset": 508
                     }
                 }
             },
@@ -120,18 +120,94 @@
                 "to": {
                     "startLine": 8,
                     "startColumn": 4,
-                    "startOffset": 499,
-                    "endColumn": 67,
-                    "endOffset": 562
+                    "startOffset": 513,
+                    "endColumn": 79,
+                    "endOffset": 588
                 },
                 "from": {
-                    "file": "C:\\Users\\Elio\\.android\\build-cache\\cfe42de63e1ea1cf1073ab44e1cd37c84735fb9b\\output\\res\\values-eu-rES\\values-eu-rES.xml",
+                    "file": "C:\\Users\\Elio\\.android\\build-cache\\b14f793b8ad88f009186a16e52f4be5c72feda80\\output\\res\\values-eu-rES\\values-eu-rES.xml",
                     "position": {
                         "startLine": 8,
                         "startColumn": 4,
-                        "startOffset": 499,
+                        "startOffset": 513,
+                        "endColumn": 79,
+                        "endOffset": 588
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 9,
+                    "startColumn": 4,
+                    "startOffset": 593,
+                    "endColumn": 80,
+                    "endOffset": 669
+                },
+                "from": {
+                    "file": "C:\\Users\\Elio\\.android\\build-cache\\b14f793b8ad88f009186a16e52f4be5c72feda80\\output\\res\\values-eu-rES\\values-eu-rES.xml",
+                    "position": {
+                        "startLine": 9,
+                        "startColumn": 4,
+                        "startOffset": 593,
+                        "endColumn": 80,
+                        "endOffset": 669
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 10,
+                    "startColumn": 4,
+                    "startOffset": 674,
+                    "endColumn": 70,
+                    "endOffset": 740
+                },
+                "from": {
+                    "file": "C:\\Users\\Elio\\.android\\build-cache\\b14f793b8ad88f009186a16e52f4be5c72feda80\\output\\res\\values-eu-rES\\values-eu-rES.xml",
+                    "position": {
+                        "startLine": 10,
+                        "startColumn": 4,
+                        "startOffset": 674,
+                        "endColumn": 70,
+                        "endOffset": 740
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 11,
+                    "startColumn": 4,
+                    "startOffset": 745,
+                    "endColumn": 82,
+                    "endOffset": 823
+                },
+                "from": {
+                    "file": "C:\\Users\\Elio\\.android\\build-cache\\b14f793b8ad88f009186a16e52f4be5c72feda80\\output\\res\\values-eu-rES\\values-eu-rES.xml",
+                    "position": {
+                        "startLine": 11,
+                        "startColumn": 4,
+                        "startOffset": 745,
+                        "endColumn": 82,
+                        "endOffset": 823
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 12,
+                    "startColumn": 4,
+                    "startOffset": 828,
+                    "endColumn": 67,
+                    "endOffset": 891
+                },
+                "from": {
+                    "file": "C:\\Users\\Elio\\.android\\build-cache\\b14f793b8ad88f009186a16e52f4be5c72feda80\\output\\res\\values-eu-rES\\values-eu-rES.xml",
+                    "position": {
+                        "startLine": 12,
+                        "startColumn": 4,
+                        "startOffset": 828,
                         "endColumn": 67,
-                        "endOffset": 562
+                        "endOffset": 891
                     }
                 }
             }

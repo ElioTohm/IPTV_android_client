@@ -228,7 +228,7 @@ public class DVBPlayer extends Activity {
                     @Override
                     public void showChannelInfo(int channelindex) {
                         Channel channel = channelArrayList.get(channelindex);
-                        currentChannel.setText(String.valueOf(channel.getId()));
+                        currentChannel.setText(String.valueOf(channel.getNumber()));
                         channelName.setText(channel.getName());
                         channelInfo.setVisibility(View.VISIBLE);
                         Handler mChannelInfoHandler=new Handler();
@@ -240,6 +240,6 @@ public class DVBPlayer extends Activity {
                         mChannelInfoHandler.removeCallbacks(mChannelInfoRunnable);
                         mChannelInfoHandler.postDelayed(mChannelInfoRunnable, 5000);
                     }
-                });
+                }, null, null);
     }
 }

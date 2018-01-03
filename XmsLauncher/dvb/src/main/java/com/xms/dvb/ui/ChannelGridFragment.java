@@ -59,7 +59,7 @@ public class ChannelGridFragment extends HeadersFragment {
         // loop in result genre to create row genre for channels
         for (Channel channel : channelRealmResults) {
 
-            int channel_id = channel.getId();
+            int channel_id = channel.getNumber();
             HeaderItem headerItem1 = new HeaderItem(channel_id, channel_id + " " +channel.getName());
             PageRow pageRow1 = new PageRow(headerItem1);
             mRowsAdapter.add(pageRow1);

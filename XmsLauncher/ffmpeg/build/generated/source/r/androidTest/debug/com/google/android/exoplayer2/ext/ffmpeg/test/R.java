@@ -17,7 +17,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int ad_marker_color=0x7f010011;
+        public static final int ad_marker_color=0x7f010014;
         /** <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
 Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
 in (inches), mm (millimeters).
@@ -27,7 +27,15 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int ad_marker_width=0x7f010009;
+        public static final int ad_marker_width=0x7f01000b;
+        /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int auto_show=0x7f01001b;
         /** <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
 Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
 in (inches), mm (millimeters).
@@ -37,7 +45,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int bar_height=0x7f010007;
+        public static final int bar_height=0x7f010009;
         /** <p>Must be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
 "<code>#<i>rrggbb</i></code>", or "<code>#<i>aarrggbb</i></code>".
 <p>This may also be a reference to a resource (in the form
@@ -46,7 +54,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int buffered_color=0x7f01000f;
+        public static final int buffered_color=0x7f010012;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
@@ -54,7 +62,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int default_artwork=0x7f010013;
+        public static final int default_artwork=0x7f010018;
         /** <p>Must be an integer value, such as "<code>100</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -70,7 +78,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int hide_on_touch=0x7f010015;
+        public static final int hide_on_touch=0x7f01001a;
         /** <p>Must be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
 "<code>#<i>rrggbb</i></code>", or "<code>#<i>aarrggbb</i></code>".
 <p>This may also be a reference to a resource (in the form
@@ -79,11 +87,32 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int played_color=0x7f01000d;
+        public static final int played_ad_marker_color=0x7f010015;
+        /** <p>Must be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
+"<code>#<i>rrggbb</i></code>", or "<code>#<i>aarrggbb</i></code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int played_color=0x7f010010;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
         public static final int player_layout_id=0x7f010002;
+        /** <p>Must be one or more (separated by '|') of the following constant values.</p>
+<table>
+<colgroup align="left" />
+<colgroup align="left" />
+<colgroup align="left" />
+<tr><th>Constant</th><th>Value</th><th>Description</th></tr>
+<tr><td><code>none</code></td><td>0</td><td></td></tr>
+<tr><td><code>one</code></td><td>1</td><td></td></tr>
+<tr><td><code>all</code></td><td>2</td><td></td></tr>
+</table>
+         */
+        public static final int repeat_toggle_modes=0x7f010003;
         /** <p>Must be one of the following constant values.</p>
 <table>
 <colgroup align="left" />
@@ -96,7 +125,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
 <tr><td><code>fill</code></td><td>3</td><td></td></tr>
 </table>
          */
-        public static final int resize_mode=0x7f010003;
+        public static final int resize_mode=0x7f010004;
         /** <p>Must be an integer value, such as "<code>100</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -104,7 +133,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int rewind_increment=0x7f010004;
+        public static final int rewind_increment=0x7f010005;
         /** <p>Must be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
 "<code>#<i>rrggbb</i></code>", or "<code>#<i>aarrggbb</i></code>".
 <p>This may also be a reference to a resource (in the form
@@ -113,7 +142,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int scrubber_color=0x7f01000e;
+        public static final int scrubber_color=0x7f010011;
         /** <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
 Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
 in (inches), mm (millimeters).
@@ -123,7 +152,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int scrubber_disabled_size=0x7f01000b;
+        public static final int scrubber_disabled_size=0x7f01000d;
         /** <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
 Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
 in (inches), mm (millimeters).
@@ -133,7 +162,11 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int scrubber_dragged_size=0x7f01000c;
+        public static final int scrubber_dragged_size=0x7f01000e;
+        /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
+or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
+         */
+        public static final int scrubber_drawable=0x7f01000f;
         /** <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
 Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
 in (inches), mm (millimeters).
@@ -143,7 +176,15 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int scrubber_enabled_size=0x7f01000a;
+        public static final int scrubber_enabled_size=0x7f01000c;
+        /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int show_shuffle_button=0x7f010006;
         /** <p>Must be an integer value, such as "<code>100</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -151,7 +192,16 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int show_timeout=0x7f010005;
+        public static final int show_timeout=0x7f010007;
+        /** <p>Must be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
+"<code>#<i>rrggbb</i></code>", or "<code>#<i>aarrggbb</i></code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int shutter_background_color=0x7f010017;
         /** <p>Must be one of the following constant values.</p>
 <table>
 <colgroup align="left" />
@@ -163,7 +213,7 @@ containing a value of this type.
 <tr><td><code>texture_view</code></td><td>2</td><td></td></tr>
 </table>
          */
-        public static final int surface_type=0x7f010006;
+        public static final int surface_type=0x7f010008;
         /** <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
 Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
 in (inches), mm (millimeters).
@@ -173,7 +223,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int touch_target_height=0x7f010008;
+        public static final int touch_target_height=0x7f01000a;
         /** <p>Must be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
 "<code>#<i>rrggbb</i></code>", or "<code>#<i>aarrggbb</i></code>".
 <p>This may also be a reference to a resource (in the form
@@ -182,7 +232,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int unplayed_color=0x7f010010;
+        public static final int unplayed_color=0x7f010013;
         /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -190,7 +240,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int use_artwork=0x7f010012;
+        public static final int use_artwork=0x7f010016;
         /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -198,14 +248,14 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int use_controller=0x7f010014;
+        public static final int use_controller=0x7f010019;
     }
     public static final class color {
-        public static final int exo_edit_mode_background_color=0x7f060000;
+        public static final int exo_edit_mode_background_color=0x7f050000;
     }
     public static final class dimen {
-        public static final int exo_media_button_height=0x7f070000;
-        public static final int exo_media_button_width=0x7f070001;
+        public static final int exo_media_button_height=0x7f060000;
+        public static final int exo_media_button_width=0x7f060001;
     }
     public static final class drawable {
         public static final int exo_controls_fastforward=0x7f020000;
@@ -213,32 +263,41 @@ containing a value of this type.
         public static final int exo_controls_pause=0x7f020002;
         public static final int exo_controls_play=0x7f020003;
         public static final int exo_controls_previous=0x7f020004;
-        public static final int exo_controls_rewind=0x7f020005;
-        public static final int exo_edit_mode_logo=0x7f020006;
+        public static final int exo_controls_repeat_all=0x7f020005;
+        public static final int exo_controls_repeat_off=0x7f020006;
+        public static final int exo_controls_repeat_one=0x7f020007;
+        public static final int exo_controls_rewind=0x7f020008;
+        public static final int exo_controls_shuffle=0x7f020009;
+        public static final int exo_edit_mode_logo=0x7f02000a;
     }
     public static final class id {
-        public static final int exo_artwork=0x7f080000;
-        public static final int exo_content_frame=0x7f080001;
-        public static final int exo_controller_placeholder=0x7f080002;
-        public static final int exo_duration=0x7f080003;
-        public static final int exo_ffwd=0x7f080004;
-        public static final int exo_next=0x7f080005;
-        public static final int exo_overlay=0x7f080006;
-        public static final int exo_pause=0x7f080007;
-        public static final int exo_play=0x7f080008;
-        public static final int exo_position=0x7f080009;
-        public static final int exo_prev=0x7f08000a;
-        public static final int exo_progress=0x7f08000b;
-        public static final int exo_rew=0x7f08000c;
-        public static final int exo_shutter=0x7f08000d;
-        public static final int exo_subtitles=0x7f08000e;
-        public static final int fill=0x7f08000f;
-        public static final int fit=0x7f080010;
-        public static final int fixed_height=0x7f080011;
-        public static final int fixed_width=0x7f080012;
-        public static final int none=0x7f080013;
-        public static final int surface_view=0x7f080014;
-        public static final int texture_view=0x7f080015;
+        public static final int all=0x7f070012;
+        public static final int exo_artwork=0x7f070000;
+        public static final int exo_content_frame=0x7f070001;
+        public static final int exo_controller=0x7f070002;
+        public static final int exo_controller_placeholder=0x7f070003;
+        public static final int exo_duration=0x7f070004;
+        public static final int exo_ffwd=0x7f070005;
+        public static final int exo_next=0x7f070006;
+        public static final int exo_overlay=0x7f070007;
+        public static final int exo_pause=0x7f070008;
+        public static final int exo_play=0x7f070009;
+        public static final int exo_position=0x7f07000a;
+        public static final int exo_prev=0x7f07000b;
+        public static final int exo_progress=0x7f07000c;
+        public static final int exo_repeat_toggle=0x7f07000d;
+        public static final int exo_rew=0x7f07000e;
+        public static final int exo_shuffle=0x7f07000f;
+        public static final int exo_shutter=0x7f070010;
+        public static final int exo_subtitles=0x7f070011;
+        public static final int fill=0x7f070015;
+        public static final int fit=0x7f070016;
+        public static final int fixed_height=0x7f070017;
+        public static final int fixed_width=0x7f070018;
+        public static final int none=0x7f070013;
+        public static final int one=0x7f070014;
+        public static final int surface_view=0x7f070019;
+        public static final int texture_view=0x7f07001a;
     }
     public static final class layout {
         public static final int exo_playback_control_view=0x7f030000;
@@ -250,17 +309,22 @@ containing a value of this type.
         public static final int exo_controls_pause_description=0x7f040002;
         public static final int exo_controls_play_description=0x7f040003;
         public static final int exo_controls_previous_description=0x7f040004;
-        public static final int exo_controls_rewind_description=0x7f040005;
-        public static final int exo_controls_stop_description=0x7f040006;
+        public static final int exo_controls_repeat_all_description=0x7f040005;
+        public static final int exo_controls_repeat_off_description=0x7f040006;
+        public static final int exo_controls_repeat_one_description=0x7f040007;
+        public static final int exo_controls_rewind_description=0x7f040008;
+        public static final int exo_controls_shuffle_description=0x7f040009;
+        public static final int exo_controls_stop_description=0x7f04000a;
     }
     public static final class style {
-        public static final int ExoMediaButton=0x7f050000;
-        public static final int ExoMediaButton_FastForward=0x7f050001;
-        public static final int ExoMediaButton_Next=0x7f050002;
-        public static final int ExoMediaButton_Pause=0x7f050003;
-        public static final int ExoMediaButton_Play=0x7f050004;
-        public static final int ExoMediaButton_Previous=0x7f050005;
-        public static final int ExoMediaButton_Rewind=0x7f050006;
+        public static final int ExoMediaButton=0x7f080000;
+        public static final int ExoMediaButton_FastForward=0x7f080001;
+        public static final int ExoMediaButton_Next=0x7f080002;
+        public static final int ExoMediaButton_Pause=0x7f080003;
+        public static final int ExoMediaButton_Play=0x7f080004;
+        public static final int ExoMediaButton_Previous=0x7f080005;
+        public static final int ExoMediaButton_Rewind=0x7f080006;
+        public static final int ExoMediaButton_Shuffle=0x7f080007;
     }
     public static final class styleable {
         /** Attributes that can be used with a AspectRatioFrameLayout.
@@ -274,7 +338,7 @@ containing a value of this type.
            @see #AspectRatioFrameLayout_resize_mode
          */
         public static final int[] AspectRatioFrameLayout = {
-            0x7f010003
+            0x7f010004
         };
         /**
           <p>This symbol is the offset where the {@link com.google.android.exoplayer2.ext.ffmpeg.test.R.attr#resize_mode}
@@ -305,10 +369,12 @@ containing a value of this type.
            <tr><td><code>{@link #DefaultTimeBar_ad_marker_width com.google.android.exoplayer2.ext.ffmpeg.test:ad_marker_width}</code></td><td></td></tr>
            <tr><td><code>{@link #DefaultTimeBar_bar_height com.google.android.exoplayer2.ext.ffmpeg.test:bar_height}</code></td><td></td></tr>
            <tr><td><code>{@link #DefaultTimeBar_buffered_color com.google.android.exoplayer2.ext.ffmpeg.test:buffered_color}</code></td><td></td></tr>
+           <tr><td><code>{@link #DefaultTimeBar_played_ad_marker_color com.google.android.exoplayer2.ext.ffmpeg.test:played_ad_marker_color}</code></td><td></td></tr>
            <tr><td><code>{@link #DefaultTimeBar_played_color com.google.android.exoplayer2.ext.ffmpeg.test:played_color}</code></td><td></td></tr>
            <tr><td><code>{@link #DefaultTimeBar_scrubber_color com.google.android.exoplayer2.ext.ffmpeg.test:scrubber_color}</code></td><td></td></tr>
            <tr><td><code>{@link #DefaultTimeBar_scrubber_disabled_size com.google.android.exoplayer2.ext.ffmpeg.test:scrubber_disabled_size}</code></td><td></td></tr>
            <tr><td><code>{@link #DefaultTimeBar_scrubber_dragged_size com.google.android.exoplayer2.ext.ffmpeg.test:scrubber_dragged_size}</code></td><td></td></tr>
+           <tr><td><code>{@link #DefaultTimeBar_scrubber_drawable com.google.android.exoplayer2.ext.ffmpeg.test:scrubber_drawable}</code></td><td></td></tr>
            <tr><td><code>{@link #DefaultTimeBar_scrubber_enabled_size com.google.android.exoplayer2.ext.ffmpeg.test:scrubber_enabled_size}</code></td><td></td></tr>
            <tr><td><code>{@link #DefaultTimeBar_touch_target_height com.google.android.exoplayer2.ext.ffmpeg.test:touch_target_height}</code></td><td></td></tr>
            <tr><td><code>{@link #DefaultTimeBar_unplayed_color com.google.android.exoplayer2.ext.ffmpeg.test:unplayed_color}</code></td><td></td></tr>
@@ -317,18 +383,21 @@ containing a value of this type.
            @see #DefaultTimeBar_ad_marker_width
            @see #DefaultTimeBar_bar_height
            @see #DefaultTimeBar_buffered_color
+           @see #DefaultTimeBar_played_ad_marker_color
            @see #DefaultTimeBar_played_color
            @see #DefaultTimeBar_scrubber_color
            @see #DefaultTimeBar_scrubber_disabled_size
            @see #DefaultTimeBar_scrubber_dragged_size
+           @see #DefaultTimeBar_scrubber_drawable
            @see #DefaultTimeBar_scrubber_enabled_size
            @see #DefaultTimeBar_touch_target_height
            @see #DefaultTimeBar_unplayed_color
          */
         public static final int[] DefaultTimeBar = {
-            0x7f010007, 0x7f010008, 0x7f010009, 0x7f01000a,
-            0x7f01000b, 0x7f01000c, 0x7f01000d, 0x7f01000e,
-            0x7f01000f, 0x7f010010, 0x7f010011
+            0x7f010009, 0x7f01000a, 0x7f01000b, 0x7f01000c,
+            0x7f01000d, 0x7f01000e, 0x7f01000f, 0x7f010010,
+            0x7f010011, 0x7f010012, 0x7f010013, 0x7f010014,
+            0x7f010015
         };
         /**
           <p>This symbol is the offset where the {@link com.google.android.exoplayer2.ext.ffmpeg.test.R.attr#ad_marker_color}
@@ -344,7 +413,7 @@ theme attribute (in the form
 containing a value of this type.
           @attr name com.google.android.exoplayer2.ext.ffmpeg.test:ad_marker_color
         */
-        public static final int DefaultTimeBar_ad_marker_color = 10;
+        public static final int DefaultTimeBar_ad_marker_color = 11;
         /**
           <p>This symbol is the offset where the {@link com.google.android.exoplayer2.ext.ffmpeg.test.R.attr#ad_marker_width}
           attribute's value can be found in the {@link #DefaultTimeBar} array.
@@ -391,7 +460,22 @@ theme attribute (in the form
 containing a value of this type.
           @attr name com.google.android.exoplayer2.ext.ffmpeg.test:buffered_color
         */
-        public static final int DefaultTimeBar_buffered_color = 8;
+        public static final int DefaultTimeBar_buffered_color = 9;
+        /**
+          <p>This symbol is the offset where the {@link com.google.android.exoplayer2.ext.ffmpeg.test.R.attr#played_ad_marker_color}
+          attribute's value can be found in the {@link #DefaultTimeBar} array.
+
+
+          <p>Must be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
+"<code>#<i>rrggbb</i></code>", or "<code>#<i>aarrggbb</i></code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name com.google.android.exoplayer2.ext.ffmpeg.test:played_ad_marker_color
+        */
+        public static final int DefaultTimeBar_played_ad_marker_color = 12;
         /**
           <p>This symbol is the offset where the {@link com.google.android.exoplayer2.ext.ffmpeg.test.R.attr#played_color}
           attribute's value can be found in the {@link #DefaultTimeBar} array.
@@ -406,7 +490,7 @@ theme attribute (in the form
 containing a value of this type.
           @attr name com.google.android.exoplayer2.ext.ffmpeg.test:played_color
         */
-        public static final int DefaultTimeBar_played_color = 6;
+        public static final int DefaultTimeBar_played_color = 7;
         /**
           <p>This symbol is the offset where the {@link com.google.android.exoplayer2.ext.ffmpeg.test.R.attr#scrubber_color}
           attribute's value can be found in the {@link #DefaultTimeBar} array.
@@ -421,7 +505,7 @@ theme attribute (in the form
 containing a value of this type.
           @attr name com.google.android.exoplayer2.ext.ffmpeg.test:scrubber_color
         */
-        public static final int DefaultTimeBar_scrubber_color = 7;
+        public static final int DefaultTimeBar_scrubber_color = 8;
         /**
           <p>This symbol is the offset where the {@link com.google.android.exoplayer2.ext.ffmpeg.test.R.attr#scrubber_disabled_size}
           attribute's value can be found in the {@link #DefaultTimeBar} array.
@@ -454,6 +538,16 @@ containing a value of this type.
           @attr name com.google.android.exoplayer2.ext.ffmpeg.test:scrubber_dragged_size
         */
         public static final int DefaultTimeBar_scrubber_dragged_size = 5;
+        /**
+          <p>This symbol is the offset where the {@link com.google.android.exoplayer2.ext.ffmpeg.test.R.attr#scrubber_drawable}
+          attribute's value can be found in the {@link #DefaultTimeBar} array.
+
+
+          <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
+or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
+          @attr name com.google.android.exoplayer2.ext.ffmpeg.test:scrubber_drawable
+        */
+        public static final int DefaultTimeBar_scrubber_drawable = 6;
         /**
           <p>This symbol is the offset where the {@link com.google.android.exoplayer2.ext.ffmpeg.test.R.attr#scrubber_enabled_size}
           attribute's value can be found in the {@link #DefaultTimeBar} array.
@@ -500,7 +594,7 @@ theme attribute (in the form
 containing a value of this type.
           @attr name com.google.android.exoplayer2.ext.ffmpeg.test:unplayed_color
         */
-        public static final int DefaultTimeBar_unplayed_color = 9;
+        public static final int DefaultTimeBar_unplayed_color = 10;
         /** Attributes that can be used with a PlaybackControlView.
            <p>Includes the following attributes:</p>
            <table>
@@ -509,16 +603,21 @@ containing a value of this type.
            <tr><th>Attribute</th><th>Description</th></tr>
            <tr><td><code>{@link #PlaybackControlView_controller_layout_id com.google.android.exoplayer2.ext.ffmpeg.test:controller_layout_id}</code></td><td></td></tr>
            <tr><td><code>{@link #PlaybackControlView_fastforward_increment com.google.android.exoplayer2.ext.ffmpeg.test:fastforward_increment}</code></td><td></td></tr>
+           <tr><td><code>{@link #PlaybackControlView_repeat_toggle_modes com.google.android.exoplayer2.ext.ffmpeg.test:repeat_toggle_modes}</code></td><td></td></tr>
            <tr><td><code>{@link #PlaybackControlView_rewind_increment com.google.android.exoplayer2.ext.ffmpeg.test:rewind_increment}</code></td><td></td></tr>
+           <tr><td><code>{@link #PlaybackControlView_show_shuffle_button com.google.android.exoplayer2.ext.ffmpeg.test:show_shuffle_button}</code></td><td></td></tr>
            <tr><td><code>{@link #PlaybackControlView_show_timeout com.google.android.exoplayer2.ext.ffmpeg.test:show_timeout}</code></td><td></td></tr>
            </table>
            @see #PlaybackControlView_controller_layout_id
            @see #PlaybackControlView_fastforward_increment
+           @see #PlaybackControlView_repeat_toggle_modes
            @see #PlaybackControlView_rewind_increment
+           @see #PlaybackControlView_show_shuffle_button
            @see #PlaybackControlView_show_timeout
          */
         public static final int[] PlaybackControlView = {
-            0x7f010000, 0x7f010001, 0x7f010004, 0x7f010005
+            0x7f010000, 0x7f010001, 0x7f010003, 0x7f010005,
+            0x7f010006, 0x7f010007
         };
         /**
           <p>This symbol is the offset where the {@link com.google.android.exoplayer2.ext.ffmpeg.test.R.attr#controller_layout_id}
@@ -545,6 +644,24 @@ containing a value of this type.
         */
         public static final int PlaybackControlView_fastforward_increment = 1;
         /**
+          <p>This symbol is the offset where the {@link com.google.android.exoplayer2.ext.ffmpeg.test.R.attr#repeat_toggle_modes}
+          attribute's value can be found in the {@link #PlaybackControlView} array.
+
+
+          <p>Must be one or more (separated by '|') of the following constant values.</p>
+<table>
+<colgroup align="left" />
+<colgroup align="left" />
+<colgroup align="left" />
+<tr><th>Constant</th><th>Value</th><th>Description</th></tr>
+<tr><td><code>none</code></td><td>0</td><td></td></tr>
+<tr><td><code>one</code></td><td>1</td><td></td></tr>
+<tr><td><code>all</code></td><td>2</td><td></td></tr>
+</table>
+          @attr name com.google.android.exoplayer2.ext.ffmpeg.test:repeat_toggle_modes
+        */
+        public static final int PlaybackControlView_repeat_toggle_modes = 2;
+        /**
           <p>This symbol is the offset where the {@link com.google.android.exoplayer2.ext.ffmpeg.test.R.attr#rewind_increment}
           attribute's value can be found in the {@link #PlaybackControlView} array.
 
@@ -557,7 +674,21 @@ theme attribute (in the form
 containing a value of this type.
           @attr name com.google.android.exoplayer2.ext.ffmpeg.test:rewind_increment
         */
-        public static final int PlaybackControlView_rewind_increment = 2;
+        public static final int PlaybackControlView_rewind_increment = 3;
+        /**
+          <p>This symbol is the offset where the {@link com.google.android.exoplayer2.ext.ffmpeg.test.R.attr#show_shuffle_button}
+          attribute's value can be found in the {@link #PlaybackControlView} array.
+
+
+          <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name com.google.android.exoplayer2.ext.ffmpeg.test:show_shuffle_button
+        */
+        public static final int PlaybackControlView_show_shuffle_button = 4;
         /**
           <p>This symbol is the offset where the {@link com.google.android.exoplayer2.ext.ffmpeg.test.R.attr#show_timeout}
           attribute's value can be found in the {@link #PlaybackControlView} array.
@@ -571,13 +702,14 @@ theme attribute (in the form
 containing a value of this type.
           @attr name com.google.android.exoplayer2.ext.ffmpeg.test:show_timeout
         */
-        public static final int PlaybackControlView_show_timeout = 3;
+        public static final int PlaybackControlView_show_timeout = 5;
         /** Attributes that can be used with a SimpleExoPlayerView.
            <p>Includes the following attributes:</p>
            <table>
            <colgroup align="left" />
            <colgroup align="left" />
            <tr><th>Attribute</th><th>Description</th></tr>
+           <tr><td><code>{@link #SimpleExoPlayerView_auto_show com.google.android.exoplayer2.ext.ffmpeg.test:auto_show}</code></td><td></td></tr>
            <tr><td><code>{@link #SimpleExoPlayerView_controller_layout_id com.google.android.exoplayer2.ext.ffmpeg.test:controller_layout_id}</code></td><td></td></tr>
            <tr><td><code>{@link #SimpleExoPlayerView_default_artwork com.google.android.exoplayer2.ext.ffmpeg.test:default_artwork}</code></td><td></td></tr>
            <tr><td><code>{@link #SimpleExoPlayerView_fastforward_increment com.google.android.exoplayer2.ext.ffmpeg.test:fastforward_increment}</code></td><td></td></tr>
@@ -586,10 +718,12 @@ containing a value of this type.
            <tr><td><code>{@link #SimpleExoPlayerView_resize_mode com.google.android.exoplayer2.ext.ffmpeg.test:resize_mode}</code></td><td></td></tr>
            <tr><td><code>{@link #SimpleExoPlayerView_rewind_increment com.google.android.exoplayer2.ext.ffmpeg.test:rewind_increment}</code></td><td></td></tr>
            <tr><td><code>{@link #SimpleExoPlayerView_show_timeout com.google.android.exoplayer2.ext.ffmpeg.test:show_timeout}</code></td><td></td></tr>
+           <tr><td><code>{@link #SimpleExoPlayerView_shutter_background_color com.google.android.exoplayer2.ext.ffmpeg.test:shutter_background_color}</code></td><td></td></tr>
            <tr><td><code>{@link #SimpleExoPlayerView_surface_type com.google.android.exoplayer2.ext.ffmpeg.test:surface_type}</code></td><td></td></tr>
            <tr><td><code>{@link #SimpleExoPlayerView_use_artwork com.google.android.exoplayer2.ext.ffmpeg.test:use_artwork}</code></td><td></td></tr>
            <tr><td><code>{@link #SimpleExoPlayerView_use_controller com.google.android.exoplayer2.ext.ffmpeg.test:use_controller}</code></td><td></td></tr>
            </table>
+           @see #SimpleExoPlayerView_auto_show
            @see #SimpleExoPlayerView_controller_layout_id
            @see #SimpleExoPlayerView_default_artwork
            @see #SimpleExoPlayerView_fastforward_increment
@@ -598,15 +732,31 @@ containing a value of this type.
            @see #SimpleExoPlayerView_resize_mode
            @see #SimpleExoPlayerView_rewind_increment
            @see #SimpleExoPlayerView_show_timeout
+           @see #SimpleExoPlayerView_shutter_background_color
            @see #SimpleExoPlayerView_surface_type
            @see #SimpleExoPlayerView_use_artwork
            @see #SimpleExoPlayerView_use_controller
          */
         public static final int[] SimpleExoPlayerView = {
-            0x7f010000, 0x7f010001, 0x7f010002, 0x7f010003,
-            0x7f010004, 0x7f010005, 0x7f010006, 0x7f010012,
-            0x7f010013, 0x7f010014, 0x7f010015
+            0x7f010000, 0x7f010001, 0x7f010002, 0x7f010004,
+            0x7f010005, 0x7f010007, 0x7f010008, 0x7f010016,
+            0x7f010017, 0x7f010018, 0x7f010019, 0x7f01001a,
+            0x7f01001b
         };
+        /**
+          <p>This symbol is the offset where the {@link com.google.android.exoplayer2.ext.ffmpeg.test.R.attr#auto_show}
+          attribute's value can be found in the {@link #SimpleExoPlayerView} array.
+
+
+          <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name com.google.android.exoplayer2.ext.ffmpeg.test:auto_show
+        */
+        public static final int SimpleExoPlayerView_auto_show = 12;
         /**
           <p>This symbol is the offset where the {@link com.google.android.exoplayer2.ext.ffmpeg.test.R.attr#controller_layout_id}
           attribute's value can be found in the {@link #SimpleExoPlayerView} array.
@@ -626,7 +776,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
           @attr name com.google.android.exoplayer2.ext.ffmpeg.test:default_artwork
         */
-        public static final int SimpleExoPlayerView_default_artwork = 8;
+        public static final int SimpleExoPlayerView_default_artwork = 9;
         /**
           <p>This symbol is the offset where the {@link com.google.android.exoplayer2.ext.ffmpeg.test.R.attr#fastforward_increment}
           attribute's value can be found in the {@link #SimpleExoPlayerView} array.
@@ -654,7 +804,7 @@ theme attribute (in the form
 containing a value of this type.
           @attr name com.google.android.exoplayer2.ext.ffmpeg.test:hide_on_touch
         */
-        public static final int SimpleExoPlayerView_hide_on_touch = 10;
+        public static final int SimpleExoPlayerView_hide_on_touch = 11;
         /**
           <p>This symbol is the offset where the {@link com.google.android.exoplayer2.ext.ffmpeg.test.R.attr#player_layout_id}
           attribute's value can be found in the {@link #SimpleExoPlayerView} array.
@@ -713,6 +863,21 @@ containing a value of this type.
         */
         public static final int SimpleExoPlayerView_show_timeout = 5;
         /**
+          <p>This symbol is the offset where the {@link com.google.android.exoplayer2.ext.ffmpeg.test.R.attr#shutter_background_color}
+          attribute's value can be found in the {@link #SimpleExoPlayerView} array.
+
+
+          <p>Must be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
+"<code>#<i>rrggbb</i></code>", or "<code>#<i>aarrggbb</i></code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name com.google.android.exoplayer2.ext.ffmpeg.test:shutter_background_color
+        */
+        public static final int SimpleExoPlayerView_shutter_background_color = 8;
+        /**
           <p>This symbol is the offset where the {@link com.google.android.exoplayer2.ext.ffmpeg.test.R.attr#surface_type}
           attribute's value can be found in the {@link #SimpleExoPlayerView} array.
 
@@ -757,6 +922,6 @@ theme attribute (in the form
 containing a value of this type.
           @attr name com.google.android.exoplayer2.ext.ffmpeg.test:use_controller
         */
-        public static final int SimpleExoPlayerView_use_controller = 9;
+        public static final int SimpleExoPlayerView_use_controller = 10;
     };
 }

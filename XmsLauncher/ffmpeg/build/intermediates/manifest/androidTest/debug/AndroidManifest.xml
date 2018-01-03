@@ -13,10 +13,6 @@
         android:label="Tests for com.google.android.exoplayer2.ext.ffmpeg.test"
         android:targetPackage="com.google.android.exoplayer2.ext.ffmpeg.test" />
 
-    <meta-data
-        android:name="android.support.VERSION"
-        android:value="25.3.1" />
-
     <application>
         <uses-library android:name="android.test.runner" />
     </application>

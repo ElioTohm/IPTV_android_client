@@ -31,7 +31,7 @@ android {
 
 dependencies {
 //    compile project(':xmsplayer')
-    compile 'com.google.android.exoplayer:exoplayer:r2.4.2'
+    compile 'com.google.android.exoplayer:exoplayer:' + project.ext.releaseVersion
 }
 
 

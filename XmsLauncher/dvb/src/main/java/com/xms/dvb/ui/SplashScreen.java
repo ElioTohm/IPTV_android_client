@@ -317,7 +317,7 @@ public class SplashScreen extends Activity {
                 Stream initstream = new Stream(startUrl + ":" + port, null, 1);
                 Channel initchannel = new Channel();
                 initchannel.setStream(initstream);
-                initchannel.setId(CHANNEL_NUMBER);
+                initchannel.setNumber(CHANNEL_NUMBER);
                 initchannel.setName("Unkown");
                 channels.add(initchannel);
                 int lastindex = startUrl.lastIndexOf(".");
@@ -332,7 +332,7 @@ public class SplashScreen extends Activity {
                     increamented  = (increamented  + uri_hopes);
                     increamnetedport = increamnetedport + port_hope;
                     channel.setStream(stream);
-                    channel.setId(CHANNEL_NUMBER);
+                    channel.setNumber(CHANNEL_NUMBER);
                     channel.setName("Unkown");
                     channels.add(channel);
                     CHANNEL_NUMBER++;

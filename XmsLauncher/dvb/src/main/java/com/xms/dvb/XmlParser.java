@@ -145,7 +145,7 @@ public class XmlParser {
         Stream stream = new Stream("udp://@"+ip+":"+port, null, 1);
 //        channel.setStream_type(1);
         channel.setStream(stream);
-        channel.setId(CHANNEL_NUMBER);
+        channel.setNumber(CHANNEL_NUMBER);
         channel.setName("Unkown");
         CHANNEL_NUMBER++;
         return channel;
