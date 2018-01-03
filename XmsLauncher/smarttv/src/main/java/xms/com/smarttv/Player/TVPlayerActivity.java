@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.XmsPro.xmsproplayer.Interface.XmsPlayerUICallback;
 import com.XmsPro.xmsproplayer.XmsPlayer;
 import com.eliotohme.data.Channel;
+import com.eliotohme.data.User;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.util.Util;
 
@@ -54,17 +55,20 @@ public class TVPlayerActivity extends Activity {
 
         RealmQuery<Channel> channels = realm.where(Channel.class);
 
-        channelArrayList.addAll(channels.findAllSorted("id"));
+        channelArrayList.addAll(channels.findAllSorted("number"));
         simpleExoPlayerView = findViewById(xms.com.smarttv.R.id.simpleexoplayerview);
 
         USER_NAME = 1;
+        realm = Realm.getDefaultInstance();
+
+        User user = realm.where(User.class).findFirst();
 
         xmsPlayer = new XmsPlayer(this, simpleExoPlayerView, channelArrayList, USER_NAME,
                  new XmsPlayerUICallback() {
             @Override
             public void showChannelInfo(int channelindex) {
                 Channel channel = channelArrayList.get(channelindex);
-                currentChannel.setText(String.valueOf(channel.getId()));
+                currentChannel.setText(String.valueOf(channel.getNumber()));
                 channelName.setText(channel.getName());
                 channelInfo.setVisibility(View.VISIBLE);
                 Handler mChannelInfoHandler=new Handler();
@@ -76,7 +80,7 @@ public class TVPlayerActivity extends Activity {
                 mChannelInfoHandler.removeCallbacks(mChannelInfoRunnable);
                 mChannelInfoHandler.postDelayed(mChannelInfoRunnable, 5000);
             }
-        });
+        }, user.getToken_type(), user.getAccess_token());
     }
 
     @Override

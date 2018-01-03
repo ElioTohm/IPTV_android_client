@@ -55,7 +55,7 @@ public class ChannelListFragment extends BrowseFragment {
         // Put all channel in all channels group (row)
         RealmQuery<Channel> channels = realm.where(Channel.class);
         ArrayObjectAdapter gridRowAdapterAllChannels = new ArrayObjectAdapter(channelCardPresenter);
-        gridRowAdapterAllChannels.addAll(0, channels.findAllSorted("id"));
+        gridRowAdapterAllChannels.addAll(0, channels.findAllSorted("number"));
 
         mRowsAdapter.add(new ListRow(new HeaderItem(0, "All Channels"), gridRowAdapterAllChannels));
 
@@ -67,7 +67,7 @@ public class ChannelListFragment extends BrowseFragment {
         for (Genre genre : genreRealmResults) {
             RealmQuery<Channel> channelsbundle = realm.where(Channel.class).equalTo("genres.id", genre.getId());
             ArrayObjectAdapter gridRowAdapterbundle = new ArrayObjectAdapter(channelCardPresenter);
-            gridRowAdapterbundle.addAll(0, channelsbundle.findAllSorted("id"));
+            gridRowAdapterbundle.addAll(0, channelsbundle.findAllSorted("number"));
             mRowsAdapter.add(new ListRow(new HeaderItem(1, genre.getName()), gridRowAdapterbundle));
 
         }
@@ -81,7 +81,7 @@ public class ChannelListFragment extends BrowseFragment {
         public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item,
                                   RowPresenter.ViewHolder rowViewHolder, Row row) {
             if (item instanceof Channel) {
-                XmsPlayer.getPlayerInstance().changeChannel(((Channel) item).getId() - 1 );
+                XmsPlayer.getPlayerInstance().changeChannel(((Channel) item).getNumber() - 1 );
             }
         }
     }

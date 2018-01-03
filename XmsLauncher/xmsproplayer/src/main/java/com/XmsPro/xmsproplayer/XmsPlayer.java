@@ -5,10 +5,12 @@ import android.net.Uri;
 
 import com.XmsPro.xmsproplayer.Interface.XmsPlayerUICallback;
 import com.eliotohme.data.Channel;
+import com.eliotohme.data.network.AuthenticationInterceptor;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.Timeline;
+import com.google.android.exoplayer2.ext.okhttp.OkHttpDataSourceFactory;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.extractor.ExtractorsFactory;
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource;
@@ -29,7 +31,6 @@ import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
-import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.google.android.exoplayer2.upstream.UdpDataSource;
 import com.google.android.exoplayer2.util.Util;
@@ -37,6 +38,8 @@ import com.google.android.exoplayer2.util.Util;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
 import java.util.List;
+
+import okhttp3.OkHttpClient;
 
 import static com.google.android.exoplayer2.extractor.ts.DefaultTsPayloadReaderFactory.FLAG_ALLOW_NON_IDR_KEYFRAMES;
 import static com.google.android.exoplayer2.extractor.ts.TsExtractor.MODE_SINGLE_PMT;
@@ -57,7 +60,7 @@ public class XmsPlayer  {
     private Context context;
     private static XmsPlayer instance;
     private XmsPlayerUICallback xmsPlayerUICallback;
-
+    private String TOKENTYPE, TOKEN;
     static {
         DEFAULT_COOKIE_MANAGER = new CookieManager();
         DEFAULT_COOKIE_MANAGER.setCookiePolicy(CookiePolicy.ACCEPT_ORIGINAL_SERVER);
@@ -75,7 +78,7 @@ public class XmsPlayer  {
      * initialize both param to use in class
      */
     public XmsPlayer(Context context, SimpleExoPlayerView simpleExoPlayerView,
-                     List<Channel> channelArrayList, int user_name, XmsPlayerUICallback xmsPlayerUICallback) {
+                     List<Channel> channelArrayList, int user_name, XmsPlayerUICallback xmsPlayerUICallback, String TOKENTYPE, String TOKEN) {
 
         // set surface of the player
         this.context = context;
@@ -84,8 +87,9 @@ public class XmsPlayer  {
         this.channellistSize = channelArrayList.size();
         this.USER_NAME = user_name;
         this.xmsPlayerUICallback = xmsPlayerUICallback;
+        this.TOKEN = TOKEN;
+        this.TOKENTYPE = TOKENTYPE;
         instance = this;
-
     }
 
 
@@ -277,13 +281,16 @@ public class XmsPlayer  {
     private DataSource.Factory buildDataSourceFactory(boolean useBandwidthMeter) {
         return buildDataSourceFactory(useBandwidthMeter ? BANDWIDTH_METER : null);
     }
+
     public DataSource.Factory buildDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
         return new DefaultDataSourceFactory(context, bandwidthMeter,
                 buildHttpDataSourceFactory(bandwidthMeter));
     }
 
     public HttpDataSource.Factory buildHttpDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
-        return new DefaultHttpDataSourceFactory(userAgent, bandwidthMeter);
+        AuthenticationInterceptor interceptor = new AuthenticationInterceptor(this.TOKENTYPE, this.TOKEN);
+        OkHttpClient okHttpClient = new OkHttpClient.Builder().addInterceptor(interceptor).build();
+        return new OkHttpDataSourceFactory(okHttpClient, userAgent, bandwidthMeter);
     }
 
     public int getCurrentChannelIndex () {

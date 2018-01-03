@@ -6,10 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
@@ -261,44 +258,44 @@ public class SplashScreen extends Activity {
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(@NonNull Call<ResponseBody> call, @NonNull final Response<ResponseBody> response) {
-                if (!response.body().contentType().type().equals("text")) {
-                    File apkpdate = new File(SplashScreen.this.getExternalCacheDir().getAbsolutePath() + "/xmslauncher.apk");
-                    if (apkpdate.exists()) {
-                        apkpdate.delete();
-                    }
-
-                    new AsyncTask<Void, Void, Void>() {
-                        @Override
-                        protected Void doInBackground(Void... voids) {
-
-                            writeResponseBodyToDisk(response.body());
-                            // start apk as intent to update code
-                            try {
-                                StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
-                                StrictMode.setVmPolicy(builder.build());
-
-                                File apkpdate = new File(SplashScreen.this.getExternalCacheDir().getAbsolutePath() + "/xmslauncher.apk");
-                                Intent promptInstall = new Intent(Intent.ACTION_VIEW);
-                                promptInstall.setDataAndType(Uri.fromFile(apkpdate), "application/vnd.android.package-archive");
-                                promptInstall.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivity(promptInstall);
-                            } catch (Exception e) {
-                                new AlertDialog.Builder(SplashScreen.this)
-                                        .setMessage("XMS launcher Could not update please download latest version manually")
-                                        .setCancelable(false)
-                                        .setPositiveButton("Exit", new DialogInterface.OnClickListener() {
-                                            public void onClick(DialogInterface dialog, int id) {
-                                                SplashScreen.this.finish();
-                                            }
-                                        })
-                                        .show();
-                            }
-                            return null;
-                        }
-                    }.execute();
-                } else {
+//                if (!response.body().contentType().type().equals("text")) {
+//                    File apkpdate = new File(SplashScreen.this.getExternalCacheDir().getAbsolutePath() + "/xmslauncher.apk");
+//                    if (apkpdate.exists()) {
+//                        apkpdate.delete();
+//                    }
+//
+//                    new AsyncTask<Void, Void, Void>() {
+//                        @Override
+//                        protected Void doInBackground(Void... voids) {
+//
+//                            writeResponseBodyToDisk(response.body());
+//                            // start apk as intent to update code
+//                            try {
+//                                StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+//                                StrictMode.setVmPolicy(builder.build());
+//
+//                                File apkpdate = new File(SplashScreen.this.getExternalCacheDir().getAbsolutePath() + "/xmslauncher.apk");
+//                                Intent promptInstall = new Intent(Intent.ACTION_VIEW);
+//                                promptInstall.setDataAndType(Uri.fromFile(apkpdate), "application/vnd.android.package-archive");
+//                                promptInstall.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                                startActivity(promptInstall);
+//                            } catch (Exception e) {
+//                                new AlertDialog.Builder(SplashScreen.this)
+//                                        .setMessage("XMS launcher Could not update please download latest version manually")
+//                                        .setCancelable(false)
+//                                        .setPositiveButton("Exit", new DialogInterface.OnClickListener() {
+//                                            public void onClick(DialogInterface dialog, int id) {
+//                                                SplashScreen.this.finish();
+//                                            }
+//                                        })
+//                                        .show();
+//                            }
+//                            return null;
+//                        }
+//                    }.execute();
+//                } else {
                     getChannels();
-                }
+//                }
             }
 
             @Override

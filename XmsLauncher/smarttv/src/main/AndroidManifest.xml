@@ -56,9 +56,10 @@
             android:name=".Player.TVPlayerActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:hardwareAccelerated="true"
-            android:launchMode="singleInstance"/>
+            android:launchMode="singleInstance"
+            android:screenOrientation="landscape"/>
 
-        <activity android:name=".UI.SplashScreen">
+        <activity android:name=".UI.SplashScreen" android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
