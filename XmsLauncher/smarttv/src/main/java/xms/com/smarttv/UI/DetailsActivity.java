@@ -12,22 +12,27 @@
  * the License.
  */
 
-package xms.com.smarttv;
+package xms.com.smarttv.UI;
 
-import android.support.v17.leanback.widget.AbstractDetailsDescriptionPresenter;
+import android.app.Activity;
+import android.os.Bundle;
 
-import xms.com.smarttv.objects.ServiceApp;
+import xms.com.smarttv.R;
 
-public class DetailsDescriptionPresenter extends AbstractDetailsDescriptionPresenter {
+/*
+ * Details activity class that loads LeanbackDetailsFragment class
+ */
+public class DetailsActivity extends Activity {
+    public static final String SHARED_ELEMENT_NAME = "hero";
+    public static final String SERVICE = "Services";
 
+    /**
+     * Called when the activity is first created.
+     */
     @Override
-    protected void onBindDescription(ViewHolder viewHolder, Object item) {
-        ServiceApp serviceApp = (ServiceApp) item;
-
-        if (serviceApp != null) {
-            viewHolder.getTitle().setText(serviceApp.getTitle());
-            viewHolder.getSubtitle().setText(serviceApp.getStudio());
-            viewHolder.getBody().setText(serviceApp.getDescription());
-        }
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_details);
     }
+
 }

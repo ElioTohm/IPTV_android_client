@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
+import java.util.UUID;
 
 import io.realm.Realm;
 import okhttp3.ResponseBody;
@@ -76,7 +77,7 @@ public class SplashScreen extends Activity {
     private void registerdevice () {
         // initalize dialog
         final View view = getLayoutInflater().inflate(R.layout.client_register_dialog, null);
-
+        String uuid = UUID.randomUUID().toString();
         AlertDialog.Builder dialog = new AlertDialog.Builder(SplashScreen.this);
         dialog.setView(view);
         // set cancelable to true to be able to fix network before registery

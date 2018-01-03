@@ -12,7 +12,7 @@
  * the License.
  */
 
-package xms.com.smarttv;
+package xms.com.smarttv.UI;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -48,6 +48,9 @@ import java.util.Collections;
 import java.util.List;
 
 import xms.com.smarttv.Presenter.CardPresenter;
+import xms.com.smarttv.Presenter.DetailsDescriptionPresenter;
+import xms.com.smarttv.R;
+import xms.com.smarttv.Utils;
 import xms.com.smarttv.objects.ServiceApp;
 import xms.com.smarttv.objects.ServiceAppList;
 

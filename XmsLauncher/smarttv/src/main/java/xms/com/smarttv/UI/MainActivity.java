@@ -12,10 +12,12 @@
  * the License.
  */
 
-package xms.com.smarttv;
+package xms.com.smarttv.UI;
 
 import android.app.Activity;
 import android.os.Bundle;
+
+import xms.com.smarttv.R;
 
 /*
  * MainActivity class that loads MainFragment

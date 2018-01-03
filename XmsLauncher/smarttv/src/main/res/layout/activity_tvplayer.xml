@@ -24,7 +24,7 @@
         android:name="xms.com.smarttv.Player.ChannelListFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".MainActivity"
+        tools:context=".UI.MainActivity"
         tools:deviceIds="tv"
         tools:ignore="MergeRootFrame"/>
 

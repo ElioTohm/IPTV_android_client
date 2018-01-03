@@ -12,7 +12,7 @@
  * the License.
  */
 
-package xms.com.smarttv;
+package xms.com.smarttv.UI;
 
 import android.app.Activity;
 import android.content.Context;
@@ -58,6 +58,7 @@ import java.util.TimerTask;
 import xms.com.smarttv.Player.TVPlayerActivity;
 import xms.com.smarttv.Presenter.CardPresenter;
 import xms.com.smarttv.Presenter.InstalledApplicationPresenter;
+import xms.com.smarttv.R;
 import xms.com.smarttv.objects.InstallAppsInfo;
 import xms.com.smarttv.objects.ServiceApp;
 import xms.com.smarttv.objects.ServiceAppList;

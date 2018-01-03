@@ -21,7 +21,7 @@ import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmQuery;
-import xms.com.smarttv.MainActivity;
+import xms.com.smarttv.UI.MainActivity;
 import xms.com.smarttv.services.NotificationService;
 
 public class TVPlayerActivity extends Activity {

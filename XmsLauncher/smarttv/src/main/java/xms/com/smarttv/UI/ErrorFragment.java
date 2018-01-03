@@ -11,11 +11,13 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package xms.com.smarttv;
+package xms.com.smarttv.UI;
 
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+
+import xms.com.smarttv.R;
 
 /*
  * This class demonstrates how to extend ErrorFragment
