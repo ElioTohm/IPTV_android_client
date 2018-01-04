@@ -25,7 +25,6 @@ public class SmartTv extends Application {
         // set @realmConfiguration for development database will be rewritten on change
         final RealmConfiguration realmConfiguration = new RealmConfiguration.Builder()
                 .name(Realm.DEFAULT_REALM_NAME)
-                .schemaVersion(1)
                 .deleteRealmIfMigrationNeeded()
                 .build();
         Realm.setDefaultConfiguration(realmConfiguration);
