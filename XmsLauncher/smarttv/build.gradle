@@ -6,7 +6,6 @@ android {
         config {
             keyAlias 'Test'
             keyPassword '201092'
-            storeFile file('C:/Users/Elio/Desktop/Work/XMSpro/testjks/testing.jks')
             storePassword '201092'
         }
     }
