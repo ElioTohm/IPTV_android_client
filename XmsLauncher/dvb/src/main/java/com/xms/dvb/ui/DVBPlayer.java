@@ -217,7 +217,7 @@ public class DVBPlayer extends Activity {
         // Get a Realm instance for this thread
         realm = Realm.getDefaultInstance();
  
-        channelArrayList.addAll(realm.where(Channel.class).findAllSorted("id"));
+        channelArrayList.addAll(realm.where(Channel.class).findAllSorted("number"));
 
         simpleExoPlayerView = findViewById(R.id.simpleexoplayerview);
 
