@@ -45,16 +45,12 @@ public class SplashScreen extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         new DownloadXmlTask().cancel(true);
-        new checkChannelsLoaded().cancel(true);
         setContentView(R.layout.activity_splash);
         realm = Realm.getDefaultInstance();
         User user = realm.where(User.class).findFirst();
-//        if (user == null || user.getAccess_token().equals(null) || user.getAccess_token().equals("")) {
-//            registerdevice();
-//        } else
-        if (realm.where(Channel.class).count() > 0) {
-            // Start a new thread that will download all the data
-            new checkChannelsLoaded().execute();
+        if (user == null || user.getAccess_token().equals(null) || user.getAccess_token().equals("")) {
+            registerdevice();
+        } else if (realm.where(Channel.class).count() > 0) {
             if (Preferences.getStartingUrl().equals("")) {
                 new DownloadXmlTask().execute();
             } else {
@@ -150,36 +146,6 @@ public class SplashScreen extends Activity {
         // Starts the query
         conn.connect();
         return conn.getInputStream();
-    }
-
-    private class checkChannelsLoaded extends AsyncTask<Void, Void, Void>  {
-        @Override
-        protected Void doInBackground(Void... voids) {
-            Realm realm = Realm.getDefaultInstance();
-            List<Channel> Unloaded_channels = realm.where(Channel.class).contains("name", "Unkown").findAll();
-            if (Unloaded_channels.size() > 0 ) {
-                Handler handler =  new Handler(SplashScreen.this.getMainLooper());
-                handler.post( new Runnable(){
-                    public void run(){
-                        Toast.makeText(SplashScreen.this , "loading channel info...", Toast.LENGTH_LONG).show();
-                    }
-                });
-                XmlParser channelXmlParser_resume = new XmlParser(SplashScreen.this);
-                long allChannelSize = realm.where(Channel.class).count();
-                int progress = 0;
-                for (int i=0; i<Unloaded_channels.size(); i++) {
-                    int total = (int) (100.0 * (i + allChannelSize - Unloaded_channels.size())  / allChannelSize);
-                    if (progress < total) {
-                        progress = total;
-                        channelXmlParser_resume.getServiceName(Unloaded_channels.get(i).getStream().getVid_stream(), String.valueOf(progress));
-                    } else {
-                        channelXmlParser_resume.getServiceName(Unloaded_channels.get(i).getStream().getVid_stream(), "");
-                    }
-                }
-            }
-            realm.close();
-            return null;
-        }
     }
 
     private void Connectiondialoghandler () {
@@ -313,29 +279,20 @@ public class SplashScreen extends Activity {
                 Preferences.setPortHope(port_hope);
 
                 final ArrayList<Channel> channels = new ArrayList<Channel>();
-                int CHANNEL_NUMBER = 1;
-                Stream initstream = new Stream(startUrl + ":" + port, null, 1);
-                Channel initchannel = new Channel();
-                initchannel.setStream(initstream);
-                initchannel.setNumber(CHANNEL_NUMBER);
-                initchannel.setName("Unkown");
-                channels.add(initchannel);
                 int lastindex = startUrl.lastIndexOf(".");
                 int increamented  = Integer.parseInt(startUrl.substring(lastindex+1,
                         startUrl.length()));
                 int increamnetedport = port;
-                CHANNEL_NUMBER++;
-                for (int i = 1; i < Integer.parseInt(String.valueOf(channelNumber)); i ++ ) {
+                for (int i = 1; i <= channelNumber; i ++ ) {
                     Channel channel = new Channel();
                     Stream stream = new Stream(startUrl.substring(0,lastindex)+ "." + increamented + ":" + increamnetedport,
                             null, 1);
                     increamented  = (increamented  + uri_hopes);
                     increamnetedport = increamnetedport + port_hope;
                     channel.setStream(stream);
-                    channel.setNumber(CHANNEL_NUMBER);
+                    channel.setNumber(i);
                     channel.setName("Unkown");
                     channels.add(channel);
-                    CHANNEL_NUMBER++;
                 }
 
                 realm.executeTransaction(new Realm.Transaction() {
@@ -344,8 +301,6 @@ public class SplashScreen extends Activity {
                         realm.delete(Channel.class);
                         realm.insert(channels);
                         // Start a new thread that will download all the data
-                        new checkChannelsLoaded().cancel(true);
-                        new checkChannelsLoaded().execute();
                         startActivity(new Intent(SplashScreen.this, DVBPlayer.class));
                         finish();
                     }

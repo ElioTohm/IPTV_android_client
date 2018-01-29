@@ -42,6 +42,7 @@ import java.util.List;
 import okhttp3.OkHttpClient;
 
 import static com.google.android.exoplayer2.extractor.ts.DefaultTsPayloadReaderFactory.FLAG_ALLOW_NON_IDR_KEYFRAMES;
+import static com.google.android.exoplayer2.extractor.ts.DefaultTsPayloadReaderFactory.FLAG_DETECT_ACCESS_UNITS;
 import static com.google.android.exoplayer2.extractor.ts.TsExtractor.MODE_SINGLE_PMT;
 
 public class XmsPlayer  {

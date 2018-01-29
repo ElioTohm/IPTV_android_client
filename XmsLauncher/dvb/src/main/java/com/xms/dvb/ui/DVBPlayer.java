@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.KeyEvent;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.XmsPro.xmsproplayer.Interface.XmsPlayerUICallback;
 import com.XmsPro.xmsproplayer.XmsPlayer;
@@ -18,6 +20,7 @@ import com.eliotohme.data.Channel;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.util.Util;
 import com.xms.dvb.R;
+import com.xms.dvb.XmlParser;
 import com.xms.dvb.app.Preferences;
 
 import java.util.ArrayList;
@@ -41,6 +44,37 @@ public class DVBPlayer extends Activity {
         setContentView(R.layout.activity_dvbplayer);
 
         localeinit ();
+        new checkChannelsLoaded().execute();
+    }
+
+    private class checkChannelsLoaded extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... voids) {
+            Realm realm = Realm.getDefaultInstance();
+            List<Channel> Unloaded_channels = realm.where(Channel.class).contains("name", "Unkown").findAll();
+            if (Unloaded_channels.size() > 0 ) {
+                Handler handler =  new Handler(DVBPlayer.this.getMainLooper());
+                handler.post( new Runnable(){
+                    public void run(){
+                        Toast.makeText(DVBPlayer.this , "loading channel info...", Toast.LENGTH_LONG).show();
+                    }
+                });
+                XmlParser channelXmlParser_resume = new XmlParser(DVBPlayer.this);
+                long allChannelSize = realm.where(Channel.class).count();
+                int progress = 0;
+                for (int i=0; i<Unloaded_channels.size(); i++) {
+                    int total = (int) (100.0 * (i + allChannelSize - Unloaded_channels.size())  / allChannelSize);
+                    if (progress < total) {
+                        progress = total;
+                        channelXmlParser_resume.getServiceName(Unloaded_channels.get(i).getStream().getVid_stream(), String.valueOf(progress));
+                    } else {
+                        channelXmlParser_resume.getServiceName(Unloaded_channels.get(i).getStream().getVid_stream(), "");
+                    }
+                }
+            }
+            realm.close();
+            return null;
+        }
     }
 
     @Override
