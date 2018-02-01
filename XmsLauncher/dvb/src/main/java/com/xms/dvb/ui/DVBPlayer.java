@@ -8,14 +8,15 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.KeyEvent;
+import android.view.SurfaceView;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.XmsPro.xmsproplayer.FTPPlayer;
 import com.XmsPro.xmsproplayer.Interface.XmsPlayerUICallback;
-import com.XmsPro.xmsproplayer.XmsPlayer;
 import com.eliotohme.data.Channel;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.util.Util;
@@ -29,13 +30,12 @@ import java.util.List;
 import io.realm.Realm;
 
 public class DVBPlayer extends Activity {
+    private FTPPlayer ftPplayer;
     private View channelInfo;
     private TextView currentChannel, channel_number_selector, channelName;
     private List<Channel> channelArrayList;
     private RelativeLayout channelList_frameLayout;
-    private SimpleExoPlayerView simpleExoPlayerView;
     private int USER_NAME;
-    private XmsPlayer xmsPlayer;
     private ChannelGridFragment channelGridFragment;
     Realm realm;
     @Override
@@ -80,40 +80,29 @@ public class DVBPlayer extends Activity {
     @Override
     public void onStart() {
         super.onStart();
-        if (Util.SDK_INT > 23) {
-            xmsPlayer.initializePlayer();
-            if(Preferences.getLastChannel() > 0){
-                xmsPlayer.changeChannel(Preferences.getLastChannel());
-            }
-        }
+        ftPplayer.createPlayer();
+        ftPplayer.SetChannel(Preferences.getLastChannel());
+        channelGridFragment.setSelectedPosition(Preferences.getLastChannel());
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if ((Util.SDK_INT <= 23 || !xmsPlayer.hasPlayer())) {
-            localeinit ();
-            xmsPlayer.initializePlayer();
-            if(Preferences.getLastChannel() > 0){
-                xmsPlayer.changeChannel(Preferences.getLastChannel());
-            }
-        }
+        ftPplayer.createPlayer();
+        ftPplayer.SetChannel(Preferences.getLastChannel());
+        channelGridFragment.setSelectedPosition(Preferences.getLastChannel());
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        if (Util.SDK_INT <= 23) {
-            xmsPlayer.releasePlayer();
-        }
+        ftPplayer.releasePlayer();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        if (Util.SDK_INT > 23) {
-            xmsPlayer.releasePlayer();
-        }
+        ftPplayer.releasePlayer();
     }
 
     @Override
@@ -145,17 +134,17 @@ public class DVBPlayer extends Activity {
                     return super.dispatchKeyEvent(event);
                 case KeyEvent.KEYCODE_DPAD_UP:
                     if (FrameLayout.VISIBLE != channelList_frameLayout.getVisibility()) {
-                        xmsPlayer.nextchannel();
-                        Preferences.setLastChannel(xmsPlayer.getCurrentChannelIndex());
-                        channelGridFragment.setSelectedPosition(xmsPlayer.getCurrentChannelIndex());
+                        int channelnumber = ftPplayer.nextchannel();
+                        Preferences.setLastChannel(channelnumber);
+                        channelGridFragment.setSelectedPosition(channelnumber);
                         return true;
                     }
                     return super.dispatchKeyEvent(event);
                 case KeyEvent.KEYCODE_DPAD_DOWN:
                     if (FrameLayout.VISIBLE != channelList_frameLayout.getVisibility()) {
-                        xmsPlayer.previouschannel();
-                        Preferences.setLastChannel(xmsPlayer.getCurrentChannelIndex());
-                        channelGridFragment.setSelectedPosition(xmsPlayer.getCurrentChannelIndex());
+                        int channelnumber = ftPplayer.previouschannel();
+                        Preferences.setLastChannel(channelnumber);
+                        channelGridFragment.setSelectedPosition(channelnumber);
                         return true;
                     }
                     return super.dispatchKeyEvent(event);
@@ -207,14 +196,14 @@ public class DVBPlayer extends Activity {
                 channel_number_selector.setText(channel_number_selector.getText() + String.valueOf(finalChannel_numberpressed));
                 Runnable setchannelnumberRunnable = new Runnable() {
                     public void run() {
-                        if (!channel_number_selector.getText().equals("")) {
-                            int channel_number = Integer.parseInt((String) channel_number_selector.getText()) - 1;
-                            xmsPlayer.changeChannel(channel_number);
-                            Preferences.setLastChannel(channel_number);
-                            channelGridFragment.setSelectedPosition(channel_number);
-                            channel_number_selector.setText("");
-                            channel_number_selector.setVisibility(View.INVISIBLE);
-                        }
+                    if (!channel_number_selector.getText().equals("")) {
+                        int channel_number = Integer.parseInt((String) channel_number_selector.getText());
+                        ftPplayer.SetChannel(channel_number);
+                        Preferences.setLastChannel(channel_number);
+                        channelGridFragment.setSelectedPosition(channel_number - 1);
+                        channel_number_selector.setText("");
+                        channel_number_selector.setVisibility(View.INVISIBLE);
+                    }
                     }
                 };
                 setchannelnumberHandler.postDelayed(setchannelnumberRunnable, 2000);
@@ -248,16 +237,12 @@ public class DVBPlayer extends Activity {
         channelList_frameLayout = findViewById(R.id.main_channellist_fragment);
         channel_number_selector = findViewById(R.id.channel_number_selector);
         channelGridFragment= (ChannelGridFragment) getFragmentManager().findFragmentById(R.id.main_channellist_fragment);
-        // Get a Realm instance for this thread
+        SurfaceView surfaceView = findViewById(R.id.surface);
+        USER_NAME = 1;
         realm = Realm.getDefaultInstance();
- 
         channelArrayList.addAll(realm.where(Channel.class).findAllSorted("number"));
 
-        simpleExoPlayerView = findViewById(R.id.simpleexoplayerview);
-
-        USER_NAME = 1;
-
-        xmsPlayer = new XmsPlayer(this, simpleExoPlayerView, channelArrayList, USER_NAME,
+        ftPplayer = new FTPPlayer(DVBPlayer.this, surfaceView,
                 new XmsPlayerUICallback() {
                     @Override
                     public void showChannelInfo(int channelindex) {
@@ -274,6 +259,24 @@ public class DVBPlayer extends Activity {
                         mChannelInfoHandler.removeCallbacks(mChannelInfoRunnable);
                         mChannelInfoHandler.postDelayed(mChannelInfoRunnable, 5000);
                     }
-                }, null, null);
+                });
+//        xmsPlayer = new XmsPlayer(this, simpleExoPlayerView, channelArrayList, USER_NAME,
+//                new XmsPlayerUICallback() {
+//                    @Override
+//                    public void showChannelInfo(int channelindex) {
+//                        Channel channel = channelArrayList.get(channelindex);
+//                        currentChannel.setText(String.valueOf(channel.getNumber()));
+//                        channelName.setText(channel.getName());
+//                        channelInfo.setVisibility(View.VISIBLE);
+//                        Handler mChannelInfoHandler=new Handler();
+//                        Runnable mChannelInfoRunnable=new Runnable() {
+//                            public void run() {
+//                                channelInfo.setVisibility(View.INVISIBLE);
+//                            }
+//                        };
+//                        mChannelInfoHandler.removeCallbacks(mChannelInfoRunnable);
+//                        mChannelInfoHandler.postDelayed(mChannelInfoRunnable, 5000);
+//                    }
+//                }, null, null);
     }
 }

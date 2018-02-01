@@ -29,20 +29,21 @@
         <activity android:name=".ui.SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.HOME" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.DVBPlayer"
-            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
-            android:hardwareAccelerated="true"/>
+        <activity
+            android:name=".ui.DVBPlayer"
+            android:hardwareAccelerated="true" />
         <activity android:name=".ui.HomeActivity" />
         <activity
             android:name=".ui.DialogActivity"
             android:exported="true"
-            android:theme="@style/Theme.Example.LeanbackDialog"/>
+            android:theme="@style/Theme.Example.LeanbackDialog" />
     </application>
 
 </manifest>

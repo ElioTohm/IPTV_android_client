@@ -8,14 +8,10 @@
     tools:context="com.xms.dvb.ui.DVBPlayer">
 
 
-    <com.google.android.exoplayer2.ui.SimpleExoPlayerView
+    <SurfaceView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/simpleexoplayerview"
-        app:use_controller="false"
-        app:resize_mode="fill">
-
-    </com.google.android.exoplayer2.ui.SimpleExoPlayerView>
+        android:id="@+id/surface"/>
 
     <fragment
         xmlns:android="http://schemas.android.com/apk/res/android"

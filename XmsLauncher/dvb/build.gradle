@@ -35,8 +35,8 @@ dependencies {
     compile 'com.android.support:appcompat-v7:' + project.ext.supportLibraryVersion
     compile project(':xmsproplayer')
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'com.android.support:support-v4:'  + project.ext.supportLibraryVersion
-    compile 'com.android.support:support-vector-drawable:'  + project.ext.supportLibraryVersion
+    compile 'com.android.support:support-v4:' + project.ext.supportLibraryVersion
+    compile 'com.android.support:support-vector-drawable:' + project.ext.supportLibraryVersion
     compile 'com.writingminds:FFmpegAndroid:0.3.2'
-    compile 'com.android.support:recyclerview-v7:'  + project.ext.supportLibraryVersion
+    compile 'com.android.support:recyclerview-v7:' + project.ext.supportLibraryVersion
 }

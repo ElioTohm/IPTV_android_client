@@ -117,10 +117,11 @@ public class XmsPlayer  {
                     DataSource.Factory udsf = new UdpDataSource.Factory() {
                         @Override
                         public DataSource createDataSource() {
-                            return new UdpDataSource(null, 1316, UdpDataSource.DEAFULT_SOCKET_TIMEOUT_MILLIS);
+                            return new UdpDataSource(null, 6000, UdpDataSource.DEAFULT_SOCKET_TIMEOUT_MILLIS);
                         }
                     };
                     ExtractorsFactory tsExtractorFactory = new DefaultExtractorsFactory()
+                            .setTsExtractorFlags(FLAG_DETECT_ACCESS_UNITS)
                             .setTsExtractorFlags(FLAG_ALLOW_NON_IDR_KEYFRAMES)
                             .setTsExtractorMode(MODE_SINGLE_PMT);
                     mediaSources[i] = new ExtractorMediaSource(channel_stream_uri,
