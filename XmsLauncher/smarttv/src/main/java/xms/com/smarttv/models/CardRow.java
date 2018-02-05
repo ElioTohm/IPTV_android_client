@@ -1,17 +1,13 @@
-package xms.com.smarttv.objects;
-
-/**
- * Created by Elio on 10/20/2017.
- */
+package xms.com.smarttv.models;
 
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
 /**
- * This class represents a row of cards. In a real world application you might want to store more
- * data than in this example.
+ * Created by elio on 2/3/18.
  */
+
 public class CardRow {
 
     // default is a list of cards
@@ -44,4 +40,3 @@ public class CardRow {
     }
 
 }
-

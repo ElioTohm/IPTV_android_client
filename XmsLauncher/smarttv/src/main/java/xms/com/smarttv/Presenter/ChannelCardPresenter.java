@@ -1,6 +1,5 @@
 package xms.com.smarttv.Presenter;
 
-import android.graphics.drawable.Drawable;
 import android.support.v17.leanback.widget.ImageCardView;
 import android.support.v17.leanback.widget.Presenter;
 import android.util.Log;
@@ -10,22 +9,15 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.eliotohme.data.Channel;
 
-/**
- * Created by Elio on 9/28/2017.
- */
-
 public class ChannelCardPresenter extends Presenter {
     private static final String TAG = "ChannelCardPresenter";
 
     private static final int CARD_WIDTH = 313;
     private static final int CARD_HEIGHT = 176;
-    private Drawable mDefaultCardImage;
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent) {
         Log.d(TAG, "onCreateViewHolder");
-
-        mDefaultCardImage = parent.getResources().getDrawable(com.XmsPro.xmsproplayer.R.drawable.movie);
 
         ImageCardView cardView = new ImageCardView(parent.getContext()) {
             @Override
@@ -51,7 +43,6 @@ public class ChannelCardPresenter extends Presenter {
             cardView.setMainImageDimensions(CARD_WIDTH, CARD_HEIGHT);
             Glide.with(viewHolder.view.getContext())
                     .load(channel.getThumbnail())
-                    .error(mDefaultCardImage)
                     .into(cardView.getMainImageView());
         }
     }

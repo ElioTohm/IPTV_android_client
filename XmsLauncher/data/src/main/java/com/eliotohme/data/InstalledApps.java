@@ -1,13 +1,15 @@
-package xms.com.smarttv.objects;
+package com.eliotohme.data;
 
-import android.graphics.drawable.Drawable;
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
-public class InstallAppsInfo {
+public class InstalledApps extends RealmObject {
+
     private String appname = "";
+    @PrimaryKey
     private String pname = "";
     private String versionName = "";
     private int versionCode = 0;
-    private Drawable icon;
 
     public void setAppname(String appname) {
         this.appname = appname;
@@ -35,14 +37,6 @@ public class InstallAppsInfo {
 
     public void setVersionCode(int versionCode) {
         this.versionCode = versionCode;
-    }
-
-    public Drawable getIcon() {
-        return icon;
-    }
-
-    public void setIcon(Drawable icon) {
-        this.icon = icon;
     }
 
     public String getAppname() {

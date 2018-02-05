@@ -19,7 +19,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.eliotohme.data.Channel;
-import com.eliotohme.data.Client;
 import com.eliotohme.data.Genre;
 import com.eliotohme.data.User;
 import com.eliotohme.data.network.ApiInterface;
@@ -30,6 +29,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.ref.WeakReference;
 import java.util.List;
 import java.util.UUID;
 
@@ -164,11 +164,6 @@ public class SplashScreen extends Activity {
                     }
                 });
                 if (response.code() == 200) {
-                    try {
-                        getClientInfo();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
                     startTVplayer();
                     finish();
                 }
@@ -190,45 +185,6 @@ public class SplashScreen extends Activity {
         startActivity(new Intent(getApplication(), TVPlayerActivity.class));
     }
 
-    /**
-     * checks Client info for change
-     * f there is change show the onboarding activity
-     * @throws IOException
-     */
-    private void getClientInfo() throws IOException {
-        ApiInterface apiInterface = ApiService.createService(ApiInterface.class,Preferences.getServerUrl(), TKN_TYPE, TKN);
-        Call<Client> clientCall = apiInterface.getClientInfo(USER_ID);
-        clientCall.enqueue(new Callback<Client>() {
-            @Override
-            public void onResponse(@NonNull Call<Client> call, @NonNull final Response<Client> response) {
-                Realm subrealm = Realm.getDefaultInstance();
-                if (response.code() == 200 && (subrealm.where(Client.class).findFirst() ==  null
-                        || !response.body().getEmail().equals(subrealm.where(Client.class).findFirst().getEmail()))) {
-
-                    subrealm.executeTransaction(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
-                            realm.delete(Client.class);
-                            realm.insert(response.body());
-                        }
-                    });
-
-                    // This is the first time running the app, let's go to onboarding
-                    Intent intent = new Intent(getApplicationContext(), OnboardingActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.putExtra("name", response.body().getName());
-                    intent.putExtra("welcome_message", response.body().getWelcomeMessage());
-                    intent.putExtra("welcome_image", response.body().getWelcomeImage());
-                    getApplication().startActivity(intent);
-                }
-
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<Client> call, @NonNull Throwable t) {}
-        });
-    }
-
     private void Connectiondialoghandler () {
         new AlertDialog.Builder(SplashScreen.this)
                 .setMessage("Can not connect please try again")
@@ -243,7 +199,7 @@ public class SplashScreen extends Activity {
                     registerdevice();
                     }
                 })
-                .setNeutralButton("Settigns", new DialogInterface.OnClickListener() {
+                .setNeutralButton("Settings", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                     startActivityForResult(new Intent(android.provider.Settings.ACTION_SETTINGS), 0);
@@ -274,40 +230,7 @@ public class SplashScreen extends Activity {
                         apkpdate.delete();
                     }
                     Toast.makeText(SplashScreen.this,"Downloading Updates...", Toast.LENGTH_LONG).show();
-                    new AsyncTask<Void, Void, Void>() {
-                        @Override
-                        protected Void doInBackground(Void... voids) {
-
-                            writeResponseBodyToDisk(response.body());
-                            // start apk as intent to update code
-                            try {
-                                StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
-                                StrictMode.setVmPolicy(builder.build());
-
-                                File apkpdate = new File(SplashScreen.this.getExternalCacheDir().getAbsolutePath() + "/xmslauncher.apk");
-                                final Intent promptInstall = new Intent(Intent.ACTION_VIEW);
-                                promptInstall.setDataAndType(Uri.fromFile(apkpdate), "application/vnd.android.package-archive");
-                                promptInstall.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivity(promptInstall);
-                            } catch (Exception e) {
-                                new Handler(Looper.getMainLooper()).post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                    new AlertDialog.Builder(SplashScreen.this)
-                                        .setMessage("XMS launcher Could not update please download latest version manually")
-                                        .setCancelable(false)
-                                        .setPositiveButton("Exit", new DialogInterface.OnClickListener() {
-                                            public void onClick(DialogInterface dialog, int id) {
-                                                SplashScreen.this.finish();
-                                            }
-                                        })
-                                        .show();
-                                    }
-                                });
-                            }
-                            return null;
-                        }
-                    }.execute();
+                    new SaveApk(SplashScreen.this).execute(response);
                 } else {
                     getChannels();
                 }
@@ -320,51 +243,100 @@ public class SplashScreen extends Activity {
             }
         });
     }
-    private void writeResponseBodyToDisk(ResponseBody body) {
-        try {
-            File apkpdate = new File(SplashScreen.this.getExternalCacheDir().getAbsolutePath() + "/xmslauncher.apk");
 
-            InputStream inputStream = null;
-            OutputStream outputStream = null;
+    private static class SaveApk extends AsyncTask<Response<ResponseBody>, Void, Void> {
 
+        private WeakReference<SplashScreen> activityReference;
+
+        SaveApk(SplashScreen context) {
+            activityReference = new WeakReference<>(context);
+        }
+
+        @Override
+        protected Void doInBackground(Response<ResponseBody>[] responses) {
+            int count = responses.length;
+            for (int i = 0; i < count; i++) {
+                writeResponseBodyToDisk(responses[i].body());
+                if (isCancelled()) break;
+            }
+
+            // start apk as intent to update code
             try {
-                byte[] fileReader = new byte[4096];
+                StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+                StrictMode.setVmPolicy(builder.build());
 
-                long fileSize = body.contentLength();
-                long fileSizeDownloaded = 0;
+                File apkpdate = new File(activityReference.get().getExternalCacheDir().getAbsolutePath() + "/xmslauncher.apk");
+                final Intent promptInstall = new Intent(Intent.ACTION_VIEW);
+                promptInstall.setDataAndType(Uri.fromFile(apkpdate), "application/vnd.android.package-archive");
+                promptInstall.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                activityReference.get().startActivity(promptInstall);
+            } catch (Exception e) {
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        new AlertDialog.Builder(activityReference.get())
+                                .setMessage("XMS launcher Could not update please download latest version manually")
+                                .setCancelable(false)
+                                .setPositiveButton("Exit", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        activityReference.get().finish();
+                                    }
+                                })
+                                .show();
+                    }
+                });
+            }
+            return null;
+        }
 
-                inputStream = body.byteStream();
-                outputStream = new FileOutputStream(apkpdate);
+        private void writeResponseBodyToDisk(ResponseBody body) {
+            try {
+                File apkpdate = new File(activityReference.get().getExternalCacheDir().getAbsolutePath() + "/xmslauncher.apk");
 
-                while (true) {
-                    int read = inputStream.read(fileReader);
+                InputStream inputStream = null;
+                OutputStream outputStream = null;
 
-                    if (read == -1) {
-                        break;
+                try {
+                    byte[] fileReader = new byte[4096];
+
+                    long fileSize = body.contentLength();
+                    long fileSizeDownloaded = 0;
+
+                    inputStream = body.byteStream();
+                    outputStream = new FileOutputStream(apkpdate);
+
+                    while (true) {
+                        int read = inputStream.read(fileReader);
+
+                        if (read == -1) {
+                            break;
+                        }
+
+                        outputStream.write(fileReader, 0, read);
+
+                        fileSizeDownloaded += read;
+
+                        Log.d("TEST", "file download: " + (fileSize/fileSizeDownloaded) + "%");
                     }
 
-                    outputStream.write(fileReader, 0, read);
+                    outputStream.flush();
 
-                    fileSizeDownloaded += read;
+                } catch (IOException e) {
+                    Log.e("test", e.toString());
+                } finally {
+                    if (inputStream != null) {
+                        inputStream.close();
+                    }
 
-                    Log.d("TEST", "file download: " + (fileSize/fileSizeDownloaded) + "%");
+                    if (outputStream != null) {
+                        outputStream.close();
+                    }
                 }
-
-                outputStream.flush();
-
             } catch (IOException e) {
-                Log.e("test", e.toString());
-            } finally {
-                if (inputStream != null) {
-                    inputStream.close();
-                }
-
-                if (outputStream != null) {
-                    outputStream.close();
-                }
+                Log.d("TEST", "writeResponseBodyToDisk: " + e);
             }
-        } catch (IOException e) {
-            Log.d("TEST", "writeResponseBodyToDisk: " + e);
         }
+
     }
+
 }

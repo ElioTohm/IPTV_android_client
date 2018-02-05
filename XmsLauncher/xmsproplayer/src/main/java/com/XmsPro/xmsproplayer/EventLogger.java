@@ -90,11 +90,6 @@ final class EventLogger implements ExoPlayer.EventListener,
 
     }
 
-//    @Override
-//    public void onPositionDiscontinuity() {
-//        Log.d(TAG, "positionDiscontinuity");
-//    }
-
     @Override
     public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
         Log.d(TAG, "playbackParameters " + String.format(
@@ -246,14 +241,6 @@ final class EventLogger implements ExoPlayer.EventListener,
     public void onAudioDisabled(DecoderCounters counters) {
         Log.d(TAG, "audioDisabled [" + getSessionTimeString() + "]");
     }
-
-//    @Override
-//    public void onAudioTrackUnderrun(int bufferSize, long bufferSizeMs, long elapsedSinceLastFeedMs) {
-//        printInternalError("audioTrackUnderrun [" + bufferSize + ", " + bufferSizeMs + ", "
-//                + elapsedSinceLastFeedMs + "]", null);
-//    }
-
-    // VideoRendererEventListener
 
     @Override
     public void onVideoEnabled(DecoderCounters counters) {

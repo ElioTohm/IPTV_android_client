@@ -1,89 +1,103 @@
 package xms.com.smarttv.Player;
 
 import android.os.Bundle;
-import android.support.v17.leanback.app.BrowseFragment;
+import android.support.annotation.Nullable;
+import android.support.v17.leanback.app.HeadersFragment;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
 import android.support.v17.leanback.widget.HeaderItem;
-import android.support.v17.leanback.widget.ListRow;
 import android.support.v17.leanback.widget.ListRowPresenter;
-import android.support.v17.leanback.widget.OnItemViewClickedListener;
-import android.support.v17.leanback.widget.Presenter;
+import android.support.v17.leanback.widget.PageRow;
 import android.support.v17.leanback.widget.Row;
-import android.support.v17.leanback.widget.RowPresenter;
+import android.support.v17.leanback.widget.RowHeaderPresenter;
 
 import com.XmsPro.xmsproplayer.XmsPlayer;
 import com.eliotohme.data.Channel;
-import com.eliotohme.data.Genre;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
+import io.realm.OrderedCollectionChangeSet;
+import io.realm.OrderedRealmCollectionChangeListener;
 import io.realm.Realm;
-import io.realm.RealmQuery;
 import io.realm.RealmResults;
-import xms.com.smarttv.Presenter.ChannelCardPresenter;
+import xms.com.smarttv.R;
 
-public class ChannelListFragment extends BrowseFragment {
+public class ChannelListFragment extends HeadersFragment {
     private ArrayObjectAdapter mRowsAdapter;
+    private RealmResults<Channel> channelRealmResults;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        setupUIElements();
+        customSetBackground(R.color.fastlane_background);
 
+        //load rows
         loadRows();
 
-        setOnItemViewClickedListener(new ItemViewClickedListener());
+        // set the channel select
+        // set click handler for header item / channel
+        setOnHeaderClickedListener(new OnHeaderClickedListener() {
+            @Override
+            public void onHeaderClicked(RowHeaderPresenter.ViewHolder viewHolder, Row row) {
+                    XmsPlayer.getPlayerInstance().changeChannel((int) row.getHeaderItem().getId() - 1 );
+            }
+        });
 
     }
 
-    private void setupUIElements() {
-        setHeadersState(HEADERS_ENABLED);
-        setHeadersTransitionOnBackEnabled(false);
-        // set fastLane (or headers) background color
-        setBrandColor(getResources().getColor(com.XmsPro.xmsproplayer.R.color.fastlane_background));
-        // set search icon color
-    }
 
     private void loadRows() {
-
         Realm.init(getActivity());
         mRowsAdapter = new ArrayObjectAdapter(new ListRowPresenter());
-        ChannelCardPresenter channelCardPresenter = new ChannelCardPresenter();
 
         // Get a Realm instance for this thread
-        Realm realm = Realm.getDefaultInstance();
-
-        // Put all channel in all channels group (row)
-        RealmQuery<Channel> channels = realm.where(Channel.class);
-        ArrayObjectAdapter gridRowAdapterAllChannels = new ArrayObjectAdapter(channelCardPresenter);
-        gridRowAdapterAllChannels.addAll(0, channels.findAllSorted("number"));
-
-        mRowsAdapter.add(new ListRow(new HeaderItem(0, "All Channels"), gridRowAdapterAllChannels));
+        final Realm realm = Realm.getDefaultInstance();
 
         // get all genre
-        RealmQuery<Genre> genreRealmQuery = realm.where(Genre.class);
-        RealmResults<Genre> genreRealmResults = genreRealmQuery.findAll();
+        channelRealmResults = realm.where(Channel.class).findAllSorted("number");
 
         // loop in result genre to create row genre for channels
-        for (Genre genre : genreRealmResults) {
-            RealmQuery<Channel> channelsbundle = realm.where(Channel.class).equalTo("genres.id", genre.getId());
-            ArrayObjectAdapter gridRowAdapterbundle = new ArrayObjectAdapter(channelCardPresenter);
-            gridRowAdapterbundle.addAll(0, channelsbundle.findAllSorted("number"));
-            mRowsAdapter.add(new ListRow(new HeaderItem(1, genre.getName()), gridRowAdapterbundle));
+        for (Channel channel : channelRealmResults) {
 
+            int channel_id = channel.getNumber();
+            HeaderItem headerItem1 = new HeaderItem(channel_id, channel_id + " " +channel.getName());
+            PageRow pageRow1 = new PageRow(headerItem1);
+            mRowsAdapter.add(pageRow1);
         }
-
         setAdapter(mRowsAdapter);
 
+        channelRealmResults.addChangeListener(new OrderedRealmCollectionChangeListener<RealmResults<Channel>>() {
+            @Override
+            public void onChange(RealmResults<Channel> channels, @Nullable OrderedCollectionChangeSet orderedCollectionChangeSet) {
+                OrderedCollectionChangeSet.Range[] modifications = orderedCollectionChangeSet.getChangeRanges();
+                for (OrderedCollectionChangeSet.Range range : modifications) {
+                    int index = range.startIndex + 1 ;
+                    mRowsAdapter.replace(
+                            range.startIndex,
+                            new PageRow(new HeaderItem(range.startIndex,
+                                    index + " " + realm.where(Channel.class)
+                                            .equalTo("number", index)
+                                            .findFirst().getName())
+                            )
+                    );
+                }
+            }
+        });
     }
 
-    private final class ItemViewClickedListener implements OnItemViewClickedListener {
-        @Override
-        public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item,
-                                  RowPresenter.ViewHolder rowViewHolder, Row row) {
-            if (item instanceof Channel) {
-                XmsPlayer.getPlayerInstance().changeChannel(((Channel) item).getNumber() - 1 );
-            }
+    private void customSetBackground(int colorResource) {
+        try {
+            Class clazz = HeadersFragment.class;
+            Method m = clazz.getDeclaredMethod("setBackgroundColor", Integer.TYPE);
+            m.setAccessible(true);
+            m.invoke(this, getResources().getColor(colorResource));
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
         }
     }
-
 }

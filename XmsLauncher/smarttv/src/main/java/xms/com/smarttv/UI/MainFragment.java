@@ -43,10 +43,7 @@ import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
+import com.eliotohme.data.InstalledApps;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -59,7 +56,6 @@ import xms.com.smarttv.Player.TVPlayerActivity;
 import xms.com.smarttv.Presenter.CardPresenter;
 import xms.com.smarttv.Presenter.InstalledApplicationPresenter;
 import xms.com.smarttv.R;
-import xms.com.smarttv.objects.InstallAppsInfo;
 import xms.com.smarttv.objects.ServiceApp;
 import xms.com.smarttv.objects.ServiceAppList;
 import xms.com.smarttv.weather.OpenUrlActivity;
@@ -96,9 +92,8 @@ public class MainFragment extends BrowseFragment {
 
     }
 
-
-    private ArrayList<InstallAppsInfo> getInstalledApps() throws PackageManager.NameNotFoundException {
-        ArrayList<InstallAppsInfo> res = new ArrayList<InstallAppsInfo>();
+    private ArrayList<InstalledApps> getInstalledApps() throws PackageManager.NameNotFoundException {
+        ArrayList<InstalledApps> res = new ArrayList<InstalledApps>();
 
         Activity thisactivity = getActivity();
 
@@ -110,12 +105,11 @@ public class MainFragment extends BrowseFragment {
             ApplicationInfo ai = pm.getApplicationInfo(packinfo.packageName, 0);
 
             if ((ai.flags & ApplicationInfo.FLAG_SYSTEM) == 0 && !packinfo.applicationInfo.loadLabel(thisactivity.getPackageManager()).toString().equals(getString(R.string.app_name))) {
-                InstallAppsInfo newInfo = new InstallAppsInfo();
+                InstalledApps newInfo = new InstalledApps();
                 newInfo.setAppname(packinfo.applicationInfo.loadLabel(thisactivity.getPackageManager()).toString());
                 newInfo.setPname(packinfo.packageName);
                 newInfo.setVersionName(packinfo.versionName);
                 newInfo.setVersionCode(packinfo.versionCode);
-                newInfo.setIcon(packinfo.applicationInfo.loadIcon(thisactivity.getPackageManager()));
                 res.add(newInfo);
             }
         }
@@ -150,13 +144,13 @@ public class MainFragment extends BrowseFragment {
             mRowsAdapter.add(new ListRow(header, listRowAdapter));
         }
 
-        ArrayList<InstallAppsInfo> installAppsInfos;
-        ArrayObjectAdapter ApplistRowAdapter = new ArrayObjectAdapter(new InstalledApplicationPresenter());
+        ArrayList<InstalledApps> installApps;
+        ArrayObjectAdapter ApplistRowAdapter = new ArrayObjectAdapter(new InstalledApplicationPresenter(getActivity()));
 
         try {
-            installAppsInfos = getInstalledApps();
-            for (int j = 0; j < installAppsInfos.size(); j++) {
-                ApplistRowAdapter.add(installAppsInfos.get(j));
+            installApps = getInstalledApps();
+            for (int j = 0; j < installApps.size(); j++) {
+                ApplistRowAdapter.add(installApps.get(j));
             }
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
@@ -204,19 +198,19 @@ public class MainFragment extends BrowseFragment {
     protected void updateBackground(String uri) {
         int width = mMetrics.widthPixels;
         int height = mMetrics.heightPixels;
-        Glide.with(getActivity())
-                .load(uri)
-                .centerCrop()
-                .error(mDefaultBackground)
-                .into(new SimpleTarget<GlideDrawable>(width, height) {
-                    @Override
-                    public void onResourceReady(GlideDrawable resource,
-                                                GlideAnimation<? super GlideDrawable>
-                                                        glideAnimation) {
-                        mBackgroundManager.setDrawable(resource);
-                    }
-                });
-        mBackgroundTimer.cancel();
+//        Glide.with(getActivity())
+//                .load(uri)
+//                .centerCrop()
+//                .error(mDefaultBackground)
+//                .into(new SimpleTarget<GlideDrawable>(width, height) {
+//                    @Override
+//                    public void onResourceReady(GlideDrawable resource,
+//                                                GlideAnimation<? super GlideDrawable>
+//                                                        glideAnimation) {
+//                        mBackgroundManager.setDrawable(resource);
+//                    }
+//                });
+//        mBackgroundTimer.cancel();
     }
 
     private void startBackgroundTimer() {
@@ -261,11 +255,11 @@ public class MainFragment extends BrowseFragment {
                 } else {
                     startActivityForResult(new Intent(android.provider.Settings.ACTION_SETTINGS), 0);
                 }
-            } else if (item instanceof InstallAppsInfo) {
-                InstallAppsInfo installAppsInfo = (InstallAppsInfo) item;
+            } else if (item instanceof InstalledApps) {
+                InstalledApps installApps = (InstalledApps) item;
 
                 Context ctx = getActivity(); // or you can replace **'this'** with your **ActivityName.this**
-                Intent i = ctx.getPackageManager().getLaunchIntentForPackage(installAppsInfo.getPname());
+                Intent i = ctx.getPackageManager().getLaunchIntentForPackage(installApps.getPname());
                 ctx.startActivity(i);
 
             }

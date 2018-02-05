@@ -1,13 +1,16 @@
 package xms.com.smarttv.Presenter;
 
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.support.v17.leanback.widget.ImageCardView;
 import android.support.v17.leanback.widget.Presenter;
 import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.eliotohme.data.InstalledApps;
+
 import xms.com.smarttv.R;
-import xms.com.smarttv.objects.InstallAppsInfo;
 
 public class InstalledApplicationPresenter extends Presenter {
     private static final String TAG = "CardPresenter";
@@ -16,6 +19,11 @@ public class InstalledApplicationPresenter extends Presenter {
     private static final int CARD_HEIGHT = 176;
     private static int sSelectedBackgroundColor;
     private static int sDefaultBackgroundColor;
+    private Context context;
+
+    public InstalledApplicationPresenter (Context context) {
+        this.context = context;
+    }
 
     private static void updateCardBackgroundColor(ImageCardView view, boolean selected) {
         int color = selected ? sSelectedBackgroundColor : sDefaultBackgroundColor;
@@ -49,15 +57,19 @@ public class InstalledApplicationPresenter extends Presenter {
 
     @Override
     public void onBindViewHolder(Presenter.ViewHolder viewHolder, Object item) {
-        InstallAppsInfo installAppsInfo = (InstallAppsInfo) item;
+        InstalledApps installedApps = (InstalledApps) item;
         ImageCardView cardView = (ImageCardView) viewHolder.view;
 
         Log.d(TAG, "onBindViewHolder");
 
-        cardView.setTitleText(installAppsInfo.getAppname());
-        cardView.setContentText(installAppsInfo.getVersionName());
+        cardView.setTitleText(installedApps.getAppname());
+        cardView.setContentText(installedApps.getVersionName());
         cardView.setMainImageDimensions(CARD_WIDTH, CARD_HEIGHT);
-        cardView.getMainImageView().setImageDrawable(installAppsInfo.getIcon());
+        try {
+            cardView.getMainImageView().setImageDrawable(context.getPackageManager().getApplicationIcon(installedApps.getPname()));
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
 

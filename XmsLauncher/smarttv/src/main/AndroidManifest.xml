@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+
     <uses-feature
         android:name="android.hardware.touchscreen"
         android:required="false" />
@@ -16,8 +17,8 @@
         android:required="true" />
 
     <application
-        android:allowBackup="true"
         android:name=".app.SmartTv"
+        android:allowBackup="true"
         android:banner="@drawable/xmsprologosmall"
         android:icon="@drawable/xmsprologosmall"
         android:label="@string/app_name"
@@ -30,7 +31,7 @@
             android:icon="@drawable/xmsprologosmall"
             android:label="@string/app_name"
             android:logo="@drawable/xmsprologosmall"
-            android:screenOrientation="landscape"/>
+            android:screenOrientation="landscape" />
         <activity
             android:name=".UI.DetailsActivity"
             android:screenOrientation="landscape" />
@@ -42,8 +43,7 @@
             android:enabled="true"
             android:exported="true"
             android:screenOrientation="landscape"
-            android:theme="@style/Theme.Leanback.Onboarding">
-        </activity>
+            android:theme="@style/Theme.Leanback.Onboarding" />
         <activity
             android:name=".weather.OpenUrlActivity"
             android:theme="@style/WebViewActivityTheme" />
@@ -56,11 +56,12 @@
             android:name=".Player.TVPlayerActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:hardwareAccelerated="true"
-            android:theme="@style/Theme.Leanback"
             android:launchMode="singleInstance"
-            android:screenOrientation="landscape"/>
-
-        <activity android:name=".UI.SplashScreen" android:screenOrientation="landscape">
+            android:screenOrientation="landscape"
+            android:theme="@style/Theme.Leanback" />
+        <activity
+            android:name=".UI.SplashScreen"
+            android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -70,6 +71,10 @@
                 <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service
+            android:name=".services.GetInstalledAppService"
+            android:exported="false"></service>
     </application>
 
 </manifest>

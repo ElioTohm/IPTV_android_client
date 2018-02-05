@@ -5,7 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/Main"
     tools:context="xms.com.smarttv.Player.TVPlayerActivity">
+
+    <ImageView
+        android:paddingLeft="20dp"
+        android:layout_width="150dp"
+        android:layout_height="75dp"
+        android:id="@+id/DefaultIcon"
+        android:src="@drawable/xmsprologosmall"
+        android:elevation="100dp"/>
 
 
     <com.google.android.exoplayer2.ui.SimpleExoPlayerView
@@ -16,18 +25,6 @@
         app:resize_mode="fill">
 
     </com.google.android.exoplayer2.ui.SimpleExoPlayerView>
-
-    <fragment
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/main_channellist_fragment"
-        android:name="xms.com.smarttv.Player.ChannelListFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".UI.MainActivity"
-        tools:deviceIds="tv"
-        tools:ignore="MergeRootFrame"/>
-
 
     <TextView
         android:id="@+id/channel_number_selector"

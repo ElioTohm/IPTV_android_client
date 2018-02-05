@@ -5,23 +5,13 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
-import android.content.res.ColorStateList;
-import android.graphics.Bitmap;
 import android.graphics.drawable.AnimationDrawable;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
 
 import java.util.ArrayList;
 
@@ -91,28 +81,33 @@ public class OnboardingFragment extends android.support.v17.leanback.app.Onboard
         return getString(pageDescriptions[pageIndex]);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Nullable
     @Override
     protected View onCreateBackgroundView(LayoutInflater inflater, ViewGroup container) {
-        final View bgView = new View(getActivity());
-        Glide.with(getActivity())
-                .load(welcome_image)
-                .asBitmap()
-                .error(getResources().getDrawable(R.drawable.default_background))
-                .into(new SimpleTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                        Drawable drawable = new BitmapDrawable(resource);
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                            bgView.setBackground(drawable);
-                        }
-                    }
-                });
-        bgView.setBackgroundTintMode(android.graphics.PorterDuff.Mode.MULTIPLY);
-        bgView.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.WhiteSmokeTransparent)));
-        return bgView;
+        return null;
     }
+
+//    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+//    @Nullable
+//    @Override
+//    protected View onCreateBackgroundView(LayoutInflater inflater, ViewGroup container) {
+//        final View bgView = new View(getActivity());
+//        Glide.with(getActivity())
+//                .load(welcome_image)
+//                .into(new SimpleTarget<Drawable>() {
+//                    @Override
+//                    public void onResourceReady(Drawable resource, Transition<? super Drawable> transition) {
+//                        Drawable drawable = new BitmapDrawable(resource);
+//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+//                            bgView.setBackground(drawable);
+//                        }
+//
+//                    }
+//                });
+//        bgView.setBackgroundTintMode(android.graphics.PorterDuff.Mode.MULTIPLY);
+//        bgView.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.WhiteSmokeTransparent)));
+//        return bgView;
+//    }
 
     @Nullable
     @Override

@@ -38,12 +38,6 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
-
 import java.util.Collections;
 import java.util.List;
 
@@ -94,7 +88,7 @@ public class ServiceDetailsFragment extends DetailsFragment {
             setupDetailsOverviewRowPresenter();
             setupMovieListRow();
             setupMovieListRowPresenter();
-            updateBackground(mSelectedServiceApp.getBackgroundImageUrl());
+//            updateBackground(mSelectedServiceApp.getBackgroundImageUrl());
             setOnItemViewClickedListener(new ItemViewClickedListener());
         } else {
             Intent intent = new Intent(getActivity(), MainActivity.class);
@@ -115,19 +109,17 @@ public class ServiceDetailsFragment extends DetailsFragment {
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(mMetrics);
     }
 
-    protected void updateBackground(String uri) {
-        Glide.with(getActivity())
-                .load(uri)
-                .centerCrop()
-                .error(mDefaultBackground)
-                .into(new SimpleTarget<GlideDrawable>(mMetrics.widthPixels, mMetrics.heightPixels) {
-                    @Override
-                    public void onResourceReady(GlideDrawable resource,
-                                                GlideAnimation<? super GlideDrawable> glideAnimation) {
-                        mBackgroundManager.setDrawable(resource);
-                    }
-                });
-    }
+//    protected void updateBackground(String uri) {
+//        Glide.with(getActivity())
+//                .load(uri)
+//                .into(new SimpleTarget<GlideDrawable>(mMetrics.widthPixels, mMetrics.heightPixels) {
+//                    @Override
+//                    public void onResourceReady(GlideDrawable resource,
+//                                                GlideAnimation<? super GlideDrawable> glideAnimation) {
+//                        mBackgroundManager.setDrawable(resource);
+//                    }
+//                });
+//    }
 
     private void setupAdapter() {
         mPresenterSelector = new ClassPresenterSelector();
@@ -143,21 +135,21 @@ public class ServiceDetailsFragment extends DetailsFragment {
                 .getApplicationContext(), DETAIL_THUMB_WIDTH);
         int height = Utils.convertDpToPixel(getActivity()
                 .getApplicationContext(), DETAIL_THUMB_HEIGHT);
-        Glide.with(getActivity())
-                .load(mSelectedServiceApp.getSvgimage())
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .centerCrop()
-                .error(R.drawable.default_background)
-                .into(new SimpleTarget<GlideDrawable>(width, height) {
-                    @Override
-                    public void onResourceReady(GlideDrawable resource,
-                                                GlideAnimation<? super GlideDrawable>
-                                                        glideAnimation) {
-                        Log.d(TAG, "details overview card image url ready: " + resource);
-                        row.setImageDrawable(resource);
-                        mAdapter.notifyArrayItemRangeChanged(0, mAdapter.size());
-                    }
-                });
+//        Glide.with(getActivity())
+//                .load(mSelectedServiceApp.getSvgimage())
+//                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+//                .centerCrop()
+//                .error(R.drawable.default_background)
+//                .into(new SimpleTarget<GlideDrawable>(width, height) {
+//                    @Override
+//                    public void onResourceReady(GlideDrawable resource,
+//                                                GlideAnimation<? super GlideDrawable>
+//                                                        glideAnimation) {
+//                        Log.d(TAG, "details overview card image url ready: " + resource);
+//                        row.setImageDrawable(resource);
+//                        mAdapter.notifyArrayItemRangeChanged(0, mAdapter.size());
+//                    }
+//                });
 
         row.addAction(new Action(ACTION_WATCH_TRAILER, "Call", getResources().getString(R.string.watch_trailer_2)));
         row.addAction(new Action(ACTION_RENT, "Request Room Service",

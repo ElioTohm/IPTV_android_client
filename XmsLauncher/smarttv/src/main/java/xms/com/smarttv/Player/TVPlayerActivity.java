@@ -1,69 +1,86 @@
 package xms.com.smarttv.Player;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.XmsPro.xmsproplayer.Interface.XmsPlayerUICallback;
 import com.XmsPro.xmsproplayer.XmsPlayer;
 import com.eliotohme.data.Channel;
+import com.eliotohme.data.Client;
 import com.eliotohme.data.User;
+import com.eliotohme.data.network.ApiInterface;
+import com.eliotohme.data.network.ApiService;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
-import com.google.android.exoplayer2.util.Util;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
-import io.realm.RealmQuery;
-import xms.com.smarttv.UI.MainActivity;
-import xms.com.smarttv.services.NotificationService;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import xms.com.smarttv.R;
+import xms.com.smarttv.UI.MainMenu;
+import xms.com.smarttv.app.Preferences;
+import xms.com.smarttv.services.GetInstalledAppService;
 
 public class TVPlayerActivity extends Activity {
-    String TAG  = "xms";
     private View channelInfo;
     private TextView currentChannel, channel_number_selector, channelName;
     private List<Channel> channelArrayList;
-    private FrameLayout channelList_frameLayout;
-    private SimpleExoPlayerView simpleExoPlayerView;
-    private int USER_NAME;
     private XmsPlayer xmsPlayer;
+    private Fragment menuFragment;
+    private Fragment channelGridFragment;
+    private Realm realm;
+    private ImageView imageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(xms.com.smarttv.R.layout.activity_tvplayer);
-        // init notification intent
-        Intent notificationIntent = new Intent(this, NotificationService.class);
 
+        // init notification intent
+//        Intent notificationIntent = new Intent(this, NotificationService.class);
         // Starts the IntentService
-        this.startService(notificationIntent);
+//        this.startService(notificationIntent);
+
+        // init get application service
+        Intent getinstalledappintent = new Intent(this, GetInstalledAppService.class);
+        this.startService(getinstalledappintent);
+
+        menuFragment = new MainMenu();
+        channelGridFragment = new ChannelListFragment();
+        getFragmentManager().beginTransaction().add(R.id.Main, menuFragment).commit();
+        getFragmentManager().beginTransaction().add(R.id.Main, channelGridFragment).commit();
+        getFragmentManager().beginTransaction().hide(channelGridFragment).commit();
+
+        realm = Realm.getDefaultInstance();
+        try {
+            getClientInfo();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         channelInfo = findViewById(xms.com.smarttv.R.id.channelInfo);
         currentChannel = findViewById(xms.com.smarttv.R.id.current_channel);
         channelName = findViewById(xms.com.smarttv.R.id.channel_name);
         channelArrayList = new ArrayList<>();
-        channelList_frameLayout = findViewById(xms.com.smarttv.R.id.main_channellist_fragment);
         channel_number_selector = findViewById(xms.com.smarttv.R.id.channel_number_selector);
+        imageView = findViewById(R.id.DefaultIcon);
 
-        // Get a Realm instance for this thread
-        Realm realm = Realm.getDefaultInstance();
+        channelArrayList.addAll(realm.where(Channel.class).findAllSorted("number"));
+        SimpleExoPlayerView simpleExoPlayerView = findViewById(xms.com.smarttv.R.id.simpleexoplayerview);
 
-        RealmQuery<Channel> channels = realm.where(Channel.class);
-
-        channelArrayList.addAll(channels.findAllSorted("number"));
-        simpleExoPlayerView = findViewById(xms.com.smarttv.R.id.simpleexoplayerview);
-
-        USER_NAME = 1;
-        realm = Realm.getDefaultInstance();
-
-        User user = realm.where(User.class).findFirst();
-
-        xmsPlayer = new XmsPlayer(this, simpleExoPlayerView, channelArrayList, USER_NAME,
+        xmsPlayer = new XmsPlayer(this, simpleExoPlayerView, channelArrayList,
                  new XmsPlayerUICallback() {
             @Override
             public void showChannelInfo(int channelindex) {
@@ -80,39 +97,31 @@ public class TVPlayerActivity extends Activity {
                 mChannelInfoHandler.removeCallbacks(mChannelInfoRunnable);
                 mChannelInfoHandler.postDelayed(mChannelInfoRunnable, 5000);
             }
-        }, user.getToken_type(), user.getAccess_token());
+        }, realm.where(User.class).findFirst().getToken_type(), realm.where(User.class).findFirst().getAccess_token());
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        if (Util.SDK_INT > 23) {
-            xmsPlayer.initializePlayer();
-        }
+        xmsPlayer.initializePlayer();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if ((Util.SDK_INT <= 23 || !xmsPlayer.hasPlayer())) {
-            xmsPlayer.initializePlayer();
-        }
+        xmsPlayer.initializePlayer();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        if (Util.SDK_INT <= 23) {
-            xmsPlayer.releasePlayer();
-        }
+        xmsPlayer.releasePlayer();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        if (Util.SDK_INT > 23) {
-            xmsPlayer.releasePlayer();
-        }
+        xmsPlayer.releasePlayer();
     }
 
     @Override
@@ -123,27 +132,30 @@ public class TVPlayerActivity extends Activity {
             int channel_numberpressed = 10;
             switch (keyCode) {
                 case KeyEvent.KEYCODE_BACK:
-                    if (FrameLayout.VISIBLE == channelList_frameLayout.getVisibility()) {
-                        channelList_frameLayout.setVisibility(FrameLayout.GONE);
+                    getFragmentManager().beginTransaction().hide(channelGridFragment).commit();
+                        getFragmentManager().beginTransaction().hide(menuFragment).commit();
+                        imageView.setVisibility(ImageView.INVISIBLE);
                         return false;
-                    }
-                    return super.dispatchKeyEvent(event);
                 case KeyEvent.KEYCODE_MENU:
-                    startActivity(new Intent(this, MainActivity.class));
+                    if (channelGridFragment.isHidden()){
+                        getFragmentManager().beginTransaction().show(menuFragment).commit();
+                        imageView.setVisibility(ImageView.VISIBLE);
+                    }
+                    return false;
                 case KeyEvent.KEYCODE_DPAD_CENTER:
-                    if (FrameLayout.VISIBLE != channelList_frameLayout.getVisibility()) {
-                        channelList_frameLayout.setVisibility(FrameLayout.VISIBLE);
+                    if (channelGridFragment.isHidden() && menuFragment.isHidden()) {
+                        getFragmentManager().beginTransaction().show(channelGridFragment).commit();
                         return false;
                     }
                     return super.dispatchKeyEvent(event);
                 case KeyEvent.KEYCODE_DPAD_UP:
-                    if (FrameLayout.VISIBLE != channelList_frameLayout.getVisibility()) {
+                    if (channelGridFragment.isHidden() && menuFragment.isHidden()) {
                         xmsPlayer.nextchannel();
                         return true;
                     }
                     return super.dispatchKeyEvent(event);
                 case KeyEvent.KEYCODE_DPAD_DOWN:
-                    if (FrameLayout.VISIBLE != channelList_frameLayout.getVisibility()) {
+                    if (channelGridFragment.isHidden() && menuFragment.isHidden()) {
                         xmsPlayer.previouschannel();
                         return true;
                     }
@@ -214,5 +226,38 @@ public class TVPlayerActivity extends Activity {
     @Override
     public void onBackPressed() {
         return;
+    }
+
+    /**
+     * checks Client info for change
+     * f there is change show the onboarding activity
+     * @throws IOException
+     */
+    private void getClientInfo() throws IOException {
+        realm = Realm.getDefaultInstance();
+        User user = realm.where(User.class).findFirst();
+        ApiInterface apiInterface = ApiService.createService(ApiInterface.class, Preferences.getServerUrl(), user.getToken_type(), user.getAccess_token());
+        Call<Client> clientCall = apiInterface.getClientInfo(user.getId());
+        clientCall.enqueue(new Callback<Client>() {
+            @Override
+            public void onResponse(@NonNull Call<Client> call, @NonNull final Response<Client> response) {
+                Realm subrealm = Realm.getDefaultInstance();
+                if (response.code() == 200 && (subrealm.where(Client.class).findFirst() ==  null
+                        || !response.body().getEmail().equals(subrealm.where(Client.class).findFirst().getEmail()))) {
+
+                    subrealm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            realm.delete(Client.class);
+                            realm.insert(response.body());
+                        }
+                    });
+                }
+
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Client> call, @NonNull Throwable t) {}
+        });
     }
 }

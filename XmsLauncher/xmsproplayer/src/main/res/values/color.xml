@@ -150,7 +150,7 @@
     <color name="album_title">#4c4c4c</color>
     <color name="background_gradient_start">#000000</color>
     <color name="background_gradient_end">#DDDDDD</color>
-    <color name="fastlane_background">#0096a6</color>
+    <color name="fastlane_background">#90000000</color>
     <color name="search_opaque">#ffaa3f</color>
     <color name="selected_background">#ffaa3f</color>
     <color name="detail_background">#0096a6</color>

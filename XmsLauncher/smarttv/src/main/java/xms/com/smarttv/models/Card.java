@@ -1,6 +1,4 @@
-package xms.com.smarttv.objects;
-
-
+package xms.com.smarttv.models;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -11,10 +9,7 @@ import com.google.gson.annotations.SerializedName;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-/**
- * This is a generic example of a custom data object, containing info we might want to keep with
- * each card on the home screen
- */
+
 public class Card {
 
     @SerializedName("title") private String mTitle = "";
@@ -173,4 +168,3 @@ public class Card {
     }
 
 }
-

@@ -21,6 +21,7 @@ import com.google.android.exoplayer2.source.dash.DashMediaSource;
 import com.google.android.exoplayer2.source.dash.DefaultDashChunkSource;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
 import com.google.android.exoplayer2.source.smoothstreaming.DefaultSsChunkSource;
+import com.google.android.exoplayer2.source.smoothstreaming.SsChunkSource;
 import com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
@@ -42,22 +43,16 @@ import java.util.List;
 import okhttp3.OkHttpClient;
 
 import static com.google.android.exoplayer2.extractor.ts.DefaultTsPayloadReaderFactory.FLAG_ALLOW_NON_IDR_KEYFRAMES;
-import static com.google.android.exoplayer2.extractor.ts.DefaultTsPayloadReaderFactory.FLAG_DETECT_ACCESS_UNITS;
 import static com.google.android.exoplayer2.extractor.ts.TsExtractor.MODE_SINGLE_PMT;
 
 public class XmsPlayer  {
-    protected String userAgent;
+    private String userAgent;
     private DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
     private SimpleExoPlayer player;
-    boolean playWhenReady;
-    int currentWindow;
-    long playbackPosition;
-    private EventLogger eventlogger;
     private static final CookieManager DEFAULT_COOKIE_MANAGER;
     private List<Channel> channelArrayList;
     private int channellistSize;
     private SimpleExoPlayerView simpleExoPlayerView;
-    private int USER_NAME;
     private Context context;
     private static XmsPlayer instance;
     private XmsPlayerUICallback xmsPlayerUICallback;
@@ -73,30 +68,24 @@ public class XmsPlayer  {
         }
         return null;
     }
+
     /**
      * @param context
      * @param simpleExoPlayerView
      * initialize both param to use in class
      */
     public XmsPlayer(Context context, SimpleExoPlayerView simpleExoPlayerView,
-                     List<Channel> channelArrayList, int user_name, XmsPlayerUICallback xmsPlayerUICallback, String TOKENTYPE, String TOKEN) {
+                     List<Channel> channelArrayList, XmsPlayerUICallback xmsPlayerUICallback, String TOKENTYPE, String TOKEN) {
 
         // set surface of the player
         this.context = context;
         this.simpleExoPlayerView = simpleExoPlayerView;
         this.channelArrayList = channelArrayList;
         this.channellistSize = channelArrayList.size();
-        this.USER_NAME = user_name;
         this.xmsPlayerUICallback = xmsPlayerUICallback;
         this.TOKEN = TOKEN;
         this.TOKENTYPE = TOKENTYPE;
         instance = this;
-    }
-
-
-
-    public boolean hasPlayer() {
-        return player == null;
     }
 
     private MediaSource buildMediaSource(List<Channel> channels) {
@@ -104,10 +93,15 @@ public class XmsPlayer  {
         * Function that handles creating a ConcatenatingMediaSource
         * Of UDP URIs
         */
-        DataSource.Factory mediaDataSourceFactory = buildDataSourceFactory(true);
+        DataSource.Factory mediaDataSourceFactory = buildDataSourceFactory(false);
 
         // Loop on URI list to create individual Media source
         MediaSource[] mediaSources = new MediaSource[channels.size()];
+
+        // init chunk and media source factories
+        DashChunkSource.Factory dashChunkSourceFactory = null;
+        DefaultExtractorsFactory defaultExtractorsFactory = null;
+        SsChunkSource.Factory ssChunkSourceFactory = null;
 
         for (int i = 0; i < channels.size(); i++) {
             Uri channel_stream_uri = Uri.parse(channels.get(i).getStream().getVid_stream());
@@ -117,47 +111,41 @@ public class XmsPlayer  {
                     DataSource.Factory udsf = new UdpDataSource.Factory() {
                         @Override
                         public DataSource createDataSource() {
-                            return new UdpDataSource(null, 6000, UdpDataSource.DEAFULT_SOCKET_TIMEOUT_MILLIS);
+                            return new UdpDataSource(null, 1316, UdpDataSource.DEAFULT_SOCKET_TIMEOUT_MILLIS);
                         }
                     };
                     ExtractorsFactory tsExtractorFactory = new DefaultExtractorsFactory()
-                            .setTsExtractorFlags(FLAG_DETECT_ACCESS_UNITS)
                             .setTsExtractorFlags(FLAG_ALLOW_NON_IDR_KEYFRAMES)
                             .setTsExtractorMode(MODE_SINGLE_PMT);
-                    mediaSources[i] = new ExtractorMediaSource(channel_stream_uri,
-                                            udsf,
-                                            tsExtractorFactory,
-                                            null,
-                                            null);
+                    mediaSources[i] = new ExtractorMediaSource.Factory(udsf)
+                                            .setExtractorsFactory(tsExtractorFactory)
+                                            .createMediaSource(channel_stream_uri);
                     break;
                 case 2:
-                    mediaSources[i]  = new HlsMediaSource(channel_stream_uri,
-                                            mediaDataSourceFactory,
-                                            null,
-                                            null);
+                    mediaSources[i]  = new HlsMediaSource.Factory(mediaDataSourceFactory)
+                                            .createMediaSource(channel_stream_uri);
                     break;
                 case 3:
-                    DashChunkSource.Factory dashChunkSourceFactory =
-                            new DefaultDashChunkSource.Factory(mediaDataSourceFactory);
-                    mediaSources[i]  = new DashMediaSource(channel_stream_uri,
-                                            mediaDataSourceFactory,
-                                            dashChunkSourceFactory,
-                                            null,
-                                            null);
+                    if (dashChunkSourceFactory == null) {
+                        dashChunkSourceFactory = new DefaultDashChunkSource.Factory(mediaDataSourceFactory);
+                    }
+                    mediaSources[i]  = new DashMediaSource.Factory(dashChunkSourceFactory, mediaDataSourceFactory)
+                                            .createMediaSource(channel_stream_uri);
                     break;
                 case 4:
-                    mediaSources[i]  = new SsMediaSource(channel_stream_uri,
-                                            buildDataSourceFactory(false),
-                                            new DefaultSsChunkSource.Factory(mediaDataSourceFactory),
-                                            null,
-                                            null);
+                    if( ssChunkSourceFactory == null) {
+                        ssChunkSourceFactory = new DefaultSsChunkSource.Factory(mediaDataSourceFactory);
+                    }
+                    mediaSources[i]  = new SsMediaSource.Factory(ssChunkSourceFactory, mediaDataSourceFactory)
+                                            .createMediaSource(channel_stream_uri);
                     break;
                 case 5:
-                    mediaSources[i]  = new ExtractorMediaSource(channel_stream_uri,
-                                            mediaDataSourceFactory,
-                                            new DefaultExtractorsFactory(),
-                                            null,
-                                            null);
+                    if (defaultExtractorsFactory == null) {
+                        defaultExtractorsFactory = new DefaultExtractorsFactory();
+                    }
+                    mediaSources[i]  = new ExtractorMediaSource.Factory(mediaDataSourceFactory)
+                                            .setExtractorsFactory(defaultExtractorsFactory)
+                                            .createMediaSource(channel_stream_uri);
             }
 
         }
@@ -178,29 +166,23 @@ public class XmsPlayer  {
         /*
         * Initialize ExoplayerFactory
         * */
-        userAgent = Util.getUserAgent(context, "ExoPlayerDemo");
+        if (player == null) {
+            userAgent = Util.getUserAgent(context, "ExoPlayerDemo");
 
-        //default BandwidthMeter
-        BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
+            //default BandwidthMeter
+            BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
 
-        //Track selector Factory that takes the adaptive track selection as constructor
-        TrackSelection.Factory videoTrackSelectionFactory = new AdaptiveTrackSelection.Factory(bandwidthMeter);
+            //Track selector Factory that takes the adaptive track selection as constructor
+            TrackSelection.Factory videoTrackSelectionFactory = new AdaptiveTrackSelection.Factory(bandwidthMeter);
 
-        // the track selector
-        MappingTrackSelector trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
+            // the track selector
+            MappingTrackSelector trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
 
-        //add trackselector to EventLogger constructor
-        eventlogger = new EventLogger(trackSelector);
+            DefaultRenderersFactory renderersFactory = new DefaultRenderersFactory(this.context,
+                    null, DefaultRenderersFactory.EXTENSION_RENDERER_MODE_ON);
 
-        DefaultRenderersFactory renderersFactory = new DefaultRenderersFactory(this.context,
-                null, DefaultRenderersFactory.EXTENSION_RENDERER_MODE_PREFER);
-
-        player = ExoPlayerFactory.newSimpleInstance(renderersFactory, trackSelector);
-
-        //set Player listeners
-        player.addListener(eventlogger);
-        player.setVideoDebugListener(eventlogger);
-        player.setAudioDebugListener(eventlogger);
+            player = ExoPlayerFactory.newSimpleInstance(renderersFactory, trackSelector);
+        }
 
         // set the mediasource and play when ready
         player.prepare(buildMediaSource(channelArrayList));
@@ -216,12 +198,6 @@ public class XmsPlayer  {
      */
     public void releasePlayer() {
         if (player != null) {
-            playbackPosition = player.getCurrentPosition();
-            currentWindow = player.getCurrentWindowIndex();
-            playWhenReady = player.getPlayWhenReady();
-            player.removeListener(eventlogger);
-            player.setVideoDebugListener(null);
-            player.setAudioDebugListener(null);
             player.release();
             player = null;
         }
@@ -284,19 +260,15 @@ public class XmsPlayer  {
         return buildDataSourceFactory(useBandwidthMeter ? BANDWIDTH_METER : null);
     }
 
-    public DataSource.Factory buildDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
+    private DataSource.Factory buildDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
         return new DefaultDataSourceFactory(context, bandwidthMeter,
                 buildHttpDataSourceFactory(bandwidthMeter));
     }
 
-    public HttpDataSource.Factory buildHttpDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
+    private HttpDataSource.Factory buildHttpDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
         AuthenticationInterceptor interceptor = new AuthenticationInterceptor(this.TOKENTYPE, this.TOKEN);
         OkHttpClient okHttpClient = new OkHttpClient.Builder().addInterceptor(interceptor).build();
         return new OkHttpDataSourceFactory(okHttpClient, userAgent, bandwidthMeter);
-    }
-
-    public int getCurrentChannelIndex () {
-        return player.getCurrentWindowIndex();
     }
 
 }
