@@ -1,12 +1,17 @@
 package xms.com.smarttv.Player;
 
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v17.leanback.app.HeadersFragment;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
 import android.support.v17.leanback.widget.HeaderItem;
 import android.support.v17.leanback.widget.ListRowPresenter;
 import android.support.v17.leanback.widget.PageRow;
+import android.support.v17.leanback.widget.Presenter;
+import android.support.v17.leanback.widget.PresenterSelector;
 import android.support.v17.leanback.widget.Row;
 import android.support.v17.leanback.widget.RowHeaderPresenter;
 
@@ -20,11 +25,12 @@ import io.realm.OrderedCollectionChangeSet;
 import io.realm.OrderedRealmCollectionChangeListener;
 import io.realm.Realm;
 import io.realm.RealmResults;
+import xms.com.smarttv.Presenter.IconHeaderItemPresenter;
 import xms.com.smarttv.R;
+import xms.com.smarttv.UI.CustomHeaderItem;
 
 public class ChannelListFragment extends HeadersFragment {
     private ArrayObjectAdapter mRowsAdapter;
-    private RealmResults<Channel> channelRealmResults;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -44,24 +50,31 @@ public class ChannelListFragment extends HeadersFragment {
             }
         });
 
+        setPresenterSelector(new PresenterSelector() {
+            @RequiresApi(api = Build.VERSION_CODES.M)
+            @Override
+            public Presenter getPresenter(Object item) {
+                return new IconHeaderItemPresenter();
+            }
+        });
+
     }
 
 
     private void loadRows() {
-        Realm.init(getActivity());
         mRowsAdapter = new ArrayObjectAdapter(new ListRowPresenter());
 
         // Get a Realm instance for this thread
         final Realm realm = Realm.getDefaultInstance();
 
         // get all genre
-        channelRealmResults = realm.where(Channel.class).findAllSorted("number");
+        RealmResults<Channel> channelRealmResults = realm.where(Channel.class).findAllSorted("number");
 
         // loop in result genre to create row genre for channels
         for (Channel channel : channelRealmResults) {
 
             int channel_id = channel.getNumber();
-            HeaderItem headerItem1 = new HeaderItem(channel_id, channel_id + " " +channel.getName());
+            CustomHeaderItem headerItem1 = new CustomHeaderItem(channel_id, channel_id + " " +channel.getName());
             PageRow pageRow1 = new PageRow(headerItem1);
             mRowsAdapter.add(pageRow1);
         }
@@ -86,6 +99,7 @@ public class ChannelListFragment extends HeadersFragment {
         });
     }
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private void customSetBackground(int colorResource) {
         try {
             Class clazz = HeadersFragment.class;

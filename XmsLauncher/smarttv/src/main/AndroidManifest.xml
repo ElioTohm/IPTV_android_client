@@ -55,7 +55,6 @@
         <activity
             android:name=".Player.TVPlayerActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
-            android:hardwareAccelerated="true"
             android:launchMode="singleInstance"
             android:screenOrientation="landscape"
             android:theme="@style/Theme.Leanback" />

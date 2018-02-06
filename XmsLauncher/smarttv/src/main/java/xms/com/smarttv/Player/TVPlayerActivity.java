@@ -9,10 +9,12 @@ import android.support.annotation.NonNull;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.XmsPro.xmsproplayer.Interface.XmsPlayerUICallback;
 import com.XmsPro.xmsproplayer.XmsPlayer;
+import com.bumptech.glide.Glide;
 import com.eliotohme.data.Channel;
 import com.eliotohme.data.Client;
 import com.eliotohme.data.User;
@@ -29,38 +31,35 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import xms.com.smarttv.R;
+import xms.com.smarttv.UI.ChannelsListFragment;
 import xms.com.smarttv.UI.MainMenu;
 import xms.com.smarttv.app.Preferences;
 import xms.com.smarttv.services.GetInstalledAppService;
 
-public class TVPlayerActivity extends Activity {
+public class TVPlayerActivity extends Activity implements ChannelsListFragment.OnListFragmentInteractionListener {
     private View channelInfo;
     private TextView currentChannel, channel_number_selector, channelName;
     private List<Channel> channelArrayList;
     private XmsPlayer xmsPlayer;
     private Fragment menuFragment;
-    private Fragment channelGridFragment;
+    private ChannelsListFragment channelGridFragment;
     private Realm realm;
-    private ImageView imageView;
+    private RelativeLayout navigation;
+    private ImageView channel_icon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(xms.com.smarttv.R.layout.activity_tvplayer);
 
-        // init notification intent
-//        Intent notificationIntent = new Intent(this, NotificationService.class);
-        // Starts the IntentService
-//        this.startService(notificationIntent);
-
         // init get application service
         Intent getinstalledappintent = new Intent(this, GetInstalledAppService.class);
         this.startService(getinstalledappintent);
 
         menuFragment = new MainMenu();
-        channelGridFragment = new ChannelListFragment();
+        channelGridFragment = new ChannelsListFragment();
         getFragmentManager().beginTransaction().add(R.id.Main, menuFragment).commit();
-        getFragmentManager().beginTransaction().add(R.id.Main, channelGridFragment).commit();
+        getFragmentManager().beginTransaction().add(R.id.fragment_container_channel, channelGridFragment).commit();
         getFragmentManager().beginTransaction().hide(channelGridFragment).commit();
 
         realm = Realm.getDefaultInstance();
@@ -73,9 +72,10 @@ public class TVPlayerActivity extends Activity {
         channelInfo = findViewById(xms.com.smarttv.R.id.channelInfo);
         currentChannel = findViewById(xms.com.smarttv.R.id.current_channel);
         channelName = findViewById(xms.com.smarttv.R.id.channel_name);
+        channel_icon = findViewById(R.id.channel_icon);
         channelArrayList = new ArrayList<>();
         channel_number_selector = findViewById(xms.com.smarttv.R.id.channel_number_selector);
-        imageView = findViewById(R.id.DefaultIcon);
+        navigation = findViewById(R.id.navigation);
 
         channelArrayList.addAll(realm.where(Channel.class).findAllSorted("number"));
         SimpleExoPlayerView simpleExoPlayerView = findViewById(xms.com.smarttv.R.id.simpleexoplayerview);
@@ -94,6 +94,7 @@ public class TVPlayerActivity extends Activity {
                         channelInfo.setVisibility(View.INVISIBLE);
                     }
                 };
+                Glide.with(getBaseContext()).load(channel.getThumbnail()).into(channel_icon);
                 mChannelInfoHandler.removeCallbacks(mChannelInfoRunnable);
                 mChannelInfoHandler.postDelayed(mChannelInfoRunnable, 5000);
             }
@@ -134,16 +135,17 @@ public class TVPlayerActivity extends Activity {
                 case KeyEvent.KEYCODE_BACK:
                     getFragmentManager().beginTransaction().hide(channelGridFragment).commit();
                         getFragmentManager().beginTransaction().hide(menuFragment).commit();
-                        imageView.setVisibility(ImageView.INVISIBLE);
+                        navigation.setVisibility(ImageView.INVISIBLE);
                         return false;
                 case KeyEvent.KEYCODE_MENU:
                     if (channelGridFragment.isHidden()){
+                        navigation.setVisibility(ImageView.VISIBLE);
                         getFragmentManager().beginTransaction().show(menuFragment).commit();
-                        imageView.setVisibility(ImageView.VISIBLE);
                     }
                     return false;
                 case KeyEvent.KEYCODE_DPAD_CENTER:
                     if (channelGridFragment.isHidden() && menuFragment.isHidden()) {
+                        navigation.setVisibility(ImageView.VISIBLE);
                         getFragmentManager().beginTransaction().show(channelGridFragment).commit();
                         return false;
                     }
@@ -259,5 +261,10 @@ public class TVPlayerActivity extends Activity {
             @Override
             public void onFailure(@NonNull Call<Client> call, @NonNull Throwable t) {}
         });
+    }
+
+    @Override
+    public void onListFragmentInteraction(Channel channel) {
+        xmsPlayer.changeChannel(channel.getNumber() - 1);
     }
 }

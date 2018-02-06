@@ -8,15 +8,6 @@
     android:id="@+id/Main"
     tools:context="xms.com.smarttv.Player.TVPlayerActivity">
 
-    <ImageView
-        android:paddingLeft="20dp"
-        android:layout_width="150dp"
-        android:layout_height="75dp"
-        android:id="@+id/DefaultIcon"
-        android:src="@drawable/xmsprologosmall"
-        android:elevation="100dp"/>
-
-
     <com.google.android.exoplayer2.ui.SimpleExoPlayerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -25,6 +16,27 @@
         app:resize_mode="fill">
 
     </com.google.android.exoplayer2.ui.SimpleExoPlayerView>
+    <RelativeLayout
+        android:layout_width="250dp"
+        android:layout_height="match_parent"
+        android:id="@+id/navigation"
+        android:background="@color/BlackTransparent">
+        <ImageView
+            android:paddingLeft="20dp"
+            android:layout_width="220dp"
+            android:layout_height="75dp"
+            android:id="@+id/DefaultIcon"
+            android:src="@drawable/xmsprologosmall"/>
+
+        <RelativeLayout
+            android:layout_width="220dp"
+            android:paddingTop="80dp"
+            android:layout_height="match_parent"
+            android:id="@+id/fragment_container_channel"
+            tools:context="xms.com.smarttv.Player.TVPlayerActivity"/>
+
+    </RelativeLayout>
+
 
     <TextView
         android:id="@+id/channel_number_selector"
@@ -43,10 +55,12 @@
 
     <RelativeLayout
         android:id="@+id/channelInfo"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="100dip"
         android:layout_centerInParent="true"
         android:layout_alignParentBottom="true"
+        android:paddingLeft="100dp"
+        android:paddingRight="100dp"
         android:layout_alignParentLeft="false"
         android:layout_alignParentRight="false"
         android:layout_alignParentTop="false"
@@ -63,9 +77,9 @@
             android:textSize="50dp" />
 
         <ImageView
-            android:id="@+id/channel_ico"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:id="@+id/channel_icon"
+            android:layout_width="50dp"
+            android:layout_height="120dp"
             android:layout_margin="10dp"
             android:layout_toRightOf="@id/current_channel"
             android:contentDescription="@string/channel_ico"
@@ -79,7 +93,7 @@
             android:layout_alignBottom="@+id/current_channel"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:layout_toRightOf="@+id/channel_ico"
+            android:layout_toRightOf="@+id/channel_icon"
             android:text="Channel name"
             android:textColor="#FFF"
             android:textSize="50dp" />

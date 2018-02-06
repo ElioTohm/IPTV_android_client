@@ -2,13 +2,14 @@ package xms.com.smarttv.UI;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.RequiresApi;
 import android.support.v17.leanback.app.BackgroundManager;
 import android.support.v17.leanback.app.BrowseFragment;
 import android.support.v17.leanback.app.RowsFragment;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
-import android.support.v17.leanback.widget.HeaderItem;
 import android.support.v17.leanback.widget.ListRow;
 import android.support.v17.leanback.widget.ListRowPresenter;
 import android.support.v17.leanback.widget.OnItemViewClickedListener;
@@ -29,6 +30,7 @@ import com.google.gson.Gson;
 
 import xms.com.smarttv.CardListRow;
 import xms.com.smarttv.Presenter.CardPresenterSelector;
+import xms.com.smarttv.Presenter.IconHeaderItemPresenter;
 import xms.com.smarttv.Presenter.SettingsIconPresenter;
 import xms.com.smarttv.Presenter.ShadowRowPresenterSelector;
 import xms.com.smarttv.R;
@@ -38,13 +40,13 @@ import xms.com.smarttv.models.CardRow;
 
 public class MainMenu extends BrowseFragment {
     private static final long HEADER_ID_1 = 1;
-    private static final String HEADER_NAME_1 = "Hotel Services";
+    private static final String HEADER_NAME_1 = "Services";
     private static final long HEADER_ID_2 = 2;
     private static final String HEADER_NAME_2 = "VOD";
     private static final long HEADER_ID_3 = 3;
-    private static final String HEADER_NAME_3 = "Settings Fragment";
+    private static final String HEADER_NAME_3 = "Settings";
     private static final long HEADER_ID_4 = 4;
-    private static final String HEADER_NAME_4 = "Guest Survey";
+    private static final String HEADER_NAME_4 = "Weather";
     private BackgroundManager mBackgroundManager;
 
     private ArrayObjectAdapter mRowsAdapter;
@@ -63,8 +65,14 @@ public class MainMenu extends BrowseFragment {
     private void setupUi() {
         setHeadersState(HEADERS_ENABLED);
         setHeadersTransitionOnBackEnabled(true);
+        setHeaderPresenterSelector(new PresenterSelector() {
+            @RequiresApi(api = Build.VERSION_CODES.M)
+            @Override
+            public Presenter getPresenter(Object item) {
+                return new IconHeaderItemPresenter();
+            }
+        });
         setBrandColor(getResources().getColor(R.color.fastlane_background));
-
         prepareEntranceTransition();
     }
 
@@ -82,19 +90,19 @@ public class MainMenu extends BrowseFragment {
     }
 
     private void createRows() {
-        HeaderItem headerItem1 = new HeaderItem(HEADER_ID_1, HEADER_NAME_1);
+        CustomHeaderItem headerItem1 = new CustomHeaderItem(HEADER_ID_1, HEADER_NAME_1);
         PageRow pageRow1 = new PageRow(headerItem1);
         mRowsAdapter.add(pageRow1);
 
-        HeaderItem headerItem2 = new HeaderItem(HEADER_ID_2, HEADER_NAME_2);
+        CustomHeaderItem headerItem2 = new CustomHeaderItem(HEADER_ID_2, HEADER_NAME_2);
         PageRow pageRow2 = new PageRow(headerItem2);
         mRowsAdapter.add(pageRow2);
 
-        HeaderItem headerItem3 = new HeaderItem(HEADER_ID_3, HEADER_NAME_3);
+        CustomHeaderItem headerItem3 = new CustomHeaderItem(HEADER_ID_3, HEADER_NAME_3);
         PageRow pageRow3 = new PageRow(headerItem3);
         mRowsAdapter.add(pageRow3);
 
-        HeaderItem headerItem4 = new HeaderItem(HEADER_ID_4, HEADER_NAME_4);
+        CustomHeaderItem headerItem4 = new CustomHeaderItem(HEADER_ID_4, HEADER_NAME_4);
         PageRow pageRow4 = new PageRow(headerItem4);
         mRowsAdapter.add(pageRow4);
     }
@@ -172,7 +180,7 @@ public class MainMenu extends BrowseFragment {
                 adapter.add(card);
             }
 
-            HeaderItem headerItem = new HeaderItem(cardRow.getTitle());
+            CustomHeaderItem headerItem = new CustomHeaderItem(cardRow.getTitle());
             return new CardListRow(headerItem, adapter, cardRow);
         }
     }
@@ -216,7 +224,7 @@ public class MainMenu extends BrowseFragment {
                 adapter.add(card);
             }
 
-            HeaderItem headerItem = new HeaderItem(cardRow.getTitle());
+            CustomHeaderItem headerItem = new CustomHeaderItem(cardRow.getTitle());
             return new CardListRow(headerItem, adapter, cardRow);
         }
     }
@@ -224,6 +232,9 @@ public class MainMenu extends BrowseFragment {
     public static class WebViewFragment extends Fragment implements MainFragmentAdapterProvider {
         private MainFragmentAdapter mMainFragmentAdapter = new MainFragmentAdapter(this);
         private WebView mWebview;
+        public static  final String LON = "55.207660";
+        public static  final String LAT = "25.082351";
+        public static final String WEATHER_WEB_URL = String.format("http://forecast.io/embed/#lat=%s&lon=%s&name=Wellington color=#00aaff&font=Arial&units=ca", LAT, LON);
 
         @Override
         public MainFragmentAdapter getMainFragmentAdapter() {
@@ -254,7 +265,7 @@ public class MainMenu extends BrowseFragment {
         @Override
         public void onResume() {
             super.onResume();
-            mWebview.loadUrl("https://www.google.com/policies/terms");
+            mWebview.loadUrl(WEATHER_WEB_URL);
             getMainFragmentAdapter().getFragmentHost().notifyDataReady(getMainFragmentAdapter());
         }
     }
