@@ -28,8 +28,7 @@ public class ApplicationsMenu extends GridFragment {
         super.onCreate(savedInstanceState);
         setupAdapter();
         loadData();
-        getMainFragmentAdapter().getFragmentHost().notifyDataReady(getMainFragmentAdapter());
-    }
+}
 
     private void setupAdapter() {
         VerticalGridPresenter presenter = new VerticalGridPresenter(ZOOM_FACTOR);

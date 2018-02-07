@@ -1,6 +1,5 @@
 package xms.com.smarttv.UI;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.os.Build;
 import android.os.Bundle;
@@ -203,17 +202,6 @@ public class MainMenu extends BrowseFragment {
             setAdapter(mRowsAdapter);
         }
 
-        @Override
-        public void onAttach(Activity activity) {
-            super.onAttach(activity);
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    loadData();
-                }
-            }, 200);
-        }
-
         private void loadData() {
             if (isAdded()) {
                 String json = Utils.inputStreamToString(getResources().openRawResource(
@@ -252,7 +240,6 @@ public class MainMenu extends BrowseFragment {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            getMainFragmentAdapter().getFragmentHost().showTitleView(false);
         }
 
         @Override
@@ -274,7 +261,6 @@ public class MainMenu extends BrowseFragment {
         public void onResume() {
             super.onResume();
             mWebview.loadUrl(WEATHER_WEB_URL);
-            getMainFragmentAdapter().getFragmentHost().notifyDataReady(getMainFragmentAdapter());
         }
     }
 }

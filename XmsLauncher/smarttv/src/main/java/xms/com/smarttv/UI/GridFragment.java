@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v17.leanback.app.BrowseFragment;
 import android.support.v17.leanback.transition.TransitionHelper;
 import android.support.v17.leanback.widget.ObjectAdapter;
-import android.support.v17.leanback.widget.OnChildLaidOutListener;
 import android.support.v17.leanback.widget.OnItemViewClickedListener;
 import android.support.v17.leanback.widget.OnItemViewSelectedListener;
 import android.support.v17.leanback.widget.Presenter;
@@ -93,16 +92,6 @@ public class GridFragment extends Fragment implements BrowseFragment.MainFragmen
                 }
             };
 
-    final private OnChildLaidOutListener mChildLaidOutListener =
-            new OnChildLaidOutListener() {
-                @Override
-                public void onChildLaidOut(ViewGroup parent, View view, int position, long id) {
-                    if (position == 0) {
-                        showOrHideTitle();
-                    }
-                }
-            };
-
     /**
      * Sets an item selection listener.
      */
@@ -113,21 +102,9 @@ public class GridFragment extends Fragment implements BrowseFragment.MainFragmen
     private void gridOnItemSelected(int position) {
         if (position != mSelectedPosition) {
             mSelectedPosition = position;
-            showOrHideTitle();
         }
     }
 
-    private void showOrHideTitle() {
-        if (mGridViewHolder.getGridView().findViewHolderForAdapterPosition(mSelectedPosition)
-                == null) {
-            return;
-        }
-        if (!mGridViewHolder.getGridView().hasPreviousViewInSameRow(mSelectedPosition)) {
-            mMainFragmentAdapter.getFragmentHost().showTitleView(true);
-        } else {
-            mMainFragmentAdapter.getFragmentHost().showTitleView(false);
-        }
-    }
 
     /**
      * Sets an item clicked listener.
@@ -159,7 +136,6 @@ public class GridFragment extends Fragment implements BrowseFragment.MainFragmen
         ViewGroup gridDock = (ViewGroup) view.findViewById(R.id.browse_grid_dock);
         mGridViewHolder = mGridPresenter.onCreateViewHolder(gridDock);
         gridDock.addView(mGridViewHolder.view);
-        mGridViewHolder.getGridView().setOnChildLaidOutListener(mChildLaidOutListener);
 
         mSceneAfterEntranceTransition = TransitionHelper.createScene(gridDock, new Runnable() {
             @Override
@@ -168,7 +144,6 @@ public class GridFragment extends Fragment implements BrowseFragment.MainFragmen
             }
         });
 
-        getMainFragmentAdapter().getFragmentHost().notifyViewCreated(mMainFragmentAdapter);
         updateAdapter();
 
     }

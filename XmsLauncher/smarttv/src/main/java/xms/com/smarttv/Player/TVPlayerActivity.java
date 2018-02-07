@@ -29,6 +29,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import xms.com.smarttv.R;
+import xms.com.smarttv.UI.ApplicationsMenu;
 import xms.com.smarttv.UI.ChannelsListFragment;
 import xms.com.smarttv.UI.CustomHeaderItem;
 import xms.com.smarttv.UI.MainMenu;
@@ -46,6 +47,47 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
     private ChannelsListFragment channelGridFragment;
     private Realm realm;
     private ImageView channel_icon;
+    private static final long HEADER_ID_0 = 0;
+    private static final String HEADER_NAME_0 = "Room Services";
+    private static final long HEADER_ID_1 = 1;
+    private static final String HEADER_NAME_1 = "Restaurants & Bars";
+    private static final long HEADER_ID_2 = 2;
+    private static final String HEADER_NAME_2 = "Spa & Fitness";
+    private static final long HEADER_ID_3 = 3;
+    private static final String HEADER_NAME_3 = "Special Offers";
+    private static final long HEADER_ID_4 = 4;
+    private static final String HEADER_NAME_4 = "Weather";
+    private static final long HEADER_ID_5 = 5;
+    private static final String HEADER_NAME_5 = "City Guide";
+
+    @Override
+    public void onBackPressed() {
+        return;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        xmsPlayer.initializePlayer();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        xmsPlayer.initializePlayer();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        xmsPlayer.releasePlayer();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        xmsPlayer.releasePlayer();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,30 +142,6 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        xmsPlayer.initializePlayer();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        xmsPlayer.initializePlayer();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        xmsPlayer.releasePlayer();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        xmsPlayer.releasePlayer();
-    }
-
-    @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
         int action = event.getAction();
         int keyCode = event.getKeyCode();
@@ -132,8 +150,8 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
             switch (keyCode) {
                 case KeyEvent.KEYCODE_BACK:
                     getFragmentManager().beginTransaction().hide(channelGridFragment).commit();
-                    if (getFragmentManager().findFragmentByTag("Detail") != null) {
-                        getFragmentManager().beginTransaction().remove(getFragmentManager().findFragmentByTag("Detail")).commit();
+                    if (getFragmentManager().findFragmentByTag("DetailSectionFragment") != null) {
+                        getFragmentManager().beginTransaction().remove(getFragmentManager().findFragmentByTag("DetailSectionFragment")).commit();
                         return false;
                     }
                     getFragmentManager().beginTransaction().hide(menuFragment).commit();
@@ -226,8 +244,28 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
     }
 
     @Override
-    public void onBackPressed() {
-        return;
+    public void onListFragmentInteraction(Channel channel) {
+        xmsPlayer.changeChannel(channel.getNumber());
+        currentChannelNumber = channel.getNumber();
+    }
+
+    @Override
+    public void onListFragmentInteraction(CustomHeaderItem item) {
+        Fragment DetailSectionFragment = null;
+        if (item.getHeaderId() == HEADER_ID_0) {
+            DetailSectionFragment = new ApplicationsMenu();
+        } else if (item.getHeaderId() == HEADER_ID_1) {
+            DetailSectionFragment = new ApplicationsMenu();
+        } else if (item.getHeaderId() == HEADER_ID_2) {
+            DetailSectionFragment = new MainMenu.SampleFragmentB();
+        } else if (item.getHeaderId() == HEADER_ID_3) {
+            DetailSectionFragment = new MainMenu.SettingsFragment();
+        } else if (item.getHeaderId() == HEADER_ID_4) {
+            DetailSectionFragment = new MainMenu.WebViewFragment();
+        }
+        getFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container_details, DetailSectionFragment, "DetailSectionFragment")
+                .commit();
     }
 
     /**
@@ -263,14 +301,4 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
         });
     }
 
-    @Override
-    public void onListFragmentInteraction(Channel channel) {
-        xmsPlayer.changeChannel(channel.getNumber());
-        currentChannelNumber = channel.getNumber();
-    }
-
-    @Override
-    public void onListFragmentInteraction(CustomHeaderItem item) {
-        getFragmentManager().beginTransaction().replace(R.id.fragment_container_details, new MainMenu.SampleFragmentB(), "Detail").commit();
-    }
 }
