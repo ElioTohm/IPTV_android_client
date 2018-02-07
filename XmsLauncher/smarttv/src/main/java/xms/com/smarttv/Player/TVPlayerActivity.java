@@ -1,5 +1,6 @@
 package xms.com.smarttv.Player;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
@@ -9,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.XmsPro.xmsproplayer.Interface.XmsPlayerUICallback;
@@ -30,11 +32,11 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import xms.com.smarttv.R;
 import xms.com.smarttv.UI.ApplicationsMenu;
-import xms.com.smarttv.UI.ChannelsListFragment;
 import xms.com.smarttv.UI.CustomHeaderItem;
 import xms.com.smarttv.UI.MainMenu;
-import xms.com.smarttv.UI.SectionMenuFragment;
 import xms.com.smarttv.app.Preferences;
+import xms.com.smarttv.fragments.ChannelsListFragment;
+import xms.com.smarttv.fragments.SectionMenuFragment;
 import xms.com.smarttv.services.GetInstalledAppService;
 
 public class TVPlayerActivity extends Activity implements ChannelsListFragment.OnListFragmentInteractionListener, SectionMenuFragment.OnListFragmentInteractionListener  {
@@ -47,18 +49,14 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
     private ChannelsListFragment channelGridFragment;
     private Realm realm;
     private ImageView channel_icon;
+    private RelativeLayout detailsectionContainer;
+    private Fragment detailSectionFragment = null;
     private static final long HEADER_ID_0 = 0;
-    private static final String HEADER_NAME_0 = "Room Services";
     private static final long HEADER_ID_1 = 1;
-    private static final String HEADER_NAME_1 = "Restaurants & Bars";
     private static final long HEADER_ID_2 = 2;
-    private static final String HEADER_NAME_2 = "Spa & Fitness";
     private static final long HEADER_ID_3 = 3;
-    private static final String HEADER_NAME_3 = "Special Offers";
     private static final long HEADER_ID_4 = 4;
-    private static final String HEADER_NAME_4 = "Weather";
     private static final long HEADER_ID_5 = 5;
-    private static final String HEADER_NAME_5 = "City Guide";
 
     @Override
     public void onBackPressed() {
@@ -117,6 +115,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
         channel_icon = findViewById(R.id.channel_icon);
         channelArrayList = new ArrayList<>();
         channel_number_selector = findViewById(xms.com.smarttv.R.id.channel_number_selector);
+        detailsectionContainer = findViewById(R.id.fragment_container_details);
 
         channelArrayList.add(realm.where(Channel.class).findFirst());
         SimpleExoPlayerView simpleExoPlayerView = findViewById(xms.com.smarttv.R.id.simpleexoplayerview);
@@ -151,7 +150,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
                 case KeyEvent.KEYCODE_BACK:
                     getFragmentManager().beginTransaction().hide(channelGridFragment).commit();
                     if (getFragmentManager().findFragmentByTag("DetailSectionFragment") != null) {
-                        getFragmentManager().beginTransaction().remove(getFragmentManager().findFragmentByTag("DetailSectionFragment")).commit();
+                        hideDetailSection("DetailSectionFragment");
                         return false;
                     }
                     getFragmentManager().beginTransaction().hide(menuFragment).commit();
@@ -251,20 +250,32 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
 
     @Override
     public void onListFragmentInteraction(CustomHeaderItem item) {
-        Fragment DetailSectionFragment = null;
         if (item.getHeaderId() == HEADER_ID_0) {
-            DetailSectionFragment = new ApplicationsMenu();
+            detailSectionFragment = new ApplicationsMenu();
         } else if (item.getHeaderId() == HEADER_ID_1) {
-            DetailSectionFragment = new ApplicationsMenu();
+            detailSectionFragment = new ApplicationsMenu();
         } else if (item.getHeaderId() == HEADER_ID_2) {
-            DetailSectionFragment = new MainMenu.SampleFragmentB();
+            detailSectionFragment = new MainMenu.SampleFragmentB();
         } else if (item.getHeaderId() == HEADER_ID_3) {
-            DetailSectionFragment = new MainMenu.SettingsFragment();
+            detailSectionFragment = new MainMenu.SettingsFragment();
         } else if (item.getHeaderId() == HEADER_ID_4) {
-            DetailSectionFragment = new MainMenu.WebViewFragment();
+            detailSectionFragment = new MainMenu.WebViewFragment();
         }
+        showDetailSection (detailSectionFragment);
+    }
+
+    @SuppressLint("ResourceAsColor")
+    private void showDetailSection (Fragment detailFragment) {
+        detailsectionContainer.setBackgroundColor(R.color.BlackTransparent);
         getFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container_details, DetailSectionFragment, "DetailSectionFragment")
+                .replace(R.id.fragment_container_details, detailFragment, "DetailSectionFragment")
+                .commit();
+    }
+
+    private void hideDetailSection (String detailFragmenttag) {
+        detailsectionContainer.setBackgroundColor(0x000000);
+        getFragmentManager().beginTransaction()
+                .remove(getFragmentManager().findFragmentByTag(detailFragmenttag))
                 .commit();
     }
 

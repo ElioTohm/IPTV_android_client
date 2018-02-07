@@ -15,7 +15,7 @@ import com.eliotohme.data.Channel;
 import java.util.List;
 
 import xms.com.smarttv.R;
-import xms.com.smarttv.UI.ChannelsListFragment.OnListFragmentInteractionListener;
+import xms.com.smarttv.fragments.ChannelsListFragment.OnListFragmentInteractionListener;
 
 public class ChannelRecyclerViewAdapter extends RecyclerView.Adapter<ChannelRecyclerViewAdapter.ViewHolder> {
 

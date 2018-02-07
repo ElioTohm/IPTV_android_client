@@ -13,6 +13,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import xms.com.smarttv.R;
+import xms.com.smarttv.fragments.SectionMenuFragment;
 
 public class SectionRecyclerViewAdapter extends RecyclerView.Adapter<SectionRecyclerViewAdapter.ViewHolder> {
 

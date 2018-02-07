@@ -16,6 +16,7 @@
         app:resize_mode="fill">
 
     </com.google.android.exoplayer2.ui.SimpleExoPlayerView>
+
     <RelativeLayout
         android:layout_width="250dp"
         android:layout_height="match_parent"
@@ -23,9 +24,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:paddingTop="50dp"
-        android:paddingRight="50dp"
-        android:paddingLeft="300dp"
+        android:layout_marginLeft="250dp"
         android:layout_height="match_parent"
         android:id="@+id/fragment_container_details"/>
 

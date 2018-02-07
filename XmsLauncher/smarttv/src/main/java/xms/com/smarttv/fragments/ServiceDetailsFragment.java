@@ -12,7 +12,7 @@
  * the License.
  */
 
-package xms.com.smarttv.UI;
+package xms.com.smarttv.fragments;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -44,6 +44,8 @@ import java.util.List;
 import xms.com.smarttv.Presenter.CardPresenter;
 import xms.com.smarttv.Presenter.DetailsDescriptionPresenter;
 import xms.com.smarttv.R;
+import xms.com.smarttv.UI.DetailsActivity;
+import xms.com.smarttv.UI.MainActivity;
 import xms.com.smarttv.Utils;
 import xms.com.smarttv.objects.ServiceApp;
 import xms.com.smarttv.objects.ServiceAppList;
@@ -88,7 +90,6 @@ public class ServiceDetailsFragment extends DetailsFragment {
             setupDetailsOverviewRowPresenter();
             setupMovieListRow();
             setupMovieListRowPresenter();
-//            updateBackground(mSelectedServiceApp.getBackgroundImageUrl());
             setOnItemViewClickedListener(new ItemViewClickedListener());
         } else {
             Intent intent = new Intent(getActivity(), MainActivity.class);
