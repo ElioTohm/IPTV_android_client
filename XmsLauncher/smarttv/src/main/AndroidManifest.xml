@@ -55,9 +55,7 @@
         <activity
             android:name=".Player.TVPlayerActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
-            android:launchMode="singleInstance"
-            android:screenOrientation="landscape"
-            android:theme="@style/Theme.Leanback" />
+            android:screenOrientation="landscape" />
         <activity
             android:name=".UI.SplashScreen"
             android:screenOrientation="landscape">
@@ -73,7 +71,8 @@
 
         <service
             android:name=".services.GetInstalledAppService"
-            android:exported="false"></service>
+            android:exported="false" />
+
     </application>
 
 </manifest>

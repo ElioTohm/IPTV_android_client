@@ -19,24 +19,15 @@
     <RelativeLayout
         android:layout_width="250dp"
         android:layout_height="match_parent"
-        android:id="@+id/navigation"
-        android:background="@color/BlackTransparent">
-        <ImageView
-            android:paddingLeft="20dp"
-            android:layout_width="220dp"
-            android:layout_height="75dp"
-            android:id="@+id/DefaultIcon"
-            android:src="@drawable/xmsprologosmall"/>
+        android:id="@+id/fragment_container_channel"/>
 
-        <RelativeLayout
-            android:layout_width="220dp"
-            android:paddingTop="80dp"
-            android:layout_height="match_parent"
-            android:id="@+id/fragment_container_channel"
-            tools:context="xms.com.smarttv.Player.TVPlayerActivity"/>
-
-    </RelativeLayout>
-
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:paddingTop="50dp"
+        android:paddingRight="50dp"
+        android:paddingLeft="300dp"
+        android:layout_height="match_parent"
+        android:id="@+id/fragment_container_details"/>
 
     <TextView
         android:id="@+id/channel_number_selector"

@@ -10,24 +10,29 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.eliotohme.data.Channel;
+import java.util.ArrayList;
+import java.util.List;
 
-import io.realm.Realm;
 import xms.com.smarttv.R;
 
-/**
- * A fragment representing a list of Items.
- * <p/>
- * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
- * interface.
- */
-public class ChannelsListFragment extends Fragment {
-
+public class SectionMenuFragment extends Fragment {
     private static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 1;
-    private OnListFragmentInteractionListener mListener;
+    private SectionMenuFragment.OnListFragmentInteractionListener mListener;
+    private static final long HEADER_ID_0 = 0;
+    private static final String HEADER_NAME_0 = "Room Services";
+    private static final long HEADER_ID_1 = 1;
+    private static final String HEADER_NAME_1 = "Restaurants & Bars";
+    private static final long HEADER_ID_2 = 2;
+    private static final String HEADER_NAME_2 = "Spa & Fitness";
+    private static final long HEADER_ID_3 = 3;
+    private static final String HEADER_NAME_3 = "Special Offers";
+    private static final long HEADER_ID_4 = 4;
+    private static final String HEADER_NAME_4 = "Weather";
+    private static final long HEADER_ID_5 = 5;
+    private static final String HEADER_NAME_5 = "City Guide";
 
-    public ChannelsListFragment() {
+    public SectionMenuFragment() {
     }
 
     @SuppressWarnings("unused")
@@ -55,13 +60,25 @@ public class ChannelsListFragment extends Fragment {
         view.findViewById(R.id.channel_recycler_view);
         // Set the adapter
         Context context = view.getContext();
-        RecyclerView recyclerView = view.findViewById(R.id.channel_recycler_view);;
+        RecyclerView recyclerView = view.findViewById(R.id.channel_recycler_view);
+        ;
         if (mColumnCount <= 1) {
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
         } else {
             recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
         }
-        recyclerView.setAdapter(new ChannelRecyclerViewAdapter(Realm.getDefaultInstance().where(Channel.class).findAll(), mListener));
+        CustomHeaderItem headerItem0 = new CustomHeaderItem(HEADER_ID_0, HEADER_NAME_0, R.drawable.lb_ic_fast_forward);
+        CustomHeaderItem headerItem1 = new CustomHeaderItem(HEADER_ID_1, HEADER_NAME_1, R.drawable.glass);
+        CustomHeaderItem headerItem2 = new CustomHeaderItem(HEADER_ID_2, HEADER_NAME_2, R.drawable.lb_ic_fast_forward);
+        CustomHeaderItem headerItem3 = new CustomHeaderItem(HEADER_ID_3, HEADER_NAME_3, R.drawable.tagsale);
+        CustomHeaderItem headerItem4 = new CustomHeaderItem(HEADER_ID_4, HEADER_NAME_4, R.drawable.lb_ic_fast_forward);
+        List<CustomHeaderItem> mRowsAdapter  = new ArrayList<>() ;
+        mRowsAdapter.add(headerItem0);
+        mRowsAdapter.add(headerItem1);
+        mRowsAdapter.add(headerItem2);
+        mRowsAdapter.add(headerItem3);
+        mRowsAdapter.add(headerItem4);
+        recyclerView.setAdapter(new SectionRecyclerViewAdapter(mRowsAdapter, mListener));
         return view;
     }
 
@@ -69,8 +86,8 @@ public class ChannelsListFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnListFragmentInteractionListener) {
-            mListener = (OnListFragmentInteractionListener) context;
+        if (context instanceof SectionMenuFragment.OnListFragmentInteractionListener) {
+            mListener = (SectionMenuFragment.OnListFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnListFragmentInteractionListener");
@@ -95,6 +112,6 @@ public class ChannelsListFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(Channel item);
+        void onListFragmentInteraction(CustomHeaderItem item);
     }
 }

@@ -16,18 +16,22 @@ package xms.com.smarttv.Presenter;
 
 import android.support.v17.leanback.widget.AbstractDetailsDescriptionPresenter;
 
-import xms.com.smarttv.objects.ServiceApp;
-
 public class DetailsDescriptionPresenter extends AbstractDetailsDescriptionPresenter {
 
     @Override
     protected void onBindDescription(ViewHolder viewHolder, Object item) {
-        ServiceApp serviceApp = (ServiceApp) item;
-
-        if (serviceApp != null) {
-            viewHolder.getTitle().setText(serviceApp.getTitle());
-            viewHolder.getSubtitle().setText(serviceApp.getStudio());
-            viewHolder.getBody().setText(serviceApp.getDescription());
-        }
+//        Movie details = (Movie) item;
+//        // In a production app, the itemData object contains the information
+//        // needed to display details for the media item:
+//        // viewHolder.getTitle().setText(details.getShortTitle());
+//
+//        // Here we provide static data for testing purposes:
+//        viewHolder.getTitle().setText(details.getTitle());
+//        viewHolder.getSubtitle().setText("2014   Drama   TV-14");
+//        viewHolder.getBody().setText("Lorem ipsum dolor sit amet, consectetur "
+//                + "adipisicing elit, sed do eiusmod tempor incididunt ut labore "
+//                + " et dolore magna aliqua. Ut enim ad minim veniam, quis "
+//                + "nostrud exercitation ullamco laboris nisi ut aliquip ex ea "
+//                + "commodo consequat.");
     }
 }

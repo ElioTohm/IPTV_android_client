@@ -24,10 +24,11 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
+import com.eliotohme.data.Client;
 import com.google.gson.Gson;
 
+import io.realm.Realm;
 import xms.com.smarttv.CardListRow;
 import xms.com.smarttv.Presenter.CardPresenterSelector;
 import xms.com.smarttv.Presenter.IconHeaderItemPresenter;
@@ -39,15 +40,18 @@ import xms.com.smarttv.models.Card;
 import xms.com.smarttv.models.CardRow;
 
 public class MainMenu extends BrowseFragment {
+    private static final long HEADER_ID_0 = 0;
+    private static final String HEADER_NAME_0 = "Room Services";
     private static final long HEADER_ID_1 = 1;
-    private static final String HEADER_NAME_1 = "Services";
+    private static final String HEADER_NAME_1 = "Restaurants & Bars";
     private static final long HEADER_ID_2 = 2;
-    private static final String HEADER_NAME_2 = "VOD";
+    private static final String HEADER_NAME_2 = "Spa & Fitness";
     private static final long HEADER_ID_3 = 3;
-    private static final String HEADER_NAME_3 = "Settings";
+    private static final String HEADER_NAME_3 = "Special Offers";
     private static final long HEADER_ID_4 = 4;
     private static final String HEADER_NAME_4 = "Weather";
-    private BackgroundManager mBackgroundManager;
+    private static final long HEADER_ID_5 = 5;
+    private static final String HEADER_NAME_5 = "City Guide";
 
     private ArrayObjectAdapter mRowsAdapter;
 
@@ -56,7 +60,7 @@ public class MainMenu extends BrowseFragment {
         super.onCreate(savedInstanceState);
         setupUi();
         loadData();
-        mBackgroundManager = BackgroundManager.getInstance(getActivity());
+        BackgroundManager mBackgroundManager = BackgroundManager.getInstance(getActivity());
         mBackgroundManager.attach(getActivity().getWindow());
         getMainFragmentRegistry().registerFragment(PageRow.class,
                 new PageRowFragmentFactory(mBackgroundManager));
@@ -64,6 +68,7 @@ public class MainMenu extends BrowseFragment {
 
     private void setupUi() {
         setHeadersState(HEADERS_ENABLED);
+        setTitle("Welcome " + Realm.getDefaultInstance().where(Client.class).findFirst().getName());
         setHeadersTransitionOnBackEnabled(true);
         setHeaderPresenterSelector(new PresenterSelector() {
             @RequiresApi(api = Build.VERSION_CODES.M)
@@ -90,19 +95,23 @@ public class MainMenu extends BrowseFragment {
     }
 
     private void createRows() {
-        CustomHeaderItem headerItem1 = new CustomHeaderItem(HEADER_ID_1, HEADER_NAME_1);
+        CustomHeaderItem headerItem0 = new CustomHeaderItem(HEADER_ID_0, HEADER_NAME_0, R.drawable.lb_ic_fast_forward);
+        PageRow pageRow0 = new PageRow(headerItem0);
+        mRowsAdapter.add(pageRow0);
+
+        CustomHeaderItem headerItem1 = new CustomHeaderItem(HEADER_ID_1, HEADER_NAME_1, R.drawable.glass);
         PageRow pageRow1 = new PageRow(headerItem1);
         mRowsAdapter.add(pageRow1);
 
-        CustomHeaderItem headerItem2 = new CustomHeaderItem(HEADER_ID_2, HEADER_NAME_2);
+        CustomHeaderItem headerItem2 = new CustomHeaderItem(HEADER_ID_2, HEADER_NAME_2, R.drawable.lb_ic_fast_forward);
         PageRow pageRow2 = new PageRow(headerItem2);
         mRowsAdapter.add(pageRow2);
 
-        CustomHeaderItem headerItem3 = new CustomHeaderItem(HEADER_ID_3, HEADER_NAME_3);
+        CustomHeaderItem headerItem3 = new CustomHeaderItem(HEADER_ID_3, HEADER_NAME_3, R.drawable.tagsale);
         PageRow pageRow3 = new PageRow(headerItem3);
         mRowsAdapter.add(pageRow3);
 
-        CustomHeaderItem headerItem4 = new CustomHeaderItem(HEADER_ID_4, HEADER_NAME_4);
+        CustomHeaderItem headerItem4 = new CustomHeaderItem(HEADER_ID_4, HEADER_NAME_4, R.drawable.lb_ic_fast_forward);
         PageRow pageRow4 = new PageRow(headerItem4);
         mRowsAdapter.add(pageRow4);
     }
@@ -118,7 +127,9 @@ public class MainMenu extends BrowseFragment {
         public Fragment createFragment(Object rowObj) {
             Row row = (Row)rowObj;
             mBackgroundManager.setDrawable(null);
-            if (row.getHeaderItem().getId() == HEADER_ID_1) {
+            if (row.getHeaderItem().getId() == HEADER_ID_0) {
+                return new ApplicationsMenu();
+            } else if (row.getHeaderItem().getId() == HEADER_ID_1) {
                 return new ApplicationsMenu();
             } else if (row.getHeaderItem().getId() == HEADER_ID_2) {
                 return new SampleFragmentB();
@@ -149,8 +160,6 @@ public class MainMenu extends BrowseFragment {
                         Object item,
                         RowPresenter.ViewHolder rowViewHolder,
                         Row row) {
-                    Toast.makeText(getActivity(), "Implement click handler", Toast.LENGTH_SHORT)
-                            .show();
                 }
             });
         }
@@ -159,7 +168,6 @@ public class MainMenu extends BrowseFragment {
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             createRows();
-            getMainFragmentAdapter().getFragmentHost().notifyDataReady(getMainFragmentAdapter());
         }
 
         private void createRows() {

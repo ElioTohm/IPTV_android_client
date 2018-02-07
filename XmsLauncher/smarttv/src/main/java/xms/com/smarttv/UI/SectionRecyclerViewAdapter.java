@@ -10,42 +10,39 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.eliotohme.data.Channel;
-
 import java.util.List;
 
 import xms.com.smarttv.R;
-import xms.com.smarttv.UI.ChannelsListFragment.OnListFragmentInteractionListener;
 
-public class ChannelRecyclerViewAdapter extends RecyclerView.Adapter<ChannelRecyclerViewAdapter.ViewHolder> {
+public class SectionRecyclerViewAdapter extends RecyclerView.Adapter<SectionRecyclerViewAdapter.ViewHolder> {
 
-    private final List<Channel> mValues;
-    private final OnListFragmentInteractionListener mListener;
+    private final List<CustomHeaderItem> mValues;
+    private final SectionMenuFragment.OnListFragmentInteractionListener mListener;
 
-    public ChannelRecyclerViewAdapter(List<Channel> items, OnListFragmentInteractionListener listener) {
+    public SectionRecyclerViewAdapter(List<CustomHeaderItem> items, SectionMenuFragment.OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public SectionRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_item, parent, false);
-        return new ViewHolder(view);
+        return new SectionRecyclerViewAdapter.ViewHolder(view);
     }
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.channel = mValues.get(position);
-        holder.channel_name.setText( mValues.get(position).getNumber()+ " " + mValues.get(position).getName());
+    public void onBindViewHolder(final SectionRecyclerViewAdapter.ViewHolder holder, int position) {
+        holder.section = mValues.get(position);
+        holder.section_name.setText(mValues.get(position).getName());
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (null != mListener) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
-                    mListener.onListFragmentInteraction(holder.channel);
+                    mListener.onListFragmentInteraction(holder.section);
                 }
             }
         });
@@ -70,20 +67,20 @@ public class ChannelRecyclerViewAdapter extends RecyclerView.Adapter<ChannelRecy
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        public final TextView channel_name;
-        public Channel channel;
+        public final TextView section_name;
+        public CustomHeaderItem section;
         private ImageView imageView;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            channel_name = (TextView) view.findViewById(R.id.channel);
+            section_name = (TextView) view.findViewById(R.id.channel);
             imageView = (ImageView) view.findViewById(R.id.channel_icon);
         }
 
         @Override
         public String toString() {
-            return super.toString() + " '" + channel_name.getText() + "'";
+            return super.toString() + " '" + section_name.getText() + "'";
         }
     }
 }

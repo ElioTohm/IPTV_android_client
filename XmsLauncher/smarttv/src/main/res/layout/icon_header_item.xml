@@ -3,18 +3,17 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:focusable="true"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/header_icon"
         android:layout_width="24dp"
-        android:layout_height="24dp" />
+        android:layout_height="25dp" />
 
     <TextView
         android:id="@+id/header_label"
-        android:layout_marginTop="6dp"
         android:textColor="@color/White"
         android:layout_width="match_parent"
-        android:textSize="25sp"
+        android:textSize="20sp"
         android:layout_height="wrap_content" />
 </android.support.v17.leanback.widget.NonOverlappingLinearLayout>
