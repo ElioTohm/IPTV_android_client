@@ -3,19 +3,20 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:focusable="true"
     android:paddingLeft="20dp"
-    android:paddingTop="20dp"
+    android:paddingTop="15dp"
+    android:paddingBottom="15dp"
     android:layout_height="wrap_content"
     android:layout_width="match_parent">
 
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="30dp"
         android:id="@+id/channel_icon"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="30sp"
+        android:textSize="22sp"
         android:textColor="@color/white"
         android:id="@+id/channel"/>
 </RelativeLayout>

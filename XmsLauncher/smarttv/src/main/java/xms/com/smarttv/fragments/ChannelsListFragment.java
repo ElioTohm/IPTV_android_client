@@ -56,13 +56,13 @@ public class ChannelsListFragment extends Fragment {
         view.findViewById(R.id.channel_recycler_view);
         // Set the adapter
         Context context = view.getContext();
-        RecyclerView recyclerView = view.findViewById(R.id.channel_recycler_view);;
+        RecyclerView recyclerView = view.findViewById(R.id.channel_recycler_view);
         if (mColumnCount <= 1) {
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
         } else {
             recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
         }
-        recyclerView.setAdapter(new ChannelRecyclerViewAdapter(Realm.getDefaultInstance().where(Channel.class).findAll(), mListener));
+        recyclerView.setAdapter(new ChannelRecyclerViewAdapter(Realm.getDefaultInstance().where(Channel.class).findAllSorted("number"), mListener));
         return view;
     }
 

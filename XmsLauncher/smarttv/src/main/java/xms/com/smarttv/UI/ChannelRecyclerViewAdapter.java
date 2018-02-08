@@ -54,7 +54,7 @@ public class ChannelRecyclerViewAdapter extends RecyclerView.Adapter<ChannelRecy
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
-                    v.setBackgroundColor(v.getContext().getColor(R.color.Blue));
+                    v.setBackgroundColor(v.getContext().getResources().getColor(R.color.selected_row_item));
                 } else {
                     v.setBackgroundColor(0x00000000);
                 }
@@ -69,16 +69,16 @@ public class ChannelRecyclerViewAdapter extends RecyclerView.Adapter<ChannelRecy
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public final View mView;
-        public final TextView channel_name;
-        public Channel channel;
+        final View mView;
+        final TextView channel_name;
+        Channel channel;
         private ImageView imageView;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            channel_name = (TextView) view.findViewById(R.id.channel);
-            imageView = (ImageView) view.findViewById(R.id.channel_icon);
+            channel_name = view.findViewById(R.id.channel);
+            imageView = view.findViewById(R.id.channel_icon);
         }
 
         @Override

@@ -52,7 +52,7 @@ public class SectionRecyclerViewAdapter extends RecyclerView.Adapter<SectionRecy
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
-                    v.setBackgroundColor(v.getContext().getColor(R.color.Blue));
+                    v.setBackgroundColor(v.getContext().getResources().getColor(R.color.selected_row_item));
                 } else {
                     v.setBackgroundColor(0x00000000);
                 }
@@ -67,16 +67,16 @@ public class SectionRecyclerViewAdapter extends RecyclerView.Adapter<SectionRecy
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public final View mView;
-        public final TextView section_name;
-        public CustomHeaderItem section;
+        final View mView;
+        final TextView section_name;
+        CustomHeaderItem section;
         private ImageView imageView;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            section_name = (TextView) view.findViewById(R.id.channel);
-            imageView = (ImageView) view.findViewById(R.id.channel_icon);
+            section_name = view.findViewById(R.id.channel);
+            imageView = view.findViewById(R.id.channel_icon);
         }
 
         @Override

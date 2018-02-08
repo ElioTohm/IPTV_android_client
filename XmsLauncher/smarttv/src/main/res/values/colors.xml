@@ -195,4 +195,6 @@
     <color name="player_progress_color">#feab91</color>
     <color name="player_background_color">#db2a0f</color>
     <color name="selected_background">#ffaa3f</color>
+
+    <color name="selected_row_item">#3366ff</color>
 </resources>

@@ -1,21 +1,22 @@
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="match_parent"
     android:background="@color/BlackTransparent"
-    android:layout_width="match_parent">
+    android:layout_width="match_parent"
+    android:orientation="vertical">
 
     <android.support.v7.widget.AppCompatImageView
         android:paddingLeft="20dp"
         android:layout_width="match_parent"
-        android:layout_height="75dp"
+        android:layout_height="150dp"
         android:id="@+id/DefaultIcon"
         android:src="@drawable/xmsprologosmall" />
 
     <android.support.v7.widget.RecyclerView
-        android:paddingTop="80dp"
+        android:layout_marginTop="30dp"
         android:id="@+id/channel_recycler_view"
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_height="match_parent"
         android:layout_width="match_parent"/>
 
-</RelativeLayout>
+</LinearLayout>
