@@ -21,10 +21,12 @@ public class ChannelRecyclerViewAdapter extends RecyclerView.Adapter<ChannelRecy
 
     private final List<Channel> mValues;
     private final OnListFragmentInteractionListener mListener;
+    private final OnChannelClicked OnChannelClicked;
 
-    public ChannelRecyclerViewAdapter(List<Channel> items, OnListFragmentInteractionListener listener) {
+    public ChannelRecyclerViewAdapter(List<Channel> items, OnListFragmentInteractionListener listener, OnChannelClicked OnChannelClicked) {
         mValues = items;
         mListener = listener;
+        this.OnChannelClicked = OnChannelClicked;
     }
 
     @Override
@@ -36,7 +38,7 @@ public class ChannelRecyclerViewAdapter extends RecyclerView.Adapter<ChannelRecy
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         holder.channel = mValues.get(position);
         holder.channel_name.setText(holder.channel.getName());
         holder.channel_number.setText(String.valueOf(holder.channel.getNumber()));
@@ -44,9 +46,11 @@ public class ChannelRecyclerViewAdapter extends RecyclerView.Adapter<ChannelRecy
             @Override
             public void onClick(View v) {
                 if (null != mListener) {
-                    // Notify the active callbacks interface (the activity, if the
-                    // fragment is attached to one) that an item has been selected.
+                    // callback to update player in player activity
                     mListener.onListFragmentInteraction(holder.channel);
+
+                    // callback to update position in fragment
+                    OnChannelClicked.UpdateLastPosition(position);
                 }
             }
         });
@@ -87,5 +91,9 @@ public class ChannelRecyclerViewAdapter extends RecyclerView.Adapter<ChannelRecy
         public String toString() {
             return super.toString() + " '" + channel_name.getText() + "'";
         }
+    }
+
+    public interface OnChannelClicked {
+        void UpdateLastPosition(int currentposition);
     }
 }

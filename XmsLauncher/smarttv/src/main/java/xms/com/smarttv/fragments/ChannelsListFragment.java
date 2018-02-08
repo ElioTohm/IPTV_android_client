@@ -23,11 +23,13 @@ import xms.com.smarttv.UI.SimpleDividerItemDecoration;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class ChannelsListFragment extends Fragment {
-
+public class ChannelsListFragment extends Fragment implements ChannelRecyclerViewAdapter.OnChannelClicked  {
+    private int savedposition = 0 ;
     private static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
+    private ChannelRecyclerViewAdapter channelRecyclerViewAdapter;
+    private RecyclerView recyclerView;
 
     public ChannelsListFragment() {
     }
@@ -57,17 +59,28 @@ public class ChannelsListFragment extends Fragment {
         view.findViewById(R.id.channel_recycler_view);
         // Set the adapter
         Context context = view.getContext();
-        RecyclerView recyclerView = view.findViewById(R.id.channel_recycler_view);
+        recyclerView = view.findViewById(R.id.channel_recycler_view);
         recyclerView.addItemDecoration(new SimpleDividerItemDecoration(context));
         if (mColumnCount <= 1) {
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
         } else {
             recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
         }
-        recyclerView.setAdapter(new ChannelRecyclerViewAdapter(Realm.getDefaultInstance().where(Channel.class).findAllSorted("number"), mListener));
+        channelRecyclerViewAdapter = new ChannelRecyclerViewAdapter(Realm.getDefaultInstance().where(Channel.class).findAllSorted("number"),mListener,this);
+        recyclerView.setAdapter(channelRecyclerViewAdapter);
+        recyclerView.scrollToPosition(savedposition);
+        channelRecyclerViewAdapter.notifyDataSetChanged();
         return view;
     }
 
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden) {
+            recyclerView.setFocusable(true);
+            recyclerView.smoothScrollToPosition(savedposition);
+        }
+    }
 
     @Override
     public void onAttach(Context context) {
@@ -86,18 +99,12 @@ public class ChannelsListFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
+    @Override
+    public void UpdateLastPosition(int currentposition) {
+        this.savedposition = currentposition;
+    }
+
     public interface OnListFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onListFragmentInteraction(Channel item);
     }
 }
