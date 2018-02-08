@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.XmsPro.xmsproplayer.Interface.XmsPlayerUICallback;
 import com.XmsPro.xmsproplayer.XmsPlayer;
+import com.bumptech.glide.Glide;
 import com.eliotohme.data.Channel;
 import com.eliotohme.data.Client;
 import com.eliotohme.data.User;
@@ -213,8 +214,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
 
             if (channel_numberpressed < 10){
                 Handler setchannelnumberHandler = new Handler();
-                final int finalChannel_numberpressed = channel_numberpressed;
-                channel_number_selector.setText(channel_number_selector.getText() + String.valueOf(finalChannel_numberpressed));
+                channel_number_selector.setText(String.format("%s%s", channel_number_selector.getText(), String.valueOf(channel_numberpressed)));
                 Runnable setchannelnumberRunnable = new Runnable() {
                     public void run() {
                         if (!channel_number_selector.getText().equals("")) {
@@ -258,6 +258,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
     @Override
     public void showChannelInfo(int channelindex) {
         Channel channel = realm.where(Channel.class).equalTo("number", channelindex).findFirst();
+        Glide.with(this).asBitmap().load(channel.getThumbnail()).into(channel_icon);
         currentChannel.setText(String.valueOf(channel.getNumber()));
         channelName.setText(channel.getName());
         channelInfo.setVisibility(View.VISIBLE);
@@ -268,7 +269,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
             }
         };
         mChannelInfoHandler.removeCallbacks(mChannelInfoRunnable);
-        mChannelInfoHandler.postDelayed(mChannelInfoRunnable, 5000);
+        mChannelInfoHandler.postDelayed(mChannelInfoRunnable, 3000);
     }
 
     @SuppressLint("ResourceAsColor")
@@ -280,7 +281,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
     }
 
     private void hideDetailSection (String detailFragmenttag) {
-        if (getFragmentManager().findFragmentByTag("DetailSectionFragment") != null) {
+        if (getFragmentManager().findFragmentByTag(detailFragmenttag) != null) {
             detailsectionContainer.setBackgroundColor(0x000000);
             getFragmentManager().beginTransaction()
                     .remove(getFragmentManager().findFragmentByTag(detailFragmenttag))

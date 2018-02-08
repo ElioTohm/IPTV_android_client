@@ -75,8 +75,8 @@ public class SectionRecyclerViewAdapter extends RecyclerView.Adapter<SectionRecy
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            section_name = view.findViewById(R.id.channel);
-            imageView = view.findViewById(R.id.channel_icon);
+            section_name = view.findViewById(R.id.item_name);
+            imageView = view.findViewById(R.id.item_icon);
         }
 
         @Override

@@ -38,7 +38,8 @@ public class ChannelRecyclerViewAdapter extends RecyclerView.Adapter<ChannelRecy
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.channel = mValues.get(position);
-        holder.channel_name.setText( mValues.get(position).getNumber()+ " " + mValues.get(position).getName());
+        holder.channel_name.setText(holder.channel.getName());
+        holder.channel_number.setText(String.valueOf(holder.channel.getNumber()));
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -53,12 +54,11 @@ public class ChannelRecyclerViewAdapter extends RecyclerView.Adapter<ChannelRecy
             @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    v.setBackgroundColor(v.getContext().getResources().getColor(R.color.selected_row_item));
-                } else {
-                    v.setBackgroundColor(0x00000000);
-                }
-
+            if (hasFocus) {
+                v.setBackgroundColor(v.getContext().getResources().getColor(R.color.selected_row_item));
+            } else {
+                v.setBackgroundColor(0x00000000);
+            }
             }
         });
     }
@@ -71,14 +71,16 @@ public class ChannelRecyclerViewAdapter extends RecyclerView.Adapter<ChannelRecy
     public class ViewHolder extends RecyclerView.ViewHolder {
         final View mView;
         final TextView channel_name;
+        final TextView channel_number;
         Channel channel;
         private ImageView imageView;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            channel_name = view.findViewById(R.id.channel);
-            imageView = view.findViewById(R.id.channel_icon);
+            channel_name = view.findViewById(R.id.item_name);
+            channel_number = view.findViewById(R.id.item_number);
+            imageView = view.findViewById(R.id.item_icon);
         }
 
         @Override
