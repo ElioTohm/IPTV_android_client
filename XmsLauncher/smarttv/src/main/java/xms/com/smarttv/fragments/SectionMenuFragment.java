@@ -16,6 +16,7 @@ import java.util.List;
 import xms.com.smarttv.R;
 import xms.com.smarttv.UI.CustomHeaderItem;
 import xms.com.smarttv.UI.SectionRecyclerViewAdapter;
+import xms.com.smarttv.UI.SimpleDividerItemDecoration;
 
 public class SectionMenuFragment extends Fragment {
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -63,6 +64,7 @@ public class SectionMenuFragment extends Fragment {
         // Set the adapter
         Context context = view.getContext();
         RecyclerView recyclerView = view.findViewById(R.id.channel_recycler_view);
+        recyclerView.addItemDecoration(new SimpleDividerItemDecoration(context));
         ;
         if (mColumnCount <= 1) {
             recyclerView.setLayoutManager(new LinearLayoutManager(context));

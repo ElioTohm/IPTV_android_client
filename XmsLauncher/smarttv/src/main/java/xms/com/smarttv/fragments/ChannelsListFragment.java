@@ -15,6 +15,7 @@ import com.eliotohme.data.Channel;
 import io.realm.Realm;
 import xms.com.smarttv.R;
 import xms.com.smarttv.UI.ChannelRecyclerViewAdapter;
+import xms.com.smarttv.UI.SimpleDividerItemDecoration;
 
 /**
  * A fragment representing a list of Items.
@@ -57,6 +58,7 @@ public class ChannelsListFragment extends Fragment {
         // Set the adapter
         Context context = view.getContext();
         RecyclerView recyclerView = view.findViewById(R.id.channel_recycler_view);
+        recyclerView.addItemDecoration(new SimpleDividerItemDecoration(context));
         if (mColumnCount <= 1) {
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
         } else {
