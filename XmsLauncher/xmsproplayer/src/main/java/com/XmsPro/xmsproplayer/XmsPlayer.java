@@ -6,10 +6,10 @@ import android.net.Uri;
 import com.XmsPro.xmsproplayer.Interface.XmsPlayerUICallback;
 import com.eliotohme.data.Channel;
 import com.eliotohme.data.network.AuthenticationInterceptor;
+import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.ext.okhttp.OkHttpDataSourceFactory;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.extractor.ExtractorsFactory;
@@ -30,6 +30,7 @@ import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.DataSource;
+import com.google.android.exoplayer2.upstream.DefaultAllocator;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.upstream.HttpDataSource;
@@ -40,8 +41,11 @@ import java.net.CookieManager;
 import java.net.CookiePolicy;
 import java.util.List;
 
+import io.realm.Realm;
 import okhttp3.OkHttpClient;
 
+import static com.google.android.exoplayer2.DefaultLoadControl.DEFAULT_MAX_BUFFER_MS;
+import static com.google.android.exoplayer2.DefaultLoadControl.DEFAULT_MIN_BUFFER_MS;
 import static com.google.android.exoplayer2.extractor.ts.DefaultTsPayloadReaderFactory.FLAG_ALLOW_NON_IDR_KEYFRAMES;
 import static com.google.android.exoplayer2.extractor.ts.TsExtractor.MODE_SINGLE_PMT;
 
@@ -51,7 +55,6 @@ public class XmsPlayer  {
     private SimpleExoPlayer player;
     private static final CookieManager DEFAULT_COOKIE_MANAGER;
     private List<Channel> channelArrayList;
-    private int channellistSize;
     private SimpleExoPlayerView simpleExoPlayerView;
     private Context context;
     private static XmsPlayer instance;
@@ -81,7 +84,6 @@ public class XmsPlayer  {
         this.context = context;
         this.simpleExoPlayerView = simpleExoPlayerView;
         this.channelArrayList = channelArrayList;
-        this.channellistSize = channelArrayList.size();
         this.xmsPlayerUICallback = xmsPlayerUICallback;
         this.TOKEN = TOKEN;
         this.TOKENTYPE = TOKENTYPE;
@@ -111,7 +113,7 @@ public class XmsPlayer  {
                     DataSource.Factory udsf = new UdpDataSource.Factory() {
                         @Override
                         public DataSource createDataSource() {
-                            return new UdpDataSource(null, 1316, UdpDataSource.DEAFULT_SOCKET_TIMEOUT_MILLIS);
+                            return new UdpDataSource(null, 6000, 15000);
                         }
                     };
                     ExtractorsFactory tsExtractorFactory = new DefaultExtractorsFactory()
@@ -181,15 +183,24 @@ public class XmsPlayer  {
             DefaultRenderersFactory renderersFactory = new DefaultRenderersFactory(this.context,
                     null, DefaultRenderersFactory.EXTENSION_RENDERER_MODE_ON);
 
-            player = ExoPlayerFactory.newSimpleInstance(renderersFactory, trackSelector);
+
+            player = ExoPlayerFactory.newSimpleInstance(renderersFactory, trackSelector,
+                    new DefaultLoadControl(new DefaultAllocator(true,64 * 512),
+                            DEFAULT_MIN_BUFFER_MS,
+                            DEFAULT_MAX_BUFFER_MS,
+                            100,
+                            100,
+                            500000,
+                            true));
         }
+        player.setPlayWhenReady(true);
 
         // set the mediasource and play when ready
         player.prepare(buildMediaSource(channelArrayList));
         simpleExoPlayerView.setPlayer(player);
-        xmsPlayerUICallback.showChannelInfo(player.getCurrentWindowIndex());
+        xmsPlayerUICallback.showChannelInfo(1);
 
-        player.setPlayWhenReady(true);
+
 
     }
 
@@ -207,38 +218,34 @@ public class XmsPlayer  {
      * in ConcatenatingMediaSource -1 windows index in player
      * and loop
      */
-    public void previouschannel() {
-        Timeline currentTimeline = player.getCurrentTimeline();
-        if (currentTimeline.isEmpty()) {
-            return;
+    public int previouschannel(int channelid) {
+        channelArrayList.clear();
+        List<Channel> channelList = Realm.getDefaultInstance().where(Channel.class).lessThan("number", channelid).findAllSorted("number");
+        if (channelList.size() ==0 ) {
+            channelList = Realm.getDefaultInstance().where(Channel.class).findAllSorted("number");
         }
-
-        int currentWindowIndex = player.getCurrentWindowIndex();
-
-        if (currentWindowIndex > 0 ) {
-            player.seekTo(currentWindowIndex - 1, 0);
-        } else {
-            player.seekTo(currentTimeline.getWindowCount() - 1, 0);
-        }
-        xmsPlayerUICallback.showChannelInfo(player.getCurrentWindowIndex());
+        channelArrayList.add(channelList.get(channelList.size()-1));
+        player.prepare(buildMediaSource(channelArrayList));
+        simpleExoPlayerView.setPlayer(player);
+        xmsPlayerUICallback.showChannelInfo(channelArrayList.get(0).getNumber());
+        return channelArrayList.get(0).getNumber();
     }
 
     /**
      * in ConcatenatingMediaSource -1 windows index in player
      * and loop
      */
-    public void nextchannel() {
-        Timeline currentTimeline = player.getCurrentTimeline();
-        if (currentTimeline.isEmpty()) {
-            return;
+    public int nextchannel(int channelid) {
+        channelArrayList.clear();
+        List<Channel> channelList = Realm.getDefaultInstance().where(Channel.class).greaterThan("number", channelid).findAllSorted("number");
+        if (channelList.size() == 0) {
+            channelList = Realm.getDefaultInstance().where(Channel.class).findAllSorted("number");
         }
-        int currentWindowIndex = player.getCurrentWindowIndex();
-        if (currentWindowIndex < currentTimeline.getWindowCount() - 1) {
-            player.seekTo(currentWindowIndex + 1, 0);
-        } else {
-            player.seekTo(0, 0);
-        }
-        xmsPlayerUICallback.showChannelInfo(player.getCurrentWindowIndex());
+        channelArrayList.add(channelList.get(0));
+        player.prepare(buildMediaSource(channelArrayList));
+        simpleExoPlayerView.setPlayer(player);
+        xmsPlayerUICallback.showChannelInfo(channelArrayList.get(0).getNumber());
+        return channelArrayList.get(0).getNumber();
     }
 
     /**
@@ -248,12 +255,11 @@ public class XmsPlayer  {
      * works with dispatchKeyEvent
      */
     public void changeChannel(int channelid) {
-        if(channelid < channellistSize){
-            if (player.getCurrentWindowIndex() != channelid) {
-                player.seekTo(channelid, 0);
-            }
-            xmsPlayerUICallback.showChannelInfo(player.getCurrentWindowIndex());
-        }
+        channelArrayList.clear();
+        channelArrayList.add(Realm.getDefaultInstance().where(Channel.class).equalTo("number", channelid).findFirst());
+        player.prepare(buildMediaSource(channelArrayList));
+        simpleExoPlayerView.setPlayer(player);
+        xmsPlayerUICallback.showChannelInfo(channelArrayList.get(0).getNumber());
     }
 
     private DataSource.Factory buildDataSourceFactory(boolean useBandwidthMeter) {
