@@ -78,13 +78,13 @@ public class XmsPlayer  {
      * initialize both param to use in class
      */
     public XmsPlayer(Context context, SimpleExoPlayerView simpleExoPlayerView,
-                     List<Channel> channelArrayList, XmsPlayerUICallback xmsPlayerUICallback, String TOKENTYPE, String TOKEN) {
+                     List<Channel> channelArrayList, String TOKENTYPE, String TOKEN) {
 
         // set surface of the player
         this.context = context;
+        this.xmsPlayerUICallback = (XmsPlayerUICallback) context;
         this.simpleExoPlayerView = simpleExoPlayerView;
         this.channelArrayList = channelArrayList;
-        this.xmsPlayerUICallback = xmsPlayerUICallback;
         this.TOKEN = TOKEN;
         this.TOKENTYPE = TOKENTYPE;
         instance = this;
@@ -113,7 +113,7 @@ public class XmsPlayer  {
                     DataSource.Factory udsf = new UdpDataSource.Factory() {
                         @Override
                         public DataSource createDataSource() {
-                            return new UdpDataSource(null, 6000, 15000);
+                            return new UdpDataSource(null, 65507, 15000);
                         }
                     };
                     ExtractorsFactory tsExtractorFactory = new DefaultExtractorsFactory()
@@ -254,12 +254,14 @@ public class XmsPlayer  {
      * thus changing channel
      * works with dispatchKeyEvent
      */
-    public void changeChannel(int channelid) {
+    public void changeChannel(int channelid, boolean showinfo) {
         channelArrayList.clear();
         channelArrayList.add(Realm.getDefaultInstance().where(Channel.class).equalTo("number", channelid).findFirst());
         player.prepare(buildMediaSource(channelArrayList));
         simpleExoPlayerView.setPlayer(player);
-        xmsPlayerUICallback.showChannelInfo(channelArrayList.get(0).getNumber());
+        if (showinfo) {
+            xmsPlayerUICallback.showChannelInfo(channelArrayList.get(0).getNumber());
+        }
     }
 
     private DataSource.Factory buildDataSourceFactory(boolean useBandwidthMeter) {

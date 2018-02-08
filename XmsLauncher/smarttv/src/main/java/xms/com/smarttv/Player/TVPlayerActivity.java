@@ -39,7 +39,8 @@ import xms.com.smarttv.fragments.ChannelsListFragment;
 import xms.com.smarttv.fragments.SectionMenuFragment;
 import xms.com.smarttv.services.GetInstalledAppService;
 
-public class TVPlayerActivity extends Activity implements ChannelsListFragment.OnListFragmentInteractionListener, SectionMenuFragment.OnListFragmentInteractionListener  {
+public class TVPlayerActivity extends Activity implements ChannelsListFragment.OnListFragmentInteractionListener,
+        SectionMenuFragment.OnListFragmentInteractionListener, XmsPlayerUICallback  {
     private View channelInfo;
     private TextView currentChannel, channel_number_selector, channelName;
     private List<Channel> channelArrayList;
@@ -51,6 +52,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
     private ImageView channel_icon;
     private RelativeLayout detailsectionContainer;
     private Fragment detailSectionFragment = null;
+    private XmsPlayerUICallback xmsPlayerUICallback;
     private static final long HEADER_ID_0 = 0;
     private static final long HEADER_ID_1 = 1;
     private static final long HEADER_ID_2 = 2;
@@ -119,25 +121,8 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
 
         channelArrayList.add(realm.where(Channel.class).findFirst());
         SimpleExoPlayerView simpleExoPlayerView = findViewById(xms.com.smarttv.R.id.simpleexoplayerview);
-
         xmsPlayer = new XmsPlayer(this, simpleExoPlayerView, channelArrayList,
-                 new XmsPlayerUICallback() {
-            @Override
-            public void showChannelInfo(int channelnumber) {
-                Channel channel = realm.where(Channel.class).equalTo("number", channelnumber).findFirst();
-                currentChannel.setText(String.valueOf(channel.getNumber()));
-                channelName.setText(channel.getName());
-                channelInfo.setVisibility(View.VISIBLE);
-                Handler mChannelInfoHandler=new Handler();
-                Runnable mChannelInfoRunnable=new Runnable() {
-                    public void run() {
-                        channelInfo.setVisibility(View.INVISIBLE);
-                    }
-                };
-                mChannelInfoHandler.removeCallbacks(mChannelInfoRunnable);
-                mChannelInfoHandler.postDelayed(mChannelInfoRunnable, 5000);
-            }
-        }, realm.where(User.class).findFirst().getToken_type(), realm.where(User.class).findFirst().getAccess_token());
+                realm.where(User.class).findFirst().getToken_type(), realm.where(User.class).findFirst().getAccess_token());
     }
 
     @Override
@@ -148,6 +133,11 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
             int channel_numberpressed = 10;
             switch (keyCode) {
                 case KeyEvent.KEYCODE_BACK:
+                    if (getFragmentManager().findFragmentByTag("DetailSectionFragment") == null &&
+                            channelGridFragment.isHidden() && menuFragment.isHidden()) {
+                        showChannelInfo(currentChannelNumber);
+                        return false;
+                    }
                     getFragmentManager().beginTransaction().hide(channelGridFragment).commit();
                     if (getFragmentManager().findFragmentByTag("DetailSectionFragment") != null) {
                         hideDetailSection("DetailSectionFragment");
@@ -157,7 +147,11 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
                     return false;
                 case KeyEvent.KEYCODE_MENU:
                     if (channelGridFragment.isHidden()){
-                        getFragmentManager().beginTransaction().show(menuFragment).commit();
+                        if (menuFragment.isHidden()) {
+                            getFragmentManager().beginTransaction().show(menuFragment).commit();
+                        } else {
+                            getFragmentManager().beginTransaction().hide(menuFragment).commit();
+                        }
                     }
                     return false;
                 case KeyEvent.KEYCODE_DPAD_CENTER:
@@ -228,7 +222,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
                     public void run() {
                         if (!channel_number_selector.getText().equals("")) {
                             currentChannelNumber = Integer.parseInt((String) channel_number_selector.getText());
-                            xmsPlayer.changeChannel(currentChannelNumber);
+                            xmsPlayer.changeChannel(currentChannelNumber, true);
                             channel_number_selector.setText("");
                             channel_number_selector.setVisibility(View.INVISIBLE);
                         }
@@ -244,7 +238,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
 
     @Override
     public void onListFragmentInteraction(Channel channel) {
-        xmsPlayer.changeChannel(channel.getNumber());
+        xmsPlayer.changeChannel(channel.getNumber(), false);
         currentChannelNumber = channel.getNumber();
     }
 
@@ -262,6 +256,22 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
             detailSectionFragment = new MainMenu.WebViewFragment();
         }
         showDetailSection (detailSectionFragment);
+    }
+
+    @Override
+    public void showChannelInfo(int channelindex) {
+        Channel channel = realm.where(Channel.class).equalTo("number", channelindex).findFirst();
+        currentChannel.setText(String.valueOf(channel.getNumber()));
+        channelName.setText(channel.getName());
+        channelInfo.setVisibility(View.VISIBLE);
+        Handler mChannelInfoHandler=new Handler();
+        Runnable mChannelInfoRunnable=new Runnable() {
+            public void run() {
+                channelInfo.setVisibility(View.INVISIBLE);
+            }
+        };
+        mChannelInfoHandler.removeCallbacks(mChannelInfoRunnable);
+        mChannelInfoHandler.postDelayed(mChannelInfoRunnable, 5000);
     }
 
     @SuppressLint("ResourceAsColor")
