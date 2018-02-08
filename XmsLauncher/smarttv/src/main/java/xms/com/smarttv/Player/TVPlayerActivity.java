@@ -52,42 +52,12 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
     private ImageView channel_icon;
     private RelativeLayout detailsectionContainer;
     private Fragment detailSectionFragment = null;
-    private XmsPlayerUICallback xmsPlayerUICallback;
     private static final long HEADER_ID_0 = 0;
     private static final long HEADER_ID_1 = 1;
     private static final long HEADER_ID_2 = 2;
     private static final long HEADER_ID_3 = 3;
     private static final long HEADER_ID_4 = 4;
     private static final long HEADER_ID_5 = 5;
-
-    @Override
-    public void onBackPressed() {
-        return;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        xmsPlayer.initializePlayer();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        xmsPlayer.initializePlayer();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        xmsPlayer.releasePlayer();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        xmsPlayer.releasePlayer();
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,6 +96,35 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
     }
 
     @Override
+    public void onBackPressed() {
+        return;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        xmsPlayer.initializePlayer();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        xmsPlayer.initializePlayer();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        xmsPlayer.releasePlayer();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        xmsPlayer.releasePlayer();
+    }
+
+    @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
         int action = event.getAction();
         int keyCode = event.getKeyCode();
@@ -139,10 +138,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
                         return false;
                     }
                     getFragmentManager().beginTransaction().hide(channelGridFragment).commit();
-                    if (getFragmentManager().findFragmentByTag("DetailSectionFragment") != null) {
-                        hideDetailSection("DetailSectionFragment");
-                        return false;
-                    }
+                    hideDetailSection("DetailSectionFragment");
                     getFragmentManager().beginTransaction().hide(menuFragment).commit();
                     return false;
                 case KeyEvent.KEYCODE_MENU:
@@ -151,6 +147,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
                             getFragmentManager().beginTransaction().show(menuFragment).commit();
                         } else {
                             getFragmentManager().beginTransaction().hide(menuFragment).commit();
+                            hideDetailSection("DetailSectionFragment");
                         }
                     }
                     return false;
@@ -283,10 +280,12 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
     }
 
     private void hideDetailSection (String detailFragmenttag) {
-        detailsectionContainer.setBackgroundColor(0x000000);
-        getFragmentManager().beginTransaction()
-                .remove(getFragmentManager().findFragmentByTag(detailFragmenttag))
-                .commit();
+        if (getFragmentManager().findFragmentByTag("DetailSectionFragment") != null) {
+            detailsectionContainer.setBackgroundColor(0x000000);
+            getFragmentManager().beginTransaction()
+                    .remove(getFragmentManager().findFragmentByTag(detailFragmenttag))
+                    .commit();
+        }
     }
 
     /**

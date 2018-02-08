@@ -34,25 +34,25 @@
         android:layout_height="100dip"
         android:layout_centerInParent="false"
         android:layout_alignParentBottom="false"
-        android:layout_alignParentLeft="false"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentStart="false"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentTop="false"
         android:layout_margin="20dp"
         android:background="@color/BlackTransparent"
         android:text=""
         android:textColor="#FFF"
-        android:textSize="50dp" />
+        android:textSize="50sp" />
 
     <RelativeLayout
         android:id="@+id/channelInfo"
         android:layout_width="match_parent"
-        android:layout_height="100dip"
+        android:layout_height="175dip"
         android:layout_centerInParent="true"
         android:layout_alignParentBottom="true"
         android:paddingLeft="100dp"
         android:paddingRight="100dp"
-        android:layout_alignParentLeft="false"
-        android:layout_alignParentRight="false"
+        android:layout_alignParentStart="false"
+        android:layout_alignParentEnd="false"
         android:layout_alignParentTop="false"
         android:layout_margin="20dp"
         android:background="@color/BlackTransparent">
@@ -60,18 +60,21 @@
         <TextView
             android:id="@+id/current_channel"
             android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:padding="20dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
             android:text="99"
+            android:layout_centerInParent="true"
             android:textColor="#FFF"
-            android:textSize="50dp" />
+            android:textSize="50sp" />
 
         <ImageView
             android:id="@+id/channel_icon"
+            android:layout_toEndOf="@+id/current_channel"
             android:layout_width="50dp"
+            android:layout_margin="20dp"
             android:layout_height="120dp"
-            android:layout_margin="10dp"
-            android:layout_toRightOf="@id/current_channel"
+            android:layout_marginTop="20dp"
+            android:layout_centerInParent="true"
             android:contentDescription="@string/channel_ico"
             android:scaleType="fitCenter" />
 
@@ -79,14 +82,19 @@
             android:id="@+id/channel_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/current_channel"
-            android:layout_alignBottom="@+id/current_channel"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_toRightOf="@+id/channel_icon"
+            android:layout_centerInParent="true"
             android:text="Channel name"
             android:textColor="#FFF"
-            android:textSize="50dp" />
+            android:textSize="50sp" />
+
+        <TextClock
+            android:id="@+id/textClock"
+            android:textSize="50sp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="19dp" />
 
     </RelativeLayout>
 
