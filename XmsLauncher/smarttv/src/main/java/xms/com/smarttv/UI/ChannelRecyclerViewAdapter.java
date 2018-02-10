@@ -19,12 +19,12 @@ import xms.com.smarttv.fragments.ChannelsListFragment.OnListFragmentInteractionL
 
 public class ChannelRecyclerViewAdapter extends RecyclerView.Adapter<ChannelRecyclerViewAdapter.ViewHolder> {
 
-    private final List<Channel> mValues;
+    private final List<Channel> channels;
     private final OnListFragmentInteractionListener mListener;
     private final OnChannelClicked OnChannelClicked;
 
     public ChannelRecyclerViewAdapter(List<Channel> items, OnListFragmentInteractionListener listener, OnChannelClicked OnChannelClicked) {
-        mValues = items;
+        channels = items;
         mListener = listener;
         this.OnChannelClicked = OnChannelClicked;
     }
@@ -39,7 +39,7 @@ public class ChannelRecyclerViewAdapter extends RecyclerView.Adapter<ChannelRecy
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        holder.channel = mValues.get(position);
+        holder.channel = channels.get(position);
         holder.channel_name.setText(holder.channel.getName());
         holder.channel_number.setText(String.valueOf(holder.channel.getNumber()));
         holder.mView.setOnClickListener(new View.OnClickListener() {
@@ -69,7 +69,7 @@ public class ChannelRecyclerViewAdapter extends RecyclerView.Adapter<ChannelRecy
 
     @Override
     public int getItemCount() {
-        return mValues.size();
+        return channels.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
