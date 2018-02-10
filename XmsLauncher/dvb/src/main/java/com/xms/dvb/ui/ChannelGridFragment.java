@@ -41,7 +41,7 @@ public class ChannelGridFragment extends HeadersFragment {
             @Override
             public void onHeaderClicked(RowHeaderPresenter.ViewHolder viewHolder, Row row) {
                 if (XmsPlayer.getPlayerInstance() != null) {
-                    XmsPlayer.getPlayerInstance().changeChannel((int) row.getHeaderItem().getId() - 1 );
+                    XmsPlayer.getPlayerInstance().changeChannel((int) row.getHeaderItem().getId() - 1, true );
                     Preferences.setLastChannel((int) row.getHeaderItem().getId() - 1);
                 } else if (FTPPlayer.getPlayerInstance() != null) {
                     FTPPlayer.getPlayerInstance().SetChannel((int) row.getHeaderItem().getId());
