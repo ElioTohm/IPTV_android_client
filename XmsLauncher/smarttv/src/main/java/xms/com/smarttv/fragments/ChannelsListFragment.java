@@ -101,6 +101,6 @@ public class ChannelsListFragment extends Fragment implements ChannelRecyclerVie
     }
 
     public interface OnListFragmentInteractionListener {
-        void onListFragmentInteraction(Channel item);
+        void onListFragmentInteraction(Channel item, boolean flag);
     }
 }

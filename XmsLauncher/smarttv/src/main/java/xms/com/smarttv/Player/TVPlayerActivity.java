@@ -47,6 +47,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
     private XmsPlayer xmsPlayer;
     private Fragment menuFragment;
     private int currentChannelNumber = 1;
+    private List<Channel> channelList ;
     private ChannelsListFragment channelGridFragment;
     private Realm realm;
     private ImageView channel_icon;
@@ -73,6 +74,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
         getFragmentManager().beginTransaction().add(R.id.fragment_container_channel, menuFragment).commit();
         getFragmentManager().beginTransaction().add(R.id.fragment_container_channel, channelGridFragment).commit();
         getFragmentManager().beginTransaction().hide(channelGridFragment).commit();
+        channelList = new ArrayList<>();
 
         realm = Realm.getDefaultInstance();
         try {
@@ -159,13 +161,22 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
                     return super.dispatchKeyEvent(event);
                 case KeyEvent.KEYCODE_DPAD_UP:
                     if (channelGridFragment.isHidden() && menuFragment.isHidden()) {
-                        currentChannelNumber = xmsPlayer.nextchannel(currentChannelNumber);
+                        List<Channel> result = realm.where(Channel.class).greaterThan("number", currentChannelNumber).findAllSorted("number");
+                        if (result.size() != 0 ) {
+                            onListFragmentInteraction(result.get(0), true);
+                        } else {
+                            result = realm.where(Channel.class).findAllSorted("number");
+                            onListFragmentInteraction(result.get(0), true);
+                        }
                         return true;
                     }
                     return super.dispatchKeyEvent(event);
                 case KeyEvent.KEYCODE_DPAD_DOWN:
                     if (channelGridFragment.isHidden() && menuFragment.isHidden()) {
-                        currentChannelNumber = xmsPlayer.previouschannel(currentChannelNumber);
+                        List<Channel> result = realm.where(Channel.class).lessThan("number", currentChannelNumber).findAllSorted("number");
+                        if (result.size() != 0 ) {
+                            onListFragmentInteraction(result.get(result.size()-1), true);
+                        }
                         return true;
                     }
                     return super.dispatchKeyEvent(event);
@@ -218,9 +229,12 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
                     public void run() {
                         if (!channel_number_selector.getText().equals("")) {
                             currentChannelNumber = Integer.parseInt((String) channel_number_selector.getText());
-                            xmsPlayer.changeChannel(currentChannelNumber, true);
-                            channel_number_selector.setText("");
-                            channel_number_selector.setVisibility(View.INVISIBLE);
+                            Channel channel = realm.where(Channel.class).equalTo("number", currentChannelNumber).findFirst();
+                            if (channel != null) {
+                                onListFragmentInteraction(channel, true);
+                                channel_number_selector.setText("");
+                                channel_number_selector.setVisibility(View.INVISIBLE);
+                            }
                         }
                     }
                 };
@@ -233,8 +247,10 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
     }
 
     @Override
-    public void onListFragmentInteraction(Channel channel) {
-        xmsPlayer.changeChannel(channel.getNumber(), false);
+    public void onListFragmentInteraction(Channel channel, boolean showinfo) {
+        channelList.clear();
+        channelList.add(channel);
+        xmsPlayer.changeSource(channelList, showinfo);
         currentChannelNumber = channel.getNumber();
     }
 

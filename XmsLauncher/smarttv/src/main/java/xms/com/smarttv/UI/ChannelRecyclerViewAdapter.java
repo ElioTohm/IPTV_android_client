@@ -47,7 +47,7 @@ public class ChannelRecyclerViewAdapter extends RecyclerView.Adapter<ChannelRecy
             public void onClick(View v) {
                 if (null != mListener) {
                     // callback to update player in player activity
-                    mListener.onListFragmentInteraction(holder.channel);
+                    mListener.onListFragmentInteraction(holder.channel, false);
 
                     // callback to update position in fragment
                     OnChannelClicked.UpdateLastPosition(position);
