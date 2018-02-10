@@ -44,7 +44,6 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
         SectionMenuFragment.OnListFragmentInteractionListener, XmsPlayerUICallback  {
     private View channelInfo;
     private TextView currentChannel, channel_number_selector, channelName;
-    private List<Channel> channelArrayList;
     private XmsPlayer xmsPlayer;
     private Fragment menuFragment;
     private int currentChannelNumber = 1;
@@ -86,7 +85,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
         currentChannel = findViewById(xms.com.smarttv.R.id.current_channel);
         channelName = findViewById(xms.com.smarttv.R.id.channel_name);
         channel_icon = findViewById(R.id.channel_icon);
-        channelArrayList = new ArrayList<>();
+        List<Channel> channelArrayList = new ArrayList<>();
         channel_number_selector = findViewById(xms.com.smarttv.R.id.channel_number_selector);
         detailsectionContainer = findViewById(R.id.fragment_container_details);
 

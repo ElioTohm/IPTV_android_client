@@ -68,18 +68,14 @@ public class ChannelsListFragment extends Fragment implements ChannelRecyclerVie
         }
         channelRecyclerViewAdapter = new ChannelRecyclerViewAdapter(Realm.getDefaultInstance().where(Channel.class).findAllSorted("number"),mListener,this);
         recyclerView.setAdapter(channelRecyclerViewAdapter);
-        recyclerView.scrollToPosition(savedposition);
-        channelRecyclerViewAdapter.notifyDataSetChanged();
+
         return view;
     }
 
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        if (!hidden) {
-            recyclerView.setFocusable(true);
-            recyclerView.smoothScrollToPosition(savedposition);
-        }
+        recyclerView.scrollToPosition(savedposition);
     }
 
     @Override

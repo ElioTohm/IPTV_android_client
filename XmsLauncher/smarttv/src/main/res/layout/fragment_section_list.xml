@@ -25,11 +25,17 @@
         android:layout_width="match_parent"/>
 
     <TextClock
-        android:id="@+id/textClock"
         android:textSize="20sp"
         android:textAlignment="center"
         android:textColor="@color/white"
-        android:format12Hour="E dd MMM yyyy hh:mm a"
+        android:format12Hour="EEEE, dd MMMM yyyy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <TextClock
+        android:textSize="20sp"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:format12Hour="hh:mm a"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 

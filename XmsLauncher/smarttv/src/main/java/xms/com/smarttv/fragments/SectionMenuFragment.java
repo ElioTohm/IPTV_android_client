@@ -60,7 +60,7 @@ public class SectionMenuFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_section_list, container, false);
-        view.findViewById(R.id.channel_recycler_view);
+
         // Set the adapter
         Context context = view.getContext();
         RecyclerView recyclerView = view.findViewById(R.id.channel_recycler_view);
