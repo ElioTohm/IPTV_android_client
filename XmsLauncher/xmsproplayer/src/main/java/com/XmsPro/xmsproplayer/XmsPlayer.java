@@ -41,7 +41,6 @@ import java.net.CookieManager;
 import java.net.CookiePolicy;
 import java.util.List;
 
-import io.realm.Realm;
 import okhttp3.OkHttpClient;
 
 import static com.google.android.exoplayer2.DefaultLoadControl.DEFAULT_MAX_BUFFER_MS;
@@ -214,53 +213,17 @@ public class XmsPlayer  {
         }
     }
 
-    /**
-     * in ConcatenatingMediaSource -1 windows index in player
-     * and loop
-     */
-    public int previouschannel(int channelid) {
-        channelArrayList.clear();
-        List<Channel> channelList = Realm.getDefaultInstance().where(Channel.class).lessThan("number", channelid).findAllSorted("number");
-        if (channelList.size() ==0 ) {
-            channelList = Realm.getDefaultInstance().where(Channel.class).findAllSorted("number");
-        }
-        channelArrayList.add(channelList.get(channelList.size()-1));
-        player.prepare(buildMediaSource(channelArrayList));
-        simpleExoPlayerView.setPlayer(player);
-        xmsPlayerUICallback.showChannelInfo(channelArrayList.get(0).getNumber());
-        return channelArrayList.get(0).getNumber();
-    }
 
     /**
-     * in ConcatenatingMediaSource -1 windows index in player
-     * and loop
+     * @param channelList
+     * @param showinfo
+     * change source of stream and set if information about stream should show with respect to showinfo flag
      */
-    public int nextchannel(int channelid) {
-        channelArrayList.clear();
-        List<Channel> channelList = Realm.getDefaultInstance().where(Channel.class).greaterThan("number", channelid).findAllSorted("number");
-        if (channelList.size() == 0) {
-            channelList = Realm.getDefaultInstance().where(Channel.class).findAllSorted("number");
-        }
-        channelArrayList.add(channelList.get(0));
-        player.prepare(buildMediaSource(channelArrayList));
-        simpleExoPlayerView.setPlayer(player);
-        xmsPlayerUICallback.showChannelInfo(channelArrayList.get(0).getNumber());
-        return channelArrayList.get(0).getNumber();
-    }
-
-    /**
-     * @param channelid
-     * changed current window index of exoplayer
-     * thus changing channel
-     * works with dispatchKeyEvent
-     */
-    public void changeChannel(int channelid, boolean showinfo) {
-        channelArrayList.clear();
-        channelArrayList.add(Realm.getDefaultInstance().where(Channel.class).equalTo("number", channelid).findFirst());
-        player.prepare(buildMediaSource(channelArrayList));
+    public void changeSource(List<Channel> channelList, boolean showinfo) {
+        player.prepare(buildMediaSource(channelList));
         simpleExoPlayerView.setPlayer(player);
         if (showinfo) {
-            xmsPlayerUICallback.showChannelInfo(channelArrayList.get(0).getNumber());
+            xmsPlayerUICallback.showChannelInfo(channelList.get(0).getNumber());
         }
     }
 
