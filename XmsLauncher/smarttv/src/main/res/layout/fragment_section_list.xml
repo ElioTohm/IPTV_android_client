@@ -1,0 +1,37 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:background="@color/BlackTransparent"
+    android:layout_width="match_parent"
+    android:orientation="vertical">
+
+    <ImageView
+        android:paddingLeft="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:id="@+id/DefaultIcon"
+        android:src="@drawable/xmsprologosmall" />
+
+    <TextView
+        android:layout_marginTop="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/WhiteSmokeTransparent"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/channel_recycler_view"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_height="450dp"
+        android:layout_width="match_parent"/>
+
+    <TextClock
+        android:id="@+id/textClock"
+        android:textSize="20sp"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:format12Hour="E dd MMM yyyy hh:mm a"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+
+</LinearLayout>
