@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.List;
 
 import xms.com.smarttv.R;
@@ -36,13 +38,15 @@ public class SectionRecyclerViewAdapter extends RecyclerView.Adapter<SectionRecy
     @Override
     public void onBindViewHolder(final SectionRecyclerViewAdapter.ViewHolder holder, int position) {
         holder.section = mValues.get(position);
-        holder.section_name.setText(mValues.get(position).getName());
+        holder.section_name.setText(holder.section.getName());
+        Glide.with(holder.mView.getContext())
+            .load(holder.mView.getContext().getResources().getDrawable(holder.section.getIconResId()))
+            .into(holder.imageView);
+
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (null != mListener) {
-                    // Notify the active callbacks interface (the activity, if the
-                    // fragment is attached to one) that an item has been selected.
                     mListener.onListFragmentInteraction(holder.section);
                 }
             }
@@ -56,7 +60,6 @@ public class SectionRecyclerViewAdapter extends RecyclerView.Adapter<SectionRecy
                 } else {
                     v.setBackgroundColor(0x00000000);
                 }
-
             }
         });
     }

@@ -38,11 +38,12 @@ dependencies {
         // excluding org.json which is provided by Android
         exclude group: 'org.json', module: 'json'
     }
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'com.github.bumptech.glide:glide:4.6.1'
+    compile 'com.android.support.constraint:constraint-layout:' + project.ext.constraintlayout
+    compile 'com.github.bumptech.glide:glide:' + project.ext.glide
+    annotationProcessor 'com.github.bumptech.glide:compiler:' + project.ext.glide
     compile 'com.android.support:recyclerview-v7:' + project.ext.supportLibraryVersion
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.6.1'
     compile 'com.android.support:support-v4:' + project.ext.supportLibraryVersion
     compile 'com.android.support:support-vector-drawable:' + project.ext.supportLibraryVersion
+    compile 'org.osmdroid:osmdroid-android:' + project.ext.osm
 
 }

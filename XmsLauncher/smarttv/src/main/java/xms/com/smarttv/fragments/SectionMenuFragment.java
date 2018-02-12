@@ -22,18 +22,22 @@ public class SectionMenuFragment extends Fragment {
     private static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 1;
     private SectionMenuFragment.OnListFragmentInteractionListener mListener;
-    private static final long HEADER_ID_0 = 0;
-    private static final String HEADER_NAME_0 = "Room Services";
-    private static final long HEADER_ID_1 = 1;
+    public static final long HEADER_ID_0 = 0;
+    private static final String HEADER_NAME_0 = "Hotel Info";
+    public static final long HEADER_ID_1 = 1;
     private static final String HEADER_NAME_1 = "Restaurants & Bars";
-    private static final long HEADER_ID_2 = 2;
+    public static final long HEADER_ID_2 = 2;
     private static final String HEADER_NAME_2 = "Spa & Fitness";
-    private static final long HEADER_ID_3 = 3;
+    public static final long HEADER_ID_3 = 3;
     private static final String HEADER_NAME_3 = "Special Offers";
-    private static final long HEADER_ID_4 = 4;
+    public static final long HEADER_ID_4 = 4;
     private static final String HEADER_NAME_4 = "Weather";
-    private static final long HEADER_ID_5 = 5;
+    public static final long HEADER_ID_5 = 5;
     private static final String HEADER_NAME_5 = "City Guide";
+    public static final long HEADER_ID_6 = 6;
+    private static final String HEADER_NAME_6 = "Live Channels";
+    public static final long HEADER_ID_7 = 7;
+    private static final String HEADER_NAME_7 = "VOD";
 
     public SectionMenuFragment() {
     }
@@ -65,27 +69,32 @@ public class SectionMenuFragment extends Fragment {
         Context context = view.getContext();
         RecyclerView recyclerView = view.findViewById(R.id.channel_recycler_view);
         recyclerView.addItemDecoration(new SimpleDividerItemDecoration(context));
-        ;
+
         if (mColumnCount <= 1) {
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
         } else {
             recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
         }
-        CustomHeaderItem headerItem0 = new CustomHeaderItem(HEADER_ID_0, HEADER_NAME_0, R.drawable.lb_ic_fast_forward);
-        CustomHeaderItem headerItem1 = new CustomHeaderItem(HEADER_ID_1, HEADER_NAME_1, R.drawable.glass);
-        CustomHeaderItem headerItem2 = new CustomHeaderItem(HEADER_ID_2, HEADER_NAME_2, R.drawable.lb_ic_fast_forward);
-        CustomHeaderItem headerItem3 = new CustomHeaderItem(HEADER_ID_3, HEADER_NAME_3, R.drawable.tagsale);
-        CustomHeaderItem headerItem4 = new CustomHeaderItem(HEADER_ID_4, HEADER_NAME_4, R.drawable.lb_ic_fast_forward);
+        CustomHeaderItem info = new CustomHeaderItem(HEADER_ID_0, HEADER_NAME_0, R.drawable.info);
+        CustomHeaderItem bar = new CustomHeaderItem(HEADER_ID_1, HEADER_NAME_1, R.drawable.bar);
+        CustomHeaderItem fitness = new CustomHeaderItem(HEADER_ID_2, HEADER_NAME_2, R.drawable.gym);
+        CustomHeaderItem specialoffers = new CustomHeaderItem(HEADER_ID_3, HEADER_NAME_3, R.drawable.dollar);
+        CustomHeaderItem weather = new CustomHeaderItem(HEADER_ID_4, HEADER_NAME_4, R.drawable.weather);
+        CustomHeaderItem cityguide = new CustomHeaderItem(HEADER_ID_5, HEADER_NAME_5, R.drawable.compass);
+        CustomHeaderItem livechannels = new CustomHeaderItem(HEADER_ID_6, HEADER_NAME_6, R.drawable.live);
+        CustomHeaderItem vod = new CustomHeaderItem(HEADER_ID_7, HEADER_NAME_7, R.drawable.vod);
         List<CustomHeaderItem> mRowsAdapter  = new ArrayList<>() ;
-        mRowsAdapter.add(headerItem0);
-        mRowsAdapter.add(headerItem1);
-        mRowsAdapter.add(headerItem2);
-        mRowsAdapter.add(headerItem3);
-        mRowsAdapter.add(headerItem4);
+        mRowsAdapter.add(info);
+        mRowsAdapter.add(livechannels);
+        mRowsAdapter.add(vod);
+        mRowsAdapter.add(bar);
+        mRowsAdapter.add(fitness);
+        mRowsAdapter.add(specialoffers);
+        mRowsAdapter.add(weather);
+        mRowsAdapter.add(cityguide);
         recyclerView.setAdapter(new SectionRecyclerViewAdapter(mRowsAdapter, mListener));
         return view;
     }
-
 
     @Override
     public void onAttach(Context context) {
@@ -104,18 +113,7 @@ public class SectionMenuFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnListFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onListFragmentInteraction(CustomHeaderItem item);
     }
 }

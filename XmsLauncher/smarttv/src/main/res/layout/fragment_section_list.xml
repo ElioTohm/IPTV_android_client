@@ -6,9 +6,10 @@
     android:orientation="vertical">
 
     <ImageView
-        android:paddingLeft="20dp"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="120dp"
         android:id="@+id/DefaultIcon"
         android:src="@drawable/xmsprologosmall" />
 
@@ -21,7 +22,7 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/channel_recycler_view"
         xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_height="450dp"
+        android:layout_height="480dp"
         android:layout_width="match_parent"/>
 
     <TextClock

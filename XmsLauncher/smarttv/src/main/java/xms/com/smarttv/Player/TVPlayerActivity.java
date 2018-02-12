@@ -37,8 +37,18 @@ import xms.com.smarttv.UI.CustomHeaderItem;
 import xms.com.smarttv.UI.MainMenu;
 import xms.com.smarttv.app.Preferences;
 import xms.com.smarttv.fragments.ChannelsListFragment;
+import xms.com.smarttv.fragments.MapFragment;
 import xms.com.smarttv.fragments.SectionMenuFragment;
 import xms.com.smarttv.services.GetInstalledAppService;
+
+import static xms.com.smarttv.fragments.SectionMenuFragment.HEADER_ID_0;
+import static xms.com.smarttv.fragments.SectionMenuFragment.HEADER_ID_1;
+import static xms.com.smarttv.fragments.SectionMenuFragment.HEADER_ID_2;
+import static xms.com.smarttv.fragments.SectionMenuFragment.HEADER_ID_3;
+import static xms.com.smarttv.fragments.SectionMenuFragment.HEADER_ID_4;
+import static xms.com.smarttv.fragments.SectionMenuFragment.HEADER_ID_5;
+import static xms.com.smarttv.fragments.SectionMenuFragment.HEADER_ID_6;
+import static xms.com.smarttv.fragments.SectionMenuFragment.HEADER_ID_7;
 
 public class TVPlayerActivity extends Activity implements ChannelsListFragment.OnListFragmentInteractionListener,
         SectionMenuFragment.OnListFragmentInteractionListener, XmsPlayerUICallback  {
@@ -53,12 +63,6 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
     private ImageView channel_icon;
     private RelativeLayout detailsectionContainer;
     private Fragment detailSectionFragment = null;
-    private static final long HEADER_ID_0 = 0;
-    private static final long HEADER_ID_1 = 1;
-    private static final long HEADER_ID_2 = 2;
-    private static final long HEADER_ID_3 = 3;
-    private static final long HEADER_ID_4 = 4;
-    private static final long HEADER_ID_5 = 5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,20 +141,19 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
                     if (getFragmentManager().findFragmentByTag("DetailSectionFragment") == null &&
                             channelGridFragment.isHidden() && menuFragment.isHidden()) {
                         showChannelInfo(currentChannelNumber);
-                        return false;
                     }
                     getFragmentManager().beginTransaction().hide(channelGridFragment).commit();
                     hideDetailSection("DetailSectionFragment");
                     getFragmentManager().beginTransaction().hide(menuFragment).commit();
-                    return false;
+                    return super.dispatchKeyEvent(event);
                 case KeyEvent.KEYCODE_MENU:
                     if (channelGridFragment.isHidden()){
                         if (menuFragment.isHidden()) {
                             getFragmentManager().beginTransaction().show(menuFragment).commit();
                         } else {
                             getFragmentManager().beginTransaction().hide(menuFragment).commit();
-                            hideDetailSection("DetailSectionFragment");
                         }
+                        hideDetailSection("DetailSectionFragment");
                     }
                     return false;
                 case KeyEvent.KEYCODE_DPAD_CENTER:
@@ -176,6 +179,9 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
                         List<Channel> result = realm.where(Channel.class).lessThan("number", currentChannelNumber).findAllSorted("number");
                         if (result.size() != 0 ) {
                             onListFragmentInteraction(result.get(result.size()-1), true);
+                        } else {
+                            result = realm.where(Channel.class).findAllSorted("number");
+                            onListFragmentInteraction(result.get(result.size() - 1), true);
                         }
                         return true;
                     }
@@ -266,6 +272,12 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
             detailSectionFragment = new MainMenu.SettingsFragment();
         } else if (item.getHeaderId() == HEADER_ID_4) {
             detailSectionFragment = new MainMenu.WebViewFragment();
+        } else if (item.getHeaderId() == HEADER_ID_5) {
+            detailSectionFragment = new MapFragment();
+        } else if (item.getHeaderId() == HEADER_ID_6) {
+            detailSectionFragment = new MapFragment();
+        } else if (item.getHeaderId() == HEADER_ID_7) {
+            detailSectionFragment = new MapFragment();
         }
         showDetailSection (detailSectionFragment);
     }
@@ -295,11 +307,11 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
                 .commit();
     }
 
-    private void hideDetailSection (String detailFragmenttag) {
-        if (getFragmentManager().findFragmentByTag(detailFragmenttag) != null) {
+    private void hideDetailSection(String DetailSectionFragment) {
+        if (getFragmentManager().findFragmentByTag(DetailSectionFragment) != null) {
             detailsectionContainer.setBackgroundColor(0x000000);
             getFragmentManager().beginTransaction()
-                    .remove(getFragmentManager().findFragmentByTag(detailFragmenttag))
+                    .remove(getFragmentManager().findFragmentByTag("DetailSectionFragment"))
                     .commit();
         }
     }
@@ -310,7 +322,6 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
      * @throws IOException
      */
     private void getClientInfo() throws IOException {
-        realm = Realm.getDefaultInstance();
         User user = realm.where(User.class).findFirst();
         ApiInterface apiInterface = ApiService.createService(ApiInterface.class, Preferences.getServerUrl(), user.getToken_type(), user.getAccess_token());
         Call<Client> clientCall = apiInterface.getClientInfo(user.getId());
