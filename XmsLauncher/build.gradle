@@ -27,6 +27,9 @@ allprojects {
         dexmakerVersion = '1.2'
         mockitoVersion = '1.9.5'
         releaseVersion = '2.6.1'
+        constraintlayout = '1.0.2'
+        glide = '4.6.1'
+        osm = '5.6.5'
     }
     if (it.hasProperty('externalBuildDir')) {
         if (!new File(externalBuildDir).isAbsolute()) {
