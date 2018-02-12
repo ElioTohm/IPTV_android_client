@@ -22,22 +22,22 @@ public class SectionMenuFragment extends Fragment {
     private static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 1;
     private SectionMenuFragment.OnListFragmentInteractionListener mListener;
-    public static final long HEADER_ID_0 = 0;
-    private static final String HEADER_NAME_0 = "Hotel Info";
-    public static final long HEADER_ID_1 = 1;
-    private static final String HEADER_NAME_1 = "Restaurants & Bars";
-    public static final long HEADER_ID_2 = 2;
-    private static final String HEADER_NAME_2 = "Spa & Fitness";
-    public static final long HEADER_ID_3 = 3;
-    private static final String HEADER_NAME_3 = "Special Offers";
-    public static final long HEADER_ID_4 = 4;
-    private static final String HEADER_NAME_4 = "Weather";
-    public static final long HEADER_ID_5 = 5;
-    private static final String HEADER_NAME_5 = "City Guide";
-    public static final long HEADER_ID_6 = 6;
-    private static final String HEADER_NAME_6 = "Live Channels";
-    public static final long HEADER_ID_7 = 7;
-    private static final String HEADER_NAME_7 = "VOD";
+    public static final long HEADER_ID_HOTEL_INFO = 0;
+    private static final String HEADER_NAME_HOTEL_INFO = "Hotel Info";
+    public static final long HEADER_ID_RESTOANDBAR = 1;
+    private static final String HEADER_NAME_RESTOANDBAR = "Restaurants & Bars";
+    public static final long HEADER_ID_SPAANDFITNESS = 2;
+    private static final String HEADER_NAME_SPAANDFITNESS = "Spa & Fitness";
+    public static final long HEADER_ID_OFFERS = 3;
+    private static final String HEADER_NAME_OFFERS  = "Special Offers";
+    public static final long HEADER_ID_WEATHER = 4;
+    private static final String HEADER_NAME_WEATHER = "Weather";
+    public static final long HEADER_ID_CITYGUIDE = 5;
+    private static final String HEADER_NAME_CITYGUIDE = "City Guide";
+    public static final long HEADER_ID_CHANNELS = 6;
+    private static final String HEADER_NAME_CHANNELS = "Live Channels";
+    public static final long HEADER_ID_VOD = 7;
+    private static final String HEADER_NAME_VOD = "VOD";
 
     public SectionMenuFragment() {
     }
@@ -75,14 +75,14 @@ public class SectionMenuFragment extends Fragment {
         } else {
             recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
         }
-        CustomHeaderItem info = new CustomHeaderItem(HEADER_ID_0, HEADER_NAME_0, R.drawable.info);
-        CustomHeaderItem bar = new CustomHeaderItem(HEADER_ID_1, HEADER_NAME_1, R.drawable.bar);
-        CustomHeaderItem fitness = new CustomHeaderItem(HEADER_ID_2, HEADER_NAME_2, R.drawable.gym);
-        CustomHeaderItem specialoffers = new CustomHeaderItem(HEADER_ID_3, HEADER_NAME_3, R.drawable.dollar);
-        CustomHeaderItem weather = new CustomHeaderItem(HEADER_ID_4, HEADER_NAME_4, R.drawable.weather);
-        CustomHeaderItem cityguide = new CustomHeaderItem(HEADER_ID_5, HEADER_NAME_5, R.drawable.compass);
-        CustomHeaderItem livechannels = new CustomHeaderItem(HEADER_ID_6, HEADER_NAME_6, R.drawable.live);
-        CustomHeaderItem vod = new CustomHeaderItem(HEADER_ID_7, HEADER_NAME_7, R.drawable.vod);
+        CustomHeaderItem info = new CustomHeaderItem(HEADER_ID_HOTEL_INFO, HEADER_NAME_HOTEL_INFO, R.drawable.info);
+        CustomHeaderItem bar = new CustomHeaderItem(HEADER_ID_RESTOANDBAR, HEADER_NAME_RESTOANDBAR, R.drawable.bar);
+        CustomHeaderItem fitness = new CustomHeaderItem(HEADER_ID_SPAANDFITNESS, HEADER_NAME_SPAANDFITNESS, R.drawable.gym);
+        CustomHeaderItem specialoffers = new CustomHeaderItem(HEADER_ID_OFFERS, HEADER_NAME_OFFERS, R.drawable.dollar);
+        CustomHeaderItem weather = new CustomHeaderItem(HEADER_ID_WEATHER, HEADER_NAME_WEATHER, R.drawable.weather);
+        CustomHeaderItem cityguide = new CustomHeaderItem(HEADER_ID_CITYGUIDE, HEADER_NAME_CITYGUIDE, R.drawable.compass);
+        CustomHeaderItem livechannels = new CustomHeaderItem(HEADER_ID_CHANNELS, HEADER_NAME_CHANNELS, R.drawable.live);
+        CustomHeaderItem vod = new CustomHeaderItem(HEADER_ID_VOD, HEADER_NAME_VOD, R.drawable.vod);
         List<CustomHeaderItem> mRowsAdapter  = new ArrayList<>() ;
         mRowsAdapter.add(info);
         mRowsAdapter.add(livechannels);

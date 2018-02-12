@@ -34,21 +34,23 @@ import retrofit2.Response;
 import xms.com.smarttv.R;
 import xms.com.smarttv.UI.ApplicationsMenu;
 import xms.com.smarttv.UI.CustomHeaderItem;
-import xms.com.smarttv.UI.MainMenu;
 import xms.com.smarttv.app.Preferences;
 import xms.com.smarttv.fragments.ChannelsListFragment;
 import xms.com.smarttv.fragments.MapFragment;
+import xms.com.smarttv.fragments.RestaurantsNBarFragment;
 import xms.com.smarttv.fragments.SectionMenuFragment;
+import xms.com.smarttv.fragments.VODfragment;
+import xms.com.smarttv.fragments.WebViewFragment;
 import xms.com.smarttv.services.GetInstalledAppService;
 
-import static xms.com.smarttv.fragments.SectionMenuFragment.HEADER_ID_0;
-import static xms.com.smarttv.fragments.SectionMenuFragment.HEADER_ID_1;
-import static xms.com.smarttv.fragments.SectionMenuFragment.HEADER_ID_2;
-import static xms.com.smarttv.fragments.SectionMenuFragment.HEADER_ID_3;
-import static xms.com.smarttv.fragments.SectionMenuFragment.HEADER_ID_4;
-import static xms.com.smarttv.fragments.SectionMenuFragment.HEADER_ID_5;
-import static xms.com.smarttv.fragments.SectionMenuFragment.HEADER_ID_6;
-import static xms.com.smarttv.fragments.SectionMenuFragment.HEADER_ID_7;
+import static xms.com.smarttv.fragments.SectionMenuFragment.HEADER_ID_CHANNELS;
+import static xms.com.smarttv.fragments.SectionMenuFragment.HEADER_ID_CITYGUIDE;
+import static xms.com.smarttv.fragments.SectionMenuFragment.HEADER_ID_HOTEL_INFO;
+import static xms.com.smarttv.fragments.SectionMenuFragment.HEADER_ID_OFFERS;
+import static xms.com.smarttv.fragments.SectionMenuFragment.HEADER_ID_RESTOANDBAR;
+import static xms.com.smarttv.fragments.SectionMenuFragment.HEADER_ID_SPAANDFITNESS;
+import static xms.com.smarttv.fragments.SectionMenuFragment.HEADER_ID_VOD;
+import static xms.com.smarttv.fragments.SectionMenuFragment.HEADER_ID_WEATHER;
 
 public class TVPlayerActivity extends Activity implements ChannelsListFragment.OnListFragmentInteractionListener,
         SectionMenuFragment.OnListFragmentInteractionListener, XmsPlayerUICallback  {
@@ -262,22 +264,22 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
 
     @Override
     public void onListFragmentInteraction(CustomHeaderItem item) {
-        if (item.getHeaderId() == HEADER_ID_0) {
+        if (item.getHeaderId() == HEADER_ID_CHANNELS) {
             detailSectionFragment = new ApplicationsMenu();
-        } else if (item.getHeaderId() == HEADER_ID_1) {
+        } else if (item.getHeaderId() == HEADER_ID_OFFERS) {
             detailSectionFragment = new ApplicationsMenu();
-        } else if (item.getHeaderId() == HEADER_ID_2) {
-            detailSectionFragment = new MainMenu.SampleFragmentB();
-        } else if (item.getHeaderId() == HEADER_ID_3) {
-            detailSectionFragment = new MainMenu.SettingsFragment();
-        } else if (item.getHeaderId() == HEADER_ID_4) {
-            detailSectionFragment = new MainMenu.WebViewFragment();
-        } else if (item.getHeaderId() == HEADER_ID_5) {
+        } else if (item.getHeaderId() == HEADER_ID_HOTEL_INFO) {
+            detailSectionFragment = new ApplicationsMenu();
+        } else if (item.getHeaderId() == HEADER_ID_RESTOANDBAR) {
+            detailSectionFragment = new RestaurantsNBarFragment();
+        } else if (item.getHeaderId() == HEADER_ID_WEATHER) {
+            detailSectionFragment = new WebViewFragment();
+        } else if (item.getHeaderId() == HEADER_ID_CITYGUIDE) {
             detailSectionFragment = new MapFragment();
-        } else if (item.getHeaderId() == HEADER_ID_6) {
-            detailSectionFragment = new MapFragment();
-        } else if (item.getHeaderId() == HEADER_ID_7) {
-            detailSectionFragment = new MapFragment();
+        } else if (item.getHeaderId() == HEADER_ID_SPAANDFITNESS) {
+            detailSectionFragment = new ApplicationsMenu();
+        } else if (item.getHeaderId() == HEADER_ID_VOD) {
+            detailSectionFragment = new VODfragment();
         }
         showDetailSection (detailSectionFragment);
     }

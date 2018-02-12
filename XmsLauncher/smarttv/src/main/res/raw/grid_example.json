@@ -1,88 +1,220 @@
 {
   "cards": [
     {
-      "type": "GRID_SQUARE",
-      "title": "Nüsse",
-      "description": "$3.99/lb",
-      "localImageResource": "food_01"
+      "type": "SQUARE_BIG",
+      "title": "Deep Into The Deep Sleep",
+      "description": "$3.99",
+      "localImageResource": "card_image_movie_01"
     },
     {
-      "type": "GRID_SQUARE",
-      "title": "Undefinierbar",
-      "description": "$3.99/lb",
-      "localImageResource": "food_02"
+      "type": "SQUARE_BIG",
+      "title": "We",
+      "description": "$3.99",
+      "localImageResource": "card_image_movie_02"
     },
     {
-      "type": "GRID_SQUARE",
-      "title": "Brocoli",
-      "description": "$3.99/lb",
-      "localImageResource": "food_03"
+      "type": "SQUARE_BIG",
+      "title": "The Fairy Story Of A Legend",
+      "description": "$3.99",
+      "localImageResource": "card_image_movie_03"
     },
     {
-      "type": "GRID_SQUARE",
-      "title": "Salat",
-      "description": "$3.99/lb",
-      "localImageResource": "food_04"
+      "type": "SQUARE_BIG",
+      "title": "Cursed",
+      "description": "$3.99",
+      "localImageResource": "card_image_movie_04"
     },
     {
-      "type": "GRID_SQUARE",
-      "title": "Große Radischen",
-      "description": "$3.99/lb",
-      "localImageResource": "food_05"
+      "type": "SQUARE_BIG",
+      "title": "My Crazy One",
+      "description": "$3.99",
+      "localImageResource": "card_image_movie_05"
     },
     {
-      "type": "GRID_SQUARE",
-      "title": "Rote Zwiebeln",
-      "description": "$3.99/lb",
-      "localImageResource": "food_06"
+      "type": "SQUARE_BIG",
+      "title": "Gone",
+      "description": "$3.99",
+      "localImageResource": "card_image_movie_06"
     },
     {
-      "type": "GRID_SQUARE",
-      "title": "Lauch",
-      "description": "$3.99/lb",
-      "localImageResource": "food_07"
+      "type": "SQUARE_BIG",
+      "title": "A Cold Night To Stay",
+      "description": "$3.99",
+      "localImageResource": "card_image_movie_07"
     },
     {
-      "type": "GRID_SQUARE",
-      "title": "Exotisches Zeugs",
-      "description": "$3.99/lb",
-      "localImageResource": "food_08"
+      "type": "SQUARE_BIG",
+      "title": "The Silence",
+      "description": "$3.99",
+      "localImageResource": "card_image_movie_08"
     },
     {
-      "type": "GRID_SQUARE",
-      "title": "Zitronen",
-      "description": "$3.99/lb",
-      "localImageResource": "food_09"
+      "type": "SQUARE_BIG",
+      "title": "Hear The Roar",
+      "description": "$3.99",
+      "localImageResource": "card_image_movie_09"
     },
     {
-      "type": "GRID_SQUARE",
-      "title": "Meerirgendwas",
-      "description": "$3.99/lb",
-      "localImageResource": "food_10"
+      "type": "SQUARE_BIG",
+      "title": "Deep Into The Deep Sleep",
+      "description": "$3.99",
+      "localImageResource": "card_image_movie_01"
     },
     {
-      "type": "GRID_SQUARE",
-      "title": "Irgendein Kohl",
-      "description": "$3.99/lb",
-      "localImageResource": "food_11"
+      "type": "SQUARE_BIG",
+      "title": "We",
+      "description": "$3.99",
+      "localImageResource": "card_image_movie_02"
     },
     {
-      "type": "GRID_SQUARE",
-      "title": "Apfel",
-      "description": "$3.99/lb",
-      "localImageResource": "food_12"
+      "type": "SQUARE_BIG",
+      "title": "The Fairy Story Of A Legend",
+      "description": "$3.99",
+      "localImageResource": "card_image_movie_03"
     },
     {
-      "type": "GRID_SQUARE",
-      "title": "Mehr Äpfel",
-      "description": "$3.99/lb",
-      "localImageResource": "food_13"
+      "type": "SQUARE_BIG",
+      "title": "Cursed",
+      "description": "$3.99",
+      "localImageResource": "card_image_movie_04"
     },
     {
-      "type": "GRID_SQUARE",
-      "title": "Tomaten",
-      "description": "$3.99/lb",
-      "localImageResource": "food_14"
+      "type": "SQUARE_BIG",
+      "title": "My Crazy One",
+      "description": "$3.99",
+      "localImageResource": "card_image_movie_05"
+    },
+    {
+      "type": "SQUARE_BIG",
+      "title": "Gone",
+      "description": "$3.99",
+      "localImageResource": "card_image_movie_06"
+    },
+    {
+      "type": "SQUARE_BIG",
+      "title": "A Cold Night To Stay",
+      "description": "$3.99",
+      "localImageResource": "card_image_movie_07"
+    },
+    {
+      "type": "SQUARE_BIG",
+      "title": "The Silence",
+      "description": "$3.99",
+      "localImageResource": "card_image_movie_08"
+    },
+    {
+      "type": "SQUARE_BIG",
+      "title": "Hear The Roar",
+      "description": "$3.99",
+      "localImageResource": "card_image_movie_09"
+    },
+    {
+      "type": "SQUARE_BIG",
+      "title": "Deep Into The Deep Sleep",
+      "description": "$3.99",
+      "localImageResource": "card_image_movie_01"
+    },
+    {
+      "type": "SQUARE_BIG",
+      "title": "We",
+      "description": "$3.99",
+      "localImageResource": "card_image_movie_02"
+    },
+    {
+      "type": "SQUARE_BIG",
+      "title": "The Fairy Story Of A Legend",
+      "description": "$3.99",
+      "localImageResource": "card_image_movie_03"
+    },
+    {
+      "type": "SQUARE_BIG",
+      "title": "Cursed",
+      "description": "$3.99",
+      "localImageResource": "card_image_movie_04"
+    },
+    {
+      "type": "SQUARE_BIG",
+      "title": "My Crazy One",
+      "description": "$3.99",
+      "localImageResource": "card_image_movie_05"
+    },
+    {
+      "type": "SQUARE_BIG",
+      "title": "Gone",
+      "description": "$3.99",
+      "localImageResource": "card_image_movie_06"
+    },
+    {
+      "type": "SQUARE_BIG",
+      "title": "A Cold Night To Stay",
+      "description": "$3.99",
+      "localImageResource": "card_image_movie_07"
+    },
+    {
+      "type": "SQUARE_BIG",
+      "title": "The Silence",
+      "description": "$3.99",
+      "localImageResource": "card_image_movie_08"
+    },
+    {
+      "type": "SQUARE_BIG",
+      "title": "Hear The Roar",
+      "description": "$3.99",
+      "localImageResource": "card_image_movie_09"
+    },
+    {
+      "type": "SQUARE_BIG",
+      "title": "Deep Into The Deep Sleep",
+      "description": "$3.99",
+      "localImageResource": "card_image_movie_01"
+    },
+    {
+      "type": "SQUARE_BIG",
+      "title": "We",
+      "description": "$3.99",
+      "localImageResource": "card_image_movie_02"
+    },
+    {
+      "type": "SQUARE_BIG",
+      "title": "The Fairy Story Of A Legend",
+      "description": "$3.99",
+      "localImageResource": "card_image_movie_03"
+    },
+    {
+      "type": "SQUARE_BIG",
+      "title": "Cursed",
+      "description": "$3.99",
+      "localImageResource": "card_image_movie_04"
+    },
+    {
+      "type": "SQUARE_BIG",
+      "title": "My Crazy One",
+      "description": "$3.99",
+      "localImageResource": "card_image_movie_05"
+    },
+    {
+      "type": "SQUARE_BIG",
+      "title": "Gone",
+      "description": "$3.99",
+      "localImageResource": "card_image_movie_06"
+    },
+    {
+      "type": "SQUARE_BIG",
+      "title": "A Cold Night To Stay",
+      "description": "$3.99",
+      "localImageResource": "card_image_movie_07"
+    },
+    {
+      "type": "SQUARE_BIG",
+      "title": "The Silence",
+      "description": "$3.99",
+      "localImageResource": "card_image_movie_08"
+    },
+    {
+      "type": "SQUARE_BIG",
+      "title": "Hear The Roar",
+      "description": "$3.99",
+      "localImageResource": "card_image_movie_09"
     }
   ]
 }
