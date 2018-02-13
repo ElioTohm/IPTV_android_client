@@ -3,6 +3,7 @@
     {
       "type": "SQUARE_BIG",
       "title": "Deep Into The Deep Sleep",
+      "card": "https://upload.wikimedia.org/wikipedia/en/0/0c/Black_Panther_film_poster.jpg",
       "description": "$3.99",
       "localImageResource": "card_image_movie_01"
     },
@@ -10,6 +11,7 @@
       "type": "SQUARE_BIG",
       "title": "We",
       "description": "$3.99",
+      "card": "https://upload.wikimedia.org/wikipedia/en/0/0c/Black_Panther_film_poster.jpg",
       "localImageResource": "card_image_movie_02"
     },
     {
@@ -22,41 +24,48 @@
       "type": "SQUARE_BIG",
       "title": "Cursed",
       "description": "$3.99",
+      "card": "https://upload.wikimedia.org/wikipedia/en/0/0c/Black_Panther_film_poster.jpg",
       "localImageResource": "card_image_movie_04"
     },
     {
       "type": "SQUARE_BIG",
       "title": "My Crazy One",
       "description": "$3.99",
+      "card": "https://upload.wikimedia.org/wikipedia/en/0/0c/Black_Panther_film_poster.jpg",
       "localImageResource": "card_image_movie_05"
     },
     {
       "type": "SQUARE_BIG",
       "title": "Gone",
       "description": "$3.99",
+      "card": "https://upload.wikimedia.org/wikipedia/en/0/0c/Black_Panther_film_poster.jpg",
       "localImageResource": "card_image_movie_06"
     },
     {
       "type": "SQUARE_BIG",
       "title": "A Cold Night To Stay",
+      "card": "https://upload.wikimedia.org/wikipedia/en/0/0c/Black_Panther_film_poster.jpg",
       "description": "$3.99",
       "localImageResource": "card_image_movie_07"
     },
     {
       "type": "SQUARE_BIG",
       "title": "The Silence",
+      "card": "https://upload.wikimedia.org/wikipedia/en/0/0c/Black_Panther_film_poster.jpg",
       "description": "$3.99",
       "localImageResource": "card_image_movie_08"
     },
     {
       "type": "SQUARE_BIG",
       "title": "Hear The Roar",
+      "card": "https://upload.wikimedia.org/wikipedia/en/0/0c/Black_Panther_film_poster.jpg",
       "description": "$3.99",
       "localImageResource": "card_image_movie_09"
     },
     {
       "type": "SQUARE_BIG",
       "title": "Deep Into The Deep Sleep",
+      "card": "https://upload.wikimedia.org/wikipedia/en/0/0c/Black_Panther_film_poster.jpg",
       "description": "$3.99",
       "localImageResource": "card_image_movie_01"
     },
@@ -64,6 +73,7 @@
       "type": "SQUARE_BIG",
       "title": "We",
       "description": "$3.99",
+      "card": "https://upload.wikimedia.org/wikipedia/en/0/0c/Black_Panther_film_poster.jpg",
       "localImageResource": "card_image_movie_02"
     },
     {
@@ -76,143 +86,41 @@
       "type": "SQUARE_BIG",
       "title": "Cursed",
       "description": "$3.99",
+      "card": "https://upload.wikimedia.org/wikipedia/en/0/0c/Black_Panther_film_poster.jpg",
       "localImageResource": "card_image_movie_04"
     },
     {
       "type": "SQUARE_BIG",
       "title": "My Crazy One",
       "description": "$3.99",
+      "card": "https://upload.wikimedia.org/wikipedia/en/0/0c/Black_Panther_film_poster.jpg",
       "localImageResource": "card_image_movie_05"
     },
     {
       "type": "SQUARE_BIG",
       "title": "Gone",
       "description": "$3.99",
+      "card": "https://upload.wikimedia.org/wikipedia/en/0/0c/Black_Panther_film_poster.jpg",
       "localImageResource": "card_image_movie_06"
     },
     {
       "type": "SQUARE_BIG",
       "title": "A Cold Night To Stay",
+      "card": "https://upload.wikimedia.org/wikipedia/en/0/0c/Black_Panther_film_poster.jpg",
       "description": "$3.99",
       "localImageResource": "card_image_movie_07"
     },
     {
       "type": "SQUARE_BIG",
       "title": "The Silence",
+      "card": "https://upload.wikimedia.org/wikipedia/en/0/0c/Black_Panther_film_poster.jpg",
       "description": "$3.99",
       "localImageResource": "card_image_movie_08"
     },
     {
       "type": "SQUARE_BIG",
       "title": "Hear The Roar",
-      "description": "$3.99",
-      "localImageResource": "card_image_movie_09"
-    },
-    {
-      "type": "SQUARE_BIG",
-      "title": "Deep Into The Deep Sleep",
-      "description": "$3.99",
-      "localImageResource": "card_image_movie_01"
-    },
-    {
-      "type": "SQUARE_BIG",
-      "title": "We",
-      "description": "$3.99",
-      "localImageResource": "card_image_movie_02"
-    },
-    {
-      "type": "SQUARE_BIG",
-      "title": "The Fairy Story Of A Legend",
-      "description": "$3.99",
-      "localImageResource": "card_image_movie_03"
-    },
-    {
-      "type": "SQUARE_BIG",
-      "title": "Cursed",
-      "description": "$3.99",
-      "localImageResource": "card_image_movie_04"
-    },
-    {
-      "type": "SQUARE_BIG",
-      "title": "My Crazy One",
-      "description": "$3.99",
-      "localImageResource": "card_image_movie_05"
-    },
-    {
-      "type": "SQUARE_BIG",
-      "title": "Gone",
-      "description": "$3.99",
-      "localImageResource": "card_image_movie_06"
-    },
-    {
-      "type": "SQUARE_BIG",
-      "title": "A Cold Night To Stay",
-      "description": "$3.99",
-      "localImageResource": "card_image_movie_07"
-    },
-    {
-      "type": "SQUARE_BIG",
-      "title": "The Silence",
-      "description": "$3.99",
-      "localImageResource": "card_image_movie_08"
-    },
-    {
-      "type": "SQUARE_BIG",
-      "title": "Hear The Roar",
-      "description": "$3.99",
-      "localImageResource": "card_image_movie_09"
-    },
-    {
-      "type": "SQUARE_BIG",
-      "title": "Deep Into The Deep Sleep",
-      "description": "$3.99",
-      "localImageResource": "card_image_movie_01"
-    },
-    {
-      "type": "SQUARE_BIG",
-      "title": "We",
-      "description": "$3.99",
-      "localImageResource": "card_image_movie_02"
-    },
-    {
-      "type": "SQUARE_BIG",
-      "title": "The Fairy Story Of A Legend",
-      "description": "$3.99",
-      "localImageResource": "card_image_movie_03"
-    },
-    {
-      "type": "SQUARE_BIG",
-      "title": "Cursed",
-      "description": "$3.99",
-      "localImageResource": "card_image_movie_04"
-    },
-    {
-      "type": "SQUARE_BIG",
-      "title": "My Crazy One",
-      "description": "$3.99",
-      "localImageResource": "card_image_movie_05"
-    },
-    {
-      "type": "SQUARE_BIG",
-      "title": "Gone",
-      "description": "$3.99",
-      "localImageResource": "card_image_movie_06"
-    },
-    {
-      "type": "SQUARE_BIG",
-      "title": "A Cold Night To Stay",
-      "description": "$3.99",
-      "localImageResource": "card_image_movie_07"
-    },
-    {
-      "type": "SQUARE_BIG",
-      "title": "The Silence",
-      "description": "$3.99",
-      "localImageResource": "card_image_movie_08"
-    },
-    {
-      "type": "SQUARE_BIG",
-      "title": "Hear The Roar",
+      "card": "https://upload.wikimedia.org/wikipedia/en/0/0c/Black_Panther_film_poster.jpg",
       "description": "$3.99",
       "localImageResource": "card_image_movie_09"
     }

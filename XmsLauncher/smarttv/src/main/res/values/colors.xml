@@ -146,6 +146,7 @@
     <color name="Navy">#000080</color>
     <color name="Black">#000000</color>
     <color name="BlackTransparent">#90000000</color>
+    <color name="BlackLightTransparent">#70000000</color>
     <color name="FullTransparent">#00000000</color>
     <color name="album_title">#4c4c4c</color>
     <color name="background_gradient_start">#000000</color>
@@ -181,8 +182,8 @@
 
     <color name="card_examples_background">#222222</color>
 
-    <color name="detail_view_actionbar_background">#04549D</color>
-    <color name="detail_view_background">#0374BF</color>
+    <color name="detail_view_actionbar_background">#900000FF</color>
+    <color name="detail_view_background">#70000000</color>
     <color name="detail_view_related_background">#022A4E</color>
     <color name="song_row_favorite_color">#FF6E40</color>
 
@@ -196,5 +197,5 @@
     <color name="player_background_color">#db2a0f</color>
     <color name="selected_background">#ffaa3f</color>
 
-    <color name="selected_row_item">#3366ff</color>
+    <color name="selected_row_item">#900000FF</color>
 </resources>

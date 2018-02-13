@@ -6,11 +6,12 @@ import android.util.Log;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.net.URI;
 import java.net.URISyntaxException;
 
 
-public class Card {
+public class Card implements Serializable {
 
     @SerializedName("title") private String mTitle = "";
     @SerializedName("description") private String mDescription = "";

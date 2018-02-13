@@ -37,11 +37,13 @@ import xms.com.smarttv.UI.CustomHeaderItem;
 import xms.com.smarttv.app.Preferences;
 import xms.com.smarttv.fragments.ChannelsListFragment;
 import xms.com.smarttv.fragments.HotelInfoFragment;
+import xms.com.smarttv.fragments.ItemDetailFragment;
 import xms.com.smarttv.fragments.MapFragment;
 import xms.com.smarttv.fragments.RestaurantsNBarFragment;
 import xms.com.smarttv.fragments.SectionMenuFragment;
 import xms.com.smarttv.fragments.VODfragment;
 import xms.com.smarttv.fragments.WebViewFragment;
+import xms.com.smarttv.models.Card;
 import xms.com.smarttv.services.GetInstalledAppService;
 
 import static xms.com.smarttv.fragments.SectionMenuFragment.HEADER_ID_CHANNELS;
@@ -54,7 +56,7 @@ import static xms.com.smarttv.fragments.SectionMenuFragment.HEADER_ID_VOD;
 import static xms.com.smarttv.fragments.SectionMenuFragment.HEADER_ID_WEATHER;
 
 public class TVPlayerActivity extends Activity implements ChannelsListFragment.OnListFragmentInteractionListener,
-        SectionMenuFragment.OnListFragmentInteractionListener, XmsPlayerUICallback  {
+        SectionMenuFragment.OnListFragmentInteractionListener, XmsPlayerUICallback, VODfragment.OnListFragmentInteractionListener {
     private View channelInfo;
     private TextView currentChannel, channel_number_selector, channelName;
     private XmsPlayer xmsPlayer;
@@ -309,6 +311,12 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
     }
 
     @Override
+    public void onListFragmentInteraction(Object item) {
+        detailSectionFragment = new ItemDetailFragment().newInstance((Card) item);
+        showDetailSection (R.id.fragment_container_details, detailSectionFragment, "DetailSectionFragment");
+    }
+
+    @Override
     public void showChannelInfo(int channelindex) {
         Channel channel = realm.where(Channel.class).equalTo("number", channelindex).findFirst();
         Glide.with(this).asBitmap().load(channel.getThumbnail()).into(channel_icon);
@@ -394,5 +402,4 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
         hideDetailSection("DetailSectionFragment");
         getFragmentManager().beginTransaction().hide(menuFragment).commit();
     }
-
 }
