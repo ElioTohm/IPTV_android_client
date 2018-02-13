@@ -335,7 +335,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
 
     @SuppressLint("ResourceAsColor")
     private void showDetailSection (int ViewId, Fragment detailFragment, String tag) {
-        detailsectionContainer.setBackgroundColor(getResources().getColor(R.color.BlackTransparent));
+        detailsectionContainer.setBackgroundColor(getResources().getColor(R.color.BlackLightTransparent));
         getFragmentManager().beginTransaction()
                 .replace(ViewId, detailFragment, tag)
                 .commit();
