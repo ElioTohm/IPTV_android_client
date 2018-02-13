@@ -58,7 +58,6 @@ import xms.com.smarttv.Presenter.InstalledApplicationPresenter;
 import xms.com.smarttv.R;
 import xms.com.smarttv.objects.ServiceApp;
 import xms.com.smarttv.objects.ServiceAppList;
-import xms.com.smarttv.weather.OpenUrlActivity;
 
 public class MainFragment extends BrowseFragment {
     private static final String TAG = "MainFragment";
@@ -239,13 +238,8 @@ public class MainFragment extends BrowseFragment {
                             DetailsActivity.SHARED_ELEMENT_NAME).toBundle();
                     getActivity().startActivity(intent, bundle);
                 } else {
-                    if (serviceApp.getTitle().equals("Weather")) {
-                        Intent intent = new Intent(getActivity(), OpenUrlActivity.class);
-                        startActivity(intent);
-                    } else {
-                        Intent intent = new Intent(getActivity(), TVPlayerActivity.class);
-                        startActivity(intent);
-                    }
+                    Intent intent = new Intent(getActivity(), TVPlayerActivity.class);
+                    startActivity(intent);
                 }
 
             } else if (item instanceof String) {

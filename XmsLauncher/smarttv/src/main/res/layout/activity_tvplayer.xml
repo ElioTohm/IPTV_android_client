@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/Main"
     tools:context="xms.com.smarttv.Player.TVPlayerActivity">
 
     <com.google.android.exoplayer2.ui.SimpleExoPlayerView
@@ -18,15 +17,20 @@
     </com.google.android.exoplayer2.ui.SimpleExoPlayerView>
 
     <RelativeLayout
-        android:layout_width="300dp"
-        android:layout_height="match_parent"
-        android:id="@+id/fragment_container_channel"/>
+        android:layout_width="match_parent"
+        android:id="@+id/Main"
+        android:layout_height="match_parent"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_marginLeft="300dp"
         android:layout_height="match_parent"
         android:id="@+id/fragment_container_details"/>
+
+    <RelativeLayout
+        android:layout_width="300dp"
+        android:layout_height="match_parent"
+        android:id="@+id/fragment_container_channel"/>
 
     <TextView
         android:id="@+id/channel_number_selector"

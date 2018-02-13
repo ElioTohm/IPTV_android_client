@@ -1,7 +1,6 @@
 package xms.com.smarttv.fragments;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v17.leanback.app.VerticalGridFragment;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
 import android.support.v17.leanback.widget.FocusHighlight;
@@ -36,13 +35,8 @@ public class VODfragment extends VerticalGridFragment {
         setAdapter(mAdapter);
 
         prepareEntranceTransition();
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                createRows();
-                startEntranceTransition();
-            }
-        }, 1000);
+        createRows();
+        startEntranceTransition();
     }
 
     private void createRows() {

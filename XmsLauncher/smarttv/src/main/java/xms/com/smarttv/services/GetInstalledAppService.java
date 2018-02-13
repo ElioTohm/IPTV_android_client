@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
+import xms.com.smarttv.R;
 
 public class GetInstalledAppService extends IntentService {
 
@@ -47,14 +48,14 @@ public class GetInstalledAppService extends IntentService {
         for(PackageInfo packinfo : packs) {
             ApplicationInfo ai = pm.getApplicationInfo(packinfo.packageName, 0);
 
-//            if ((ai.flags & ApplicationInfo.FLAG_SYSTEM) == 0 && !packinfo.applicationInfo.loadLabel(getApplication().getPackageManager()).toString().equals(getString(R.string.app_name))) {
+            if ((ai.flags & ApplicationInfo.FLAG_SYSTEM) == 0 && !packinfo.applicationInfo.loadLabel(getApplication().getPackageManager()).toString().equals(getString(R.string.app_name))) {
                 InstalledApps installedApps = new InstalledApps();
                 installedApps.setAppname(packinfo.applicationInfo.loadLabel(getApplication().getPackageManager()).toString());
                 installedApps.setPname(packinfo.packageName);
                 installedApps.setVersionName(packinfo.versionName);
                 installedApps.setVersionCode(packinfo.versionCode);
                 res.add(installedApps);
-//            }
+            }
         }
         return res;
     }

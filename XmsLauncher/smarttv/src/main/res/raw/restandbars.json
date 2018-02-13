@@ -4,6 +4,7 @@
       "cards": [
         {
           "type": "CHARACTER",
+          "title": "Cook OFF",
           "localImageResource": "resto1"
         },
         {

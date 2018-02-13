@@ -36,6 +36,7 @@ import xms.com.smarttv.UI.ApplicationsMenu;
 import xms.com.smarttv.UI.CustomHeaderItem;
 import xms.com.smarttv.app.Preferences;
 import xms.com.smarttv.fragments.ChannelsListFragment;
+import xms.com.smarttv.fragments.HotelInfoFragment;
 import xms.com.smarttv.fragments.MapFragment;
 import xms.com.smarttv.fragments.RestaurantsNBarFragment;
 import xms.com.smarttv.fragments.SectionMenuFragment;
@@ -71,10 +72,13 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
         super.onCreate(savedInstanceState);
         setContentView(xms.com.smarttv.R.layout.activity_tvplayer);
 
-        // init get application service
+        // init get application service and save application info in database
         Intent getinstalledappintent = new Intent(this, GetInstalledAppService.class);
         this.startService(getinstalledappintent);
 
+        /*
+         * initialize Fragments menu fragment and channel fragment
+         */
         menuFragment = new SectionMenuFragment();
         channelGridFragment = new ChannelsListFragment();
         getFragmentManager().beginTransaction().add(R.id.fragment_container_channel, menuFragment).commit();
@@ -82,6 +86,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
         getFragmentManager().beginTransaction().hide(channelGridFragment).commit();
         channelList = new ArrayList<>();
 
+        // init Realm and getClient
         realm = Realm.getDefaultInstance();
         try {
             getClientInfo();
@@ -89,6 +94,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
             e.printStackTrace();
         }
 
+        // init element and channel list with player
         channelInfo = findViewById(xms.com.smarttv.R.id.channelInfo);
         currentChannel = findViewById(xms.com.smarttv.R.id.current_channel);
         channelName = findViewById(xms.com.smarttv.R.id.channel_name);
@@ -103,6 +109,9 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
                 realm.where(User.class).findFirst().getToken_type(), realm.where(User.class).findFirst().getAccess_token());
     }
 
+    /**
+     * Prevent User to use back button while in Player
+     */
     @Override
     public void onBackPressed() {
         return;
@@ -140,13 +149,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
             int channel_numberpressed = 10;
             switch (keyCode) {
                 case KeyEvent.KEYCODE_BACK:
-                    if (getFragmentManager().findFragmentByTag("DetailSectionFragment") == null &&
-                            channelGridFragment.isHidden() && menuFragment.isHidden()) {
-                        showChannelInfo(currentChannelNumber);
-                    }
-                    getFragmentManager().beginTransaction().hide(channelGridFragment).commit();
-                    hideDetailSection("DetailSectionFragment");
-                    getFragmentManager().beginTransaction().hide(menuFragment).commit();
+                    cleaFragmentForPlayer();
                     return super.dispatchKeyEvent(event);
                 case KeyEvent.KEYCODE_MENU:
                     if (channelGridFragment.isHidden()){
@@ -173,6 +176,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
                             result = realm.where(Channel.class).findAllSorted("number");
                             onListFragmentInteraction(result.get(0), true);
                         }
+                        currentChannelNumber = result.get(0).getNumber();
                         return true;
                     }
                     return super.dispatchKeyEvent(event);
@@ -185,6 +189,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
                             result = realm.where(Channel.class).findAllSorted("number");
                             onListFragmentInteraction(result.get(result.size() - 1), true);
                         }
+                        currentChannelNumber = result.get(result.size() - 1).getNumber();
                         return true;
                     }
                     return super.dispatchKeyEvent(event);
@@ -254,6 +259,13 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
         return super.dispatchKeyEvent(event);
     }
 
+    /**
+     * ChannelFragment listener to change the stream to the corresponding channel
+     * takes
+     * @param channel
+     * @param showinfo
+     * show info flag to show channel detail section
+     */
     @Override
     public void onListFragmentInteraction(Channel channel, boolean showinfo) {
         channelList.clear();
@@ -262,26 +274,38 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
         currentChannelNumber = channel.getNumber();
     }
 
+    /**
+     * @param item
+     * ListFragmentInteraction listener that show corresponding Fragment Detail
+     */
     @Override
     public void onListFragmentInteraction(CustomHeaderItem item) {
         if (item.getHeaderId() == HEADER_ID_CHANNELS) {
-            detailSectionFragment = new ApplicationsMenu();
+            cleaFragmentForPlayer();
         } else if (item.getHeaderId() == HEADER_ID_OFFERS) {
             detailSectionFragment = new ApplicationsMenu();
+            showDetailSection (R.id.fragment_container_details, detailSectionFragment, "DetailSectionFragment");
         } else if (item.getHeaderId() == HEADER_ID_HOTEL_INFO) {
-            detailSectionFragment = new ApplicationsMenu();
+            xmsPlayer.releasePlayer();
+            detailSectionFragment = new HotelInfoFragment();
+            showDetailSection (R.id.Main, detailSectionFragment, "HotelDetailsFragment");
         } else if (item.getHeaderId() == HEADER_ID_RESTOANDBAR) {
             detailSectionFragment = new RestaurantsNBarFragment();
+            showDetailSection (R.id.fragment_container_details, detailSectionFragment, "DetailSectionFragment");
         } else if (item.getHeaderId() == HEADER_ID_WEATHER) {
             detailSectionFragment = new WebViewFragment();
+            showDetailSection (R.id.fragment_container_details, detailSectionFragment, "DetailSectionFragment");
         } else if (item.getHeaderId() == HEADER_ID_CITYGUIDE) {
             detailSectionFragment = new MapFragment();
+            showDetailSection (R.id.fragment_container_details, detailSectionFragment, "DetailSectionFragment");
         } else if (item.getHeaderId() == HEADER_ID_SPAANDFITNESS) {
             detailSectionFragment = new ApplicationsMenu();
+            showDetailSection (R.id.fragment_container_details, detailSectionFragment, "DetailSectionFragment");
         } else if (item.getHeaderId() == HEADER_ID_VOD) {
             detailSectionFragment = new VODfragment();
+            showDetailSection (R.id.fragment_container_details, detailSectionFragment, "DetailSectionFragment");
         }
-        showDetailSection (detailSectionFragment);
+
     }
 
     @Override
@@ -302,10 +326,10 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
     }
 
     @SuppressLint("ResourceAsColor")
-    private void showDetailSection (Fragment detailFragment) {
-        detailsectionContainer.setBackgroundColor(R.color.BlackTransparent);
+    private void showDetailSection (int ViewId, Fragment detailFragment, String tag) {
+        detailsectionContainer.setBackgroundColor(getResources().getColor(R.color.BlackTransparent));
         getFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container_details, detailFragment, "DetailSectionFragment")
+                .replace(ViewId, detailFragment, tag)
                 .commit();
     }
 
@@ -313,14 +337,14 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
         if (getFragmentManager().findFragmentByTag(DetailSectionFragment) != null) {
             detailsectionContainer.setBackgroundColor(0x000000);
             getFragmentManager().beginTransaction()
-                    .remove(getFragmentManager().findFragmentByTag("DetailSectionFragment"))
+                    .remove(getFragmentManager().findFragmentByTag(DetailSectionFragment))
                     .commit();
         }
     }
 
     /**
      * checks Client info for change
-     * f there is change show the onboarding activity
+     * if there is change show the onboarding activity
      * @throws IOException
      */
     private void getClientInfo() throws IOException {
@@ -348,6 +372,27 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
             @Override
             public void onFailure(@NonNull Call<Client> call, @NonNull Throwable t) {}
         });
+    }
+
+    /**
+     * Clear fragment to play Channels
+     * if HotelDetailsFragment is showing initialize the player
+     * and change the channel to the current channel number
+     */
+    private void cleaFragmentForPlayer () {
+        if (getFragmentManager().findFragmentByTag("HotelDetailsFragment") != null) {
+            xmsPlayer.initializePlayer();
+            xmsPlayer.changeSource(realm.where(Channel.class).equalTo("number", currentChannelNumber).findAll(), true);
+            hideDetailSection("HotelDetailsFragment");
+            getFragmentManager().beginTransaction().remove(getFragmentManager().findFragmentByTag("HotelDetailsFragment")).commit();
+        }
+        if (getFragmentManager().findFragmentByTag("DetailSectionFragment") == null &&
+                channelGridFragment.isHidden() && menuFragment.isHidden()) {
+            showChannelInfo(currentChannelNumber);
+        }
+        getFragmentManager().beginTransaction().hide(channelGridFragment).commit();
+        hideDetailSection("DetailSectionFragment");
+        getFragmentManager().beginTransaction().hide(menuFragment).commit();
     }
 
 }
