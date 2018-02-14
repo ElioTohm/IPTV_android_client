@@ -32,6 +32,11 @@
         android:layout_height="match_parent"
         android:id="@+id/fragment_container_channel"/>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:id="@+id/ItemDetailFragment"
+        android:layout_height="match_parent"/>
+
     <TextView
         android:id="@+id/channel_number_selector"
         android:layout_width="wrap_content"

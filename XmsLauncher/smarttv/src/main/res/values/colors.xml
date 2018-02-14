@@ -182,8 +182,8 @@
 
     <color name="card_examples_background">#222222</color>
 
-    <color name="detail_view_actionbar_background">#900000FF</color>
-    <color name="detail_view_background">#70000000</color>
+    <color name="detail_view_actionbar_background">#0000FF</color>
+    <color name="detail_view_background">#000000</color>
     <color name="detail_view_related_background">#022A4E</color>
     <color name="song_row_favorite_color">#FF6E40</color>
 
@@ -198,4 +198,5 @@
     <color name="selected_background">#ffaa3f</color>
 
     <color name="selected_row_item">#900000FF</color>
+    <color name="row_item">#0000FF</color>
 </resources>

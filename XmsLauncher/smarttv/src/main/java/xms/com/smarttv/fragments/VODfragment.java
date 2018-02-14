@@ -32,7 +32,7 @@ public class VODfragment extends VerticalGridFragment implements OnItemViewClick
     }
 
     private void setupAdapter() {
-        VerticalGridPresenter gridPresenter = new VerticalGridPresenter(ZOOM_FACTOR);
+        VerticalGridPresenter gridPresenter = new VerticalGridPresenter(ZOOM_FACTOR, false);
         gridPresenter.setNumberOfColumns(COLUMNS);
         setGridPresenter(gridPresenter);
 

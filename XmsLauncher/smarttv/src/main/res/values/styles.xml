@@ -138,7 +138,7 @@
     </style>
 
     <style name="DefaultCardStyle" parent="Widget.Leanback.ImageCardViewStyle">
-        <item name="cardBackground">@null</item>
+        <item name="cardBackground">@color/BlackLightTransparent</item>
     </style>
 
     <style name="DefaultCardTheme" parent="Theme.Leanback">

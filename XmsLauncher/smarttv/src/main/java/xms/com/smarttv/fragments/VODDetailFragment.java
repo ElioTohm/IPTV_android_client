@@ -22,7 +22,7 @@ import xms.com.smarttv.Presenter.DetailsDescriptionPresenter;
 import xms.com.smarttv.R;
 import xms.com.smarttv.models.Card;
 
-public class ItemDetailFragment extends DetailsFragment {
+public class VODDetailFragment extends DetailsFragment {
     private static final String ITEM_TAG = "CARD";
     private ArrayObjectAdapter mRowsAdapter;
     private Card card;
@@ -36,8 +36,8 @@ public class ItemDetailFragment extends DetailsFragment {
         buildDetails();
     }
 
-    public static ItemDetailFragment newInstance(Serializable object) {
-        ItemDetailFragment fragment = new ItemDetailFragment();
+    public static VODDetailFragment newInstance(Serializable object) {
+        VODDetailFragment fragment = new VODDetailFragment();
         Bundle args = new Bundle();
         args.putSerializable(ITEM_TAG, object);
         fragment.setArguments(args);

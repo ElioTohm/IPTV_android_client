@@ -38,6 +38,8 @@ public class SectionMenuFragment extends Fragment {
     private static final String HEADER_NAME_CHANNELS = "Live Channels";
     public static final long HEADER_ID_VOD = 7;
     private static final String HEADER_NAME_VOD = "VOD";
+    public static final long HEADER_ID_ACCOUNT = 3;
+    private static final String HEADER_NAME_ACCOUNT = "Your Account";
 
     public SectionMenuFragment() {
     }
@@ -78,20 +80,20 @@ public class SectionMenuFragment extends Fragment {
         CustomHeaderItem info = new CustomHeaderItem(HEADER_ID_HOTEL_INFO, HEADER_NAME_HOTEL_INFO, R.drawable.info);
         CustomHeaderItem bar = new CustomHeaderItem(HEADER_ID_RESTOANDBAR, HEADER_NAME_RESTOANDBAR, R.drawable.bar);
         CustomHeaderItem fitness = new CustomHeaderItem(HEADER_ID_SPAANDFITNESS, HEADER_NAME_SPAANDFITNESS, R.drawable.gym);
-        CustomHeaderItem specialoffers = new CustomHeaderItem(HEADER_ID_OFFERS, HEADER_NAME_OFFERS, R.drawable.dollar);
         CustomHeaderItem weather = new CustomHeaderItem(HEADER_ID_WEATHER, HEADER_NAME_WEATHER, R.drawable.weather);
         CustomHeaderItem cityguide = new CustomHeaderItem(HEADER_ID_CITYGUIDE, HEADER_NAME_CITYGUIDE, R.drawable.compass);
         CustomHeaderItem livechannels = new CustomHeaderItem(HEADER_ID_CHANNELS, HEADER_NAME_CHANNELS, R.drawable.live);
         CustomHeaderItem vod = new CustomHeaderItem(HEADER_ID_VOD, HEADER_NAME_VOD, R.drawable.vod);
+        CustomHeaderItem account = new CustomHeaderItem(HEADER_ID_ACCOUNT, HEADER_NAME_ACCOUNT, R.drawable.account);
         List<CustomHeaderItem> mRowsAdapter  = new ArrayList<>() ;
         mRowsAdapter.add(info);
         mRowsAdapter.add(livechannels);
         mRowsAdapter.add(vod);
         mRowsAdapter.add(bar);
         mRowsAdapter.add(fitness);
-        mRowsAdapter.add(specialoffers);
         mRowsAdapter.add(weather);
         mRowsAdapter.add(cityguide);
+        mRowsAdapter.add(account);
         recyclerView.setAdapter(new SectionRecyclerViewAdapter(mRowsAdapter, mListener));
         return view;
     }

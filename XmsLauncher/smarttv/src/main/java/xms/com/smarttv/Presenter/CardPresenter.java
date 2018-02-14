@@ -14,7 +14,6 @@
 
 package xms.com.smarttv.Presenter;
 
-import android.graphics.drawable.Drawable;
 import android.support.v17.leanback.widget.ImageCardView;
 import android.support.v17.leanback.widget.Presenter;
 import android.util.Log;
@@ -24,6 +23,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 
 import xms.com.smarttv.R;
+import xms.com.smarttv.models.Card;
 import xms.com.smarttv.objects.ServiceApp;
 
 /*
@@ -33,11 +33,10 @@ import xms.com.smarttv.objects.ServiceApp;
 public class CardPresenter extends Presenter {
     private static final String TAG = "CardPresenter";
 
-    private static final int CARD_WIDTH = 313;
-    private static final int CARD_HEIGHT = 176;
+    private static final int CARD_WIDTH = 200;
+    private static final int CARD_HEIGHT = 88;
     private static int sSelectedBackgroundColor;
     private static int sDefaultBackgroundColor;
-    private Drawable mDefaultCardImage;
 
     private static void updateCardBackgroundColor(ImageCardView view, boolean selected) {
         int color = selected ? sSelectedBackgroundColor : sDefaultBackgroundColor;
@@ -51,9 +50,8 @@ public class CardPresenter extends Presenter {
     public ViewHolder onCreateViewHolder(ViewGroup parent) {
         Log.d(TAG, "onCreateViewHolder");
 
-        sDefaultBackgroundColor = parent.getResources().getColor(R.color.default_background);
-        sSelectedBackgroundColor = parent.getResources().getColor(R.color.selected_background);
-        mDefaultCardImage = parent.getResources().getDrawable(R.drawable.movie);
+        sDefaultBackgroundColor = parent.getResources().getColor(R.color.selected_row_item);
+        sSelectedBackgroundColor = parent.getResources().getColor(R.color.row_item);
 
         ImageCardView cardView = new ImageCardView(parent.getContext()) {
             @Override
@@ -65,33 +63,46 @@ public class CardPresenter extends Presenter {
 
         cardView.setFocusable(true);
         cardView.setFocusableInTouchMode(true);
-        cardView.setMainImageScaleType(ImageView.ScaleType.CENTER_INSIDE);
+        cardView.setMainImageScaleType(ImageView.ScaleType.FIT_XY);
         updateCardBackgroundColor(cardView, false);
         return new ViewHolder(cardView);
     }
 
     @Override
     public void onBindViewHolder(Presenter.ViewHolder viewHolder, Object item) {
-        ServiceApp serviceApp = (ServiceApp) item;
         ImageCardView cardView = (ImageCardView) viewHolder.view;
+        cardView.setMainImageDimensions(CARD_WIDTH, CARD_HEIGHT);
 
-        Log.d(TAG, "onBindViewHolder");
-        if (serviceApp.getCardImageUrl() != null) {
-            cardView.setTitleText(serviceApp.getTitle());
-            cardView.setContentText(serviceApp.getStudio());
-            cardView.setMainImageDimensions(CARD_WIDTH, CARD_HEIGHT);
-            Glide.with(viewHolder.view.getContext())
-                    .load(serviceApp.getSvgimage())
-                    .into(cardView.getMainImageView());
-            cardView.getMainImageView().setImageResource(serviceApp.getSvgimage());
+        if (item instanceof ServiceApp) {
+            ServiceApp serviceApp = (ServiceApp) item;
+
+            if (serviceApp.getCardImageUrl() != null) {
+                cardView.setTitleText(serviceApp.getTitle());
+                cardView.setContentText(serviceApp.getStudio());
+                Glide.with(viewHolder.view.getContext())
+                        .load(serviceApp.getSvgimage())
+                        .into(cardView.getMainImageView());
+                cardView.getMainImageView().setImageResource(serviceApp.getSvgimage());
+            }
+        } else if (item instanceof Card) {
+            Card card = (Card) item;
+            cardView.setTag(card);
+            cardView.setTitleText(card.getTitle());
+            cardView.setContentText(card.getDescription());
+            if (card.getLocalImageResourceName() != null) {
+                int resourceId = cardView.getContext().getResources()
+                        .getIdentifier(card.getLocalImageResourceName(),
+                                "drawable", cardView.getContext().getPackageName());
+                Glide.with(viewHolder.view.getContext())
+                        .load(resourceId)
+                        .into(cardView.getMainImageView());
+            }
         }
     }
 
     @Override
     public void onUnbindViewHolder(Presenter.ViewHolder viewHolder) {
-        Log.d(TAG, "onUnbindViewHolder");
         ImageCardView cardView = (ImageCardView) viewHolder.view;
-        // Remove references to images so that the garbage collector can free up memory
         cardView.setBadgeImage(null);
         cardView.setMainImage(null);
     }
