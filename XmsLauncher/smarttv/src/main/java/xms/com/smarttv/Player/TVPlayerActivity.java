@@ -46,6 +46,7 @@ import xms.com.smarttv.fragments.VODfragment;
 import xms.com.smarttv.fragments.WebViewFragment;
 import xms.com.smarttv.models.Card;
 import xms.com.smarttv.services.GetInstalledAppService;
+import xms.com.smarttv.services.NotificationService;
 
 import static xms.com.smarttv.fragments.SectionMenuFragment.HEADER_ID_CHANNELS;
 import static xms.com.smarttv.fragments.SectionMenuFragment.HEADER_ID_CITYGUIDE;
@@ -77,6 +78,9 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
         // init get application service and save application info in database
         Intent getinstalledappintent = new Intent(this, GetInstalledAppService.class);
         this.startService(getinstalledappintent);
+
+        Intent notificationService = new Intent(this, NotificationService.class);
+        this.startService(notificationService);
 
         /*
          * initialize Fragments menu fragment and channel fragment

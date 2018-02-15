@@ -1,4 +1,4 @@
-package xms.com.smarttv.objects;
+package xms.com.smarttv.models;
 
 import java.util.ArrayList;
 import java.util.List;

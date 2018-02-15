@@ -24,7 +24,7 @@ import com.bumptech.glide.Glide;
 
 import xms.com.smarttv.R;
 import xms.com.smarttv.models.Card;
-import xms.com.smarttv.objects.ServiceApp;
+import xms.com.smarttv.models.ServiceApp;
 
 /*
  * A CardPresenter is used to generate Views and bind Objects to them on demand.

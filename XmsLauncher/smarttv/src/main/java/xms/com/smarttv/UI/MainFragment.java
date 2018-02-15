@@ -56,8 +56,8 @@ import xms.com.smarttv.Player.TVPlayerActivity;
 import xms.com.smarttv.Presenter.CardPresenter;
 import xms.com.smarttv.Presenter.InstalledApplicationPresenter;
 import xms.com.smarttv.R;
-import xms.com.smarttv.objects.ServiceApp;
-import xms.com.smarttv.objects.ServiceAppList;
+import xms.com.smarttv.models.ServiceApp;
+import xms.com.smarttv.models.ServiceAppList;
 
 public class MainFragment extends BrowseFragment {
     private static final String TAG = "MainFragment";

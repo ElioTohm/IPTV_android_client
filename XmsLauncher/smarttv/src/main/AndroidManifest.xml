@@ -46,9 +46,6 @@
             android:exported="true"
             android:screenOrientation="landscape"
             android:theme="@style/Theme.Leanback.Onboarding" />
-        <activity
-            android:name=".weather.OpenUrlActivity"
-            android:theme="@style/WebViewActivityTheme" />
 
         <service
             android:name=".services.NotificationService"
