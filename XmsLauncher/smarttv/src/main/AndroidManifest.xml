@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="xms.com.smarttv">
 
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
@@ -32,7 +32,6 @@
             android:icon="@drawable/xmsprologosmall"
             android:label="@string/app_name"
             android:logo="@drawable/xmsprologosmall"
-
             android:screenOrientation="landscape" />
         <activity
             android:name=".UI.DetailsActivity"
@@ -75,6 +74,7 @@
             android:name=".services.GetInstalledAppService"
             android:exported="false" />
 
+        <activity android:name=".UI.VideoDetailsActivity"></activity>
     </application>
 
 </manifest>

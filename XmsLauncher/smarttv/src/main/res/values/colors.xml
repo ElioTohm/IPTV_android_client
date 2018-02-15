@@ -199,4 +199,5 @@
 
     <color name="selected_row_item">#900000FF</color>
     <color name="row_item">#0000FF</color>
+    <color name="welcome_message">#ffff</color>
 </resources>

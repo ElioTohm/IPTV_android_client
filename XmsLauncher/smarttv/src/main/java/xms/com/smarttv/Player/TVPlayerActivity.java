@@ -158,9 +158,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
                                 .remove(getFragmentManager().findFragmentByTag("ItemDetail"))
                                 .commit();
                     } else {
-                        getFragmentManager().beginTransaction()
-                                .hide(getFragmentManager().findFragmentByTag("ItemList"))
-                                .commit();
+                        hideDetailSection("ItemList");
                     }
                     return super.dispatchKeyEvent(event);
                 case KeyEvent.KEYCODE_MENU:
@@ -253,13 +251,13 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
                 Runnable setchannelnumberRunnable = new Runnable() {
                     public void run() {
                         if (!channel_number_selector.getText().equals("")) {
-                            currentChannelNumber = Integer.parseInt((String) channel_number_selector.getText());
-                            Channel channel = realm.where(Channel.class).equalTo("number", currentChannelNumber).findFirst();
+                            Channel channel = realm.where(Channel.class).equalTo("number", Integer.parseInt((String) channel_number_selector.getText())).findFirst();
                             if (channel != null) {
                                 onListFragmentInteraction(channel, true);
-                                channel_number_selector.setText("");
-                                channel_number_selector.setVisibility(View.INVISIBLE);
+                                currentChannelNumber = channel.getNumber();
                             }
+                            channel_number_selector.setText("");
+                            channel_number_selector.setVisibility(View.INVISIBLE);
                         }
                     }
                 };

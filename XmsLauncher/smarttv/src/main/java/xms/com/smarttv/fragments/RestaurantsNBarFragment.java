@@ -1,13 +1,10 @@
 package xms.com.smarttv.fragments;
 
 import android.os.Bundle;
-import android.support.v17.leanback.app.RowsFragment;
+import android.support.v17.leanback.app.BrowseFragment;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
-import android.support.v17.leanback.widget.OnItemViewClickedListener;
-import android.support.v17.leanback.widget.Presenter;
 import android.support.v17.leanback.widget.PresenterSelector;
 import android.support.v17.leanback.widget.Row;
-import android.support.v17.leanback.widget.RowPresenter;
 
 import com.google.gson.Gson;
 
@@ -20,28 +17,21 @@ import xms.com.smarttv.Utils;
 import xms.com.smarttv.models.Card;
 import xms.com.smarttv.models.CardRow;
 
-public class RestaurantsNBarFragment extends RowsFragment {
+public class RestaurantsNBarFragment extends BrowseFragment {
     private final ArrayObjectAdapter mRowsAdapter;
 
     public RestaurantsNBarFragment() {
         mRowsAdapter = new ArrayObjectAdapter(new ShadowRowPresenterSelector());
-
         setAdapter(mRowsAdapter);
-        setOnItemViewClickedListener(new OnItemViewClickedListener() {
-            @Override
-            public void onItemClicked(
-                    Presenter.ViewHolder itemViewHolder,
-                    Object item,
-                    RowPresenter.ViewHolder rowViewHolder,
-                    Row row) {
-            }
-        });
+        setHeadersState(HEADERS_DISABLED);
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        prepareEntranceTransition();
         createRows();
+        startEntranceTransition();
     }
 
     private void createRows() {

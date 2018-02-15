@@ -7,14 +7,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.ViewFlipper;
 
 import com.bumptech.glide.Glide;
+import com.eliotohme.data.Client;
 
+import io.realm.Realm;
 import xms.com.smarttv.R;
 
 public class HotelInfoFragment extends Fragment {
-    ViewFlipper imageswitcher;
     public HotelInfoFragment() {
         // Required empty public constructor
     }
@@ -29,17 +31,30 @@ public class HotelInfoFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_hotel_info, container, false);
-        imageswitcher = view.findViewById(R.id.imageswitcher);
+        ViewFlipper viewflipper = view.findViewById(R.id.viewflipper);
+        TextView welcomemessage = view.findViewById(R.id.welcome_message);
 
-        final String []gallery = {"http://192.168.0.75/storage/hotel/images/hotel1.jpg",
-                "http://192.168.0.75/storage/hotel/images/hotel2.jpg","http://192.168.0.75/storage/hotel/images/hotel3.jpg"};
+        final String []gallery = {
+                "http://192.168.0.75/storage/hotel/images/hotel1.jpg",
+                "http://192.168.0.75/storage/hotel/images/hotel2.jpg",
+                "http://192.168.0.75/storage/hotel/images/hotel3.jpg"
+        };
+        Client client = Realm.getDefaultInstance().where(Client.class).findFirst();
 
-        for (int i = 0; i< gallery.length; i++) {
+        String welcome = "";
+        String clientName = "";
+        if (client != null) {
+            welcome = client.getWelcomeMessage();
+            clientName = client.getName();
+        }
+        welcomemessage.setText(String.format("%s %s", welcome, clientName));
+
+        for (String imageurl : gallery) {
             ImageView imageView = new ImageView(view.getContext());
             imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-            imageswitcher.addView(imageView);
+            viewflipper.addView(imageView);
             Glide.with(view.getContext())
-                    .load(gallery[i])
+                    .load(imageurl)
                     .into(imageView);
         }
 
