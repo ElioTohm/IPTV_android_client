@@ -16,14 +16,28 @@ import com.eliotohme.data.Client;
 import io.realm.Realm;
 import xms.com.smarttv.R;
 
-public class HotelInfoFragment extends Fragment {
-    public HotelInfoFragment() {
+public class BackgroundImageFragment extends Fragment {
+    private static final String TYPE = "type";
+    public static final int HOTEL = 1;
+    public static final int SPA = 2;
+    public static final int RESTAURANTNBAR = 3;
+    private int type;
+    public BackgroundImageFragment() {
         // Required empty public constructor
+    }
+
+    public static BackgroundImageFragment newInstance(int type) {
+        BackgroundImageFragment fragment = new BackgroundImageFragment();
+        Bundle args = new Bundle();
+        args.putInt(TYPE, type);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        type = getArguments().getInt(TYPE);
     }
 
     @Override
@@ -34,11 +48,31 @@ public class HotelInfoFragment extends Fragment {
         ViewFlipper viewflipper = view.findViewById(R.id.viewflipper);
         TextView welcomemessage = view.findViewById(R.id.welcome_message);
 
-        final String []gallery = {
-                "http://192.168.0.75/storage/hotel/images/hotel1.jpg",
-                "http://192.168.0.75/storage/hotel/images/hotel2.jpg",
-                "http://192.168.0.75/storage/hotel/images/hotel3.jpg"
-        };
+        String[] gallery = null;
+        switch (type) {
+            case RESTAURANTNBAR:
+                gallery = new String[]{
+                        "http://192.168.0.75/storage/hotel/images/rest1.jpg",
+                        "http://192.168.0.75/storage/hotel/images/rest2.jpg",
+                };
+                break;
+            case HOTEL:
+                gallery = new String[]{
+                        "http://192.168.0.75/storage/hotel/images/hotel1.jpg",
+                        "http://192.168.0.75/storage/hotel/images/hotel2.jpg",
+                        "http://192.168.0.75/storage/hotel/images/hotel3.jpg"
+                };
+                break;
+            case SPA:
+                gallery = new String[]{
+                        "http://192.168.0.75/storage/hotel/images/spa1.jpg",
+                        "http://192.168.0.75/storage/hotel/images/spa2.jpg",
+                        "http://192.168.0.75/storage/hotel/images/gym1.jpg",
+                        "http://192.168.0.75/storage/hotel/images/gym2.jpg"
+                };
+                break;
+        }
+
         Client client = Realm.getDefaultInstance().where(Client.class).findFirst();
 
         String welcome = "";

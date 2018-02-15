@@ -175,6 +175,8 @@ public class SplashScreen extends Activity {
                 Connectiondialoghandler();
             }
         });
+
+
     }
 
     /**

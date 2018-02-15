@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="xms.com.smarttv.fragments.HotelInfoFragment">
+    tools:context="xms.com.smarttv.fragments.BackgroundImageFragment">
     
     <ViewFlipper
         android:layout_width="match_parent"

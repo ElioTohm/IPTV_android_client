@@ -180,7 +180,7 @@ public class XmsPlayer  {
             MappingTrackSelector trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
 
             DefaultRenderersFactory renderersFactory = new DefaultRenderersFactory(this.context,
-                    null, DefaultRenderersFactory.EXTENSION_RENDERER_MODE_ON);
+                    null, DefaultRenderersFactory.EXTENSION_RENDERER_MODE_PREFER);
 
 
             player = ExoPlayerFactory.newSimpleInstance(renderersFactory, trackSelector,

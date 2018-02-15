@@ -32,7 +32,6 @@ public class VODDetailFragment extends DetailsFragment {
         super.onCreate(savedInstanceState);
 
         card = (Card)getArguments().getSerializable(ITEM_TAG);
-
         buildDetails();
     }
 
@@ -62,18 +61,18 @@ public class VODDetailFragment extends DetailsFragment {
                 .dontAnimate();
 
         Glide.with(this)
-                .asBitmap()
-                .load(card.getImageUrl())
-                .apply(options)
-                .into(new SimpleTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(
-                            @NonNull Bitmap resource,
-                            Transition<? super Bitmap> transition) {
-                        detailsOverview.setImageBitmap(getActivity(), resource);
-                        startEntranceTransition();
-                    }
-                });
+            .asBitmap()
+            .load(card.getImageUrl())
+            .apply(options)
+            .into(new SimpleTarget<Bitmap>() {
+                @Override
+                public void onResourceReady(
+                        @NonNull Bitmap resource,
+                        Transition<? super Bitmap> transition) {
+                    detailsOverview.setImageBitmap(getActivity(), resource);
+                    startEntranceTransition();
+                }
+            });
 
         SparseArrayObjectAdapter adapter = new SparseArrayObjectAdapter();
 
@@ -81,9 +80,8 @@ public class VODDetailFragment extends DetailsFragment {
                 .getString(R.string.watch_trailer_1),
                 getResources().getString(R.string.watch_trailer_2)));
         adapter.set(2, new Action(2, getResources().getString(R.string.rent_1),
-                getResources().getString(R.string.rent_2)));
-        adapter.set(3, new Action(3, getResources().getString(R.string.buy_1),
-                getResources().getString(R.string.buy_2)));
+                card.getDescription()));
+
         detailsOverview.setActionsAdapter(adapter);
 
         // Add images and action buttons to the details view
