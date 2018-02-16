@@ -35,7 +35,7 @@ public class SectionMenuFragment extends Fragment {
     public static final int HEADER_ID_CITYGUIDE = 5;
     private static final String HEADER_NAME_CITYGUIDE = "City Guide";
     public static final int HEADER_ID_CHANNELS = 6;
-    private static final String HEADER_NAME_CHANNELS = "Live Channels";
+    private static final String HEADER_NAME_CHANNELS = "Live TV";
     public static final int HEADER_ID_VOD = 7;
     private static final String HEADER_NAME_VOD = "VOD";
     public static final int HEADER_ID_ACCOUNT = 3;
