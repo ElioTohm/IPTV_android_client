@@ -81,6 +81,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
 
         Intent notificationService = new Intent(this, NotificationService.class);
         this.startService(notificationService);
+        realm = Realm.getDefaultInstance();
 
         /*
          * initialize Fragments menu fragment and channel fragment
@@ -94,14 +95,6 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
         getFragmentManager().beginTransaction().add(R.id.fragment_container_channel, channelGridFragment).commit();
         getFragmentManager().beginTransaction().hide(channelGridFragment).commit();
         channelList = new ArrayList<>();
-
-        // init Realm and getClient
-        realm = Realm.getDefaultInstance();
-        try {
-            getClientInfo();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
         // init element and channel list with player
         channelInfo = findViewById(xms.com.smarttv.R.id.channelInfo);
@@ -129,7 +122,11 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
     @Override
     public void onStart() {
         super.onStart();
-        xmsPlayer.initializePlayer();
+        try {
+            getClientInfo();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -311,10 +308,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
             cleaFragmentForPlayer();
         } else if (item.getHeaderId() == HEADER_ID_HOTEL_INFO) {
             xmsPlayer.releasePlayer();
-            detailSectionFragment = BackgroundImageFragment.newInstance(SectionMenuFragment.HEADER_ID_HOTEL_INFO);
-            showDetailSection (R.id.Main, detailSectionFragment, "BackgroundFragment", false);
-            detailSectionFragment = new HotelInfoFragment();
-            showDetailSection (R.id.fragment_container_details, detailSectionFragment, "ItemList", true);
+            ShowHotelInfo();
         } else if (item.getHeaderId() == HEADER_ID_RESTOANDBAR) {
             xmsPlayer.releasePlayer();
             detailSectionFragment = BackgroundImageFragment.newInstance(SectionMenuFragment.HEADER_ID_RESTOANDBAR);
@@ -410,16 +404,30 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
             public void onResponse(@NonNull Call<Client> call, @NonNull final Response<Client> response) {
                 if (response.body() != null) {
                     Realm subrealm = Realm.getDefaultInstance();
-                    if (response.code() == 200 && (subrealm.where(Client.class).findFirst() ==  null
-                            || !response.body().getEmail().equals(subrealm.where(Client.class).findFirst().getEmail()))) {
-
-                        subrealm.executeTransaction(new Realm.Transaction() {
-                            @Override
-                            public void execute(Realm realm) {
-                                realm.delete(Client.class);
-                                realm.insert(response.body());
+                    if (response.code() == 200) {
+                        if (realm.where(Client.class).findFirst() !=  null) {
+                            if (!response.body().getEmail().equals(subrealm.where(Client.class).findFirst().getEmail())) {
+                                subrealm.executeTransaction(new Realm.Transaction() {
+                                    @Override
+                                    public void execute(Realm realm) {
+                                        realm.delete(Client.class);
+                                        realm.insert(response.body());
+                                    }
+                                });
+                                ShowHotelInfo();
+                            } else {
+                                xmsPlayer.initializePlayer();
                             }
-                        });
+                        } else {
+                            subrealm.executeTransaction(new Realm.Transaction() {
+                                @Override
+                                public void execute(Realm realm) {
+                                    realm.insert(response.body());
+                                }
+
+                            });
+                            ShowHotelInfo();
+                        }
                     }
                 }
             }
@@ -456,5 +464,12 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
                 .setCustomAnimations(R.animator.lb_onboarding_page_indicator_fade_in,
                         R.animator.lb_onboarding_page_indicator_fade_out)
                 .hide(menuFragment).commit();
+    }
+
+    private void ShowHotelInfo () {
+        detailSectionFragment = BackgroundImageFragment.newInstance(SectionMenuFragment.HEADER_ID_HOTEL_INFO);
+        showDetailSection (R.id.Main, detailSectionFragment, "BackgroundFragment", false);
+        detailSectionFragment = new HotelInfoFragment();
+        showDetailSection (R.id.fragment_container_details, detailSectionFragment, "ItemList", true);
     }
 }

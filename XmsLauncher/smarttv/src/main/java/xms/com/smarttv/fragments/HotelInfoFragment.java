@@ -18,7 +18,7 @@ import xms.com.smarttv.R;
  */
 public class HotelInfoFragment extends Fragment {
 
-    TextView welcomemessage;
+    TextView welcomemessage, personalmesage;
 
     public HotelInfoFragment() {
         // Required empty public constructor
@@ -31,17 +31,17 @@ public class HotelInfoFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_hotel_info, container, false);
         welcomemessage = view.findViewById(R.id.welcome_message);
+        personalmesage = view.findViewById(R.id.personal_message);
+        String message = "";
+        String clientName = "";
 
         Client client = Realm.getDefaultInstance().where(Client.class).findFirst();
-
-        String welcome = "";
-        String clientName = "";
         if (client != null) {
-            welcome = client.getWelcomeMessage();
+            message = client.getWelcomeMessage();
             clientName = client.getName();
         }
-        welcomemessage.setText(String.format("%s %s", welcome, clientName));
-
+        welcomemessage.setText(String.format("%s %s", "Welcome", clientName));
+        personalmesage.setText(message);
         return view;
     }
 
