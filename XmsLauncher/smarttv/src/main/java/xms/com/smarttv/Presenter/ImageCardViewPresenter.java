@@ -57,6 +57,11 @@ public class ImageCardViewPresenter extends AbstractCardPresenter<ImageCardView>
                     .asBitmap()
                     .load(resourceId)
                     .into(cardView.getMainImageView());
+        } else if (card.getImageUrl() != null) {
+            Glide.with(getContext())
+                    .asBitmap()
+                    .load(card.getImageUrl())
+                    .into(cardView.getMainImageView());
         }
     }
 

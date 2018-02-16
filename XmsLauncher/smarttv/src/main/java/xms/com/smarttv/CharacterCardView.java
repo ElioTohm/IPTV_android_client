@@ -11,11 +11,10 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import xms.com.smarttv.models.Card;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
-/**
- * Created by elio on 2/3/18.
- */
+import xms.com.smarttv.models.Card;
 
 public class CharacterCardView extends BaseCardView {
 
@@ -40,8 +39,8 @@ public class CharacterCardView extends BaseCardView {
     }
 
     public void updateUi(Card card) {
-        TextView primaryText = (TextView) findViewById(R.id.primary_text);
-        final ImageView imageView = (ImageView) findViewById(R.id.main_image);
+        TextView primaryText = findViewById(R.id.primary_text);
+        final ImageView imageView = findViewById(R.id.main_image);
 
         primaryText.setText(card.getTitle());
         if (card.getLocalImageResourceName() != null) {
@@ -52,6 +51,13 @@ public class CharacterCardView extends BaseCardView {
             drawable.setAntiAlias(true);
             drawable.setCornerRadius(Math.max(bitmap.getWidth(), bitmap.getHeight()) / 2.0f);
             imageView.setImageDrawable(drawable);
+        } else if (card.getImageUrl() != null) {
+            Glide.with(getContext())
+                    .asBitmap()
+                    .apply(RequestOptions.centerInsideTransform())
+                    .apply(RequestOptions.circleCropTransform())
+                    .load(card.getImageUrl())
+                    .into(imageView);
         }
     }
 

@@ -32,7 +32,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import xms.com.smarttv.R;
-import xms.com.smarttv.UI.ApplicationsMenu;
 import xms.com.smarttv.UI.CustomHeaderItem;
 import xms.com.smarttv.app.Preferences;
 import xms.com.smarttv.fragments.BackgroundImageFragment;
@@ -41,6 +40,7 @@ import xms.com.smarttv.fragments.HotelInfoFragment;
 import xms.com.smarttv.fragments.MapFragment;
 import xms.com.smarttv.fragments.RestaurantsNBarFragment;
 import xms.com.smarttv.fragments.SectionMenuFragment;
+import xms.com.smarttv.fragments.SpaFitnessFragment;
 import xms.com.smarttv.fragments.VODDetailFragment;
 import xms.com.smarttv.fragments.VODfragment;
 import xms.com.smarttv.fragments.WebViewFragment;
@@ -331,7 +331,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
             xmsPlayer.releasePlayer();
             detailSectionFragment = BackgroundImageFragment.newInstance(SectionMenuFragment.HEADER_ID_SPAANDFITNESS);
             showDetailSection (R.id.Main, detailSectionFragment, "BackgroundFragment", false);
-            detailSectionFragment = new ApplicationsMenu();
+            detailSectionFragment = new SpaFitnessFragment();
             showDetailSection (R.id.fragment_container_details, detailSectionFragment, "ItemList", true);
         } else if (item.getHeaderId() == HEADER_ID_VOD) {
             xmsPlayer.releasePlayer();

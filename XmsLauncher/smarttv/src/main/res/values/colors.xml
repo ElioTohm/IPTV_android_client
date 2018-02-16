@@ -197,7 +197,8 @@
     <color name="player_background_color">#db2a0f</color>
     <color name="selected_background">#ffaa3f</color>
 
-    <color name="selected_row_item">#900000FF</color>
+    <color name="selected_row_header">#800000FF</color>
+    <color name="selected_row_item">#300000FF</color>
     <color name="row_item">#0000FF</color>
     <color name="welcome_message">#ffff</color>
 </resources>

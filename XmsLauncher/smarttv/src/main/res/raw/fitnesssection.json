@@ -1,0 +1,32 @@
+[
+  {
+    "title": "Gym",
+    "cards": [
+      {
+        "type": "CHARACTER",
+        "title": "Personal Trainer",
+        "card": "http://192.168.0.75/storage/hotel/images/gym1.png"
+      },
+      {
+        "type": "CHARACTER",
+        "title": "Subscription",
+        "card": "http://192.168.0.75/storage/hotel/images/gym2.png"
+      }
+    ]
+  },
+  {
+    "title": "Spa",
+    "cards": [
+      {
+        "type": "CHARACTER",
+        "title": "Sona",
+        "card": "http://192.168.0.75/storage/hotel/images/spa2.png"
+      },
+      {
+        "type": "CHARACTER",
+        "title": "Message",
+        "card": "http://192.168.0.75/storage/hotel/images/spa1.png"
+      }
+    ]
+  }
+]

@@ -56,7 +56,7 @@ public class SectionRecyclerViewAdapter extends RecyclerView.Adapter<SectionRecy
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
-                    v.setBackgroundColor(v.getContext().getResources().getColor(R.color.selected_row_item));
+                    v.setBackgroundColor(v.getContext().getResources().getColor(R.color.selected_row_header));
                 } else {
                     v.setBackgroundColor(0x00000000);
                 }
