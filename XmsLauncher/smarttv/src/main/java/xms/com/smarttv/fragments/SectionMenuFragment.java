@@ -22,23 +22,23 @@ public class SectionMenuFragment extends Fragment {
     private static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 1;
     private SectionMenuFragment.OnListFragmentInteractionListener mListener;
-    public static final long HEADER_ID_HOTEL_INFO = 0;
+    public static final int HEADER_ID_HOTEL_INFO = 0;
     private static final String HEADER_NAME_HOTEL_INFO = "Hotel Info";
-    public static final long HEADER_ID_RESTOANDBAR = 1;
+    public static final int HEADER_ID_RESTOANDBAR = 1;
     private static final String HEADER_NAME_RESTOANDBAR = "Restaurants & Bars";
-    public static final long HEADER_ID_SPAANDFITNESS = 2;
+    public static final int HEADER_ID_SPAANDFITNESS = 2;
     private static final String HEADER_NAME_SPAANDFITNESS = "Spa & Fitness";
-    public static final long HEADER_ID_OFFERS = 3;
+    public static final int HEADER_ID_OFFERS = 3;
     private static final String HEADER_NAME_OFFERS  = "Special Offers";
-    public static final long HEADER_ID_WEATHER = 4;
+    public static final int HEADER_ID_WEATHER = 4;
     private static final String HEADER_NAME_WEATHER = "Weather";
-    public static final long HEADER_ID_CITYGUIDE = 5;
+    public static final int HEADER_ID_CITYGUIDE = 5;
     private static final String HEADER_NAME_CITYGUIDE = "City Guide";
-    public static final long HEADER_ID_CHANNELS = 6;
+    public static final int HEADER_ID_CHANNELS = 6;
     private static final String HEADER_NAME_CHANNELS = "Live Channels";
-    public static final long HEADER_ID_VOD = 7;
+    public static final int HEADER_ID_VOD = 7;
     private static final String HEADER_NAME_VOD = "VOD";
-    public static final long HEADER_ID_ACCOUNT = 3;
+    public static final int HEADER_ID_ACCOUNT = 3;
     private static final String HEADER_NAME_ACCOUNT = "Your Account";
 
     public SectionMenuFragment() {
