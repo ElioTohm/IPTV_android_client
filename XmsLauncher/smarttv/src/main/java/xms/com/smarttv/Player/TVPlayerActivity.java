@@ -32,6 +32,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import xms.com.smarttv.R;
+import xms.com.smarttv.UI.ApplicationsMenu;
 import xms.com.smarttv.UI.CustomHeaderItem;
 import xms.com.smarttv.app.Preferences;
 import xms.com.smarttv.fragments.BackgroundImageFragment;
@@ -48,6 +49,7 @@ import xms.com.smarttv.models.Card;
 import xms.com.smarttv.services.GetInstalledAppService;
 import xms.com.smarttv.services.NotificationService;
 
+import static xms.com.smarttv.fragments.SectionMenuFragment.HEADER_ID_APPS;
 import static xms.com.smarttv.fragments.SectionMenuFragment.HEADER_ID_CHANNELS;
 import static xms.com.smarttv.fragments.SectionMenuFragment.HEADER_ID_CITYGUIDE;
 import static xms.com.smarttv.fragments.SectionMenuFragment.HEADER_ID_HOTEL_INFO;
@@ -338,6 +340,12 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
             detailSectionFragment = BackgroundImageFragment.newInstance(SectionMenuFragment.HEADER_ID_VOD);
             showDetailSection (R.id.Main, detailSectionFragment, "BackgroundFragment", false);
             detailSectionFragment = new VODfragment();
+            showDetailSection (R.id.fragment_container_details, detailSectionFragment, "ItemList", true);
+        } else if (item.getHeaderId() == HEADER_ID_APPS) {
+            xmsPlayer.releasePlayer();
+            detailSectionFragment = BackgroundImageFragment.newInstance(SectionMenuFragment.HEADER_ID_HOTEL_INFO);
+            showDetailSection (R.id.Main, detailSectionFragment, "BackgroundFragment", false);
+            detailSectionFragment = new ApplicationsMenu();
             showDetailSection (R.id.fragment_container_details, detailSectionFragment, "ItemList", true);
         }
 

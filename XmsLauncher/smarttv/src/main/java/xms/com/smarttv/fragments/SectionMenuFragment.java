@@ -40,6 +40,9 @@ public class SectionMenuFragment extends Fragment {
     private static final String HEADER_NAME_VOD = "VOD";
     public static final int HEADER_ID_ACCOUNT = 3;
     private static final String HEADER_NAME_ACCOUNT = "Your Account";
+    public static final int HEADER_ID_APPS = 8;
+    private static final String HEADER_NAME_APPS = "Applications";
+
 
     public SectionMenuFragment() {
     }
@@ -85,6 +88,7 @@ public class SectionMenuFragment extends Fragment {
         CustomHeaderItem livechannels = new CustomHeaderItem(HEADER_ID_CHANNELS, HEADER_NAME_CHANNELS, R.drawable.live);
         CustomHeaderItem vod = new CustomHeaderItem(HEADER_ID_VOD, HEADER_NAME_VOD, R.drawable.vod);
         CustomHeaderItem account = new CustomHeaderItem(HEADER_ID_ACCOUNT, HEADER_NAME_ACCOUNT, R.drawable.account);
+        CustomHeaderItem apps = new CustomHeaderItem(HEADER_ID_APPS, HEADER_NAME_APPS, R.drawable.apps);
         List<CustomHeaderItem> mRowsAdapter  = new ArrayList<>() ;
         mRowsAdapter.add(info);
         mRowsAdapter.add(livechannels);
@@ -93,6 +97,7 @@ public class SectionMenuFragment extends Fragment {
         mRowsAdapter.add(fitness);
         mRowsAdapter.add(weather);
         mRowsAdapter.add(cityguide);
+        mRowsAdapter.add(apps);
         mRowsAdapter.add(account);
         recyclerView.setAdapter(new SectionRecyclerViewAdapter(mRowsAdapter, mListener));
         return view;
