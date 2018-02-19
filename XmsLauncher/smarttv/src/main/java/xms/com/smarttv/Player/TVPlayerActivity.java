@@ -43,7 +43,7 @@ import xms.com.smarttv.fragments.SectionMenuFragment;
 import xms.com.smarttv.fragments.SpaFitnessFragment;
 import xms.com.smarttv.fragments.VODDetailFragment;
 import xms.com.smarttv.fragments.VODfragment;
-import xms.com.smarttv.fragments.WebViewFragment;
+import xms.com.smarttv.fragments.WeatherWidgetFragment;
 import xms.com.smarttv.models.Card;
 import xms.com.smarttv.services.GetInstalledAppService;
 import xms.com.smarttv.services.NotificationService;
@@ -319,7 +319,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
             xmsPlayer.releasePlayer();
             detailSectionFragment = BackgroundImageFragment.newInstance(SectionMenuFragment.HEADER_ID_WEATHER);
             showDetailSection (R.id.Main, detailSectionFragment, "BackgroundFragment", false);
-            detailSectionFragment = new WebViewFragment();
+            detailSectionFragment = new WeatherWidgetFragment();
             showDetailSection (R.id.fragment_container_details, detailSectionFragment, "ItemList", true);
         } else if (item.getHeaderId() == HEADER_ID_CITYGUIDE) {
             xmsPlayer.releasePlayer();

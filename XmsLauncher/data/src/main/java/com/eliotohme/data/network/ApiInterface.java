@@ -3,6 +3,7 @@ package com.eliotohme.data.network;
 import com.eliotohme.data.Channel;
 import com.eliotohme.data.Client;
 import com.eliotohme.data.User;
+import com.eliotohme.data.Weather;
 
 import java.util.List;
 
@@ -28,6 +29,9 @@ public interface ApiInterface {
 
     @GET("/api/clientInfo")
     Call<Client> getClientInfo(@Query("id") int user);
+
+    @GET("v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20woeid%20in%20(select%20woeid%20from%20geo.places(1)%20where%20text%3D%22beirut%2C%20lb%22)%20and%20u%3D'c'&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys")
+    Call<Weather> getWeather();
 
     @Streaming
     @GET

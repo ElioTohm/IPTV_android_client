@@ -9,9 +9,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/welcome_message"
-        android:textSize="50sp"
+        android:textSize="32sp"
         android:layout_alignParentRight="true"
-        android:textStyle="italic|bold"
+        android:textStyle="italic"
         android:layout_marginStart="30dp"
         android:layout_marginTop="30dp"
         android:textColor="@color/white"
@@ -20,11 +20,11 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="25sp"
+        android:textSize="18sp"
         android:layout_alignParentBottom="true"
-        android:textStyle="italic|bold"
-        android:layout_marginBottom="100dp"
-        android:layout_marginLeft="30dp"
+        android:textStyle="italic"
+        android:layout_marginBottom="50dp"
+        android:padding="30dp"
         android:textColor="@color/white"
         android:id="@+id/personal_message" />
 
