@@ -59,6 +59,9 @@ public class WeatherWidgetFragment extends Fragment {
         final TextView windspeed = view.findViewById(R.id.wind);
         final TextView sunrise = view.findViewById(R.id.sunrise);
         final TextView sunset = view.findViewById(R.id.sunset);
+        final ImageView wind_icon = view.findViewById(R.id.wind_icon);
+        final ImageView sunset_icon = view.findViewById(R.id.sunset_icon);
+        final ImageView sunrise_icon = view.findViewById(R.id.sunrise_icon);
 
         final Call<Weather> weatherCall = apiInterface.getWeather();
 
@@ -67,12 +70,13 @@ public class WeatherWidgetFragment extends Fragment {
             public void onResponse(@NonNull Call<Weather> call, @NonNull Response<Weather> response) {
                 weather = response.body();
 
-                temperaturehigh.setText(String.format("%s C", weather.getQuery().getResults().getChannel().getItem().getForecast().get(0).getHigh()));
-                temperaturelow.setText(String.format("%s C", weather.getQuery().getResults().getChannel().getItem().getForecast().get(0).getLow()));
-                windspeed.setText(String.format("Wind Speed: %s %s", weather.getQuery().getResults().getChannel().getWind().getSpeed(),
-                                        weather.getQuery().getResults().getChannel().getUnits().getSpeed()));
-                sunrise.setText(String.format("Sunrise: %s", weather.getQuery().getResults().getChannel().getAstronomy().getSunrise()));
-                sunset.setText(String.format("Sunset: %s", weather.getQuery().getResults().getChannel().getAstronomy().getSunset()));
+                temperaturehigh.setText(String.format("%s \u2103", weather.getQuery().getResults().getChannel().getItem().getForecast().get(0).getHigh()));
+                temperaturelow.setText(String.format("%s \u2103", weather.getQuery().getResults().getChannel().getItem().getForecast().get(0).getLow()));
+                windspeed.setText(String.format("%s %s", weather.getQuery().getResults().getChannel().getWind().getSpeed(),
+                weather.getQuery().getResults().getChannel().getUnits().getSpeed()));
+                sunrise.setText(String.format("%s", weather.getQuery().getResults().getChannel().getAstronomy().getSunrise()));
+                sunset.setText(String.format("%s", weather.getQuery().getResults().getChannel().getAstronomy().getSunset()));
+
 
                 int resource = 0 ;
                 int code = Integer.parseInt(weather.getQuery().getResults().getChannel().getItem().getForecast().get(0).getCode());
@@ -95,8 +99,19 @@ public class WeatherWidgetFragment extends Fragment {
                         .load(getActivity().getResources().getDrawable(resource))
                         .into(weatherIcon);
 
+                Glide.with(getActivity())
+                        .load(getActivity().getResources().getDrawable(R.drawable.windsock))
+                        .into(wind_icon);
+
+                Glide.with(getActivity())
+                        .load(getActivity().getResources().getDrawable(R.drawable.sunrise))
+                        .into(sunrise_icon);
+
+                Glide.with(getActivity())
+                        .load(getActivity().getResources().getDrawable(R.drawable.sunset))
+                        .into(sunset_icon);
+
                 List<Weather.Forecast> forecastList = new ArrayList<>();
-                forecastList.add(weather.getQuery().getResults().getChannel().getItem().getForecast().get(0));
                 forecastList.add(weather.getQuery().getResults().getChannel().getItem().getForecast().get(1));
                 forecastList.add(weather.getQuery().getResults().getChannel().getItem().getForecast().get(2));
                 forecastList.add(weather.getQuery().getResults().getChannel().getItem().getForecast().get(3));

@@ -11,7 +11,8 @@
     <TextView
         android:layout_width="70dp"
         android:layout_height="match_parent"
-        android:textSize="22sp"
+        android:textSize="28sp"
+        android:layout_gravity="center"
         android:textAlignment="center"
         android:textColor="@color/white"
         android:id="@+id/day"/>
@@ -19,22 +20,24 @@
     <ImageView
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:layout_gravity="center"
         android:src="@drawable/weather"
         android:id="@+id/code"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:layout_gravity="center"
         android:textAlignment="center"
-        android:textSize="22sp"
+        android:textSize="28sp"
         android:textColor="@color/white"
         android:id="@+id/high"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:layout_gravity="center"
         android:textAlignment="center"
         android:textSize="22sp"
-        android:textColor="@color/white"
         android:id="@+id/low"/>
 
 </LinearLayout>

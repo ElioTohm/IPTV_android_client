@@ -13,24 +13,43 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/weather_icon_widget"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_weight="1"
-            android:src="@drawable/weather" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="200dp"
+            android:layout_marginRight="20dp"
+            android:layout_weight="0.6"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:text="Today"
+                android:layout_gravity="end"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="40sp"/>
+
+            <ImageView
+                android:id="@+id/weather_icon_widget"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:scaleType="fitXY"
+                android:layout_gravity="end"/>
+
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="0.7"
+            android:layout_marginLeft="20dp"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/weather_temperaturehigh"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="--"
+                android:layout_marginBottom="10dp"
                 android:textColor="@color/white"
                 android:textSize="70sp"
                 android:textStyle="bold" />
@@ -39,9 +58,8 @@
                 android:id="@+id/weather_temperaturelow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="---"
-                android:textSize="45sp"
-                android:textStyle="italic" />
+                android:layout_marginLeft="20dp"
+                android:textSize="45sp"/>
         </LinearLayout>
 
     </LinearLayout>
@@ -49,38 +67,80 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingTop="40dp"
+        android:orientation="horizontal"
+        android:paddingTop="70dp"
         android:layout_centerInParent="true"
         android:layout_below="@+id/header">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:textAlignment="center"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="30sp"
-            android:textColor="@color/white"
-            android:id="@+id/wind"/>
-        <TextView
-            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <ImageView
+                android:layout_width="65dp"
+                android:layout_height="65dp"
+                android:id="@+id/wind_icon"
+                android:layout_gravity="center"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:textAlignment="center"
+                android:layout_gravity="center"
+                android:layout_height="wrap_content"
+                android:textSize="28sp"
+                android:textColor="@color/white"
+                android:id="@+id/wind"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:textSize="30sp"
-            android:textColor="@color/white"
-            android:id="@+id/sunrise"/>
-        <TextView
-            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <ImageView
+                android:layout_width="65dp"
+                android:layout_height="65dp"
+                android:id="@+id/sunrise_icon"
+                android:layout_gravity="center"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textAlignment="center"
+                android:textSize="28sp"
+                android:textColor="@color/white"
+                android:id="@+id/sunrise"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:textSize="30sp"
-            android:textColor="@color/white"
-            android:id="@+id/sunset"/>
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <ImageView
+                android:layout_width="65dp"
+                android:layout_height="65dp"
+                android:id="@+id/sunset_icon"
+                android:layout_gravity="center"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textAlignment="center"
+                android:textSize="28sp"
+                android:textColor="@color/white"
+                android:id="@+id/sunset"/>
+        </LinearLayout>
+
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
         android:background="@color/BlackLightTransparent"
         android:layout_alignParentBottom="true"
-        android:padding="50dp"
+        android:paddingTop="30dp"
+        android:paddingLeft="50dp"
+        android:paddingRight="50dp"
+        android:paddingBottom="50dp"
         android:layout_width="match_parent"
         android:id="@+id/forcast_recycler_view"
         android:layout_height="wrap_content" />

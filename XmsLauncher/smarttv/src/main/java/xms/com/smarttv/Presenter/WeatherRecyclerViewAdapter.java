@@ -35,8 +35,8 @@ public class WeatherRecyclerViewAdapter  extends RecyclerView.Adapter<WeatherRec
     public void onBindViewHolder(final WeatherRecyclerViewAdapter.ViewHolder holder, int position) {
         holder.section = mValues.get(position);
         holder.day.setText(holder.section.getDay());
-        holder.high.setText(holder.section.getHigh());
-        holder.low.setText(holder.section.getLow());
+        holder.high.setText(String.format("%s \u2103", holder.section.getHigh()));
+        holder.low.setText(String.format("%s \u2103", holder.section.getLow()));
 
         int resource = 0 ;
         int code = Integer.parseInt(holder.section.getCode());
