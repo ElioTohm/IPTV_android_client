@@ -185,6 +185,7 @@ public class SplashScreen extends Activity {
     private void startTVplayer (){
         // start TVplayer
         startActivity(new Intent(getApplication(), TVPlayerActivity.class));
+        finish();
     }
 
     private void Connectiondialoghandler () {

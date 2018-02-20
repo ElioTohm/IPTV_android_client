@@ -31,11 +31,11 @@ http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
     <dimen name="wide_short_image_card_width">224dp</dimen>
     <dimen name="wide_short_image_card_height">109dp</dimen>
 
-    <dimen name="character_image_card_width">120dp</dimen>
-    <dimen name="character_image_card_height">120dp</dimen>
+    <dimen name="character_image_card_width">160dp</dimen>
+    <dimen name="character_image_card_height">160dp</dimen>
 
-    <dimen name="grid_card_width">200dp</dimen>
-    <dimen name="grid_card_height">200dp</dimen>
+    <dimen name="grid_card_width">160dp</dimen>
+    <dimen name="grid_card_height">160dp</dimen>
 
     <dimen name="playback_now_playing_card_width">240dp</dimen>
     <dimen name="playback_now_playing_card_height">240dp</dimen>

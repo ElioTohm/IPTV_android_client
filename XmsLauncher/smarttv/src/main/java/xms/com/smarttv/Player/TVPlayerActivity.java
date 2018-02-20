@@ -37,7 +37,9 @@ import xms.com.smarttv.UI.CustomHeaderItem;
 import xms.com.smarttv.app.Preferences;
 import xms.com.smarttv.fragments.BackgroundImageFragment;
 import xms.com.smarttv.fragments.ChannelsListFragment;
+import xms.com.smarttv.fragments.CityGuideFragment;
 import xms.com.smarttv.fragments.HotelInfoFragment;
+import xms.com.smarttv.fragments.LocationDetailFragment;
 import xms.com.smarttv.fragments.MapFragment;
 import xms.com.smarttv.fragments.RestaurantsNBarFragment;
 import xms.com.smarttv.fragments.SectionMenuFragment;
@@ -59,7 +61,8 @@ import static xms.com.smarttv.fragments.SectionMenuFragment.HEADER_ID_VOD;
 import static xms.com.smarttv.fragments.SectionMenuFragment.HEADER_ID_WEATHER;
 
 public class TVPlayerActivity extends Activity implements ChannelsListFragment.OnListFragmentInteractionListener,
-        SectionMenuFragment.OnListFragmentInteractionListener, XmsPlayerUICallback, VODfragment.OnListFragmentInteractionListener {
+        SectionMenuFragment.OnListFragmentInteractionListener, XmsPlayerUICallback, VODfragment.OnListFragmentInteractionListener,
+        CityGuideFragment.CityGudieInterface, LocationDetailFragment.LocationDetailFragmentListener{
     private View channelInfo;
     private TextView currentChannel, channel_number_selector, channelName;
     private XmsPlayer xmsPlayer;
@@ -113,14 +116,6 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
                 realm.where(User.class).findFirst().getToken_type(), realm.where(User.class).findFirst().getAccess_token());
     }
 
-    /**
-     * Prevent User to use back button while in Player
-     */
-    @Override
-    public void onBackPressed() {
-        return;
-    }
-
     @Override
     public void onStart() {
         super.onStart();
@@ -157,8 +152,9 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
             int channel_numberpressed = 10;
             switch (keyCode) {
                 case KeyEvent.KEYCODE_BACK:
-                    if (getFragmentManager().findFragmentByTag("ItemList")== null || getFragmentManager().findFragmentByTag("ItemList").isHidden()) {
-                        cleaFragmentForPlayer();
+                    if (getFragmentManager().findFragmentByTag("ItemList") == null ||
+                            getFragmentManager().findFragmentByTag("ItemList").isHidden()) {
+                            cleaFragmentForPlayer();
                     } else if (getFragmentManager().findFragmentByTag("ItemDetail") != null) {
                         getFragmentManager().beginTransaction()
                                 .setCustomAnimations(R.animator.lb_onboarding_page_indicator_fade_in,
@@ -166,9 +162,14 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
                                 .remove(getFragmentManager().findFragmentByTag("ItemDetail"))
                                 .commit();
                     } else {
-                        hideDetailSection("ItemList");
+                        if (getFragmentManager().findFragmentByTag("LocationDetail") == null ||
+                                getFragmentManager().findFragmentByTag("LocationDetail") == null ) {
+                            hideDetailSection("ItemList");
+                        } else {
+                            return super.dispatchKeyEvent(event);
+                        }
                     }
-                    return super.dispatchKeyEvent(event);
+                    return false;
                 case KeyEvent.KEYCODE_MENU:
                     if (channelGridFragment.isHidden()){
                         if (menuFragment.isHidden()) {
@@ -327,7 +328,8 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
             xmsPlayer.releasePlayer();
             detailSectionFragment = BackgroundImageFragment.newInstance(SectionMenuFragment.HEADER_ID_CITYGUIDE);
             showDetailSection (R.id.Main, detailSectionFragment, "BackgroundFragment", false);
-            detailSectionFragment = new MapFragment();
+//            detailSectionFragment = MapFragment.newInstance(33.888630, 35.495480, 11);
+            detailSectionFragment = new CityGuideFragment();
             showDetailSection (R.id.fragment_container_details, detailSectionFragment, "ItemList", true);
         } else if (item.getHeaderId() == HEADER_ID_SPAANDFITNESS) {
             xmsPlayer.releasePlayer();
@@ -479,5 +481,29 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
         showDetailSection (R.id.Main, detailSectionFragment, "BackgroundFragment", false);
         detailSectionFragment = new HotelInfoFragment();
         showDetailSection (R.id.fragment_container_details, detailSectionFragment, "ItemList", true);
+    }
+
+    @Override
+    public void LocationSelected(Object item) {
+        detailSectionFragment = LocationDetailFragment.newInstance((Card) item);
+//        showDetailSection (R.id.fragment_container_details, detailSectionFragment, "LocationDetail", true);
+        getFragmentManager().beginTransaction()
+                .setCustomAnimations(R.animator.lb_onboarding_page_indicator_fade_in,
+                        R.animator.lb_onboarding_page_indicator_fade_out)
+                .replace(R.id.fragment_container_details, detailSectionFragment, "LocationDetail")
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
+    public void LoadMap(Double latitude, Double longitude, int zoom) {
+        detailSectionFragment = MapFragment.newInstance(latitude, longitude, zoom);
+        getFragmentManager().beginTransaction()
+                .setCustomAnimations(R.animator.lb_onboarding_page_indicator_fade_in,
+                        R.animator.lb_onboarding_page_indicator_fade_out)
+                .replace(R.id.fragment_container_details, detailSectionFragment, "Map")
+                .addToBackStack(null)
+                .commit();
+
     }
 }

@@ -19,7 +19,7 @@ import xms.com.smarttv.models.Card;
 public class CharacterCardView extends BaseCardView {
 
     public CharacterCardView(Context context) {
-        super(context, null, R.style.CharacterCardStyle);
+        super(context, null, R.style.DefaultCardTheme);
         LayoutInflater.from(getContext()).inflate(R.layout.character_card, this);
         setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -27,11 +27,9 @@ public class CharacterCardView extends BaseCardView {
                 ImageView mainImage = (ImageView) findViewById(R.id.main_image);
                 View container = findViewById(R.id.container);
                 if (hasFocus) {
-                    container.setBackgroundResource(R.drawable.character_focused);
-                    mainImage.setBackgroundResource(R.drawable.character_focused);
+                    container.setBackgroundColor(R.drawable.character_focused);
                 } else {
                     container.setBackgroundResource(R.drawable.character_not_focused_padding);
-                    mainImage.setBackgroundResource(R.drawable.character_not_focused);
                 }
             }
         });
@@ -53,11 +51,10 @@ public class CharacterCardView extends BaseCardView {
             imageView.setImageDrawable(drawable);
         } else if (card.getImageUrl() != null) {
             Glide.with(getContext())
-                    .asBitmap()
-                    .apply(RequestOptions.centerInsideTransform())
-                    .apply(RequestOptions.circleCropTransform())
-                    .load(card.getImageUrl())
-                    .into(imageView);
+                .asBitmap()
+                .apply(RequestOptions.circleCropTransform())
+                .load(card.getImageUrl())
+                .into(imageView);
         }
     }
 

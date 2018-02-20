@@ -1,0 +1,64 @@
+[
+  {
+    "title": "Bars",
+    "cards": [
+      {
+        "type": "CHARACTER",
+        "title": "La Barianata",
+        "latitude":33.888630,
+        "longitude":35.495480,
+        "card": "http://192.168.0.75/storage/hotel/images/bar1.png"
+      }
+    ]
+  },
+  {
+    "title": "Family Activities",
+    "cards": [
+      {
+        "type": "CHARACTER",
+        "title": "Poseidon Water Park",
+        "latitude":33.888630,
+        "longitude":35.495480,
+        "card": "http://192.168.0.75/storage/hotel/images/waterpark.png"
+      }
+    ]
+  },
+  {
+    "title": "Night Life",
+    "cards": [
+      {
+        "type": "CHARACTER",
+        "title": "T-Club",
+        "latitude":33.888630,
+        "longitude":35.495480,
+        "card": "http://192.168.0.75/storage/hotel/images/nightlife1.png"
+      },
+      {
+        "type": "CHARACTER",
+        "title": "Castle",
+        "latitude":33.888630,
+        "longitude":35.495480,
+        "card": "http://192.168.0.75/storage/hotel/images/nightlife2.png"
+      }
+    ]
+  },
+  {
+    "title": "Tours and Sites",
+    "cards": [
+      {
+        "type": "CHARACTER",
+        "title": "Gladiator Ground",
+        "latitude":33.888630,
+        "longitude":35.495480,
+        "card": "http://192.168.0.75/storage/hotel/images/siteseeing1.png"
+      },
+      {
+        "type": "CHARACTER",
+        "title": "La Paria",
+        "latitude":33.888630,
+        "longitude":35.495480,
+        "card": "http://192.168.0.75/storage/hotel/images/siteseeing2.png"
+      }
+    ]
+  }
+]

@@ -21,10 +21,29 @@ public class Card implements Serializable {
     @SerializedName("selectedColor") private String mSelectedColor = null;
     @SerializedName("localImageResource") private String mLocalImageResource = null;
     @SerializedName("footerIconLocalImageResource") private String mFooterResource = null;
+    @SerializedName("latitude") private Double lattitude = 0.0;
+    @SerializedName("longitude") private Double longitude = 0.0;
     @SerializedName("type") private Card.Type mType;
     @SerializedName("id") private int mId;
     @SerializedName("width") private int mWidth;
     @SerializedName("height") private int mHeight;
+
+    public Double getLattitude() {
+        return lattitude;
+    }
+
+    public void setLattitude(Double lattitude) {
+        this.lattitude = lattitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+
 
     public String getTitle() {
         return mTitle;

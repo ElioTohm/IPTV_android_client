@@ -27,12 +27,14 @@ import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 public class MapFragment extends Fragment {
     private static final int MAP_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 724;
-    private static final String ARG_LOCATION = "location";
-    private static final String ARG_TYPE = "type";
+    private static final String ARG_LATITUDE = "lattitude";
+    private static final String ARG_LONGITUDE = "longitude";
+    private static final String ARG_ZOOM = "zoom";
 
-    private String location;
-    private String type;
-    private MapView map;
+    private Double latitude;
+    private Double longitude;
+    private int zoom = 0;
+
     public MapFragment() {
         // Required empty public constructor
     }
@@ -41,15 +43,16 @@ public class MapFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param location Parameter 1.
-     * @param type Parameter 2.
+     * @param latitude Parameter 1.
+     * @param longitude Parameter 2.
      * @return A new instance of fragment MapFragment.
      */
-    public static MapFragment newInstance(String location, String type) {
+    public static MapFragment newInstance(Double latitude, Double longitude, int zoom) {
         MapFragment fragment = new MapFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_LOCATION, location);
-        args.putString(ARG_TYPE, type);
+        args.putDouble(ARG_LATITUDE, latitude);
+        args.putDouble(ARG_LONGITUDE, longitude);
+        args.putInt(ARG_ZOOM, zoom);
         fragment.setArguments(args);
         return fragment;
     }
@@ -59,8 +62,9 @@ public class MapFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            location = getArguments().getString(ARG_LOCATION);
-            type = getArguments().getString(ARG_TYPE);
+            this.latitude = getArguments().getDouble(ARG_LATITUDE);
+            this.longitude = getArguments().getDouble(ARG_LONGITUDE);
+            this.zoom = getArguments().getInt(ARG_ZOOM);
         }
         if (ContextCompat.checkSelfPermission(getContext(),
                 ACCESS_FINE_LOCATION)
@@ -81,16 +85,26 @@ public class MapFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_map, container, false);
 
-        map = view.findViewById(R.id.map);
+        MapView map = view.findViewById(R.id.map);
         map.setTileSource(TileSourceFactory.MAPNIK);
 
         map.setBuiltInZoomControls(true);
         map.setMultiTouchControls(true);
 
         IMapController mapController = map.getController();
-        mapController.setZoom(9);
 
-        GeoPoint startPoint = new GeoPoint(	33.888630, 	35.495480);
+        if (zoom == 0 ) {
+            mapController.setZoom(9);
+        } else {
+            mapController.setZoom(this.zoom);
+        }
+        GeoPoint startPoint;
+        if (this.latitude == null && this.longitude == null) {
+            startPoint = new GeoPoint(33.888630, 35.495480);
+        } else {
+            startPoint = new GeoPoint(this.latitude, this.longitude);
+        }
+
         mapController.setCenter(startPoint);
 
         return view;

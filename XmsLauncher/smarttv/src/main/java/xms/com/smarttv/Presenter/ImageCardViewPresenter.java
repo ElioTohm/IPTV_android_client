@@ -31,8 +31,8 @@ public class ImageCardViewPresenter extends AbstractCardPresenter<ImageCardView>
 
     @Override
     protected ImageCardView onCreateView() {
-        sDefaultBackgroundColor = getContext().getResources().getColor(R.color.selected_row_item);
-        sSelectedBackgroundColor = getContext().getResources().getColor(R.color.row_item);
+        sDefaultBackgroundColor = getContext().getResources().getColor(R.color.row_item);
+        sSelectedBackgroundColor = getContext().getResources().getColor(R.color.selected_row_item);
         ImageCardView imageCardView = new ImageCardView(getContext()) {
             @Override
             public void setSelected(boolean selected) {
