@@ -43,9 +43,8 @@ import java.util.List;
 
 import okhttp3.OkHttpClient;
 
-import static com.google.android.exoplayer2.DefaultLoadControl.DEFAULT_MAX_BUFFER_MS;
-import static com.google.android.exoplayer2.DefaultLoadControl.DEFAULT_MIN_BUFFER_MS;
 import static com.google.android.exoplayer2.extractor.ts.DefaultTsPayloadReaderFactory.FLAG_ALLOW_NON_IDR_KEYFRAMES;
+import static com.google.android.exoplayer2.extractor.ts.DefaultTsPayloadReaderFactory.FLAG_IGNORE_SPLICE_INFO_STREAM;
 import static com.google.android.exoplayer2.extractor.ts.TsExtractor.MODE_SINGLE_PMT;
 
 public class XmsPlayer  {
@@ -112,11 +111,12 @@ public class XmsPlayer  {
                     DataSource.Factory udsf = new UdpDataSource.Factory() {
                         @Override
                         public DataSource createDataSource() {
-                            return new UdpDataSource(null, 65507, 15000);
+                            return new UdpDataSource(null, 65507, 500);
                         }
                     };
                     ExtractorsFactory tsExtractorFactory = new DefaultExtractorsFactory()
                             .setTsExtractorFlags(FLAG_ALLOW_NON_IDR_KEYFRAMES)
+                            .setTsExtractorFlags(FLAG_IGNORE_SPLICE_INFO_STREAM)
                             .setTsExtractorMode(MODE_SINGLE_PMT);
                     mediaSources[i] = new ExtractorMediaSource.Factory(udsf)
                                             .setExtractorsFactory(tsExtractorFactory)
@@ -184,12 +184,12 @@ public class XmsPlayer  {
 
 
             player = ExoPlayerFactory.newSimpleInstance(renderersFactory, trackSelector,
-                    new DefaultLoadControl(new DefaultAllocator(true,64 * 512),
-                            DEFAULT_MIN_BUFFER_MS,
-                            DEFAULT_MAX_BUFFER_MS,
+                    new DefaultLoadControl(new DefaultAllocator(true, 512, 64),
+                            1000,
+                            5000,
                             100,
                             100,
-                            500000,
+                            10,
                             true));
         }
         player.setPlayWhenReady(true);
