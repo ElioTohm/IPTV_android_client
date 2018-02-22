@@ -38,6 +38,7 @@ import xms.com.smarttv.app.Preferences;
 import xms.com.smarttv.fragments.BackgroundImageFragment;
 import xms.com.smarttv.fragments.ChannelsListFragment;
 import xms.com.smarttv.fragments.CityGuideFragment;
+import xms.com.smarttv.fragments.ClientAccountFragment;
 import xms.com.smarttv.fragments.HotelInfoFragment;
 import xms.com.smarttv.fragments.LocationDetailFragment;
 import xms.com.smarttv.fragments.MapFragment;
@@ -51,6 +52,7 @@ import xms.com.smarttv.models.Card;
 import xms.com.smarttv.services.GetInstalledAppService;
 import xms.com.smarttv.services.NotificationService;
 
+import static xms.com.smarttv.fragments.SectionMenuFragment.HEADER_ID_ACCOUNT;
 import static xms.com.smarttv.fragments.SectionMenuFragment.HEADER_ID_APPS;
 import static xms.com.smarttv.fragments.SectionMenuFragment.HEADER_ID_CHANNELS;
 import static xms.com.smarttv.fragments.SectionMenuFragment.HEADER_ID_CITYGUIDE;
@@ -62,7 +64,7 @@ import static xms.com.smarttv.fragments.SectionMenuFragment.HEADER_ID_WEATHER;
 
 public class TVPlayerActivity extends Activity implements ChannelsListFragment.OnListFragmentInteractionListener,
         SectionMenuFragment.OnListFragmentInteractionListener, XmsPlayerUICallback, VODfragment.OnListFragmentInteractionListener,
-        CityGuideFragment.CityGudieInterface, LocationDetailFragment.LocationDetailFragmentListener{
+        CityGuideFragment.CityGudieInterface, LocationDetailFragment.LocationDetailFragmentListener, ClientAccountFragment.ClientAccountFragmentListener{
     private View channelInfo;
     private TextView currentChannel, channel_number_selector, channelName;
     private XmsPlayer xmsPlayer;
@@ -349,6 +351,12 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
             showDetailSection (R.id.Main, detailSectionFragment, "BackgroundFragment", false);
             detailSectionFragment = new ApplicationsMenu();
             showDetailSection (R.id.fragment_container_details, detailSectionFragment, "ItemList", true);
+        } else if (item.getHeaderId() == HEADER_ID_ACCOUNT) {
+            xmsPlayer.releasePlayer();
+            detailSectionFragment = BackgroundImageFragment.newInstance(SectionMenuFragment.HEADER_ID_ACCOUNT);
+            showDetailSection (R.id.Main, detailSectionFragment, "BackgroundFragment", false);
+            detailSectionFragment = new ClientAccountFragment();
+            showDetailSection (R.id.fragment_container_details, detailSectionFragment, "ItemList", true);
         }
 
     }
@@ -504,6 +512,11 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
                 .replace(R.id.fragment_container_details, detailSectionFragment, "Map")
                 .addToBackStack(null)
                 .commit();
+
+    }
+
+    @Override
+    public void ServiceClicked(Card card) {
 
     }
 }

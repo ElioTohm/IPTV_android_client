@@ -53,6 +53,7 @@ public class BackgroundImageFragment extends Fragment {
                         "http://192.168.0.75/storage/hotel/images/rest2.png",
                 };
                 break;
+            case SectionMenuFragment.HEADER_ID_ACCOUNT:
             case SectionMenuFragment.HEADER_ID_HOTEL_INFO:
                 gallery = new String[]{
                         "http://192.168.0.75/storage/hotel/images/hotel1.png",
