@@ -184,7 +184,7 @@ public class XmsPlayer  {
 
 
             player = ExoPlayerFactory.newSimpleInstance(renderersFactory, trackSelector,
-                    new DefaultLoadControl(new DefaultAllocator(true, 512, 256),
+                    new DefaultLoadControl(new DefaultAllocator(true, 1024, 256),
                             500,
                             5000,
                             100,
