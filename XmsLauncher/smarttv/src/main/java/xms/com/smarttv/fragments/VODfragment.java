@@ -21,7 +21,7 @@ import xms.com.smarttv.models.CardRow;
 
 public class VODfragment extends VerticalGridFragment implements OnItemViewClickedListener {
     private static final int COLUMNS = 5;
-    private OnListFragmentInteractionListener mListener;
+    private VODFragmentListener mListener;
     private final int ZOOM_FACTOR = FocusHighlight.ZOOM_FACTOR_LARGE;
     private ArrayObjectAdapter mAdapter;
 
@@ -49,8 +49,8 @@ public class VODfragment extends VerticalGridFragment implements OnItemViewClick
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnListFragmentInteractionListener) {
-            mListener = (OnListFragmentInteractionListener) context;
+        if (context instanceof VODFragmentListener) {
+            mListener = (VODFragmentListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnListFragmentInteractionListener");
@@ -66,10 +66,10 @@ public class VODfragment extends VerticalGridFragment implements OnItemViewClick
 
     @Override
     public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item, RowPresenter.ViewHolder rowViewHolder, Row row) {
-        mListener.onListFragmentInteraction(item);
+        mListener.onVideoClicked(item);
     }
 
-    public interface OnListFragmentInteractionListener {
-        void onListFragmentInteraction(Object item);
+    public interface VODFragmentListener {
+        void onVideoClicked(Object item);
     }
 }

@@ -21,7 +21,7 @@ import xms.com.smarttv.UI.SimpleDividerItemDecoration;
 public class SectionMenuFragment extends Fragment {
     private static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 1;
-    private SectionMenuFragment.OnListFragmentInteractionListener mListener;
+    private SectionMenuFragmentListener mListener;
     public static final int HEADER_ID_HOTEL_INFO = 0;
     private static final String HEADER_NAME_HOTEL_INFO = "Hotel Info";
     public static final int HEADER_ID_RESTOANDBAR = 1;
@@ -106,8 +106,8 @@ public class SectionMenuFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof SectionMenuFragment.OnListFragmentInteractionListener) {
-            mListener = (SectionMenuFragment.OnListFragmentInteractionListener) context;
+        if (context instanceof SectionMenuFragment.SectionMenuFragmentListener) {
+            mListener = (SectionMenuFragment.SectionMenuFragmentListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnListFragmentInteractionListener");
@@ -120,7 +120,7 @@ public class SectionMenuFragment extends Fragment {
         mListener = null;
     }
 
-    public interface OnListFragmentInteractionListener {
-        void onListFragmentInteraction(CustomHeaderItem item);
+    public interface SectionMenuFragmentListener {
+        void onSectionClicked(CustomHeaderItem item);
     }
 }

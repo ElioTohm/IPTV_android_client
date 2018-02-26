@@ -1,6 +1,5 @@
 package xms.com.smarttv.Player;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
@@ -63,8 +62,10 @@ import static xms.com.smarttv.fragments.SectionMenuFragment.HEADER_ID_VOD;
 import static xms.com.smarttv.fragments.SectionMenuFragment.HEADER_ID_WEATHER;
 
 public class TVPlayerActivity extends Activity implements ChannelsListFragment.ChannelListFragmentListener,
-        SectionMenuFragment.OnListFragmentInteractionListener, XmsPlayerUICallback, VODfragment.OnListFragmentInteractionListener,
-        CityGuideFragment.CityGudieInterface, LocationDetailFragment.LocationDetailFragmentListener, ClientAccountFragment.ClientAccountFragmentListener{
+        SectionMenuFragment.SectionMenuFragmentListener, XmsPlayerUICallback, VODfragment.VODFragmentListener,
+        CityGuideFragment.CityGudieInterface, LocationDetailFragment.LocationDetailFragmentListener,
+        ClientAccountFragment.ClientAccountFragmentListener {
+
     private View channelInfo;
     private TextView currentChannel, channel_number_selector, channelName;
     private XmsPlayer xmsPlayer;
@@ -308,7 +309,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
      * ListFragmentInteraction listener that show corresponding Fragment Detail
      */
     @Override
-    public void onListFragmentInteraction(CustomHeaderItem item) {
+    public void onSectionClicked(CustomHeaderItem item) {
         if (item.getHeaderId() == HEADER_ID_CHANNELS) {
             cleaFragmentForPlayer();
         } else if (item.getHeaderId() == HEADER_ID_HOTEL_INFO) {
@@ -361,7 +362,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
     }
 
     @Override
-    public void onListFragmentInteraction(Object item) {
+    public void onVideoClicked(Object item) {
         detailSectionFragment = VODDetailFragment.newInstance((Card) item);
         showDetailSection (R.id.ItemDetailFragment, detailSectionFragment, "ItemDetail", true);
     }
@@ -383,27 +384,51 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
         mChannelInfoHandler.postDelayed(mChannelInfoRunnable, 3000);
     }
 
-    @SuppressLint("ResourceAsColor")
-    private void showDetailSection (int ViewId, Fragment detailFragment, String tag, boolean showBackground) {
-        if (showBackground) {
-            detailsectionContainer.setBackgroundColor(getResources().getColor(R.color.BlackLightTransparent));
-        }
+    @Override
+    public void LocationSelected(Object item) {
+        detailSectionFragment = LocationDetailFragment.newInstance((Card) item);
+//        showDetailSection (R.id.fragment_container_details, detailSectionFragment, "LocationDetail", true);
         getFragmentManager().beginTransaction()
                 .setCustomAnimations(R.animator.lb_onboarding_page_indicator_fade_in,
                         R.animator.lb_onboarding_page_indicator_fade_out)
-                .replace(ViewId, detailFragment, tag)
+                .replace(R.id.fragment_container_details, detailSectionFragment, "LocationDetail")
+                .addToBackStack(null)
                 .commit();
+    }
+
+    @Override
+    public void LoadMap(Double latitude, Double longitude, int zoom) {
+        detailSectionFragment = MapFragment.newInstance(latitude, longitude, zoom);
+        getFragmentManager().beginTransaction()
+                .setCustomAnimations(R.animator.lb_onboarding_page_indicator_fade_in,
+                        R.animator.lb_onboarding_page_indicator_fade_out)
+                .replace(R.id.fragment_container_details, detailSectionFragment, "Map")
+                .addToBackStack(null)
+                .commit();
+
+    }
+
+    @Override
+    public void ServiceClicked(Card card) {
+
     }
 
     private void hideDetailSection(String DetailSectionFragment) {
         if (getFragmentManager().findFragmentByTag(DetailSectionFragment) != null) {
             detailsectionContainer.setBackgroundColor(0x000000);
-           getFragmentManager().beginTransaction()
-                   .setCustomAnimations(R.animator.lb_onboarding_page_indicator_fade_in,
-                                    R.animator.lb_onboarding_page_indicator_fade_out)
+            getFragmentManager().beginTransaction()
+                    .setCustomAnimations(R.animator.lb_onboarding_page_indicator_fade_in,
+                            R.animator.lb_onboarding_page_indicator_fade_out)
                     .remove(getFragmentManager().findFragmentByTag(DetailSectionFragment))
                     .commit();
         }
+    }
+
+    private void ShowHotelInfo () {
+        detailSectionFragment = BackgroundImageFragment.newInstance(SectionMenuFragment.HEADER_ID_HOTEL_INFO);
+        showDetailSection (R.id.Main, detailSectionFragment, "BackgroundFragment", false);
+        detailSectionFragment = new HotelInfoFragment();
+        showDetailSection (R.id.fragment_container_details, detailSectionFragment, "ItemList", true);
     }
 
     /**
@@ -483,39 +508,15 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
                 .hide(menuFragment).commit();
     }
 
-    private void ShowHotelInfo () {
-        detailSectionFragment = BackgroundImageFragment.newInstance(SectionMenuFragment.HEADER_ID_HOTEL_INFO);
-        showDetailSection (R.id.Main, detailSectionFragment, "BackgroundFragment", false);
-        detailSectionFragment = new HotelInfoFragment();
-        showDetailSection (R.id.fragment_container_details, detailSectionFragment, "ItemList", true);
-    }
-
-    @Override
-    public void LocationSelected(Object item) {
-        detailSectionFragment = LocationDetailFragment.newInstance((Card) item);
-//        showDetailSection (R.id.fragment_container_details, detailSectionFragment, "LocationDetail", true);
+    private void showDetailSection (int ViewId, Fragment detailFragment, String tag, boolean showBackground) {
+        if (showBackground) {
+            detailsectionContainer.setBackgroundColor(getResources().getColor(R.color.BlackLightTransparent));
+        }
         getFragmentManager().beginTransaction()
                 .setCustomAnimations(R.animator.lb_onboarding_page_indicator_fade_in,
                         R.animator.lb_onboarding_page_indicator_fade_out)
-                .replace(R.id.fragment_container_details, detailSectionFragment, "LocationDetail")
-                .addToBackStack(null)
+                .replace(ViewId, detailFragment, tag)
                 .commit();
     }
 
-    @Override
-    public void LoadMap(Double latitude, Double longitude, int zoom) {
-        detailSectionFragment = MapFragment.newInstance(latitude, longitude, zoom);
-        getFragmentManager().beginTransaction()
-                .setCustomAnimations(R.animator.lb_onboarding_page_indicator_fade_in,
-                        R.animator.lb_onboarding_page_indicator_fade_out)
-                .replace(R.id.fragment_container_details, detailSectionFragment, "Map")
-                .addToBackStack(null)
-                .commit();
-
-    }
-
-    @Override
-    public void ServiceClicked(Card card) {
-
-    }
 }

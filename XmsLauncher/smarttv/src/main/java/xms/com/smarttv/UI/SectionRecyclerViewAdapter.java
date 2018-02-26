@@ -15,14 +15,14 @@ import com.bumptech.glide.Glide;
 import java.util.List;
 
 import xms.com.smarttv.R;
-import xms.com.smarttv.fragments.SectionMenuFragment;
+import xms.com.smarttv.fragments.SectionMenuFragment.SectionMenuFragmentListener;
 
 public class SectionRecyclerViewAdapter extends RecyclerView.Adapter<SectionRecyclerViewAdapter.ViewHolder> {
 
     private final List<CustomHeaderItem> mValues;
-    private final SectionMenuFragment.OnListFragmentInteractionListener mListener;
+    private final SectionMenuFragmentListener mListener;
 
-    public SectionRecyclerViewAdapter(List<CustomHeaderItem> items, SectionMenuFragment.OnListFragmentInteractionListener listener) {
+    public SectionRecyclerViewAdapter(List<CustomHeaderItem> items, SectionMenuFragmentListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -47,7 +47,7 @@ public class SectionRecyclerViewAdapter extends RecyclerView.Adapter<SectionRecy
             @Override
             public void onClick(View v) {
                 if (null != mListener) {
-                    mListener.onListFragmentInteraction(holder.section);
+                    mListener.onSectionClicked(holder.section);
                 }
             }
         });
