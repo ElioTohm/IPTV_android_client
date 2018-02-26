@@ -62,7 +62,7 @@ import static xms.com.smarttv.fragments.SectionMenuFragment.HEADER_ID_SPAANDFITN
 import static xms.com.smarttv.fragments.SectionMenuFragment.HEADER_ID_VOD;
 import static xms.com.smarttv.fragments.SectionMenuFragment.HEADER_ID_WEATHER;
 
-public class TVPlayerActivity extends Activity implements ChannelsListFragment.OnListFragmentInteractionListener,
+public class TVPlayerActivity extends Activity implements ChannelsListFragment.ChannelListFragmentListener,
         SectionMenuFragment.OnListFragmentInteractionListener, XmsPlayerUICallback, VODfragment.OnListFragmentInteractionListener,
         CityGuideFragment.CityGudieInterface, LocationDetailFragment.LocationDetailFragmentListener, ClientAccountFragment.ClientAccountFragmentListener{
     private View channelInfo;
@@ -201,10 +201,10 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
                     if (channelGridFragment.isHidden() && menuFragment.isHidden()) {
                         List<Channel> result = realm.where(Channel.class).greaterThan("number", currentChannelNumber).findAllSorted("number");
                         if (result.size() != 0 ) {
-                            onListFragmentInteraction(result.get(0), true);
+                            onChannelSelected(result.get(0), true);
                         } else {
                             result = realm.where(Channel.class).findAllSorted("number");
-                            onListFragmentInteraction(result.get(0), true);
+                            onChannelSelected(result.get(0), true);
                         }
                         currentChannelNumber = result.get(0).getNumber();
                         return true;
@@ -214,10 +214,10 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
                     if (channelGridFragment.isHidden() && menuFragment.isHidden()) {
                         List<Channel> result = realm.where(Channel.class).lessThan("number", currentChannelNumber).findAllSorted("number");
                         if (result.size() != 0 ) {
-                            onListFragmentInteraction(result.get(result.size()-1), true);
+                            onChannelSelected(result.get(result.size()-1), true);
                         } else {
                             result = realm.where(Channel.class).findAllSorted("number");
-                            onListFragmentInteraction(result.get(result.size() - 1), true);
+                            onChannelSelected(result.get(result.size() - 1), true);
                         }
                         currentChannelNumber = result.get(result.size() - 1).getNumber();
                         return true;
@@ -273,7 +273,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
                         if (!channel_number_selector.getText().equals("")) {
                             Channel channel = realm.where(Channel.class).equalTo("number", Integer.parseInt((String) channel_number_selector.getText())).findFirst();
                             if (channel != null) {
-                                onListFragmentInteraction(channel, true);
+                                onChannelSelected(channel, true);
                                 currentChannelNumber = channel.getNumber();
                             }
                             channel_number_selector.setText("");
@@ -296,7 +296,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
      * show info flag to show channel detail section
      */
     @Override
-    public void onListFragmentInteraction(Channel channel, boolean showinfo) {
+    public void onChannelSelected(Channel channel, boolean showinfo) {
         channelList.clear();
         channelList.add(channel);
         xmsPlayer.changeSource(channelList, showinfo);
@@ -330,7 +330,6 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.O
             xmsPlayer.releasePlayer();
             detailSectionFragment = BackgroundImageFragment.newInstance(SectionMenuFragment.HEADER_ID_CITYGUIDE);
             showDetailSection (R.id.Main, detailSectionFragment, "BackgroundFragment", false);
-//            detailSectionFragment = MapFragment.newInstance(33.888630, 35.495480, 11);
             detailSectionFragment = new CityGuideFragment();
             showDetailSection (R.id.fragment_container_details, detailSectionFragment, "ItemList", true);
         } else if (item.getHeaderId() == HEADER_ID_SPAANDFITNESS) {

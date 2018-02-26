@@ -20,14 +20,14 @@ import xms.com.smarttv.UI.SimpleDividerItemDecoration;
 /**
  * A fragment representing a list of Items.
  * <p/>
- * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
+ * Activities containing this fragment MUST implement the {@link ChannelListFragmentListener}
  * interface.
  */
 public class ChannelsListFragment extends Fragment implements ChannelRecyclerViewAdapter.OnChannelClicked  {
     private int savedposition = 0 ;
     private static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 1;
-    private OnListFragmentInteractionListener mListener;
+    private ChannelListFragmentListener mListener;
     private ChannelRecyclerViewAdapter channelRecyclerViewAdapter;
     private RecyclerView recyclerView;
 
@@ -81,8 +81,8 @@ public class ChannelsListFragment extends Fragment implements ChannelRecyclerVie
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnListFragmentInteractionListener) {
-            mListener = (OnListFragmentInteractionListener) context;
+        if (context instanceof ChannelListFragmentListener) {
+            mListener = (ChannelListFragmentListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnListFragmentInteractionListener");
@@ -100,7 +100,7 @@ public class ChannelsListFragment extends Fragment implements ChannelRecyclerVie
         this.savedposition = currentposition;
     }
 
-    public interface OnListFragmentInteractionListener {
-        void onListFragmentInteraction(Channel item, boolean flag);
+    public interface ChannelListFragmentListener {
+        void onChannelSelected(Channel item, boolean flag);
     }
 }

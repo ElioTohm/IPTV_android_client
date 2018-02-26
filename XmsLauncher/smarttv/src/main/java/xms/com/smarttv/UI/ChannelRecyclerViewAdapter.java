@@ -15,15 +15,15 @@ import com.eliotohme.data.Channel;
 import java.util.List;
 
 import xms.com.smarttv.R;
-import xms.com.smarttv.fragments.ChannelsListFragment.OnListFragmentInteractionListener;
+import xms.com.smarttv.fragments.ChannelsListFragment.ChannelListFragmentListener;
 
 public class ChannelRecyclerViewAdapter extends RecyclerView.Adapter<ChannelRecyclerViewAdapter.ViewHolder> {
 
     private final List<Channel> channels;
-    private final OnListFragmentInteractionListener mListener;
+    private final ChannelListFragmentListener mListener;
     private final OnChannelClicked OnChannelClicked;
 
-    public ChannelRecyclerViewAdapter(List<Channel> items, OnListFragmentInteractionListener listener, OnChannelClicked OnChannelClicked) {
+    public ChannelRecyclerViewAdapter(List<Channel> items, ChannelListFragmentListener listener, OnChannelClicked OnChannelClicked) {
         channels = items;
         mListener = listener;
         this.OnChannelClicked = OnChannelClicked;
@@ -47,7 +47,7 @@ public class ChannelRecyclerViewAdapter extends RecyclerView.Adapter<ChannelRecy
             public void onClick(View v) {
                 if (null != mListener) {
                     // callback to update player in player activity
-                    mListener.onListFragmentInteraction(holder.channel, false);
+                    mListener.onChannelSelected(holder.channel, false);
 
                     // callback to update position in fragment
                     OnChannelClicked.UpdateLastPosition(position);
