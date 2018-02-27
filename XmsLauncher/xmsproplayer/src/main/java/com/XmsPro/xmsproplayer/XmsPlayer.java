@@ -184,11 +184,11 @@ public class XmsPlayer  {
 
 
             player = ExoPlayerFactory.newSimpleInstance(renderersFactory, trackSelector,
-                    new DefaultLoadControl(new DefaultAllocator(true, 1024, 256),
+                    new DefaultLoadControl(new DefaultAllocator(true, 128 * 4048, 64),
+                            100,
+                            2000,
                             500,
-                            5000,
-                            100,
-                            100,
+                            500,
                             DefaultLoadControl.DEFAULT_TARGET_BUFFER_BYTES,
                             true));
         }
@@ -198,8 +198,6 @@ public class XmsPlayer  {
         player.prepare(buildMediaSource(channelArrayList));
         simpleExoPlayerView.setPlayer(player);
         xmsPlayerUICallback.showChannelInfo(1);
-
-
 
     }
 
