@@ -306,9 +306,11 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
         if (channel.getPrice() > 0 && !channel.isPurchased()) {
             Toast.makeText(this, "This is a premium Channel long press to purchase", Toast.LENGTH_LONG).show();
         } else {
-            channelList.add(channel);
-            xmsPlayer.changeSource(channelList, showinfo);
-            currentChannelNumber = channel.getNumber();
+            if (currentChannelNumber != channel.getNumber()) {
+                channelList.add(channel);
+                xmsPlayer.changeSource(channelList, showinfo);
+                currentChannelNumber = channel.getNumber();
+            }
         }
     }
 
