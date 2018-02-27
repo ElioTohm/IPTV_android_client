@@ -29,12 +29,9 @@ public class Client extends RealmObject{
     @SerializedName("welcome_image")
     @Expose
     private String welcomeImage;
-    @SerializedName("credit")
+    @SerializedName("balance")
     @Expose
-    private Integer credit;
-    @SerializedName("debit")
-    @Expose
-    private Integer debit;
+    private Integer balance;
     @SerializedName("created_at")
     @Expose
     private String createdAt;
@@ -61,14 +58,13 @@ public class Client extends RealmObject{
      * @param email
      * @param createdAt
      * @param name
-     * @param debit
-     * @param credit
+     * @param balance
      * @param welcomeMessage
      * @param room
      */
     public Client(Integer id, String name, String email, Integer room,
-                  String welcomeMessage, String welcomeImage, Integer credit,
-                  Integer debit, String createdAt, String updatedAt, RealmList<Purchase> purchases) {
+                  String welcomeMessage, String welcomeImage,
+                  Integer balance, String createdAt, String updatedAt, RealmList<Purchase> purchases) {
         super();
         this.id = id;
         this.name = name;
@@ -76,8 +72,7 @@ public class Client extends RealmObject{
         this.room = room;
         this.welcomeMessage = welcomeMessage;
         this.welcomeImage = welcomeImage;
-        this.credit = credit;
-        this.debit = debit;
+        this.balance = balance;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.purchases = purchases;
@@ -161,29 +156,16 @@ public class Client extends RealmObject{
         return this;
     }
 
-    public Integer getCredit() {
-        return credit;
+    public Integer getBalance() {
+        return balance;
     }
 
-    public void setCredit(Integer credit) {
-        this.credit = credit;
+    public void setBalance(Integer balance) {
+        this.balance = balance;
     }
 
-    public Client withCredit(Integer credit) {
-        this.credit = credit;
-        return this;
-    }
-
-    public Integer getDebit() {
-        return debit;
-    }
-
-    public void setDebit(Integer debit) {
-        this.debit = debit;
-    }
-
-    public Client withDebit(Integer debit) {
-        this.debit = debit;
+    public Client withBalance(Integer balance) {
+        this.balance = balance;
         return this;
     }
 

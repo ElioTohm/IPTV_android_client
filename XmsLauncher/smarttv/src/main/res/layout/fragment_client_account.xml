@@ -37,27 +37,6 @@
             <ImageView
                 android:layout_width="65dp"
                 android:layout_height="65dp"
-                android:id="@+id/wallet_icon"
-                android:src="@drawable/wallet"
-                android:layout_gravity="center"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:textAlignment="center"
-                android:layout_gravity="center"
-                android:layout_height="wrap_content"
-                android:textSize="28sp"
-                android:textColor="@color/white"
-                android:id="@+id/credit"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
-            <ImageView
-                android:layout_width="65dp"
-                android:layout_height="65dp"
                 android:id="@+id/bill_icon"
                 android:src="@drawable/bill"
                 android:layout_gravity="center"/>
@@ -68,7 +47,7 @@
                 android:textAlignment="center"
                 android:textSize="28sp"
                 android:textColor="@color/white"
-                android:id="@+id/debit"/>
+                android:id="@+id/balance"/>
         </LinearLayout>
 
     </LinearLayout>

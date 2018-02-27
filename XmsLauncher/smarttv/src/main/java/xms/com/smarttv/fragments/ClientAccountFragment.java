@@ -48,15 +48,13 @@ public class ClientAccountFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_client_account, container, false);
         TextView clientname = view.findViewById(R.id.client_name);
-        TextView credit = view.findViewById(R.id.credit);
-        TextView debit = view.findViewById(R.id.debit);
+        TextView balance = view.findViewById(R.id.balance);
 
         RecyclerView actionsRecyclerView = view.findViewById(R.id.action_recycler_view);
         actionsRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false));
 
         clientname.setText(String.format("%s's Account",client.getName()));
-        credit.setText(Integer.toString(client.getCredit()));
-        debit.setText(Integer.toString(client.getDebit()));
+        balance.setText(Integer.toString(client.getBalance()));
 
         Card roomservice = new Card();
         roomservice.setTitle("Room Service");

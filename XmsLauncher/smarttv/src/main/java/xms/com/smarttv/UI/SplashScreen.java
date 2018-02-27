@@ -224,14 +224,18 @@ public class SplashScreen extends Activity {
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(@NonNull Call<ResponseBody> call, @NonNull final Response<ResponseBody> response) {
-                if (!response.body().contentType().type().equals("text")) {
-                    realm.close();
-                    File apkpdate = new File(SplashScreen.this.getExternalCacheDir().getAbsolutePath() + "/xmslauncher.apk");
-                    if (apkpdate.exists()) {
-                        apkpdate.delete();
+                if (response.body() != null) {
+                    if (!response.body().contentType().type().equals("text")) {
+                        realm.close();
+                        File apkpdate = new File(SplashScreen.this.getExternalCacheDir().getAbsolutePath() + "/xmslauncher.apk");
+                        if (apkpdate.exists()) {
+                            apkpdate.delete();
+                        }
+                        Toast.makeText(SplashScreen.this,"Downloading Updates...", Toast.LENGTH_LONG).show();
+                        new SaveApk(SplashScreen.this).execute(response);
+                    } else {
+                        getChannels();
                     }
-                    Toast.makeText(SplashScreen.this,"Downloading Updates...", Toast.LENGTH_LONG).show();
-                    new SaveApk(SplashScreen.this).execute(response);
                 } else {
                     getChannels();
                 }
