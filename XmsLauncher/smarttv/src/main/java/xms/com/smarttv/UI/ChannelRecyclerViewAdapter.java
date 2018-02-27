@@ -1,7 +1,7 @@
 package xms.com.smarttv.UI;
 
-import android.annotation.SuppressLint;
 import android.os.Build;
+import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,23 +10,26 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.eliotohme.data.Channel;
 
-import java.util.List;
-
+import io.realm.OrderedRealmCollection;
+import io.realm.RealmRecyclerViewAdapter;
 import xms.com.smarttv.R;
-import xms.com.smarttv.fragments.ChannelsListFragment.ChannelListFragmentListener;
+import xms.com.smarttv.fragments.ChannelsListFragment;
 
-public class ChannelRecyclerViewAdapter extends RecyclerView.Adapter<ChannelRecyclerViewAdapter.ViewHolder> {
+public class ChannelRecyclerViewAdapter extends RealmRecyclerViewAdapter<Channel, ChannelRecyclerViewAdapter.ViewHolder> {
 
-    private final List<Channel> channels;
-    private final ChannelListFragmentListener mListener;
-    private final OnChannelClicked OnChannelClicked;
+    private final ChannelsListFragment.ChannelListFragmentListener mListener;
+    private OnChannelClicked onChannelClicked;
 
-    public ChannelRecyclerViewAdapter(List<Channel> items, ChannelListFragmentListener listener, OnChannelClicked OnChannelClicked) {
-        channels = items;
-        mListener = listener;
-        this.OnChannelClicked = OnChannelClicked;
+    public ChannelRecyclerViewAdapter(@Nullable OrderedRealmCollection<Channel> data, boolean autoUpdate, boolean updateOnModification,
+                                      ChannelsListFragment.ChannelListFragmentListener mListener,
+                                      OnChannelClicked onChannelClicked) {
+        super(data, autoUpdate, updateOnModification);
+        this.mListener = mListener;
+        this.onChannelClicked = onChannelClicked;
+        this.onChannelClicked = onChannelClicked;
     }
 
     @Override
@@ -36,21 +39,30 @@ public class ChannelRecyclerViewAdapter extends RecyclerView.Adapter<ChannelRecy
         return new ViewHolder(view);
     }
 
-    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        holder.channel = channels.get(position);
+        holder.channel = getItem(position);
+
         holder.channel_name.setText(holder.channel.getName());
         holder.channel_number.setText(String.valueOf(holder.channel.getNumber()));
+        if (holder.channel.getPrice() > 0 && !holder.channel.isPurchased()) {
+            Glide.with(holder.mView.getContext())
+                    .load("http://192.168.0.75/storage/hotel/images/money.png")
+                    .into(holder.purchasable_icon);
+        }
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (null != mListener) {
-                    // callback to update player in player activity
-                    mListener.onChannelSelected(holder.channel, false);
+                    if (holder.channel.getPrice() > 0 && !holder.channel.isPurchased()) {
+                        mListener.onChannelPurchased(holder.channel);
+                    } else {
+                        // callback to update player in player activity
+                        mListener.onChannelSelected(holder.channel, false);
 
-                    // callback to update position in fragment
-                    OnChannelClicked.UpdateLastPosition(position);
+                        // callback to update position in fragment
+                        onChannelClicked.UpdateLastPosition(position);
+                    }
                 }
             }
         });
@@ -58,33 +70,107 @@ public class ChannelRecyclerViewAdapter extends RecyclerView.Adapter<ChannelRecy
             @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-            if (hasFocus) {
-                v.setBackgroundColor(v.getContext().getResources().getColor(R.color.selected_row_header));
-            } else {
-                v.setBackgroundColor(0x00000000);
-            }
+                if (hasFocus) {
+                    v.setBackgroundColor(v.getContext().getResources().getColor(R.color.selected_row_header));
+                } else {
+                    v.setBackgroundColor(0x00000000);
+                }
             }
         });
     }
 
     @Override
-    public int getItemCount() {
-        return channels.size();
+    public long getItemId(int index) {
+        //noinspection ConstantConditions
+        return getItem(index).getNumber();
     }
 
+//    private final List<Channel> channels;
+//    private final ChannelListFragmentListener mListener;
+//    private final OnChannelClicked OnChannelClicked;
+//
+//    public ChannelRecyclerViewAdapter(List<Channel> items, ChannelListFragmentListener listener, OnChannelClicked OnChannelClicked) {
+//        channels = items;
+//        mListener = listener;
+//        this.OnChannelClicked = OnChannelClicked;
+//    }
+//
+//    @Override
+//    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+//        View view = LayoutInflater.from(parent.getContext())
+//                .inflate(R.layout.fragment_item, parent, false);
+//        return new ViewHolder(view);
+//    }
+//
+//    @Override
+//    public void onBindViewHolder(final ViewHolder holder, final int position) {
+//        holder.channel = channels.get(position);
+//        holder.channel_name.setText(holder.channel.getName());
+//        holder.channel_number.setText(String.valueOf(holder.channel.getNumber()));
+//        if (holder.channel.getPrice() > 0) {
+//            Glide.with(holder.mView.getContext())
+//                    .load("http://192.168.0.75/storage/hotel/images/money.png")
+//                    .into(holder.purchasable_icon);
+//        }
+//        holder.mView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (null != mListener) {
+//                    if (holder.channel.getPrice() > 0) {
+//                        mListener.onChannelPurchased(holder.channel);
+//                    } else {
+//                        // callback to update player in player activity
+//                        mListener.onChannelSelected(holder.channel, false);
+//
+//                        // callback to update position in fragment
+//                        OnChannelClicked.UpdateLastPosition(position);
+//                    }
+//                }
+//            }
+//        });
+//
+//        holder.mView.setOnLongClickListener(new View.OnLongClickListener() {
+//            @Override
+//            public boolean onLongClick(View v) {
+//                if (null != mListener) {
+//                    mListener.onChannelPurchased(holder.channel);
+//                }
+//                return false;
+//            }
+//        });
+//
+//        holder.mView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//            @RequiresApi(api = Build.VERSION_CODES.M)
+//            @Override
+//            public void onFocusChange(View v, boolean hasFocus) {
+//            if (hasFocus) {
+//                v.setBackgroundColor(v.getContext().getResources().getColor(R.color.selected_row_header));
+//            } else {
+//                v.setBackgroundColor(0x00000000);
+//            }
+//            }
+//        });
+//    }
+//
+//    @Override
+//    public int getItemCount() {
+//        return channels.size();
+//    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
-        final View mView;
-        final TextView channel_name;
-        final TextView channel_number;
+        View mView;
+        TextView channel_name;
+        TextView channel_number;
+        ImageView purchasable_icon;
+        boolean purchased = false;
         Channel channel;
-        private ImageView imageView;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
             channel_name = view.findViewById(R.id.item_name);
             channel_number = view.findViewById(R.id.item_number);
-            imageView = view.findViewById(R.id.item_icon);
+            purchasable_icon = view.findViewById(R.id.purchasable_icon);
         }
 
         @Override

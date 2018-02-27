@@ -3,6 +3,9 @@ package com.eliotohme.data;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
+import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -10,85 +13,217 @@ public class Client extends RealmObject{
     @PrimaryKey
     @SerializedName("id")
     @Expose
-    private int id;
-
+    private Integer id;
     @SerializedName("name")
     @Expose
     private String name;
-
     @SerializedName("email")
     @Expose
     private String email;
-
     @SerializedName("room")
     @Expose
-    private int room;
-
+    private Integer room;
     @SerializedName("welcome_message")
     @Expose
     private String welcomeMessage;
-
     @SerializedName("welcome_image")
     @Expose
     private String welcomeImage;
-
     @SerializedName("credit")
     @Expose
-    private int credit;
-
+    private Integer credit;
     @SerializedName("debit")
     @Expose
-    private int debit;
-
-    public Client() {}
+    private Integer debit;
+    @SerializedName("created_at")
+    @Expose
+    private String createdAt;
+    @SerializedName("updated_at")
+    @Expose
+    private String updatedAt;
+    @SerializedName("purchases")
+    @Expose
+    private RealmList<Purchase> purchases = null;
 
     /**
+     * No args constructor for use in serialization
+     *
+     */
+    public Client() {
+    }
+
+    /**
+     *
+     * @param purchases
+     * @param updatedAt
      * @param id
+     * @param welcomeImage
      * @param email
+     * @param createdAt
      * @param name
      * @param debit
      * @param credit
      * @param welcomeMessage
      * @param room
      */
-    public Client(int id, String name, String email, int room, String welcomeMessage, int credit, int debit) {
+    public Client(Integer id, String name, String email, Integer room,
+                  String welcomeMessage, String welcomeImage, Integer credit,
+                  Integer debit, String createdAt, String updatedAt, RealmList<Purchase> purchases) {
         super();
         this.id = id;
         this.name = name;
         this.email = email;
         this.room = room;
         this.welcomeMessage = welcomeMessage;
+        this.welcomeImage = welcomeImage;
         this.credit = credit;
+        this.debit = debit;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.purchases = purchases;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Client withId(Integer id) {
+        this.id = id;
+        return this;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Client withName(String name) {
+        this.name = name;
+        return this;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Client withEmail(String email) {
+        this.email = email;
+        return this;
+    }
+
+    public Integer getRoom() {
+        return room;
+    }
+
+    public void setRoom(Integer room) {
+        this.room = room;
+    }
+
+    public Client withRoom(Integer room) {
+        this.room = room;
+        return this;
+    }
+
+    public String getWelcomeMessage() {
+        return welcomeMessage;
+    }
+
+    public void setWelcomeMessage(String welcomeMessage) {
+        this.welcomeMessage = welcomeMessage;
+    }
+
+    public Client withWelcomeMessage(String welcomeMessage) {
+        this.welcomeMessage = welcomeMessage;
+        return this;
+    }
+
+    public String getWelcomeImage() {
+        return welcomeImage;
+    }
+
+    public void setWelcomeImage(String welcomeImage) {
+        this.welcomeImage = welcomeImage;
+    }
+
+    public Client withWelcomeImage(String welcomeImage) {
+        this.welcomeImage = welcomeImage;
+        return this;
+    }
+
+    public Integer getCredit() {
+        return credit;
+    }
+
+    public void setCredit(Integer credit) {
+        this.credit = credit;
+    }
+
+    public Client withCredit(Integer credit) {
+        this.credit = credit;
+        return this;
+    }
+
+    public Integer getDebit() {
+        return debit;
+    }
+
+    public void setDebit(Integer debit) {
         this.debit = debit;
     }
 
-    public int getId() { return id; }
+    public Client withDebit(Integer debit) {
+        this.debit = debit;
+        return this;
+    }
 
-    public void setId(int id) { this.id = id; }
+    public Object getCreatedAt() {
+        return createdAt;
+    }
 
-    public String getName() { return name; }
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
 
-    public void setName(String name) { this.name = name; }
+    public Client withCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+        return this;
+    }
 
-    public String getEmail() { return email; }
+    public Object getUpdatedAt() {
+        return updatedAt;
+    }
 
-    public void setEmail(String email) { this.email = email; }
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
+    }
 
-    public int getRoom() { return room; }
+    public Client withUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
+        return this;
+    }
 
-    public void setRoom(int room) { this.room = room; }
+    public List<Purchase> getPurchases() {
+        return purchases;
+    }
 
-    public String getWelcomeMessage() { return this.welcomeMessage; }
+    public void setPurchases(RealmList<Purchase> purchases) {
+        this.purchases = purchases;
+    }
 
-    public void setWelcomeMessage(String welcomeMessage) { this.welcomeMessage = welcomeMessage; }
+    public Client withPurchases(RealmList<Purchase> purchases) {
+        this.purchases = purchases;
+        return this;
+    }
 
-    public int getCredit() { return credit; }
-
-    public void setCredit(int credit) { this.credit = credit; }
-
-    public int getDebit() { return debit; }
-
-    public void setDebit(int debit) { this.debit = debit; }
-
-    public String getWelcomeImage() { return this.welcomeImage; }
 }

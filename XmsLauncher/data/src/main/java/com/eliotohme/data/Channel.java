@@ -3,17 +3,21 @@ package com.eliotohme.data;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
 import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
-public class Channel extends RealmObject {
+public class Channel extends RealmObject implements Serializable {
     @PrimaryKey
     @SerializedName("number")
     @Expose
     private Integer number;
+    @SerializedName("price")
+    @Expose
+    private Integer price;
     @SerializedName("name")
     @Expose
     private String name;
@@ -26,6 +30,8 @@ public class Channel extends RealmObject {
     @SerializedName("stream")
     @Expose
     private Stream stream;
+
+    boolean purchased = false;
 
     public Channel() {
     }
@@ -84,6 +90,22 @@ public class Channel extends RealmObject {
 
     public void setStream(Stream stream) {
         this.stream = stream;
+    }
+
+    public Integer getPrice() {
+        return price;
+    }
+
+    public void setPrice(Integer price) {
+        this.price = price;
+    }
+
+    public boolean isPurchased() {
+        return purchased;
+    }
+
+    public void setPurchased(boolean purchased) {
+        this.purchased = purchased;
     }
 
 }

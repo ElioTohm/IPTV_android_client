@@ -31,7 +31,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.ref.WeakReference;
 import java.util.List;
-import java.util.UUID;
 
 import io.realm.Realm;
 import okhttp3.ResponseBody;
@@ -84,20 +83,20 @@ public class SplashScreen extends Activity {
     private void registerdevice () {
         // initalize dialog
         final View view = getLayoutInflater().inflate(R.layout.client_register_dialog, null);
-        String uuid = UUID.randomUUID().toString();
+
         AlertDialog.Builder dialog = new AlertDialog.Builder(SplashScreen.this);
         dialog.setView(view);
+        // get android id
+        final EditText user_id = view.findViewById(R.id.text_ID);
+        final EditText user_secret = view.findViewById(R.id.text_secret);
+        final EditText serverURI = view.findViewById(R.id.server_url);
+        serverURI.setText("http://192.168.0.75");
+
         // set cancelable to true to be able to fix network before registery
         dialog.setCancelable(false);
         dialog.setNegativeButton("Register", new DialogInterface.OnClickListener() {
             public void onClick(final DialogInterface dialog, int id) {
-                // get android id
-                final EditText user_id = view.findViewById(R.id.text_ID);
-                final EditText user_secret = view.findViewById(R.id.text_secret);
-                final EditText serverURI = view.findViewById(R.id.server_url);
-
                 Preferences.setServerUrl(String.valueOf(serverURI.getText()));
-
                 // register client
                 final ApiInterface apiInterface = ApiService.createService(ApiInterface.class, String.valueOf(serverURI.getText()));
 
@@ -123,6 +122,7 @@ public class SplashScreen extends Activity {
                             });
                             getChannels();
                         } else {
+                            Log.d("TEST", String.valueOf(response.body().getError()));
                             registerdevice();
                         }
                     }
@@ -157,16 +157,14 @@ public class SplashScreen extends Activity {
                         realm.delete(Channel.class);
                         realm.delete(Genre.class);
                         realm.insertOrUpdate(response.body());
+                        startTVplayer();
+                        finish();
                     } else {
                         realm.deleteAll();
                         registerdevice();
                     }
                     }
                 });
-                if (response.code() == 200) {
-                    startTVplayer();
-                    finish();
-                }
             }
 
             @Override

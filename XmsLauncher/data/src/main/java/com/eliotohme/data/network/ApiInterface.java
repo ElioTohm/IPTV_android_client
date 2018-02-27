@@ -9,7 +9,9 @@ import java.util.List;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Query;
 import retrofit2.http.Streaming;
 import retrofit2.http.Url;
@@ -29,6 +31,10 @@ public interface ApiInterface {
 
     @GET("/api/clientInfo")
     Call<Client> getClientInfo(@Query("id") int user);
+
+
+    @POST("/api/clientpurchase")
+    Call<Client> purchaseItem(@Body Object client);
 
     @GET("v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20woeid%20in%20(select%20woeid%20from%20geo.places(1)%20where%20text%3D%22beirut%2C%20lb%22)%20and%20u%3D'c'&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys")
     Call<Weather> getWeather();

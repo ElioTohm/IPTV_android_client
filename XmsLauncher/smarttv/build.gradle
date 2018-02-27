@@ -46,5 +46,6 @@ dependencies {
     compile 'com.android.support:support-v4:' + project.ext.supportLibraryVersion
     compile 'com.android.support:support-vector-drawable:' + project.ext.supportLibraryVersion
     compile 'org.osmdroid:osmdroid-android:' + project.ext.osm
+    compile 'io.realm:android-adapters:2.1.1'
 
 }

@@ -3,7 +3,6 @@ package xms.com.smarttv.fragments;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,6 +12,7 @@ import android.view.ViewGroup;
 import com.eliotohme.data.Channel;
 
 import io.realm.Realm;
+import io.realm.RealmResults;
 import xms.com.smarttv.R;
 import xms.com.smarttv.UI.ChannelRecyclerViewAdapter;
 import xms.com.smarttv.UI.SimpleDividerItemDecoration;
@@ -26,7 +26,6 @@ import xms.com.smarttv.UI.SimpleDividerItemDecoration;
 public class ChannelsListFragment extends Fragment implements ChannelRecyclerViewAdapter.OnChannelClicked  {
     private int savedposition = 0 ;
     private static final String ARG_COLUMN_COUNT = "column-count";
-    private int mColumnCount = 1;
     private ChannelListFragmentListener mListener;
     private ChannelRecyclerViewAdapter channelRecyclerViewAdapter;
     private RecyclerView recyclerView;
@@ -44,15 +43,6 @@ public class ChannelsListFragment extends Fragment implements ChannelRecyclerVie
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
-        }
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_channel_list, container, false);
@@ -61,12 +51,10 @@ public class ChannelsListFragment extends Fragment implements ChannelRecyclerVie
         Context context = view.getContext();
         recyclerView = view.findViewById(R.id.channel_recycler_view);
         recyclerView.addItemDecoration(new SimpleDividerItemDecoration(context));
-        if (mColumnCount <= 1) {
-            recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        } else {
-            recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-        }
-        channelRecyclerViewAdapter = new ChannelRecyclerViewAdapter(Realm.getDefaultInstance().where(Channel.class).findAllSorted("number"),mListener,this);
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+
+        RealmResults realmResults = Realm.getDefaultInstance().where(Channel.class).sort("number").findAll();
+        channelRecyclerViewAdapter = new ChannelRecyclerViewAdapter(realmResults, true, true,mListener,this);
         recyclerView.setAdapter(channelRecyclerViewAdapter);
 
         return view;
@@ -102,5 +90,6 @@ public class ChannelsListFragment extends Fragment implements ChannelRecyclerVie
 
     public interface ChannelListFragmentListener {
         void onChannelSelected(Channel item, boolean flag);
+        void onChannelPurchased(Channel item);
     }
 }

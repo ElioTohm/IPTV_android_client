@@ -11,12 +11,15 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.XmsPro.xmsproplayer.Interface.XmsPlayerUICallback;
 import com.XmsPro.xmsproplayer.XmsPlayer;
 import com.bumptech.glide.Glide;
 import com.eliotohme.data.Channel;
 import com.eliotohme.data.Client;
+import com.eliotohme.data.Purchasable;
+import com.eliotohme.data.Purchase;
 import com.eliotohme.data.User;
 import com.eliotohme.data.network.ApiInterface;
 import com.eliotohme.data.network.ApiService;
@@ -41,6 +44,7 @@ import xms.com.smarttv.fragments.ClientAccountFragment;
 import xms.com.smarttv.fragments.HotelInfoFragment;
 import xms.com.smarttv.fragments.LocationDetailFragment;
 import xms.com.smarttv.fragments.MapFragment;
+import xms.com.smarttv.fragments.PurchaseDialog;
 import xms.com.smarttv.fragments.RestaurantsNBarFragment;
 import xms.com.smarttv.fragments.SectionMenuFragment;
 import xms.com.smarttv.fragments.SpaFitnessFragment;
@@ -299,9 +303,18 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
     @Override
     public void onChannelSelected(Channel channel, boolean showinfo) {
         channelList.clear();
-        channelList.add(channel);
-        xmsPlayer.changeSource(channelList, showinfo);
-        currentChannelNumber = channel.getNumber();
+        if (channel.getPrice() > 0 && !channel.isPurchased()) {
+            Toast.makeText(this, "This is a premium Channel long press to purchase", Toast.LENGTH_LONG).show();
+        } else {
+            channelList.add(channel);
+            xmsPlayer.changeSource(channelList, showinfo);
+            currentChannelNumber = channel.getNumber();
+        }
+    }
+
+    @Override
+    public void onChannelPurchased(Channel item) {
+        getFragmentManager().beginTransaction().add(R.id.fragment_container_purshase, PurchaseDialog.newInstance(item, "Channel")).commit();
     }
 
     /**
@@ -445,17 +458,25 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
             @Override
             public void onResponse(@NonNull Call<Client> call, @NonNull final Response<Client> response) {
                 if (response.body() != null) {
-                    Realm subrealm = Realm.getDefaultInstance();
                     if (response.code() == 200) {
+                        Realm subrealm = Realm.getDefaultInstance();
                         if (realm.where(Client.class).findFirst() !=  null) {
-                            if (!response.body().getEmail().equals(subrealm.where(Client.class).findFirst().getEmail())) {
-                                subrealm.executeTransaction(new Realm.Transaction() {
-                                    @Override
-                                    public void execute(Realm realm) {
-                                        realm.delete(Client.class);
-                                        realm.insert(response.body());
+                            subrealm.executeTransaction(new Realm.Transaction() {
+                                @Override
+                                public void execute(Realm realmexec) {
+                                    realmexec.delete(Client.class);
+                                    realmexec.delete(Purchase.class);
+                                    realmexec.delete(Purchasable.class);
+                                    realmexec.insert(response.body());
+                                    List<Purchase> purchases = realmexec.where(Purchase.class).findAll();
+                                    for (final Purchase purchase: purchases) {
+                                        if (purchase.getPurchasableType().equals("App\\Channel")){
+                                            realmexec.where(Channel.class).equalTo("number", purchase.getPurchasableId()).findFirst().setPurchased(true);
+                                        }
                                     }
-                                });
+                                }
+                            });
+                            if (!response.body().getEmail().equals(subrealm.where(Client.class).findFirst().getEmail())) {
                                 ShowHotelInfo();
                             } else {
                                 xmsPlayer.initializePlayer();
