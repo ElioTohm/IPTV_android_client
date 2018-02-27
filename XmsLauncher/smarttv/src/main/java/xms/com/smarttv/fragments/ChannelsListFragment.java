@@ -54,7 +54,7 @@ public class ChannelsListFragment extends Fragment implements ChannelRecyclerVie
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
         RealmResults realmResults = Realm.getDefaultInstance().where(Channel.class).sort("number").findAll();
-        channelRecyclerViewAdapter = new ChannelRecyclerViewAdapter(realmResults, true, true,mListener,this);
+        channelRecyclerViewAdapter = new ChannelRecyclerViewAdapter(realmResults, true,mListener,this);
         recyclerView.setAdapter(channelRecyclerViewAdapter);
 
         return view;

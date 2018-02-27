@@ -23,7 +23,7 @@ public class ChannelRecyclerViewAdapter extends RealmRecyclerViewAdapter<Channel
     private final ChannelsListFragment.ChannelListFragmentListener mListener;
     private OnChannelClicked onChannelClicked;
 
-    public ChannelRecyclerViewAdapter(@Nullable OrderedRealmCollection<Channel> data, boolean autoUpdate, boolean updateOnModification,
+    public ChannelRecyclerViewAdapter(@Nullable OrderedRealmCollection<Channel> data, boolean autoUpdate,
                                       ChannelsListFragment.ChannelListFragmentListener mListener,
                                       OnChannelClicked onChannelClicked) {
         super(data, autoUpdate);
