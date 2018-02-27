@@ -111,7 +111,7 @@ public class XmsPlayer  {
                     DataSource.Factory udsf = new UdpDataSource.Factory() {
                         @Override
                         public DataSource createDataSource() {
-                            return new UdpDataSource(null, 65507, 100);
+                            return new UdpDataSource(null, 65507, UdpDataSource.DEAFULT_SOCKET_TIMEOUT_MILLIS);
                         }
                     };
                     ExtractorsFactory tsExtractorFactory = new DefaultExtractorsFactory()
@@ -184,13 +184,13 @@ public class XmsPlayer  {
 
 
             player = ExoPlayerFactory.newSimpleInstance(renderersFactory, trackSelector,
-                    new DefaultLoadControl(new DefaultAllocator(true, 128 * 5120, 64),
-                            100,
-                            DefaultLoadControl.DEFAULT_MAX_BUFFER_MS,
-                            500,
-                            500,
-                            DefaultLoadControl.DEFAULT_TARGET_BUFFER_BYTES,
-                            true));
+                    new DefaultLoadControl(new DefaultAllocator(true, 512 * 5120, 64),
+                                    500,
+                                    DefaultLoadControl.DEFAULT_MAX_BUFFER_MS,
+                                    100,
+                                    100,
+                                    DefaultLoadControl.DEFAULT_TARGET_BUFFER_BYTES,
+                                    true));
         }
 
         player.setPlayWhenReady(true);
