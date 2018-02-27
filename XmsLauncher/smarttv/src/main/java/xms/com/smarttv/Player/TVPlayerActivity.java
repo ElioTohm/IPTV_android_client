@@ -460,6 +460,11 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
                 if (response.body() != null) {
                     if (response.code() == 200) {
                         Realm subrealm = Realm.getDefaultInstance();
+                        if (!response.body().getEmail().equals(subrealm.where(Client.class).findFirst().getEmail())) {
+                            ShowHotelInfo();
+                        } else {
+                            xmsPlayer.initializePlayer();
+                        }
                         if (realm.where(Client.class).findFirst() !=  null) {
                             subrealm.executeTransaction(new Realm.Transaction() {
                                 @Override
@@ -476,11 +481,6 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
                                     }
                                 }
                             });
-                            if (!response.body().getEmail().equals(subrealm.where(Client.class).findFirst().getEmail())) {
-                                ShowHotelInfo();
-                            } else {
-                                xmsPlayer.initializePlayer();
-                            }
                         } else {
                             subrealm.executeTransaction(new Realm.Transaction() {
                                 @Override

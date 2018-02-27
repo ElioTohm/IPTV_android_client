@@ -85,7 +85,6 @@ public class PurchaseDialog extends GuidedStepFragment {
         actions.add(action);
     }
 
-
     /**
      * @param action
      * on purchase send request to purchase to server
@@ -111,16 +110,14 @@ public class PurchaseDialog extends GuidedStepFragment {
 
             Call<Client> userCall = apiInterface.purchaseItem(new PurchaseForm(clientID, purchases));
             userCall.enqueue(new Callback<Client>() {
-
                 @Override
                 public void onResponse(@NonNull Call<Client> call, @NonNull final Response<Client> response) {
                     if (response.code() == 200 && response.body() != null) {
-                        Realm.getDefaultInstance().executeTransactionAsync(new Realm.Transaction() {
+                        Realm.getDefaultInstance().executeTransaction(new Realm.Transaction() {
                             @Override
                             public void execute(@NonNull Realm realm) {
                                 realm.insertOrUpdate(response.body());
-                                Channel channel = realm.where(Channel.class).equalTo("number", id).findFirst();
-                                channel.setPurchased(true);
+                                realm.where(Channel.class).equalTo("number", id).findFirst().setPurchased(true);
                             }
                         });
                     }

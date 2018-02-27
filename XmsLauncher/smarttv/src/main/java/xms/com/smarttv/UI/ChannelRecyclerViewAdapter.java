@@ -26,9 +26,9 @@ public class ChannelRecyclerViewAdapter extends RealmRecyclerViewAdapter<Channel
     public ChannelRecyclerViewAdapter(@Nullable OrderedRealmCollection<Channel> data, boolean autoUpdate, boolean updateOnModification,
                                       ChannelsListFragment.ChannelListFragmentListener mListener,
                                       OnChannelClicked onChannelClicked) {
-        super(data, autoUpdate, updateOnModification);
+        super(data, autoUpdate);
+        setHasStableIds(true);
         this.mListener = mListener;
-        this.onChannelClicked = onChannelClicked;
         this.onChannelClicked = onChannelClicked;
     }
 
@@ -40,7 +40,8 @@ public class ChannelRecyclerViewAdapter extends RealmRecyclerViewAdapter<Channel
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, final int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
+        final int currentposition = position;
         holder.channel = getItem(position);
 
         holder.channel_name.setText(holder.channel.getName());
@@ -48,6 +49,10 @@ public class ChannelRecyclerViewAdapter extends RealmRecyclerViewAdapter<Channel
         if (holder.channel.getPrice() > 0 && !holder.channel.isPurchased()) {
             Glide.with(holder.mView.getContext())
                     .load("http://192.168.0.75/storage/hotel/images/money.png")
+                    .into(holder.purchasable_icon);
+        } else {
+            Glide.with(holder.mView.getContext())
+                    .load(R.color.FullTransparent)
                     .into(holder.purchasable_icon);
         }
         holder.mView.setOnClickListener(new View.OnClickListener() {
@@ -61,7 +66,7 @@ public class ChannelRecyclerViewAdapter extends RealmRecyclerViewAdapter<Channel
                         mListener.onChannelSelected(holder.channel, false);
 
                         // callback to update position in fragment
-                        onChannelClicked.UpdateLastPosition(position);
+                        onChannelClicked.UpdateLastPosition(currentposition);
                     }
                 }
             }
@@ -81,7 +86,6 @@ public class ChannelRecyclerViewAdapter extends RealmRecyclerViewAdapter<Channel
 
     @Override
     public long getItemId(int index) {
-        //noinspection ConstantConditions
         return getItem(index).getNumber();
     }
 
@@ -162,7 +166,6 @@ public class ChannelRecyclerViewAdapter extends RealmRecyclerViewAdapter<Channel
         TextView channel_name;
         TextView channel_number;
         ImageView purchasable_icon;
-        boolean purchased = false;
         Channel channel;
 
         public ViewHolder(View view) {
