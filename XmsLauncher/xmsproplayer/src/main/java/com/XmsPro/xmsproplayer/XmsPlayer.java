@@ -111,7 +111,7 @@ public class XmsPlayer  {
                     DataSource.Factory udsf = new UdpDataSource.Factory() {
                         @Override
                         public DataSource createDataSource() {
-                            return new UdpDataSource(null, 65507, UdpDataSource.DEAFULT_SOCKET_TIMEOUT_MILLIS);
+                            return new UdpDataSource(null, 65507, 100);
                         }
                     };
                     ExtractorsFactory tsExtractorFactory = new DefaultExtractorsFactory()
