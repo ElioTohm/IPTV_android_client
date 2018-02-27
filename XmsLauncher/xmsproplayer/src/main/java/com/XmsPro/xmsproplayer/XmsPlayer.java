@@ -184,14 +184,15 @@ public class XmsPlayer  {
 
 
             player = ExoPlayerFactory.newSimpleInstance(renderersFactory, trackSelector,
-                    new DefaultLoadControl(new DefaultAllocator(true, 128 * 4048, 64),
+                    new DefaultLoadControl(new DefaultAllocator(true, 128 * 5120, 64),
                             100,
-                            2000,
+                            DefaultLoadControl.DEFAULT_MAX_BUFFER_MS,
                             500,
                             500,
                             DefaultLoadControl.DEFAULT_TARGET_BUFFER_BYTES,
                             true));
         }
+
         player.setPlayWhenReady(true);
 
         // set the mediasource and play when ready
