@@ -18,6 +18,7 @@ import com.XmsPro.xmsproplayer.XmsPlayer;
 import com.bumptech.glide.Glide;
 import com.eliotohme.data.Channel;
 import com.eliotohme.data.Client;
+import com.eliotohme.data.Movie;
 import com.eliotohme.data.Purchasable;
 import com.eliotohme.data.Purchase;
 import com.eliotohme.data.User;
@@ -36,6 +37,7 @@ import retrofit2.Response;
 import xms.com.smarttv.R;
 import xms.com.smarttv.UI.ApplicationsMenu;
 import xms.com.smarttv.UI.CustomHeaderItem;
+import xms.com.smarttv.UI.VOD.VODActivity;
 import xms.com.smarttv.app.Preferences;
 import xms.com.smarttv.fragments.BackgroundImageFragment;
 import xms.com.smarttv.fragments.ChannelsListFragment;
@@ -356,10 +358,15 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
             showDetailSection (R.id.fragment_container_details, detailSectionFragment, "ItemList", true);
         } else if (item.getHeaderId() == HEADER_ID_VOD) {
             xmsPlayer.releasePlayer();
-            detailSectionFragment = BackgroundImageFragment.newInstance(SectionMenuFragment.HEADER_ID_VOD);
-            showDetailSection (R.id.Main, detailSectionFragment, "BackgroundFragment", false);
-            detailSectionFragment = new VODfragment();
-            showDetailSection (R.id.fragment_container_details, detailSectionFragment, "ItemList", true);
+            startActivity(new Intent(this, VODActivity.class));
+//            detailSectionFragment = BackgroundImageFragment.newInstance(SectionMenuFragment.HEADER_ID_VOD);
+//            showDetailSection (R.id.Main, detailSectionFragment, "BackgroundFragment", false);
+//            detailSectionFragment = new VODfragment();
+//            showDetailSection (R.id.fragment_vod_list, detailSectionFragment, "ItemList", false);
+//            getFragmentManager().beginTransaction()
+//                    .setCustomAnimations(R.animator.lb_onboarding_page_indicator_fade_in,
+//                            R.animator.lb_onboarding_page_indicator_fade_out)
+//                    .hide(menuFragment).commit();
         } else if (item.getHeaderId() == HEADER_ID_APPS) {
             xmsPlayer.releasePlayer();
             detailSectionFragment = BackgroundImageFragment.newInstance(SectionMenuFragment.HEADER_ID_HOTEL_INFO);
@@ -378,7 +385,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
 
     @Override
     public void onVideoClicked(Object item) {
-        detailSectionFragment = VODDetailFragment.newInstance((Card) item);
+        detailSectionFragment = VODDetailFragment.newInstance((Movie) item);
         showDetailSection (R.id.ItemDetailFragment, detailSectionFragment, "ItemDetail", true);
     }
 
@@ -462,10 +469,13 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
                 if (response.body() != null) {
                     if (response.code() == 200) {
                         Realm subrealm = Realm.getDefaultInstance();
-                        if (!response.body().getEmail().equals(subrealm.where(Client.class).findFirst().getEmail())) {
-                            ShowHotelInfo();
-                        } else {
-                            xmsPlayer.initializePlayer();
+                        Client client = subrealm.where(Client.class).findFirst();
+                        if (client != null ) {
+                            if (!response.body().getEmail().equals(client.getEmail())) {
+                                ShowHotelInfo();
+                            } else {
+                                xmsPlayer.initializePlayer();
+                            }
                         }
                         if (realm.where(Client.class).findFirst() !=  null) {
                             subrealm.executeTransaction(new Realm.Transaction() {
@@ -491,7 +501,6 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
                                 }
 
                             });
-                            ShowHotelInfo();
                         }
                     }
                 }

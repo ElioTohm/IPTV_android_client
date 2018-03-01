@@ -1,0 +1,20 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="xms.com.smarttv.UI.VOD.VODHomeFragment">
+
+    <com.yarolegovich.discretescrollview.DiscreteScrollView
+        android:id="@+id/high_light"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:dsv_orientation="horizontal" />
+
+    <com.yarolegovich.discretescrollview.DiscreteScrollView
+        android:id="@+id/catergory"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:dsv_orientation="horizontal" />
+
+</FrameLayout>

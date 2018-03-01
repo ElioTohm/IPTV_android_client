@@ -5,6 +5,7 @@ import android.support.v17.leanback.widget.ImageCardView;
 import android.view.ContextThemeWrapper;
 
 import com.bumptech.glide.Glide;
+import com.eliotohme.data.Movie;
 
 import xms.com.smarttv.R;
 import xms.com.smarttv.models.Card;
@@ -63,6 +64,14 @@ public class ImageCardViewPresenter extends AbstractCardPresenter<ImageCardView>
                     .load(card.getImageUrl())
                     .into(cardView.getMainImageView());
         }
+    }
+
+    @Override
+    public void onBindViewHolder(Movie movie, ImageCardView cardView) {
+        Glide.with(getContext())
+            .asBitmap()
+            .load(movie.getPoster())
+            .into(cardView.getMainImageView());
     }
 
 }

@@ -15,30 +15,29 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.eliotohme.data.Movie;
 
 import java.io.Serializable;
 
 import xms.com.smarttv.Presenter.DetailsDescriptionPresenter;
 import xms.com.smarttv.R;
-import xms.com.smarttv.models.Card;
 
 public class VODDetailFragment extends DetailsFragment {
-    private static final String ITEM_TAG = "CARD";
+    private static final String MOVIE_TAG = "MOVIE";
     private ArrayObjectAdapter mRowsAdapter;
-    private Card card;
+    private Movie movie;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        card = (Card)getArguments().getSerializable(ITEM_TAG);
+        movie = (Movie) getArguments().getSerializable(MOVIE_TAG);
         buildDetails();
     }
 
     public static VODDetailFragment newInstance(Serializable object) {
         VODDetailFragment fragment = new VODDetailFragment();
         Bundle args = new Bundle();
-        args.putSerializable(ITEM_TAG, object);
+        args.putSerializable(MOVIE_TAG, object);
         fragment.setArguments(args);
         return fragment;
     }
@@ -55,14 +54,14 @@ public class VODDetailFragment extends DetailsFragment {
         selector.addClassPresenter(DetailsOverviewRow.class, rowPresenter);
         mRowsAdapter = new ArrayObjectAdapter(selector);
 
-        final DetailsOverviewRow detailsOverview = new DetailsOverviewRow(card);
+        final DetailsOverviewRow detailsOverview = new DetailsOverviewRow(movie);
         RequestOptions options = new RequestOptions()
                 .error(R.drawable.default_background)
                 .dontAnimate();
 
         Glide.with(this)
             .asBitmap()
-            .load(card.getImageUrl())
+            .load(movie.getPoster())
             .apply(options)
             .into(new SimpleTarget<Bitmap>() {
                 @Override
@@ -80,7 +79,7 @@ public class VODDetailFragment extends DetailsFragment {
                 .getString(R.string.watch_trailer_1),
                 getResources().getString(R.string.watch_trailer_2)));
         adapter.set(2, new Action(2, getResources().getString(R.string.rent_1),
-                card.getDescription()));
+                movie.getTitle()));
 
         detailsOverview.setActionsAdapter(adapter);
 

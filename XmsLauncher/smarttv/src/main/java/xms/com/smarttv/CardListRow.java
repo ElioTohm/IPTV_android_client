@@ -6,10 +6,6 @@ import android.support.v17.leanback.widget.ObjectAdapter;
 
 import xms.com.smarttv.models.CardRow;
 
-/**
- * Created by elio on 2/5/18.
- */
-
 public class CardListRow extends ListRow {
 
     private CardRow mCardRow;

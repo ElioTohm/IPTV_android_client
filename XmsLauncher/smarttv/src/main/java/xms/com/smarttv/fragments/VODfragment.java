@@ -7,17 +7,14 @@ import android.support.v17.leanback.widget.ArrayObjectAdapter;
 import android.support.v17.leanback.widget.FocusHighlight;
 import android.support.v17.leanback.widget.OnItemViewClickedListener;
 import android.support.v17.leanback.widget.Presenter;
-import android.support.v17.leanback.widget.PresenterSelector;
 import android.support.v17.leanback.widget.Row;
 import android.support.v17.leanback.widget.RowPresenter;
 import android.support.v17.leanback.widget.VerticalGridPresenter;
 
-import com.google.gson.Gson;
+import com.eliotohme.data.Movie;
 
-import xms.com.smarttv.Presenter.CardPresenterSelector;
-import xms.com.smarttv.R;
-import xms.com.smarttv.Utils;
-import xms.com.smarttv.models.CardRow;
+import io.realm.Realm;
+import xms.com.smarttv.Presenter.ImageCardViewPresenter;
 
 public class VODfragment extends VerticalGridFragment implements OnItemViewClickedListener {
     private static final int COLUMNS = 5;
@@ -36,12 +33,11 @@ public class VODfragment extends VerticalGridFragment implements OnItemViewClick
         gridPresenter.setNumberOfColumns(COLUMNS);
         setGridPresenter(gridPresenter);
 
-        PresenterSelector cardPresenterSelector = new CardPresenterSelector(getActivity());
-        mAdapter = new ArrayObjectAdapter(cardPresenterSelector);
+        mAdapter = new ArrayObjectAdapter(new ImageCardViewPresenter(getActivity()));
         setAdapter(mAdapter);
 
         prepareEntranceTransition();
-        createRows();
+        mAdapter.addAll(0, Realm.getDefaultInstance().where(Movie.class).findAll());
         startEntranceTransition();
         setOnItemViewClickedListener(this);
     }
@@ -57,12 +53,6 @@ public class VODfragment extends VerticalGridFragment implements OnItemViewClick
         }
     }
 
-    private void createRows() {
-        String json = Utils.inputStreamToString(getResources()
-                .openRawResource(R.raw.grid_example));
-        CardRow row = new Gson().fromJson(json, CardRow.class);
-        mAdapter.addAll(0, row.getCards());
-    }
 
     @Override
     public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item, RowPresenter.ViewHolder rowViewHolder, Row row) {

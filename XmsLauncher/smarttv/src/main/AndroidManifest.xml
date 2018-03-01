@@ -19,13 +19,13 @@
 
     <application
         android:name=".app.SmartTv"
-        android:hardwareAccelerated="true"
         android:banner="@drawable/xmsprologosmall"
+        android:hardwareAccelerated="true"
         android:icon="@drawable/xmsprologosmall"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:launchMode="singleTop"
         android:stateNotNeeded="true"
-        android:largeHeap="true"
         android:supportsRtl="true"
         android:theme="@style/Theme.Leanback">
         <activity
@@ -58,10 +58,11 @@
             android:screenOrientation="landscape" />
         <activity
             android:name=".UI.SplashScreen"
-            android:screenOrientation="landscape"
-            android:finishOnTaskLaunch="true">
+            android:finishOnTaskLaunch="true"
+            android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.HOME" />
@@ -73,6 +74,7 @@
             android:name=".services.GetInstalledAppService"
             android:exported="false" />
 
+        <activity android:name=".UI.VOD.VODActivity"></activity>
     </application>
 
 </manifest>

@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.eliotohme.data.Channel;
 import com.eliotohme.data.Genre;
+import com.eliotohme.data.Movie;
 import com.eliotohme.data.User;
 import com.eliotohme.data.network.ApiInterface;
 import com.eliotohme.data.network.ApiService;
@@ -120,7 +121,7 @@ public class SplashScreen extends Activity {
                                     realm.insertOrUpdate(user);
                                 }
                             });
-                            getChannels();
+                            getStreams();
                         } else {
                             Log.d("TEST", String.valueOf(response.body().getError()));
                             registerdevice();
@@ -139,12 +140,11 @@ public class SplashScreen extends Activity {
     }
 
     /**
-     * Get Channels and save them in database
+     * Get Channels, Movies and save them in database
      * function will always be called when device is turned on
      */
-    private void getChannels () {
+    private void getStreams () {
         ApiInterface apiInterface = ApiService.createService(ApiInterface.class, Preferences.getServerUrl(), TKN_TYPE, TKN);
-
         Call<List<Channel>> channelCall = apiInterface.getChannel();
         channelCall.enqueue(new Callback<List<Channel>>() {
             @Override
@@ -174,7 +174,25 @@ public class SplashScreen extends Activity {
             }
         });
 
+        Call<List<Movie>> movieCall = apiInterface.getMovies();
+        movieCall.enqueue(new Callback<List<Movie>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<Movie>> call, @NonNull final Response<List<Movie>> response) {
+                if (response.code() == 200) {
+                    Realm.getDefaultInstance().executeTransactionAsync(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            realm.insertOrUpdate(response.body());
+                        }
+                    });
+                }
+            }
 
+            @Override
+            public void onFailure(Call<List<Movie>> call, Throwable t) {
+
+            }
+        });
     }
 
     /**
@@ -192,7 +210,7 @@ public class SplashScreen extends Activity {
                 .setCancelable(false)
                 .setNegativeButton("Retry", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                    getChannels();
+                    getStreams();
                     }
                 })
                 .setPositiveButton("Register", new DialogInterface.OnClickListener() {
@@ -234,10 +252,10 @@ public class SplashScreen extends Activity {
                         Toast.makeText(SplashScreen.this,"Downloading Updates...", Toast.LENGTH_LONG).show();
                         new SaveApk(SplashScreen.this).execute(response);
                     } else {
-                        getChannels();
+                        getStreams();
                     }
                 } else {
-                    getChannels();
+                    getStreams();
                 }
             }
 

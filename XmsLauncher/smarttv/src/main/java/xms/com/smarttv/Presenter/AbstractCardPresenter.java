@@ -2,9 +2,13 @@ package xms.com.smarttv.Presenter;
 
 import android.content.Context;
 import android.support.v17.leanback.widget.BaseCardView;
+import android.support.v17.leanback.widget.HorizontalGridView;
 import android.support.v17.leanback.widget.Presenter;
 import android.view.ViewGroup;
 
+import com.eliotohme.data.Movie;
+
+import xms.com.smarttv.R;
 import xms.com.smarttv.models.Card;
 
 /**
@@ -27,17 +31,28 @@ public abstract class AbstractCardPresenter<T extends BaseCardView> extends Pres
         return mContext;
     }
 
-    @Override public final ViewHolder onCreateViewHolder(ViewGroup parent) {
+    @Override
+    public final ViewHolder onCreateViewHolder(ViewGroup parent) {
+        HorizontalGridView horizontalGridView = parent.findViewById(R.id.row_content);
+        horizontalGridView.setItemSpacing(200); // You can set item margin here.
         T cardView = onCreateView();
         return new ViewHolder(cardView);
     }
 
-    @Override public final void onBindViewHolder(ViewHolder viewHolder, Object item) {
-        Card card = (Card) item;
-        onBindViewHolder(card, (T) viewHolder.view);
+    @Override
+    public final void onBindViewHolder(ViewHolder viewHolder, Object item) {
+        if (item instanceof Card) {
+            Card card = (Card) item;
+            onBindViewHolder(card, (T) viewHolder.view);
+        } else if (item instanceof Movie) {
+            Movie movie = (Movie) item;
+            onBindViewHolder(movie, (T) viewHolder.view);
+        }
+
     }
 
-    @Override public final void onUnbindViewHolder(ViewHolder viewHolder) {
+    @Override
+    public final void onUnbindViewHolder(ViewHolder viewHolder) {
         onUnbindViewHolder((T) viewHolder.view);
     }
 
@@ -60,5 +75,6 @@ public abstract class AbstractCardPresenter<T extends BaseCardView> extends Pres
      * @see Presenter#onBindViewHolder(Presenter.ViewHolder, Object)
      */
     public abstract void onBindViewHolder(Card card, T cardView);
+    public abstract void onBindViewHolder(Movie movie, T cardView);
 
 }

@@ -16,14 +16,23 @@ package xms.com.smarttv.Presenter;
 
 import android.support.v17.leanback.widget.AbstractDetailsDescriptionPresenter;
 
+import com.eliotohme.data.Movie;
+
 import xms.com.smarttv.models.Card;
 
 public class DetailsDescriptionPresenter extends AbstractDetailsDescriptionPresenter {
 
     @Override
     protected void onBindDescription(ViewHolder viewHolder, Object itemData) {
-        Card details = (Card) itemData;
-        viewHolder.getTitle().setText(details.getTitle());
-        viewHolder.getBody().setText(details.getExtraText());
+        if (itemData instanceof Card) {
+            Card details = (Card) itemData;
+            viewHolder.getTitle().setText(details.getTitle());
+            viewHolder.getBody().setText(details.getExtraText());
+        } else if (itemData instanceof Movie) {
+            Movie details = (Movie) itemData;
+            viewHolder.getTitle().setText(details.getTitle());
+            viewHolder.getBody().setText(details.getTitle());
+        }
+
     }
 }

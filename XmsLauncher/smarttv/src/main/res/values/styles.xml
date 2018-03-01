@@ -137,6 +137,11 @@
         <item name="android:layout_height">@dimen/default_image_card_height</item>
     </style>
 
+    <style name="LargeCardImageStyle" parent="Widget.Leanback.ImageCardView.ImageStyle">
+        <item name="android:layout_width">300dp</item>
+        <item name="android:layout_height">400dp</item>
+    </style>
+
     <style name="DefaultCardStyle" parent="Widget.Leanback.ImageCardViewStyle">
         <item name="cardBackground">@color/BlackLightTransparent</item>
     </style>
@@ -144,6 +149,16 @@
     <style name="DefaultCardTheme" parent="Theme.Leanback">
         <item name="imageCardViewStyle">@style/DefaultCardStyle</item>
         <item name="imageCardViewImageStyle">@style/DefaultCardImageStyle</item>
+    </style>
+
+    <style name="LargeCardStyle" parent="Widget.Leanback.ImageCardViewStyle">
+        <item name="cardBackground">@color/BlackLightTransparent</item>
+
+    </style>
+
+    <style name="LargeCardTheme" parent="Theme.Leanback">
+        <item name="imageCardViewStyle">@style/LargeCardStyle</item>
+        <item name="imageCardViewImageStyle">@style/LargeCardImageStyle</item>
     </style>
 
     <!-- Game card styles with custom Badge icon. Used in cards example. -->

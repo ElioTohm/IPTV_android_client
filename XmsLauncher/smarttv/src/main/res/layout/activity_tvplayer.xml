@@ -28,6 +28,11 @@
         android:id="@+id/fragment_container_details"/>
 
     <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/fragment_vod_list"/>
+
+    <RelativeLayout
         android:id="@+id/fragment_container_purshase"
         android:layout_width="match_parent"
         android:layout_marginLeft="300dp"

@@ -2,6 +2,8 @@ package xms.com.smarttv.Presenter;
 
 import android.content.Context;
 
+import com.eliotohme.data.Movie;
+
 import xms.com.smarttv.TextCardView;
 import xms.com.smarttv.models.Card;
 
@@ -23,6 +25,11 @@ public class TextCardPresenter extends AbstractCardPresenter<TextCardView> {
     @Override
     public void onBindViewHolder(Card card, TextCardView cardView) {
         cardView.updateUi(card);
+    }
+
+    @Override
+    public void onBindViewHolder(Movie movie, TextCardView cardView) {
+
     }
 
 }

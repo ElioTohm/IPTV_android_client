@@ -47,5 +47,6 @@ dependencies {
     compile 'com.android.support:support-vector-drawable:' + project.ext.supportLibraryVersion
     compile 'org.osmdroid:osmdroid-android:' + project.ext.osm
     compile 'io.realm:android-adapters:2.1.1'
+    compile 'com.yarolegovich:discrete-scrollview:1.4.4'
 
 }

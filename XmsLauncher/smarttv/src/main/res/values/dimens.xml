@@ -34,6 +34,9 @@ http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
     <dimen name="character_image_card_width">160dp</dimen>
     <dimen name="character_image_card_height">160dp</dimen>
 
+    <dimen name="Large_image_card_width">300dp</dimen>
+    <dimen name="Large_image_card_height">400dp</dimen>
+
     <dimen name="grid_card_width">160dp</dimen>
     <dimen name="grid_card_height">160dp</dimen>
 

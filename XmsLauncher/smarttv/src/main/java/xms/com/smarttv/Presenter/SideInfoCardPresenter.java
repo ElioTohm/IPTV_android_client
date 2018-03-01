@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.eliotohme.data.Movie;
 
 import xms.com.smarttv.R;
 import xms.com.smarttv.models.Card;
@@ -59,6 +60,11 @@ public class SideInfoCardPresenter extends AbstractCardPresenter<BaseCardView> {
 
         TextView extraText = (TextView) cardView.findViewById(R.id.extra_text);
         extraText.setText(card.getExtraText());
+    }
+
+    @Override
+    public void onBindViewHolder(Movie movie, BaseCardView cardView) {
+
     }
 
 }

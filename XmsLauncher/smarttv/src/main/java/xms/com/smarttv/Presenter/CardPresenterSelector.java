@@ -9,11 +9,6 @@ import java.util.HashMap;
 import xms.com.smarttv.R;
 import xms.com.smarttv.models.Card;
 
-
-/**
- * Created by elio on 2/3/18.
- */
-
 public class CardPresenterSelector extends PresenterSelector {
 
     private final Context mContext;
@@ -34,9 +29,6 @@ public class CardPresenterSelector extends PresenterSelector {
             switch (card.getType()) {
                 case SINGLE_LINE:
                     presenter = new SingleLineCardPresenter(mContext);
-                    break;
-                case VIDEO_GRID:
-                    presenter = new VideoCardViewPresenter(mContext, R.style.VideoGridCardTheme);
                     break;
                 case MOVIE:
                 case MOVIE_BASE:
