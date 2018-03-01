@@ -5,15 +5,11 @@
     android:focusable="true"
     android:layout_height="wrap_content">
 
-    <ImageView
-        android:id="@+id/header_icon"
-        android:layout_width="24dp"
-        android:layout_height="25dp" />
-
     <TextView
         android:id="@+id/header_label"
         android:textColor="@color/White"
         android:layout_width="match_parent"
-        android:textSize="20sp"
+        android:textSize="30sp"
         android:layout_height="wrap_content" />
+
 </android.support.v17.leanback.widget.NonOverlappingLinearLayout>

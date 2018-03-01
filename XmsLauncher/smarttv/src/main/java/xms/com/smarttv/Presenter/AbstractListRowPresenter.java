@@ -1,22 +1,13 @@
 package xms.com.smarttv.Presenter;
 
 import android.content.Context;
-import android.support.v17.leanback.widget.BaseCardView;
-import android.support.v17.leanback.widget.HorizontalGridView;
 import android.support.v17.leanback.widget.Presenter;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
-import com.eliotohme.data.Genre;
-import com.eliotohme.data.Movie;
+import xms.com.smarttv.view.LargeListRowView;
 
-import xms.com.smarttv.R;
-import xms.com.smarttv.models.Card;
-
-/**
- * Created by elio on 2/3/18.
- */
-
-public abstract class AbstractCardPresenter<T extends BaseCardView> extends Presenter {
+public abstract class AbstractListRowPresenter<T extends LinearLayout> extends Presenter {
 
     private static final String TAG = "AbstractCardPresenter";
     private final Context mContext;
@@ -24,7 +15,7 @@ public abstract class AbstractCardPresenter<T extends BaseCardView> extends Pres
     /**
      * @param context The current context.
      */
-    public AbstractCardPresenter(Context context) {
+    public AbstractListRowPresenter(Context context) {
         mContext = context;
     }
 
@@ -34,23 +25,15 @@ public abstract class AbstractCardPresenter<T extends BaseCardView> extends Pres
 
     @Override
     public final ViewHolder onCreateViewHolder(ViewGroup parent) {
-        HorizontalGridView horizontalGridView = parent.findViewById(R.id.row_content);
-        horizontalGridView.setItemSpacing(200); // You can set item margin here.
         T cardView = onCreateView();
         return new ViewHolder(cardView);
     }
 
     @Override
     public final void onBindViewHolder(ViewHolder viewHolder, Object item) {
-        if (item instanceof Card) {
-            Card card = (Card) item;
-            onBindViewHolder(card, (T) viewHolder.view);
-        } else if (item instanceof Movie) {
-            Movie movie = (Movie) item;
-            onBindViewHolder(movie, (T) viewHolder.view);
-        } else if (item instanceof Genre) {
-            Genre genre = (Genre) item;
-            onBindViewHolder(genre, (T) viewHolder.view);
+        if (item instanceof LargeListRowView) {
+            LargeListRowView listRow = (LargeListRowView) item;
+            onBindViewHolder(listRow, (T) viewHolder.view);
         }
 
     }
@@ -78,8 +61,6 @@ public abstract class AbstractCardPresenter<T extends BaseCardView> extends Pres
      * @param cardView The view the card is bound to.
      * @see Presenter#onBindViewHolder(Presenter.ViewHolder, Object)
      */
-    public abstract void onBindViewHolder(Card card, T cardView);
-    public abstract void onBindViewHolder(Movie movie, T cardView);
-    public abstract void onBindViewHolder(Genre genre, T cardView);
+    public abstract void onBindViewHolder(LargeListRowView card, T cardView);
 
 }

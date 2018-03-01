@@ -9,29 +9,45 @@ import io.realm.annotations.PrimaryKey;
 
 public class Genre extends RealmObject {
     @PrimaryKey
-
     @SerializedName("id")
     @Expose
     private int id;
     @SerializedName("name")
     @Expose
     private String name;
+    @SerializedName("poster")
+    @Expose
+    private String poster;
 
+    /**
+     * No args constructor for use in serialization
+     *
+     */
     public Genre() {
     }
 
-    public Genre(int id, String name) {
-        super();
-        this.id = id;
-        this.name = name;
+    public String getPoster() {
+        return poster;
     }
 
-    public int getId() { return id; }
+    public void setPoster(String poster) {
+        this.poster = poster;
+    }
 
-    public void setId(int id) { this.id = id; }
+    public Integer getId() {
+        return id;
+    }
 
-    public String getName() { return name; }
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-    public void setName(String name) { this.name = name; }
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
 }

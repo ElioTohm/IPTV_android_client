@@ -6,17 +6,19 @@ import android.os.Bundle;
 import android.support.v17.leanback.app.BrowseFragment;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
 import android.support.v17.leanback.widget.HeaderItem;
-import android.support.v17.leanback.widget.ListRow;
 import android.support.v17.leanback.widget.ListRowPresenter;
 import android.support.v17.leanback.widget.OnItemViewClickedListener;
 import android.support.v17.leanback.widget.Presenter;
 import android.support.v17.leanback.widget.Row;
 import android.support.v17.leanback.widget.RowPresenter;
 
+import com.eliotohme.data.Genre;
 import com.eliotohme.data.Movie;
 
 import io.realm.Realm;
 import xms.com.smarttv.Presenter.FullImageCardPresenter;
+import xms.com.smarttv.Presenter.GenreCardViewPresenter;
+import xms.com.smarttv.models.LargeListRow;
 
 public class VODHomeFragment extends BrowseFragment implements OnItemViewClickedListener {
     private ArrayObjectAdapter mRowsAdapter;
@@ -25,13 +27,24 @@ public class VODHomeFragment extends BrowseFragment implements OnItemViewClicked
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         prepareEntranceTransition();
+
         mRowsAdapter = new ArrayObjectAdapter(new ListRowPresenter());
-        ArrayObjectAdapter listRowAdapter = new ArrayObjectAdapter(
+        ArrayObjectAdapter topmoviesarrayadapter = new ArrayObjectAdapter(
                 new FullImageCardPresenter(getActivity()));
-        listRowAdapter.addAll(0, Realm.getDefaultInstance().where(Movie.class).findAll());
+        topmoviesarrayadapter.addAll(0, Realm.getDefaultInstance().where(Movie.class).findAll());
         HeaderItem header = new HeaderItem("Top Movies");
-        mRowsAdapter.add(new ListRow(header, listRowAdapter));
+        mRowsAdapter.add(new LargeListRow(header, topmoviesarrayadapter));
+
+        ArrayObjectAdapter genresRowAdapter = new ArrayObjectAdapter(
+                new GenreCardViewPresenter(getActivity()));
+
+        genresRowAdapter.addAll(0, Realm.getDefaultInstance().where(Genre.class).findAll());
+
+        header = new HeaderItem("Genres");
+        mRowsAdapter.add(new LargeListRow(header, genresRowAdapter ));
+
         setAdapter(mRowsAdapter);
         setHeadersState(HEADERS_DISABLED);
         startEntranceTransition();

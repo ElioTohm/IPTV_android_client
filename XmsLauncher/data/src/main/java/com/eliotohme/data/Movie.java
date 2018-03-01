@@ -1,34 +1,71 @@
 package com.eliotohme.data;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.util.List;
 
+import io.realm.RealmList;
 import io.realm.RealmObject;
-import io.realm.annotations.PrimaryKey;
 
 public class Movie extends RealmObject implements Serializable {
     @SerializedName("id")
-    @PrimaryKey
-    private int id;
-    @SerializedName("stream")
-    private Stream stream = null;
+    @Expose
+    private Integer id;
     @SerializedName("title")
+    @Expose
     private String title;
     @SerializedName("poster")
+    @Expose
     private String poster;
+    @SerializedName("created_at")
+    @Expose
+    private String createdAt;
+    @SerializedName("updated_at")
+    @Expose
+    private String updatedAt;
+    @SerializedName("genres")
+    @Expose
+    private RealmList<Genre> genres = null;
+    @SerializedName("stream")
+    @Expose
+    private Stream stream;
 
     /**
      * No args constructor for use in serialization
+     *
      */
     public Movie() {
     }
 
-    public Movie(int id, Stream stream, String title, String poster) {
+    /**
+     *
+     * @param updatedAt
+     * @param id
+     * @param stream
+     * @param title
+     * @param genres
+     * @param createdAt
+     * @param poster
+     */
+    public Movie(Integer id, String title, String poster, String createdAt, String updatedAt, RealmList<Genre> genres, Stream stream) {
+        super();
         this.id = id;
-        this.stream = stream;
         this.title = title;
         this.poster = poster;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.genres = genres;
+        this.stream = stream;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getTitle() {
@@ -47,12 +84,28 @@ public class Movie extends RealmObject implements Serializable {
         this.poster = poster;
     }
 
-    public int getId() {
-        return id;
+    public String getCreatedAt() {
+        return createdAt;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public String getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public List<Genre> getGenres() {
+        return genres;
+    }
+
+    public void setGenres(RealmList<Genre> genres) {
+        this.genres = genres;
     }
 
     public Stream getStream() {
@@ -62,4 +115,5 @@ public class Movie extends RealmObject implements Serializable {
     public void setStream(Stream stream) {
         this.stream = stream;
     }
+
 }

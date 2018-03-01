@@ -1,4 +1,4 @@
-package xms.com.smarttv;
+package xms.com.smarttv.view;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
+import xms.com.smarttv.R;
 import xms.com.smarttv.models.Card;
 
 public class CharacterCardView extends BaseCardView {

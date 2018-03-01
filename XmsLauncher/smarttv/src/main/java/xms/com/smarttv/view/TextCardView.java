@@ -1,4 +1,4 @@
-package xms.com.smarttv;
+package xms.com.smarttv.view;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import xms.com.smarttv.R;
 import xms.com.smarttv.models.Card;
 
 /**

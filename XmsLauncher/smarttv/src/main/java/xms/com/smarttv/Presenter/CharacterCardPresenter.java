@@ -2,10 +2,11 @@ package xms.com.smarttv.Presenter;
 
 import android.content.Context;
 
+import com.eliotohme.data.Genre;
 import com.eliotohme.data.Movie;
 
-import xms.com.smarttv.CharacterCardView;
 import xms.com.smarttv.models.Card;
+import xms.com.smarttv.view.CharacterCardView;
 
 /**
  * Created by elio on 2/3/18.
@@ -29,6 +30,11 @@ public class CharacterCardPresenter extends AbstractCardPresenter<CharacterCardV
 
     @Override
     public void onBindViewHolder(Movie movie, CharacterCardView cardView) {
+
+    }
+
+    @Override
+    public void onBindViewHolder(Genre genre, CharacterCardView cardView) {
 
     }
 

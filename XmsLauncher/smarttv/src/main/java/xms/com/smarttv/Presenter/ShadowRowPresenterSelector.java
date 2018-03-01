@@ -4,7 +4,7 @@ import android.support.v17.leanback.widget.ListRowPresenter;
 import android.support.v17.leanback.widget.Presenter;
 import android.support.v17.leanback.widget.PresenterSelector;
 
-import xms.com.smarttv.CardListRow;
+import xms.com.smarttv.models.CardListRow;
 import xms.com.smarttv.models.CardRow;
 
 public class ShadowRowPresenterSelector extends PresenterSelector {

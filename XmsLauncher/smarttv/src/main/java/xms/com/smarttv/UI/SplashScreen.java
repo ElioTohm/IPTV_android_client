@@ -182,6 +182,10 @@ public class SplashScreen extends Activity {
                     Realm.getDefaultInstance().executeTransactionAsync(new Realm.Transaction() {
                         @Override
                         public void execute(Realm realm) {
+                            if (realm.where(Movie.class).findAll().size() >0 ) {
+                                realm.delete(Movie.class);
+                                realm.delete(Genre.class);
+                            }
                             realm.insertOrUpdate(response.body());
                         }
                     });

@@ -12,13 +12,13 @@ import android.support.v17.leanback.widget.RowPresenter;
 
 import com.google.gson.Gson;
 
-import xms.com.smarttv.CardListRow;
 import xms.com.smarttv.Presenter.CardPresenterSelector;
 import xms.com.smarttv.Presenter.ShadowRowPresenterSelector;
 import xms.com.smarttv.R;
 import xms.com.smarttv.UI.CustomHeaderItem;
 import xms.com.smarttv.Utils;
 import xms.com.smarttv.models.Card;
+import xms.com.smarttv.models.CardListRow;
 import xms.com.smarttv.models.CardRow;
 
 public class CityGuideFragment extends BrowseFragment implements OnItemViewClickedListener {

@@ -5,6 +5,8 @@ import android.support.v17.leanback.widget.ImageCardView;
 import android.view.ContextThemeWrapper;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.eliotohme.data.Genre;
 import com.eliotohme.data.Movie;
 
 import xms.com.smarttv.R;
@@ -67,11 +69,24 @@ public class ImageCardViewPresenter extends AbstractCardPresenter<ImageCardView>
     }
 
     @Override
-    public void onBindViewHolder(Movie movie, ImageCardView cardView) {
+    public void onBindViewHolder(Movie movie,final ImageCardView cardView) {
+        cardView.setTag(movie);
         Glide.with(getContext())
             .asBitmap()
             .load(movie.getPoster())
             .into(cardView.getMainImageView());
+    }
+
+    @Override
+    public void onBindViewHolder(Genre genre,final ImageCardView cardView) {
+        cardView.setTag(genre);
+        cardView.setTitleText(genre.getName());
+
+        Glide.with(getContext())
+                .asBitmap()
+                .load("http://192.168.0.75/storage/genres/Action.png")
+                .apply(new RequestOptions().fitCenter())
+                .into(cardView.getMainImageView());
     }
 
 }

@@ -1,13 +1,16 @@
-package xms.com.smarttv;
+package xms.com.smarttv.view;
 
 import android.content.Context;
 import android.support.v17.leanback.widget.BaseCardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.eliotohme.data.Movie;
+
+import xms.com.smarttv.R;
 
 public class LargeImageCardView extends BaseCardView {
 
@@ -30,6 +33,8 @@ public class LargeImageCardView extends BaseCardView {
 
     public void updateUi(Movie movie) {
         final ImageView imageView = findViewById(R.id.main_image);
+        final TextView title = findViewById(R.id.title);
+        title.setText(movie.getTitle());
         Glide.with(getContext())
                 .asBitmap()
                 .load(movie.getPoster())
