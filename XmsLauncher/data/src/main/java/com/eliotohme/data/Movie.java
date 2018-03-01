@@ -2,8 +2,14 @@ package com.eliotohme.data;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Movie {
+import java.io.Serializable;
+
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
+public class Movie extends RealmObject implements Serializable {
     @SerializedName("id")
+    @PrimaryKey
     private int id;
     @SerializedName("stream")
     private Stream stream = null;
@@ -11,8 +17,6 @@ public class Movie {
     private String title;
     @SerializedName("poster")
     private String poster;
-    @SerializedName("imdbinfo")
-    private ImdbInfo imdbInfo;
 
     /**
      * No args constructor for use in serialization
@@ -20,12 +24,11 @@ public class Movie {
     public Movie() {
     }
 
-    public Movie(int id, Stream stream, String title, String poster, ImdbInfo imdbInfo) {
+    public Movie(int id, Stream stream, String title, String poster) {
         this.id = id;
         this.stream = stream;
         this.title = title;
         this.poster = poster;
-        this.imdbInfo = imdbInfo;
     }
 
     public String getTitle() {
@@ -58,13 +61,5 @@ public class Movie {
 
     public void setStream(Stream stream) {
         this.stream = stream;
-    }
-
-    public ImdbInfo getImdbInfo() {
-        return imdbInfo;
-    }
-
-    public void setImdbInfo(ImdbInfo imdbInfo) {
-        this.imdbInfo = imdbInfo;
     }
 }
