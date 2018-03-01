@@ -30,7 +30,7 @@ dependencies {
     compile 'com.android.support:cardview-v7:' + project.ext.supportLibraryVersion
     compile 'com.android.support:recyclerview-v7:' + project.ext.supportLibraryVersion
     compile 'com.android.support:leanback-v17:' + project.ext.supportLibraryVersion
-    compile 'com.github.bumptech.glide:glide:3.7.0'
+    compile 'com.google.android.exoplayer:extension-leanback:2.6.1'
     //player
     compile 'de.mrmaffen:libvlc-android:2.1.12@aar'
     compile 'com.google.android.exoplayer:exoplayer:' + project.ext.releaseVersion
