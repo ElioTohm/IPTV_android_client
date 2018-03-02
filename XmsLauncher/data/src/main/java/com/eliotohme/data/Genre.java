@@ -26,6 +26,12 @@ public class Genre extends RealmObject {
     public Genre() {
     }
 
+    public Genre(int id, String name, String poster) {
+        this.id = id;
+        this.name = name;
+        this.poster = poster;
+    }
+
     public String getPoster() {
         return poster;
     }

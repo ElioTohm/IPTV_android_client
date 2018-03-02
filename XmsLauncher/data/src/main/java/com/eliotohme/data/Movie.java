@@ -19,6 +19,9 @@ public class Movie extends RealmObject implements Serializable {
     @SerializedName("poster")
     @Expose
     private String poster;
+    @SerializedName("price")
+    @Expose
+    private int price;
     @SerializedName("created_at")
     @Expose
     private String createdAt;
@@ -35,24 +38,12 @@ public class Movie extends RealmObject implements Serializable {
     @Expose
     private Stream stream;
 
-    /**
-     * No args constructor for use in serialization
-     *
-     */
+
     public Movie() {
     }
 
-    /**
-     *
-     * @param updatedAt
-     * @param id
-     * @param stream
-     * @param title
-     * @param genres
-     * @param createdAt
-     * @param poster
-     */
-    public Movie(Integer id, String title, String poster, String createdAt, String updatedAt, RealmList<Genre> genres, Stream stream) {
+    public Movie(Integer id, String title, String poster, String createdAt,
+                 String updatedAt, RealmList<Genre> genres, Stream stream, int price) {
         super();
         this.id = id;
         this.title = title;
@@ -61,6 +52,7 @@ public class Movie extends RealmObject implements Serializable {
         this.updatedAt = updatedAt;
         this.genres = genres;
         this.stream = stream;
+        this.price = price;
     }
 
     public Integer getId() {
@@ -125,5 +117,13 @@ public class Movie extends RealmObject implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
     }
 }
