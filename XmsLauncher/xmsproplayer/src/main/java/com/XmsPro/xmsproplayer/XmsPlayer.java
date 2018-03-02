@@ -5,6 +5,7 @@ import android.net.Uri;
 
 import com.XmsPro.xmsproplayer.Interface.XmsPlayerUICallback;
 import com.eliotohme.data.Channel;
+import com.eliotohme.data.Stream;
 import com.eliotohme.data.network.AuthenticationInterceptor;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
@@ -106,7 +107,7 @@ public class XmsPlayer  {
             Uri channel_stream_uri = Uri.parse(channels.get(i).getStream().getVid_stream());
             int channel_type = channels.get(i).getStream().getType();
             switch (channel_type) {
-                case  1:
+                case  Stream.TYPE_UDP:
                     DataSource.Factory udsf = new UdpDataSource.Factory() {
                         @Override
                         public DataSource createDataSource() {
@@ -120,25 +121,25 @@ public class XmsPlayer  {
                                             .setExtractorsFactory(tsExtractorFactory)
                                             .createMediaSource(channel_stream_uri);
                     break;
-                case 2:
+                case Stream.TYPE_HLS:
                     mediaSources[i]  = new HlsMediaSource.Factory(mediaDataSourceFactory)
                                             .createMediaSource(channel_stream_uri);
                     break;
-                case 3:
+                case Stream.DASH:
                     if (dashChunkSourceFactory == null) {
                         dashChunkSourceFactory = new DefaultDashChunkSource.Factory(mediaDataSourceFactory);
                     }
                     mediaSources[i]  = new DashMediaSource.Factory(dashChunkSourceFactory, mediaDataSourceFactory)
                                             .createMediaSource(channel_stream_uri);
                     break;
-                case 4:
+                case Stream.SS:
                     if( ssChunkSourceFactory == null) {
                         ssChunkSourceFactory = new DefaultSsChunkSource.Factory(mediaDataSourceFactory);
                     }
                     mediaSources[i]  = new SsMediaSource.Factory(ssChunkSourceFactory, mediaDataSourceFactory)
                                             .createMediaSource(channel_stream_uri);
                     break;
-                case 5:
+                case Stream.MISC:
                     if (defaultExtractorsFactory == null) {
                         defaultExtractorsFactory = new DefaultExtractorsFactory();
                     }
