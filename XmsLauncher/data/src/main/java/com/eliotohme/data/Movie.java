@@ -22,6 +22,9 @@ public class Movie extends RealmObject implements Serializable {
     @SerializedName("created_at")
     @Expose
     private String createdAt;
+    @SerializedName("description")
+    @Expose
+    private String description;
     @SerializedName("updated_at")
     @Expose
     private String updatedAt;
@@ -116,4 +119,11 @@ public class Movie extends RealmObject implements Serializable {
         this.stream = stream;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }

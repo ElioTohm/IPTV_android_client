@@ -5,14 +5,16 @@ import com.google.gson.annotations.SerializedName;
 import io.realm.RealmObject;
 
 public class Stream extends RealmObject {
-    public int TYPE_UDP = 1;
-    public int TYPE_HLS = 2;
-    public int DASH = 3;
-    public int SS = 4;
-    public int MISC = 5;
+    public final static int TYPE_UDP = 1;
+    public final static int TYPE_HLS = 2;
+    public final static int DASH = 3;
+    public final static int SS = 4;
+    public final static int MISC = 5;
 
     @SerializedName("vid_stream")
     private String vid_stream;
+    @SerializedName("trailer_stream")
+    private String trailer_stream;
     @SerializedName("sub_stream")
     private String sub_stream;
     @SerializedName("type")
@@ -49,5 +51,13 @@ public class Stream extends RealmObject {
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    public String getTrailer_stream() {
+        return trailer_stream;
+    }
+
+    public void setTrailer_stream(String trailer_stream) {
+        this.trailer_stream = trailer_stream;
     }
 }
