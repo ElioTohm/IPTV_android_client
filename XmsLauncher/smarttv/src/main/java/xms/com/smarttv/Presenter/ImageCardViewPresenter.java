@@ -17,7 +17,7 @@ public class ImageCardViewPresenter extends AbstractCardPresenter<ImageCardView>
     private static int sDefaultBackgroundColor;
 
     public ImageCardViewPresenter(Context context, int cardThemeResId) {
-        super(new ContextThemeWrapper(context, cardThemeResId));
+        super(new ContextThemeWrapper(context, cardThemeResId), 0);
     }
 
     public ImageCardViewPresenter(Context context) {
@@ -71,6 +71,7 @@ public class ImageCardViewPresenter extends AbstractCardPresenter<ImageCardView>
     @Override
     public void onBindViewHolder(Movie movie,final ImageCardView cardView) {
         cardView.setTag(movie);
+        cardView.setTitleText(movie.getTitle());
         Glide.with(getContext())
             .asBitmap()
             .load(movie.getPoster())

@@ -13,10 +13,12 @@ import com.eliotohme.data.Movie;
 import xms.com.smarttv.R;
 
 public class LargeImageCardView extends BaseCardView {
-
+    ImageView mImageView;
     public LargeImageCardView(Context context) {
         super(context, null, R.style.LargeCardTheme);
+
         LayoutInflater.from(getContext()).inflate(R.layout.vod_card_view_layout, this);
+        mImageView = findViewById(R.id.main_image);
         setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -40,5 +42,10 @@ public class LargeImageCardView extends BaseCardView {
                 .load(movie.getPoster())
                 .into(imageView);
     }
-
+    /**
+     * Returns the main image view.
+     */
+    public final ImageView getMainImageView() {
+        return mImageView;
+    }
 }

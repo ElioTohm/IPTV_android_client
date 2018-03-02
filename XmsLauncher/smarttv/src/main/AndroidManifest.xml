@@ -74,7 +74,7 @@
             android:name=".services.GetInstalledAppService"
             android:exported="false" />
 
-        <activity android:name=".UI.VOD.VODActivity"></activity>
+        <activity android:name=".UI.VOD.VODActivity" />
     </application>
 
 </manifest>

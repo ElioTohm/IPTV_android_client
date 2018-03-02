@@ -20,12 +20,14 @@ public abstract class AbstractCardPresenter<T extends BaseCardView> extends Pres
 
     private static final String TAG = "AbstractCardPresenter";
     private final Context mContext;
+    private int padding = 0;
 
     /**
      * @param context The current context.
      */
-    public AbstractCardPresenter(Context context) {
-        mContext = context;
+    public AbstractCardPresenter(Context context, int padding) {
+        this.mContext = context;
+        this.padding = padding;
     }
 
     public Context getContext() {
@@ -34,8 +36,10 @@ public abstract class AbstractCardPresenter<T extends BaseCardView> extends Pres
 
     @Override
     public final ViewHolder onCreateViewHolder(ViewGroup parent) {
-        HorizontalGridView horizontalGridView = parent.findViewById(R.id.row_content);
-        horizontalGridView.setItemSpacing(200); // You can set item margin here.
+        if (this.padding > 0) {
+            HorizontalGridView horizontalGridView = parent.findViewById(R.id.row_content);
+            horizontalGridView.setItemSpacing(this.padding); // You can set item margin here.
+        }
         T cardView = onCreateView();
         return new ViewHolder(cardView);
     }

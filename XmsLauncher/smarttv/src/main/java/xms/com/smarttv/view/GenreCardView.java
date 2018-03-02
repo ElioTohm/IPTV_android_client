@@ -34,7 +34,7 @@ public class GenreCardView extends BaseCardView {
         final ImageView imageView = findViewById(R.id.main_image);
         Glide.with(getContext())
                 .asBitmap()
-                .load("http://192.168.0.75/storage/genres/Action.png")
+                .load(genre.getPoster())
                 .into(imageView);
     }
 

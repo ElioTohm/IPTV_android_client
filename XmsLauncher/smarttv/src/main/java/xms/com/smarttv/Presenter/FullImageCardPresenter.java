@@ -11,7 +11,7 @@ import xms.com.smarttv.view.LargeImageCardView;
 public class FullImageCardPresenter extends AbstractCardPresenter<LargeImageCardView> {
 
     public FullImageCardPresenter(Context context) {
-        super(context);
+        super(context, 300);
     }
 
     @Override

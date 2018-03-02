@@ -18,6 +18,8 @@ import xms.com.smarttv.Presenter.ImageCardViewPresenter;
 
 public class VODfragment extends VerticalGridFragment implements OnItemViewClickedListener {
     private static final int COLUMNS = 5;
+    private static final String FILTER = "FILTER";
+    int filter_param = 0;
     private VODFragmentListener mListener;
     private final int ZOOM_FACTOR = FocusHighlight.ZOOM_FACTOR_LARGE;
     private ArrayObjectAdapter mAdapter;
@@ -25,7 +27,15 @@ public class VODfragment extends VerticalGridFragment implements OnItemViewClick
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        filter_param = getArguments().getInt(FILTER);
         setupAdapter();
+    }
+    public static VODfragment newInstance(int genre_id) {
+        VODfragment fragment = new VODfragment();
+        Bundle args = new Bundle();
+        args.putSerializable(FILTER, genre_id);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     private void setupAdapter() {
@@ -37,7 +47,7 @@ public class VODfragment extends VerticalGridFragment implements OnItemViewClick
         setAdapter(mAdapter);
 
         prepareEntranceTransition();
-        mAdapter.addAll(0, Realm.getDefaultInstance().where(Movie.class).findAll());
+        mAdapter.addAll(0, Realm.getDefaultInstance().where(Movie.class).equalTo("genres.id", this.filter_param).findAll());
         startEntranceTransition();
         setOnItemViewClickedListener(this);
     }

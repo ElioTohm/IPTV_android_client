@@ -15,7 +15,7 @@ import xms.com.smarttv.view.TextCardView;
 public class TextCardPresenter extends AbstractCardPresenter<TextCardView> {
 
     public TextCardPresenter(Context context) {
-        super(context);
+        super(context, 0);
     }
 
     @Override

@@ -11,7 +11,7 @@ import xms.com.smarttv.view.GenreCardView;
 public class GenreCardViewPresenter extends AbstractCardPresenter<GenreCardView> {
 
     public GenreCardViewPresenter(Context context) {
-        super(context);
+        super(context, 50);
     }
 
     @Override

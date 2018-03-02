@@ -21,7 +21,7 @@ import xms.com.smarttv.models.Card;
 public class SideInfoCardPresenter extends AbstractCardPresenter<BaseCardView> {
 
     public SideInfoCardPresenter(Context context) {
-        super(context);
+        super(context, 0);
     }
 
     @Override

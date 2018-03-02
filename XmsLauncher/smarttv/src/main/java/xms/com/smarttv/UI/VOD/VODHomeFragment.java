@@ -71,11 +71,16 @@ public class VODHomeFragment extends BrowseFragment implements OnItemViewClicked
 
     @Override
     public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item, RowPresenter.ViewHolder rowViewHolder, Row row) {
-//        mListener.LocationSelected(item);
+        if (item instanceof Movie) {
+            mListener.MovieSelected((Movie) item);
+        } else if (item instanceof Genre) {
+            mListener.GenreSelected((Genre) item);
+        }
+
     }
 
     public interface VODHomeListener {
-        void MovieSelected(Object item);
-        void GenreSelected(Object item);
+        void MovieSelected(Movie movie);
+        void GenreSelected(Genre genre);
     }
 }
