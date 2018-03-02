@@ -120,7 +120,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
         detailsectionContainer = findViewById(R.id.fragment_container_details);
 
         channelArrayList.add(realm.where(Channel.class).findFirst());
-        SimpleExoPlayerView simpleExoPlayerView = findViewById(xms.com.smarttv.R.id.simpleexoplayerview);
+        SimpleExoPlayerView simpleExoPlayerView = findViewById(R.id.simpleexoplayerview);
         xmsPlayer = new XmsPlayer(this, simpleExoPlayerView, channelArrayList,
                 realm.where(User.class).findFirst().getToken_type(), realm.where(User.class).findFirst().getAccess_token());
     }

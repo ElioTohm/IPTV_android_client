@@ -24,7 +24,7 @@ public class LargeImageCardView extends BaseCardView {
             public void onFocusChange(View v, boolean hasFocus) {
                 View container = findViewById(R.id.container);
                 if (hasFocus) {
-                    container.setBackgroundColor(R.drawable.character_focused);
+                    container.setBackgroundColor(getContext().getResources().getColor(R.color.vod_detail_view_actionbar_background));
                 } else {
                     container.setBackgroundResource(R.drawable.character_not_focused_padding);
                 }

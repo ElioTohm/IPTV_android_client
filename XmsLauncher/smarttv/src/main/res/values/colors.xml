@@ -200,7 +200,7 @@
     <color name="selected_background">#ffaa3f</color>
 
     <color name="selected_row_header">#800000FF</color>
-    <color name="selected_row_item">#300000FF</color>
-    <color name="row_item">#70000000</color>
+    <color name="selected_row_item">#04549D</color>
+    <color name="row_item">#90000000</color>
     <color name="welcome_message">#ffff</color>
 </resources>
