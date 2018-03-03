@@ -11,6 +11,7 @@ import android.support.v17.leanback.widget.ArrayObjectAdapter;
 import android.support.v17.leanback.widget.ClassPresenterSelector;
 import android.support.v17.leanback.widget.DetailsOverviewRow;
 import android.support.v17.leanback.widget.FullWidthDetailsOverviewRowPresenter;
+import android.support.v17.leanback.widget.OnActionClickedListener;
 import android.support.v17.leanback.widget.RowPresenter;
 import android.support.v17.leanback.widget.SparseArrayObjectAdapter;
 import android.view.View;
@@ -27,8 +28,11 @@ import java.io.Serializable;
 import xms.com.smarttv.Presenter.DetailsDescriptionPresenter;
 import xms.com.smarttv.R;
 
-public class VODDetailFragment extends DetailsFragment {
+public class VODDetailFragment extends DetailsFragment implements OnActionClickedListener {
     private static final String MOVIE_TAG = "MOVIE";
+    private int ACTION_PURCHASE = 1;
+    private int ACTION_WATCH = 2;
+    private VODDetailFragmentListener listener;
     private ArrayObjectAdapter mRowsAdapter;
     private Movie movie;
     private final DetailsFragmentBackgroundController mDetailsBackground =
@@ -96,7 +100,11 @@ public class VODDetailFragment extends DetailsFragment {
 
         SparseArrayObjectAdapter adapter = new SparseArrayObjectAdapter();
 
-        adapter.set(1, new Action(1, "Rent"));
+        if ( movie.getPrice() > 0 && !movie.isPurchased()) {
+            adapter.set(ACTION_PURCHASE, new Action(ACTION_PURCHASE, "Rent"));
+        } else {
+            adapter.set(ACTION_WATCH, new Action(ACTION_WATCH, "watch"));
+        }
 
         detailsOverview.setActionsAdapter(adapter);
 
@@ -128,5 +136,21 @@ public class VODDetailFragment extends DetailsFragment {
                         startEntranceTransition();
                     }
                 });
+    }
+
+    @Override
+    public void onActionClicked(Action action) {
+        if (action.getId() == ACTION_PURCHASE) {
+            getFragmentManager().beginTransaction()
+                    .add(R.id.fragment_container_purshase, PurchaseDialog.newInstance(movie, "Movie"))
+                    .commit();
+        } else if (action.getId() == ACTION_WATCH) {
+
+        }
+    }
+
+    public interface VODDetailFragmentListener {
+        void purchase(Movie movie);
+        void watch(Movie movie);
     }
 }

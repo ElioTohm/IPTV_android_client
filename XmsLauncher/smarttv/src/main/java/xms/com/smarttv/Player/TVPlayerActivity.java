@@ -409,7 +409,6 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
     @Override
     public void LocationSelected(Object item) {
         detailSectionFragment = LocationDetailFragment.newInstance((Card) item);
-//        showDetailSection (R.id.fragment_container_details, detailSectionFragment, "LocationDetail", true);
         getFragmentManager().beginTransaction()
                 .setCustomAnimations(R.animator.lb_onboarding_page_indicator_fade_in,
                         R.animator.lb_onboarding_page_indicator_fade_out)
@@ -487,8 +486,13 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
                                     realmexec.insert(response.body());
                                     List<Purchase> purchases = realmexec.where(Purchase.class).findAll();
                                     for (final Purchase purchase: purchases) {
-                                        if (purchase.getPurchasableType().equals("App\\Channel")){
-                                            realmexec.where(Channel.class).equalTo("id", purchase.getPurchasableId()).findFirst().setPurchased(true);
+                                        switch (purchase.getPurchasableType()){
+                                            case "App\\Channel":
+                                                realmexec.where(Channel.class).equalTo("id", purchase.getPurchasableId()).findFirst().setPurchased(true);
+                                                break;
+                                            case "App\\Movie":
+                                                realmexec.where(Movie.class).equalTo("id", purchase.getPurchasableId()).findFirst().setPurchased(true);
+                                                break;
                                         }
                                     }
                                 }

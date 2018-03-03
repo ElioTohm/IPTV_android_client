@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:id="@+id/DefaultIcon"
-        android:src="@drawable/xmsprologosmall" />
+        android:src="@drawable/fracarro" />
     <TextView
         android:layout_marginTop="30dp"
         android:layout_width="match_parent"
