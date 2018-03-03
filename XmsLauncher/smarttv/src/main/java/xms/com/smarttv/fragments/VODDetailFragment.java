@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v17.leanback.app.DetailsFragment;
 import android.support.v17.leanback.app.DetailsFragmentBackgroundController;
-import android.support.v17.leanback.media.MediaPlayerGlue;
 import android.support.v17.leanback.widget.Action;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
 import android.support.v17.leanback.widget.ClassPresenterSelector;
@@ -97,10 +96,7 @@ public class VODDetailFragment extends DetailsFragment {
 
         SparseArrayObjectAdapter adapter = new SparseArrayObjectAdapter();
 
-        adapter.set(1, new Action(1, getResources()
-                .getString(R.string.watch_trailer_1),
-                getResources().getString(R.string.watch_trailer_2)));
-        adapter.set(2, new Action(2, getResources().getString(R.string.rent_1)));
+        adapter.set(1, new Action(1, "Rent"));
 
         detailsOverview.setActionsAdapter(adapter);
 
@@ -110,15 +106,27 @@ public class VODDetailFragment extends DetailsFragment {
         initializeBackground();
     }
 
-    @SuppressLint("RestrictedApi")
+    @SuppressLint("ResourceAsColor")
     private void initializeBackground() {
         mDetailsBackground.enableParallax();
+        mDetailsBackground.setSolidColor(R.color.BlackTransparent);
 
-        MediaPlayerGlue playerGlue = new MediaPlayerGlue(getActivity());
-        mDetailsBackground.setupVideoPlayback(playerGlue);
+        RequestOptions options = new RequestOptions()
+                .error(R.drawable.default_background)
+                .centerCrop();
 
-        playerGlue.setTitle(movie.getTitle());
-        playerGlue.setArtist(movie.getDescription());
-        playerGlue.setVideoUrl(movie.getStream().getVid_stream());
+        Glide.with(this)
+                .asBitmap()
+                .load(movie.getPoster())
+                .apply(options)
+                .into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(
+                            @NonNull Bitmap resource,
+                            Transition<? super Bitmap> transition) {
+                        mDetailsBackground.setCoverBitmap(resource);
+                        startEntranceTransition();
+                    }
+                });
     }
 }

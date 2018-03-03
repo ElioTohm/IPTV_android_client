@@ -488,7 +488,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
                                     List<Purchase> purchases = realmexec.where(Purchase.class).findAll();
                                     for (final Purchase purchase: purchases) {
                                         if (purchase.getPurchasableType().equals("App\\Channel")){
-                                            realmexec.where(Channel.class).equalTo("number", purchase.getPurchasableId()).findFirst().setPurchased(true);
+                                            realmexec.where(Channel.class).equalTo("id", purchase.getPurchasableId()).findFirst().setPurchased(true);
                                         }
                                     }
                                 }

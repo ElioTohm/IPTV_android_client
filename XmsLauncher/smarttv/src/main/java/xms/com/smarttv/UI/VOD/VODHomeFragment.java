@@ -40,6 +40,7 @@ public class VODHomeFragment extends BrowseFragment implements OnItemViewClicked
         ArrayObjectAdapter genresRowAdapter = new ArrayObjectAdapter(
                 new GenreCardViewPresenter(getActivity()));
 
+        genresRowAdapter.add(0, new Genre(0, "A-Z", "http://192.168.0.75/storage/genres/all.png"));
         genresRowAdapter.addAll(0, Realm.getDefaultInstance().where(Genre.class).findAll());
 
         header = new HeaderItem("Genres");

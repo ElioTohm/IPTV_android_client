@@ -47,7 +47,12 @@ public class VODfragment extends VerticalGridFragment implements OnItemViewClick
         setAdapter(mAdapter);
 
         prepareEntranceTransition();
-        mAdapter.addAll(0, Realm.getDefaultInstance().where(Movie.class).equalTo("genres.id", this.filter_param).findAll());
+        if ( this.filter_param >0 ) {
+            mAdapter.addAll(0, Realm.getDefaultInstance().where(Movie.class).equalTo("genres.id", this.filter_param).findAll());
+        } else {
+            mAdapter.addAll(0, Realm.getDefaultInstance().where(Movie.class).findAll());
+        }
+
         startEntranceTransition();
         setOnItemViewClickedListener(this);
     }
