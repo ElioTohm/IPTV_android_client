@@ -38,6 +38,7 @@ public class Movie extends RealmObject implements Serializable {
     @Expose
     private Stream stream;
 
+    private boolean purchased = false;
 
     public Movie() {
     }
@@ -125,5 +126,13 @@ public class Movie extends RealmObject implements Serializable {
 
     public void setPrice(int price) {
         this.price = price;
+    }
+
+    public boolean isPurchased() {
+        return purchased;
+    }
+
+    public void setPurchased(boolean purchased) {
+        this.purchased = purchased;
     }
 }
