@@ -12,6 +12,9 @@ import io.realm.annotations.PrimaryKey;
 
 public class Channel extends RealmObject implements Serializable {
     @PrimaryKey
+    @SerializedName("id")
+    @Expose
+    private Integer id;
     @SerializedName("number")
     @Expose
     private Integer number;
@@ -36,14 +39,6 @@ public class Channel extends RealmObject implements Serializable {
     public Channel() {
     }
 
-    /**
-     *
-     * @param stream
-     * @param thumbnail
-     * @param genres
-     * @param name
-     * @param number
-     */
     public Channel(Integer number, String name, String thumbnail, RealmList<Genre> genres, Stream stream) {
         this.number = number;
         this.name = name;
@@ -108,4 +103,11 @@ public class Channel extends RealmObject implements Serializable {
         this.purchased = purchased;
     }
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 }
