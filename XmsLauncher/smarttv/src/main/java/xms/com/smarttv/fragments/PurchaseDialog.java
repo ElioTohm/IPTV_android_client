@@ -10,6 +10,7 @@ import android.support.v17.leanback.widget.GuidedAction;
 
 import com.eliotohme.data.Channel;
 import com.eliotohme.data.Client;
+import com.eliotohme.data.Movie;
 import com.eliotohme.data.Purchase;
 import com.eliotohme.data.PurchaseForm;
 import com.eliotohme.data.User;
@@ -68,6 +69,10 @@ public class PurchaseDialog extends GuidedStepFragment {
                     "Price : " + ((Channel)this.Purchasableitem).getPrice(),
                     "Purchase " + this.type, null);
             return guidance;
+        } else {
+            guidance = new GuidanceStylist.Guidance(((Movie)this.Purchasableitem).getTitle(),
+                    "Price : " + ((Movie)this.Purchasableitem).getPrice(),
+                    "Purchase " + this.type, null);
         }
         return guidance;
     }
@@ -95,7 +100,13 @@ public class PurchaseDialog extends GuidedStepFragment {
     @Override
     public void onGuidedActionClicked(GuidedAction action) {
         if (ACTION_ID_PURCHASE == action.getId()) {
-            final int id = ((Channel) Purchasableitem).getNumber();
+            int item_id = 0;
+            if (Purchasableitem instanceof Channel) {
+                item_id = ((Channel) Purchasableitem).getId();
+            } else {
+                item_id = ((Movie) Purchasableitem).getId();
+            }
+            final int id = item_id;
             Realm realm = Realm.getDefaultInstance();
             User user = realm.where(User.class).findFirst();
             int clientID = realm.where(Client.class).findFirst().getId();
@@ -117,7 +128,7 @@ public class PurchaseDialog extends GuidedStepFragment {
                             @Override
                             public void execute(@NonNull Realm realm) {
                                 realm.insertOrUpdate(response.body());
-                                realm.where(Channel.class).equalTo("number", id).findFirst().setPurchased(true);
+                                realm.where(Channel.class).equalTo("id", id).findFirst().setPurchased(true);
                             }
                         });
                     }

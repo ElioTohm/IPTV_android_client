@@ -11,6 +11,7 @@ import android.os.Looper;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -98,13 +99,18 @@ public class NotificationService extends IntentService {
         }
 
         WindowManager.LayoutParams  params = new WindowManager.LayoutParams(
-                WindowManager.LayoutParams.MATCH_PARENT,
-                WindowManager.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.WRAP_CONTENT,
                 layouttype,
                 WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
                         | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
                 PixelFormat.TRANSLUCENT
         );
+        params.gravity = Gravity.END | Gravity.TOP;
+        params.x = 0;
+        params.y = 0;
+        params.width = 500;
+        params.height = 250;
 
         notificationText.setText(notification.getMessage());
 
@@ -113,6 +119,7 @@ public class NotificationService extends IntentService {
                 .into(notificationImage);
 
         final WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+
         windowManager.addView(notificationView, params);
 
         button.setOnClickListener(new View.OnClickListener() {

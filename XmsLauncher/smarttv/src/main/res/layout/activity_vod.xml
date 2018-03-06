@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     tools:context="xms.com.smarttv.UI.VOD.VODActivity">
 
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"

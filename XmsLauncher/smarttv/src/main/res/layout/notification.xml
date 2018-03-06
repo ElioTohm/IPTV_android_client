@@ -3,19 +3,14 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="100dp"
+    android:padding="10dp"
     android:background="@color/BlackTransparent">
-
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:background="@color/WhiteSmokeTransparent">
 
         <ImageView
             android:id="@+id/notification_background"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:scaleType="fitXY"
             android:layout_centerInParent="true" />
 
         <TextView
@@ -28,16 +23,17 @@
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textColorHighlight="@android:color/darker_gray"
-            android:textSize="75dp" />
+            android:textSize="50dp" />
 
         <Button
             android:id="@+id/close_notification"
             android:layout_width="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
             android:layout_height="wrap_content"
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:focusedByDefault="true"
             android:text="X" />
-    </RelativeLayout>
 
 </RelativeLayout>

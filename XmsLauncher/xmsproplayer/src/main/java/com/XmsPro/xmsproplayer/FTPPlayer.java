@@ -65,7 +65,7 @@ public class FTPPlayer implements IVLCVout.Callback{
             // Set up video output
             final IVLCVout vout = mMediaPlayer.getVLCVout();
             vout.setVideoView(mSurface);
-            vout.setWindowSize(1280,720);
+            vout.setWindowSize(mSurface.getWidth(),mSurface.getHeight());
             vout.addCallback(this);
             vout.attachViews();
 
@@ -83,6 +83,12 @@ public class FTPPlayer implements IVLCVout.Callback{
             CurrentChannelNumber = channel.getNumber();
             xmsPlayerUICallback.showChannelInfo(media - 1);
         }
+    }
+
+    public void SetSource(String media) {
+        Media m = new Media(libvlc, Uri.parse(media));
+        mMediaPlayer.setMedia(m);
+        mMediaPlayer.play();
     }
 
     public void releasePlayer(){

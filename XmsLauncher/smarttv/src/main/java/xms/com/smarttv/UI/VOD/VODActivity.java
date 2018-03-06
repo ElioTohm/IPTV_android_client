@@ -9,12 +9,14 @@ import com.eliotohme.data.Movie;
 
 import xms.com.smarttv.R;
 import xms.com.smarttv.fragments.BackgroundImageFragment;
+import xms.com.smarttv.fragments.PurchaseDialog;
 import xms.com.smarttv.fragments.SectionMenuFragment;
 import xms.com.smarttv.fragments.VODDetailFragment;
 import xms.com.smarttv.fragments.VODfragment;
 
 
-public class VODActivity extends Activity implements VODHomeFragment.VODHomeListener, VODfragment.VODFragmentListener {
+public class VODActivity extends Activity implements VODHomeFragment.VODHomeListener, VODfragment.VODFragmentListener,
+        VODDetailFragment.VODDetailFragmentListener{
     Fragment backgroundImageFragment;
     Fragment vodHomeFragment;
     @Override
@@ -55,5 +57,19 @@ public class VODActivity extends Activity implements VODHomeFragment.VODHomeList
                 .replace(R.id.Main, VODDetailFragment.newInstance((Movie)item))
                 .addToBackStack(null)
                 .commit();
+    }
+
+    @Override
+    public void purchase(Movie movie) {
+        getFragmentManager()
+                .beginTransaction()
+                .add(R.id.fragment_container_purshase, PurchaseDialog.newInstance(movie, "Movie"))
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
+    public void watch(Movie movie) {
+
     }
 }

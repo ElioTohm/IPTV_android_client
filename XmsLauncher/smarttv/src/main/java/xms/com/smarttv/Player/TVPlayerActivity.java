@@ -18,6 +18,7 @@ import com.XmsPro.xmsproplayer.XmsPlayer;
 import com.bumptech.glide.Glide;
 import com.eliotohme.data.Channel;
 import com.eliotohme.data.Client;
+import com.eliotohme.data.Genre;
 import com.eliotohme.data.Movie;
 import com.eliotohme.data.Purchasable;
 import com.eliotohme.data.Purchase;
@@ -38,6 +39,7 @@ import xms.com.smarttv.R;
 import xms.com.smarttv.UI.ApplicationsMenu;
 import xms.com.smarttv.UI.CustomHeaderItem;
 import xms.com.smarttv.UI.VOD.VODActivity;
+import xms.com.smarttv.UI.VOD.VODHomeFragment;
 import xms.com.smarttv.app.Preferences;
 import xms.com.smarttv.fragments.BackgroundImageFragment;
 import xms.com.smarttv.fragments.ChannelsListFragment;
@@ -70,7 +72,8 @@ import static xms.com.smarttv.fragments.SectionMenuFragment.HEADER_ID_WEATHER;
 public class TVPlayerActivity extends Activity implements ChannelsListFragment.ChannelListFragmentListener,
         SectionMenuFragment.SectionMenuFragmentListener, XmsPlayerUICallback, VODfragment.VODFragmentListener,
         CityGuideFragment.CityGudieInterface, LocationDetailFragment.LocationDetailFragmentListener,
-        ClientAccountFragment.ClientAccountFragmentListener {
+        ClientAccountFragment.ClientAccountFragmentListener, VODHomeFragment.VODHomeListener,
+        VODDetailFragment.VODDetailFragmentListener {
 
     private View channelInfo;
     private TextView currentChannel, channel_number_selector, channelName;
@@ -174,9 +177,8 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
                         if (getFragmentManager().findFragmentByTag("LocationDetail") == null ||
                                 getFragmentManager().findFragmentByTag("LocationDetail") == null ) {
                             hideDetailSection("ItemList");
-                        } else {
-                            return super.dispatchKeyEvent(event);
                         }
+                        return super.dispatchKeyEvent(event);
                     }
                     return false;
                 case KeyEvent.KEYCODE_MENU:
@@ -196,7 +198,8 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
                     }
                     return false;
                 case KeyEvent.KEYCODE_DPAD_CENTER:
-                    if (channelGridFragment.isHidden() && menuFragment.isHidden()) {
+                    if (channelGridFragment.isHidden() && menuFragment.isHidden() &&
+                            (getFragmentManager().findFragmentByTag("VOD") == null || getFragmentManager().findFragmentByTag("VOD").isHidden())) {
                         getFragmentManager().beginTransaction()
                                 .setCustomAnimations(R.animator.lb_onboarding_page_indicator_fade_in,
                                         R.animator.lb_onboarding_page_indicator_fade_out)
@@ -205,12 +208,13 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
                     }
                     return super.dispatchKeyEvent(event);
                 case KeyEvent.KEYCODE_DPAD_UP:
-                    if (channelGridFragment.isHidden() && menuFragment.isHidden()) {
-                        List<Channel> result = realm.where(Channel.class).greaterThan("number", currentChannelNumber).findAllSorted("number");
+                    if (channelGridFragment.isHidden() && menuFragment.isHidden() &&
+                            (getFragmentManager().findFragmentByTag("VOD") == null || getFragmentManager().findFragmentByTag("VOD").isHidden())) {
+                        List<Channel> result = realm.where(Channel.class).greaterThan("number", currentChannelNumber).findAll().sort("number");
                         if (result.size() != 0 ) {
                             onChannelSelected(result.get(0), true);
                         } else {
-                            result = realm.where(Channel.class).findAllSorted("number");
+                            result = realm.where(Channel.class).findAll().sort("number");
                             onChannelSelected(result.get(0), true);
                         }
                         currentChannelNumber = result.get(0).getNumber();
@@ -218,12 +222,13 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
                     }
                     return super.dispatchKeyEvent(event);
                 case KeyEvent.KEYCODE_DPAD_DOWN:
-                    if (channelGridFragment.isHidden() && menuFragment.isHidden()) {
-                        List<Channel> result = realm.where(Channel.class).lessThan("number", currentChannelNumber).findAllSorted("number");
+                    if (channelGridFragment.isHidden() && menuFragment.isHidden() &&
+                            (getFragmentManager().findFragmentByTag("VOD") == null || getFragmentManager().findFragmentByTag("VOD").isHidden())) {
+                        List<Channel> result = realm.where(Channel.class).lessThan("number", currentChannelNumber).findAll().sort("number");
                         if (result.size() != 0 ) {
                             onChannelSelected(result.get(result.size()-1), true);
                         } else {
-                            result = realm.where(Channel.class).findAllSorted("number");
+                            result = realm.where(Channel.class).findAll().sort("number");
                             onChannelSelected(result.get(result.size() - 1), true);
                         }
                         currentChannelNumber = result.get(result.size() - 1).getNumber();
@@ -277,15 +282,15 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
                 channel_number_selector.setText(String.format("%s%s", channel_number_selector.getText(), String.valueOf(channel_numberpressed)));
                 Runnable setchannelnumberRunnable = new Runnable() {
                     public void run() {
-                        if (!channel_number_selector.getText().equals("")) {
-                            Channel channel = realm.where(Channel.class).equalTo("number", Integer.parseInt((String) channel_number_selector.getText())).findFirst();
-                            if (channel != null) {
-                                onChannelSelected(channel, true);
-                                currentChannelNumber = channel.getNumber();
-                            }
-                            channel_number_selector.setText("");
-                            channel_number_selector.setVisibility(View.INVISIBLE);
+                    if (!channel_number_selector.getText().equals("")) {
+                        Channel channel = realm.where(Channel.class).equalTo("number", Integer.parseInt((String) channel_number_selector.getText())).findFirst();
+                        if (channel != null) {
+                            onChannelSelected(channel, true);
+                            currentChannelNumber = channel.getNumber();
                         }
+                        channel_number_selector.setText("");
+                        channel_number_selector.setVisibility(View.INVISIBLE);
+                    }
                     }
                 };
                 setchannelnumberHandler.postDelayed(setchannelnumberRunnable, 1000);
@@ -361,8 +366,8 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
             startActivity(new Intent(this, VODActivity.class));
 //            detailSectionFragment = BackgroundImageFragment.newInstance(SectionMenuFragment.HEADER_ID_VOD);
 //            showDetailSection (R.id.Main, detailSectionFragment, "BackgroundFragment", false);
-//            detailSectionFragment = new VODfragment();
-//            showDetailSection (R.id.fragment_vod_list, detailSectionFragment, "ItemList", false);
+//            detailSectionFragment = new VODHomeFragment();
+//            showDetailSection (R.id.fragment_vod_list, detailSectionFragment, "VOD", false);
 //            getFragmentManager().beginTransaction()
 //                    .setCustomAnimations(R.animator.lb_onboarding_page_indicator_fade_in,
 //                            R.animator.lb_onboarding_page_indicator_fade_out)
@@ -431,6 +436,38 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
 
     @Override
     public void ServiceClicked(Card card) {
+
+    }
+
+    @Override
+    public void MovieSelected(Movie movie) {
+        getFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_vod_list, VODDetailFragment.newInstance(movie), "VOD")
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
+    public void GenreSelected(Genre genre) {
+        getFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_vod_list, VODfragment.newInstance(genre.getId()), "VOD")
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
+    public void purchase(Movie movie) {
+        getFragmentManager()
+                .beginTransaction()
+                .add(R.id.fragment_container_purshase, PurchaseDialog.newInstance(movie, "Movie"), "VOD")
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
+    public void watch(Movie movie) {
 
     }
 

@@ -20,7 +20,7 @@
     <application
         android:name=".app.SmartTv"
         android:banner="@drawable/fracarro"
-        android:hardwareAccelerated="true"
+        android:hardwareAccelerated="false"
         android:icon="@drawable/fracarro"
         android:label="@string/app_name"
         android:largeHeap="true"
@@ -71,7 +71,9 @@
             android:name=".services.GetInstalledAppService"
             android:exported="false" />
 
-        <activity android:name=".UI.VOD.VODActivity" />
+        <activity android:name=".UI.VOD.VODActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:supportsPictureInPicture="true"/>
     </application>
 
 </manifest>

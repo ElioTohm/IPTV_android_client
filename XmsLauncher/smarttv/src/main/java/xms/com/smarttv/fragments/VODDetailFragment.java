@@ -1,6 +1,7 @@
 package xms.com.smarttv.fragments;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,7 +12,9 @@ import android.support.v17.leanback.widget.ArrayObjectAdapter;
 import android.support.v17.leanback.widget.ClassPresenterSelector;
 import android.support.v17.leanback.widget.DetailsOverviewRow;
 import android.support.v17.leanback.widget.FullWidthDetailsOverviewRowPresenter;
-import android.support.v17.leanback.widget.OnActionClickedListener;
+import android.support.v17.leanback.widget.OnItemViewClickedListener;
+import android.support.v17.leanback.widget.Presenter;
+import android.support.v17.leanback.widget.Row;
 import android.support.v17.leanback.widget.RowPresenter;
 import android.support.v17.leanback.widget.SparseArrayObjectAdapter;
 import android.view.View;
@@ -28,9 +31,9 @@ import java.io.Serializable;
 import xms.com.smarttv.Presenter.DetailsDescriptionPresenter;
 import xms.com.smarttv.R;
 
-public class VODDetailFragment extends DetailsFragment implements OnActionClickedListener {
+public class VODDetailFragment extends DetailsFragment implements OnItemViewClickedListener {
     private static final String MOVIE_TAG = "MOVIE";
-    private int ACTION_PURCHASE = 1;
+    private int ACTION_RENT = 1;
     private int ACTION_WATCH = 2;
     private VODDetailFragmentListener listener;
     private ArrayObjectAdapter mRowsAdapter;
@@ -43,6 +46,7 @@ public class VODDetailFragment extends DetailsFragment implements OnActionClicke
         super.onCreate(savedInstanceState);
         movie = (Movie) getArguments().getSerializable(MOVIE_TAG);
         buildDetails();
+        setOnItemViewClickedListener(this);
     }
 
     public static VODDetailFragment newInstance(Serializable object) {
@@ -101,7 +105,7 @@ public class VODDetailFragment extends DetailsFragment implements OnActionClicke
         SparseArrayObjectAdapter adapter = new SparseArrayObjectAdapter();
 
         if ( movie.getPrice() > 0 && !movie.isPurchased()) {
-            adapter.set(ACTION_PURCHASE, new Action(ACTION_PURCHASE, "Rent"));
+            adapter.set(ACTION_RENT, new Action(ACTION_RENT, "Rent"));
         } else {
             adapter.set(ACTION_WATCH, new Action(ACTION_WATCH, "watch"));
         }
@@ -139,12 +143,23 @@ public class VODDetailFragment extends DetailsFragment implements OnActionClicke
     }
 
     @Override
-    public void onActionClicked(Action action) {
-        if (action.getId() == ACTION_PURCHASE) {
-            getFragmentManager().beginTransaction()
-                    .add(R.id.fragment_container_purshase, PurchaseDialog.newInstance(movie, "Movie"))
-                    .commit();
-        } else if (action.getId() == ACTION_WATCH) {
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof VODDetailFragmentListener) {
+            listener = (VODDetailFragmentListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item, RowPresenter.ViewHolder rowViewHolder, Row row) {
+        if (!(item instanceof Action)) return;
+        Action action = (Action) item;
+        if (action.getId() == ACTION_RENT) {
+            listener.purchase(this.movie);
+        } else {
 
         }
     }
