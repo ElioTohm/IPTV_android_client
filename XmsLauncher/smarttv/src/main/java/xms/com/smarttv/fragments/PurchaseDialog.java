@@ -34,6 +34,8 @@ import xms.com.smarttv.app.Preferences;
 public class PurchaseDialog extends GuidedStepFragment {
     private static final String ARG_ITEM = "item";
     private static final String ARG_TYPE = "item_type";
+    private static final int TYPE_CHANNEL= 1;
+    private static final int TYPE_MOVIE = 2;
     private static Object Purchasableitem;
     private String type;
     private static final int ACTION_ID_PURCHASE = 1;
@@ -101,12 +103,16 @@ public class PurchaseDialog extends GuidedStepFragment {
     public void onGuidedActionClicked(GuidedAction action) {
         if (ACTION_ID_PURCHASE == action.getId()) {
             int item_id = 0;
+            int item_type = 0;
             if (Purchasableitem instanceof Channel) {
+                item_type = TYPE_CHANNEL;
                 item_id = ((Channel) Purchasableitem).getId();
             } else {
+                item_type = TYPE_MOVIE;
                 item_id = ((Movie) Purchasableitem).getId();
             }
             final int id = item_id;
+            final int type = item_type;
             Realm realm = Realm.getDefaultInstance();
             User user = realm.where(User.class).findFirst();
             int clientID = realm.where(Client.class).findFirst().getId();
@@ -124,11 +130,17 @@ public class PurchaseDialog extends GuidedStepFragment {
                 @Override
                 public void onResponse(@NonNull Call<Client> call, @NonNull final Response<Client> response) {
                     if (response.code() == 200 && response.body() != null) {
-                        Realm.getDefaultInstance().executeTransaction(new Realm.Transaction() {
+                        Realm.getDefaultInstance().executeTransactionAsync(new Realm.Transaction() {
                             @Override
                             public void execute(@NonNull Realm realm) {
-                                realm.insertOrUpdate(response.body());
-                                realm.where(Channel.class).equalTo("id", id).findFirst().setPurchased(true);
+                                if (type == TYPE_CHANNEL){
+                                    realm.insertOrUpdate(response.body());
+                                    realm.where(Channel.class).equalTo("id", id).findFirst().setPurchased(true);
+                                }else {
+                                    realm.insertOrUpdate(response.body());
+                                    realm.where(Movie.class).equalTo("id", id).findFirst().setPurchased(true);
+                                }
+
                             }
                         });
                     }

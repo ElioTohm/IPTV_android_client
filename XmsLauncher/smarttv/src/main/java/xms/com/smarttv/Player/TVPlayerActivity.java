@@ -75,6 +75,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
         ClientAccountFragment.ClientAccountFragmentListener, VODHomeFragment.VODHomeListener,
         VODDetailFragment.VODDetailFragmentListener {
 
+    boolean IN_VOD = false;
     private View channelInfo;
     private TextView currentChannel, channel_number_selector, channelName;
     private XmsPlayer xmsPlayer;
@@ -156,8 +157,22 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
         xmsPlayer.releasePlayer();
     }
 
+    /**
+     * if IN_VOD the user will interact with the player
+     * to fastforward if not use key bindings to navigate fragments
+     * */
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
+        if (IN_VOD) {
+            if (event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
+                IN_VOD = false;
+                xmsPlayer.releasePlayer();
+                detailSectionFragment = BackgroundImageFragment.newInstance(SectionMenuFragment.HEADER_ID_VOD);
+                showDetailSection (R.id.Main, detailSectionFragment, "BackgroundFragment", false);
+            }
+            xmsPlayer.showProgress();
+            return super.dispatchKeyEvent(event);
+        }
         int action = event.getAction();
         int keyCode = event.getKeyCode();
         if (action == KeyEvent.ACTION_UP) {
@@ -166,7 +181,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
                 case KeyEvent.KEYCODE_BACK:
                     if (getFragmentManager().findFragmentByTag("VOD") != null) {
                         if (getFragmentManager().findFragmentByTag("VOD_Detail") != null ||
-                                getFragmentManager().findFragmentByTag("VOD_Detail") != null){
+                                getFragmentManager().findFragmentByTag("VOD_List") != null){
                             return super.dispatchKeyEvent(event);
                         }
                         getFragmentManager().beginTransaction()
@@ -481,7 +496,25 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
 
     @Override
     public void watch(Movie movie) {
+        getFragmentManager().beginTransaction()
+                .setCustomAnimations(R.animator.lb_onboarding_page_indicator_fade_in,
+                        R.animator.lb_onboarding_page_indicator_fade_out)
+                .remove(getFragmentManager().findFragmentByTag("VOD")).commit();
 
+        getFragmentManager().beginTransaction()
+                .setCustomAnimations(R.animator.lb_onboarding_page_indicator_fade_in,
+                        R.animator.lb_onboarding_page_indicator_fade_out)
+                .remove(getFragmentManager().findFragmentByTag("VOD_Detail")).commit();
+        getFragmentManager().beginTransaction()
+                .setCustomAnimations(R.animator.lb_onboarding_page_indicator_fade_in,
+                        R.animator.lb_onboarding_page_indicator_fade_out)
+                .remove(getFragmentManager().findFragmentByTag("BackgroundFragment")).commit();
+
+        streamList.clear();
+        streamList.add(movie.getStream());
+        xmsPlayer.initializePlayer();
+        xmsPlayer.changeSource(streamList,false);
+        IN_VOD = true;
     }
 
     private void hideDetailSection(String DetailSectionFragment) {

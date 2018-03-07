@@ -17,6 +17,7 @@ import android.support.v17.leanback.widget.Presenter;
 import android.support.v17.leanback.widget.Row;
 import android.support.v17.leanback.widget.RowPresenter;
 import android.support.v17.leanback.widget.SparseArrayObjectAdapter;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -27,7 +28,12 @@ import com.bumptech.glide.request.transition.Transition;
 import com.eliotohme.data.Movie;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
+import io.realm.OrderedCollectionChangeSet;
+import io.realm.OrderedRealmCollectionChangeListener;
+import io.realm.Realm;
+import io.realm.RealmResults;
 import xms.com.smarttv.Presenter.DetailsDescriptionPresenter;
 import xms.com.smarttv.R;
 
@@ -38,6 +44,10 @@ public class VODDetailFragment extends DetailsFragment implements OnItemViewClic
     private VODDetailFragmentListener listener;
     private ArrayObjectAdapter mRowsAdapter;
     private Movie movie;
+    DetailsOverviewRow detailsOverview;
+    OrderedRealmCollectionChangeListener orderedRealmCollectionChangeListener;
+    SparseArrayObjectAdapter adapter;
+    RealmResults<Movie> movies;
     private final DetailsFragmentBackgroundController mDetailsBackground =
             new DetailsFragmentBackgroundController(this);
 
@@ -83,7 +93,7 @@ public class VODDetailFragment extends DetailsFragment implements OnItemViewClic
         selector.addClassPresenter(DetailsOverviewRow.class, rowPresenter);
         mRowsAdapter = new ArrayObjectAdapter(selector);
 
-        final DetailsOverviewRow detailsOverview = new DetailsOverviewRow(movie);
+        detailsOverview = new DetailsOverviewRow(movie);
         RequestOptions options = new RequestOptions()
                 .error(R.drawable.default_background)
                 .dontAnimate();
@@ -102,7 +112,11 @@ public class VODDetailFragment extends DetailsFragment implements OnItemViewClic
                 }
             });
 
-        SparseArrayObjectAdapter adapter = new SparseArrayObjectAdapter();
+        Realm realm = Realm.getDefaultInstance();
+
+        adapter = new SparseArrayObjectAdapter();
+
+        movies = realm.where(Movie.class).findAll();
 
         if ( movie.getPrice() > 0 && !movie.isPurchased()) {
             adapter.set(ACTION_RENT, new Action(ACTION_RENT, "Rent"));
@@ -140,6 +154,22 @@ public class VODDetailFragment extends DetailsFragment implements OnItemViewClic
                         startEntranceTransition();
                     }
                 });
+        orderedRealmCollectionChangeListener = new OrderedRealmCollectionChangeListener<RealmResults<Movie>>() {
+            @Override
+            public void onChange(RealmResults<Movie> results, OrderedCollectionChangeSet changeSet) {
+                Log.e("ELIO", Arrays.toString(changeSet.getInsertions()));
+                adapter.clear();
+                if ( movie.getPrice() > 0 && !movie.isPurchased()) {
+                    adapter.set(ACTION_RENT, new Action(ACTION_RENT, "Rent"));
+                } else {
+                    adapter.set(ACTION_WATCH, new Action(ACTION_WATCH, "watch"));
+                }
+                detailsOverview.setActionsAdapter(adapter);
+                mRowsAdapter.add(detailsOverview);
+                setAdapter(mRowsAdapter);
+            }
+        };
+        movies.addChangeListener(orderedRealmCollectionChangeListener);
     }
 
     @Override
@@ -154,13 +184,20 @@ public class VODDetailFragment extends DetailsFragment implements OnItemViewClic
     }
 
     @Override
+    public void onDetach () {
+        super.onDetach();
+        movies.removeChangeListener(orderedRealmCollectionChangeListener);
+    }
+
+    @Override
     public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item, RowPresenter.ViewHolder rowViewHolder, Row row) {
         if (!(item instanceof Action)) return;
         Action action = (Action) item;
         if (action.getId() == ACTION_RENT) {
             listener.purchase(this.movie);
+            // Listeners will be notified when data changes
         } else {
-
+            listener.watch(this.movie);
         }
     }
 

@@ -18,6 +18,7 @@ import com.eliotohme.data.Movie;
 import io.realm.Realm;
 import xms.com.smarttv.Presenter.FullImageCardPresenter;
 import xms.com.smarttv.Presenter.GenreCardViewPresenter;
+import xms.com.smarttv.app.Preferences;
 import xms.com.smarttv.models.LargeListRow;
 
 public class VODHomeFragment extends BrowseFragment implements OnItemViewClickedListener {
@@ -40,7 +41,7 @@ public class VODHomeFragment extends BrowseFragment implements OnItemViewClicked
         ArrayObjectAdapter genresRowAdapter = new ArrayObjectAdapter(
                 new GenreCardViewPresenter(getActivity()));
 
-        genresRowAdapter.add(0, new Genre(0, "A-Z", "http://192.168.0.75/storage/genres/all.png"));
+        genresRowAdapter.add(0, new Genre(0, "A-Z", Preferences.getServerUrl() + "/storage/genres/all.png"));
         genresRowAdapter.addAll(0, Realm.getDefaultInstance().where(Genre.class).findAll());
 
         header = new HeaderItem("Genres");
