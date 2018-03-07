@@ -22,6 +22,7 @@ import com.eliotohme.data.Genre;
 import com.eliotohme.data.Movie;
 import com.eliotohme.data.Purchasable;
 import com.eliotohme.data.Purchase;
+import com.eliotohme.data.Stream;
 import com.eliotohme.data.User;
 import com.eliotohme.data.network.ApiInterface;
 import com.eliotohme.data.network.ApiService;
@@ -38,7 +39,6 @@ import retrofit2.Response;
 import xms.com.smarttv.R;
 import xms.com.smarttv.UI.ApplicationsMenu;
 import xms.com.smarttv.UI.CustomHeaderItem;
-import xms.com.smarttv.UI.VOD.VODActivity;
 import xms.com.smarttv.UI.VOD.VODHomeFragment;
 import xms.com.smarttv.app.Preferences;
 import xms.com.smarttv.fragments.BackgroundImageFragment;
@@ -79,8 +79,8 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
     private TextView currentChannel, channel_number_selector, channelName;
     private XmsPlayer xmsPlayer;
     private Fragment menuFragment;
-    private int currentChannelNumber = 1;
-    private List<Channel> channelList ;
+    private int currentStreamId = 1;
+    private List<Stream> streamList;
     private ChannelsListFragment channelGridFragment;
     private Realm realm;
     private ImageView channel_icon;
@@ -111,20 +111,20 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
                 .add(R.id.fragment_container_channel, menuFragment).commit();
         getFragmentManager().beginTransaction().add(R.id.fragment_container_channel, channelGridFragment).commit();
         getFragmentManager().beginTransaction().hide(channelGridFragment).commit();
-        channelList = new ArrayList<>();
+        streamList = new ArrayList<>();
 
         // init element and channel list with player
         channelInfo = findViewById(xms.com.smarttv.R.id.channelInfo);
         currentChannel = findViewById(xms.com.smarttv.R.id.current_channel);
         channelName = findViewById(xms.com.smarttv.R.id.channel_name);
         channel_icon = findViewById(R.id.channel_icon);
-        List<Channel> channelArrayList = new ArrayList<>();
+        streamList = new ArrayList<>();
         channel_number_selector = findViewById(xms.com.smarttv.R.id.channel_number_selector);
         detailsectionContainer = findViewById(R.id.fragment_container_details);
-
-        channelArrayList.add(realm.where(Channel.class).findFirst());
+        currentStreamId = realm.where(Channel.class).findFirst().getStream().getId();
+        streamList.add(realm.where(Channel.class).findFirst().getStream());
         SimpleExoPlayerView simpleExoPlayerView = findViewById(R.id.simpleexoplayerview);
-        xmsPlayer = new XmsPlayer(this, simpleExoPlayerView, channelArrayList,
+        xmsPlayer = new XmsPlayer(this, simpleExoPlayerView, streamList,
                 realm.where(User.class).findFirst().getToken_type(), realm.where(User.class).findFirst().getAccess_token());
     }
 
@@ -164,6 +164,16 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
             int channel_numberpressed = 10;
             switch (keyCode) {
                 case KeyEvent.KEYCODE_BACK:
+                    if (getFragmentManager().findFragmentByTag("VOD") != null) {
+                        if (getFragmentManager().findFragmentByTag("VOD_Detail") != null ||
+                                getFragmentManager().findFragmentByTag("VOD_Detail") != null){
+                            return super.dispatchKeyEvent(event);
+                        }
+                        getFragmentManager().beginTransaction()
+                                .remove(getFragmentManager().findFragmentByTag("VOD"))
+                                .commit();
+                        return false;
+                    }
                     if (getFragmentManager().findFragmentByTag("ItemList") == null ||
                             getFragmentManager().findFragmentByTag("ItemList").isHidden()) {
                             cleaFragmentForPlayer();
@@ -210,28 +220,30 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
                 case KeyEvent.KEYCODE_DPAD_UP:
                     if (channelGridFragment.isHidden() && menuFragment.isHidden() &&
                             (getFragmentManager().findFragmentByTag("VOD") == null || getFragmentManager().findFragmentByTag("VOD").isHidden())) {
-                        List<Channel> result = realm.where(Channel.class).greaterThan("number", currentChannelNumber).findAll().sort("number");
+                        int channel_id = realm.where(Channel.class).equalTo("stream.id", currentStreamId).findFirst().getNumber();
+                        List<Channel> result = realm.where(Channel.class).greaterThan("number", channel_id).findAll().sort("number");
                         if (result.size() != 0 ) {
                             onChannelSelected(result.get(0), true);
                         } else {
                             result = realm.where(Channel.class).findAll().sort("number");
                             onChannelSelected(result.get(0), true);
                         }
-                        currentChannelNumber = result.get(0).getNumber();
+                        currentStreamId = result.get(0).getStream().getId();
                         return true;
                     }
                     return super.dispatchKeyEvent(event);
                 case KeyEvent.KEYCODE_DPAD_DOWN:
                     if (channelGridFragment.isHidden() && menuFragment.isHidden() &&
                             (getFragmentManager().findFragmentByTag("VOD") == null || getFragmentManager().findFragmentByTag("VOD").isHidden())) {
-                        List<Channel> result = realm.where(Channel.class).lessThan("number", currentChannelNumber).findAll().sort("number");
+                        int channel_id = realm.where(Channel.class).equalTo("stream.id", currentStreamId).findFirst().getNumber();
+                        List<Channel> result = realm.where(Channel.class).lessThan("number", channel_id).findAll().sort("number");
                         if (result.size() != 0 ) {
                             onChannelSelected(result.get(result.size()-1), true);
                         } else {
                             result = realm.where(Channel.class).findAll().sort("number");
                             onChannelSelected(result.get(result.size() - 1), true);
                         }
-                        currentChannelNumber = result.get(result.size() - 1).getNumber();
+                        currentStreamId = result.get(result.size() - 1).getStream().getId();
                         return true;
                     }
                     return super.dispatchKeyEvent(event);
@@ -286,7 +298,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
                         Channel channel = realm.where(Channel.class).equalTo("number", Integer.parseInt((String) channel_number_selector.getText())).findFirst();
                         if (channel != null) {
                             onChannelSelected(channel, true);
-                            currentChannelNumber = channel.getNumber();
+                            currentStreamId = channel.getStream().getId();
                         }
                         channel_number_selector.setText("");
                         channel_number_selector.setVisibility(View.INVISIBLE);
@@ -309,14 +321,14 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
      */
     @Override
     public void onChannelSelected(Channel channel, boolean showinfo) {
-        channelList.clear();
+        streamList.clear();
         if (channel.getPrice() > 0 && !channel.isPurchased()) {
             Toast.makeText(this, "This is a premium Channel long press to purchase", Toast.LENGTH_LONG).show();
         } else {
-            if (currentChannelNumber != channel.getNumber()) {
-                channelList.add(channel);
-                xmsPlayer.changeSource(channelList, showinfo);
-                currentChannelNumber = channel.getNumber();
+            if (currentStreamId != channel.getStream().getId()) {
+                streamList.add(channel.getStream());
+                xmsPlayer.changeSource(streamList, showinfo);
+                currentStreamId = channel.getStream().getId();
             }
         }
     }
@@ -363,15 +375,16 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
             showDetailSection (R.id.fragment_container_details, detailSectionFragment, "ItemList", true);
         } else if (item.getHeaderId() == HEADER_ID_VOD) {
             xmsPlayer.releasePlayer();
-            startActivity(new Intent(this, VODActivity.class));
-//            detailSectionFragment = BackgroundImageFragment.newInstance(SectionMenuFragment.HEADER_ID_VOD);
-//            showDetailSection (R.id.Main, detailSectionFragment, "BackgroundFragment", false);
-//            detailSectionFragment = new VODHomeFragment();
-//            showDetailSection (R.id.fragment_vod_list, detailSectionFragment, "VOD", false);
-//            getFragmentManager().beginTransaction()
-//                    .setCustomAnimations(R.animator.lb_onboarding_page_indicator_fade_in,
-//                            R.animator.lb_onboarding_page_indicator_fade_out)
-//                    .hide(menuFragment).commit();
+            hideDetailSection("ItemList");
+//            startActivity(new Intent(this, VODActivity.class));
+            detailSectionFragment = BackgroundImageFragment.newInstance(SectionMenuFragment.HEADER_ID_VOD);
+            showDetailSection (R.id.Main, detailSectionFragment, "BackgroundFragment", false);
+            detailSectionFragment = new VODHomeFragment();
+            showDetailSection (R.id.fragment_vod_list, detailSectionFragment, "VOD", false);
+            getFragmentManager().beginTransaction()
+                    .setCustomAnimations(R.animator.lb_onboarding_page_indicator_fade_in,
+                            R.animator.lb_onboarding_page_indicator_fade_out)
+                    .hide(menuFragment).commit();
         } else if (item.getHeaderId() == HEADER_ID_APPS) {
             xmsPlayer.releasePlayer();
             detailSectionFragment = BackgroundImageFragment.newInstance(SectionMenuFragment.HEADER_ID_HOTEL_INFO);
@@ -395,8 +408,8 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
     }
 
     @Override
-    public void showChannelInfo(int channelindex) {
-        Channel channel = realm.where(Channel.class).equalTo("number", channelindex).findFirst();
+    public void showChannelInfo(int streamindex) {
+        Channel channel = realm.where(Channel.class).equalTo("stream.id", streamindex).findFirst();
         Glide.with(this).asBitmap().load(channel.getThumbnail()).into(channel_icon);
         currentChannel.setText(String.valueOf(channel.getNumber()));
         channelName.setText(channel.getName());
@@ -443,7 +456,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
     public void MovieSelected(Movie movie) {
         getFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fragment_vod_list, VODDetailFragment.newInstance(movie), "VOD")
+                .replace(R.id.fragment_vod_list, VODDetailFragment.newInstance(movie), "VOD_Detail")
                 .addToBackStack(null)
                 .commit();
     }
@@ -452,7 +465,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
     public void GenreSelected(Genre genre) {
         getFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fragment_vod_list, VODfragment.newInstance(genre.getId()), "VOD")
+                .replace(R.id.fragment_vod_list, VODfragment.newInstance(genre.getId()), "VOD_List")
                 .addToBackStack(null)
                 .commit();
     }
@@ -511,38 +524,31 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
                                 ShowHotelInfo();
                             } else {
                                 xmsPlayer.initializePlayer();
+                                showChannelInfo(currentStreamId);
                             }
                         }
-                        if (realm.where(Client.class).findFirst() !=  null) {
-                            subrealm.executeTransaction(new Realm.Transaction() {
-                                @Override
-                                public void execute(Realm realmexec) {
+                        subrealm.executeTransaction(new Realm.Transaction() {
+                            @Override
+                            public void execute(Realm realmexec) {
+                                if (realmexec.where(Client.class).findFirst() !=  null) {
                                     realmexec.delete(Client.class);
                                     realmexec.delete(Purchase.class);
                                     realmexec.delete(Purchasable.class);
-                                    realmexec.insert(response.body());
-                                    List<Purchase> purchases = realmexec.where(Purchase.class).findAll();
-                                    for (final Purchase purchase: purchases) {
-                                        switch (purchase.getPurchasableType()){
-                                            case "App\\Channel":
-                                                realmexec.where(Channel.class).equalTo("id", purchase.getPurchasableId()).findFirst().setPurchased(true);
-                                                break;
-                                            case "App\\Movie":
-                                                realmexec.where(Movie.class).equalTo("id", purchase.getPurchasableId()).findFirst().setPurchased(true);
-                                                break;
-                                        }
+                                }
+                                realmexec.insert(response.body());
+                                List<Purchase> purchases = realmexec.where(Purchase.class).findAll();
+                                for (final Purchase purchase: purchases) {
+                                    switch (purchase.getPurchasableType()){
+                                        case "App\\Channel":
+                                            realmexec.where(Channel.class).equalTo("id", purchase.getPurchasableId()).findFirst().setPurchased(true);
+                                            break;
+                                        case "App\\Movie":
+                                            realmexec.where(Movie.class).equalTo("id", purchase.getPurchasableId()).findFirst().setPurchased(true);
+                                            break;
                                     }
                                 }
-                            });
-                        } else {
-                            subrealm.executeTransaction(new Realm.Transaction() {
-                                @Override
-                                public void execute(Realm realm) {
-                                    realm.insert(response.body());
-                                }
-
-                            });
-                        }
+                            }
+                        });
                     }
                 }
             }
@@ -560,7 +566,9 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
     private void cleaFragmentForPlayer () {
         if (getFragmentManager().findFragmentByTag("BackgroundFragment") != null) {
             xmsPlayer.initializePlayer();
-            xmsPlayer.changeSource(realm.where(Channel.class).equalTo("number", currentChannelNumber).findAll(), true);
+            streamList.clear();
+            streamList.add(realm.where(Channel.class).equalTo("number", currentStreamId).findFirst().getStream());
+            xmsPlayer.changeSource(streamList, true);
             getFragmentManager().beginTransaction()
                     .setCustomAnimations(R.animator.lb_onboarding_page_indicator_fade_in,
                             R.animator.lb_onboarding_page_indicator_fade_out)
@@ -568,7 +576,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
         }
         if (getFragmentManager().findFragmentByTag("ItemList") == null &&
                 channelGridFragment.isHidden() && menuFragment.isHidden()) {
-            showChannelInfo(currentChannelNumber);
+            showChannelInfo(currentStreamId);
         }
         getFragmentManager().beginTransaction()
                 .setCustomAnimations(R.animator.lb_onboarding_page_indicator_fade_in,

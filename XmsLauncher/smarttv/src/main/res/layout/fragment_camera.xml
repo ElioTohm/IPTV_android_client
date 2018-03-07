@@ -1,4 +1,5 @@
-<SurfaceView android:layout_width="500dp"
-    android:layout_height="250dp"
+<VideoView
+    android:layout_width="650dp"
+    android:layout_height="450dp"
     android:id="@+id/video_door"
     xmlns:android="http://schemas.android.com/apk/res/android" />

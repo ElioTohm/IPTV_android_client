@@ -13,6 +13,7 @@ import android.widget.ViewFlipper;
 import com.bumptech.glide.Glide;
 
 import xms.com.smarttv.R;
+import xms.com.smarttv.app.Preferences;
 
 public class BackgroundImageFragment extends Fragment {
     private static final String TYPE = "type";
@@ -49,42 +50,42 @@ public class BackgroundImageFragment extends Fragment {
         switch (type) {
             case SectionMenuFragment.HEADER_ID_RESTOANDBAR:
                 gallery = new String[]{
-                        "http://192.168.0.75/storage/hotel/images/rest1.png",
-                        "http://192.168.0.75/storage/hotel/images/rest2.png",
+                        Preferences.getServerUrl() + "/storage/hotel/images/rest1.png",
+                        Preferences.getServerUrl() + "/storage/hotel/images/rest2.png",
                 };
                 break;
             case SectionMenuFragment.HEADER_ID_ACCOUNT:
             case SectionMenuFragment.HEADER_ID_HOTEL_INFO:
                 gallery = new String[]{
-                        "http://192.168.0.75/storage/hotel/images/hotel1.png",
-                        "http://192.168.0.75/storage/hotel/images/hotel2.png",
-                        "http://192.168.0.75/storage/hotel/images/hotel3.png"
+                        Preferences.getServerUrl() + "/storage/hotel/images/hotel1.png",
+                        Preferences.getServerUrl() + "/storage/hotel/images/hotel2.png",
+                        Preferences.getServerUrl() + "/storage/hotel/images/hotel3.png"
                 };
                 break;
             case SectionMenuFragment.HEADER_ID_SPAANDFITNESS:
                 gallery = new String[]{
-                        "http://192.168.0.75/storage/hotel/images/spa1.png",
-//                        "http://192.168.0.75/storage/hotel/images/spa2.png",
-//                        "http://192.168.0.75/storage/hotel/images/gym1.png",
-                        "http://192.168.0.75/storage/hotel/images/gym2.png"
+                        Preferences.getServerUrl() + "/storage/hotel/images/spa1.png",
+//                        "/storage/hotel/images/spa2.png",
+//                        "/storage/hotel/images/gym1.png",
+                        Preferences.getServerUrl() + "/storage/hotel/images/gym2.png"
                 };
                 break;
             case SectionMenuFragment.HEADER_ID_WEATHER:
                 gallery = new String[]{
-                        "http://192.168.0.75/storage/hotel/images/weather1.png",
-                        "http://192.168.0.75/storage/hotel/images/weather2.png"
+                        Preferences.getServerUrl() + "/storage/hotel/images/weather1.png",
+                        Preferences.getServerUrl() + "/storage/hotel/images/weather2.png"
                 };
                 break;
             case SectionMenuFragment.HEADER_ID_CITYGUIDE:
                 gallery = new String[]{
-                        "http://192.168.0.75/storage/hotel/images/cityguide2.png",
-                        "http://192.168.0.75/storage/hotel/images/cityguide1.png"
+                        Preferences.getServerUrl() + "/storage/hotel/images/cityguide2.png",
+                        Preferences.getServerUrl() + "/storage/hotel/images/cityguide1.png"
                 };
                 break;
             case SectionMenuFragment.HEADER_ID_VOD:
                 gallery = new String[]{
-                        "http://192.168.0.75/storage/hotel/images/vod1.png",
-                        "http://192.168.0.75/storage/hotel/images/vod2.png"
+                        Preferences.getServerUrl() + "/storage/hotel/images/vod1.png",
+                        Preferences.getServerUrl() + "/storage/hotel/images/vod2.png"
                 };
                 break;
         }

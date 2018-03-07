@@ -3,6 +3,7 @@ package com.eliotohme.data;
 import com.google.gson.annotations.SerializedName;
 
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 public class Stream extends RealmObject {
     public final static int TYPE_UDP = 1;
@@ -11,6 +12,9 @@ public class Stream extends RealmObject {
     public final static int SS = 4;
     public final static int MISC = 5;
 
+    @PrimaryKey
+    @SerializedName("id")
+    private int id;
     @SerializedName("vid_stream")
     private String vid_stream;
     @SerializedName("trailer_stream")
@@ -59,5 +63,13 @@ public class Stream extends RealmObject {
 
     public void setTrailer_stream(String trailer_stream) {
         this.trailer_stream = trailer_stream;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

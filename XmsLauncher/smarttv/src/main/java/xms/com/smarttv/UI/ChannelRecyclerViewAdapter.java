@@ -16,6 +16,7 @@ import com.eliotohme.data.Channel;
 import io.realm.OrderedRealmCollection;
 import io.realm.RealmRecyclerViewAdapter;
 import xms.com.smarttv.R;
+import xms.com.smarttv.app.Preferences;
 import xms.com.smarttv.fragments.ChannelsListFragment;
 
 public class ChannelRecyclerViewAdapter extends RealmRecyclerViewAdapter<Channel, ChannelRecyclerViewAdapter.ViewHolder> {
@@ -48,7 +49,7 @@ public class ChannelRecyclerViewAdapter extends RealmRecyclerViewAdapter<Channel
         holder.channel_number.setText(String.valueOf(holder.channel.getNumber()));
         if (holder.channel.getPrice() > 0 && !holder.channel.isPurchased()) {
             Glide.with(holder.mView.getContext())
-                    .load("http://192.168.0.75/storage/hotel/images/money.png")
+                    .load(Preferences.getServerUrl() + "/storage/hotel/images/money.png")
                     .into(holder.purchasable_icon);
         } else {
             Glide.with(holder.mView.getContext())

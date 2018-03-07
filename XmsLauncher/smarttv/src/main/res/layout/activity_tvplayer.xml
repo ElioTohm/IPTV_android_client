@@ -16,6 +16,11 @@
 
     </com.google.android.exoplayer2.ui.SimpleExoPlayerView>
 
+    <!--<VideoView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:id="@+id/native_player"/>-->
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"

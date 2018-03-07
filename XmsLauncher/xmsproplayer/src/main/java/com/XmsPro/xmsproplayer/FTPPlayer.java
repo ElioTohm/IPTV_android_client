@@ -65,7 +65,7 @@ public class FTPPlayer implements IVLCVout.Callback{
             // Set up video output
             final IVLCVout vout = mMediaPlayer.getVLCVout();
             vout.setVideoView(mSurface);
-            vout.setWindowSize(mSurface.getWidth(),mSurface.getHeight());
+            vout.setWindowSize(1280,720);
             vout.addCallback(this);
             vout.attachViews();
 

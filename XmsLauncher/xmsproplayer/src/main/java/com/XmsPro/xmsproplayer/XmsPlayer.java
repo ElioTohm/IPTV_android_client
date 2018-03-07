@@ -4,7 +4,6 @@ import android.content.Context;
 import android.net.Uri;
 
 import com.XmsPro.xmsproplayer.Interface.XmsPlayerUICallback;
-import com.eliotohme.data.Channel;
 import com.eliotohme.data.Stream;
 import com.eliotohme.data.network.AuthenticationInterceptor;
 import com.google.android.exoplayer2.DefaultLoadControl;
@@ -52,7 +51,7 @@ public class XmsPlayer  {
     private DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
     private SimpleExoPlayer player;
     private static final CookieManager DEFAULT_COOKIE_MANAGER;
-    private List<Channel> channelArrayList;
+    private List<Stream> streams;
     private SimpleExoPlayerView simpleExoPlayerView;
     private Context context;
     private static XmsPlayer instance;
@@ -76,19 +75,19 @@ public class XmsPlayer  {
      * initialize both param to use in class
      */
     public XmsPlayer(Context context, SimpleExoPlayerView simpleExoPlayerView,
-                     List<Channel> channelArrayList, String TOKENTYPE, String TOKEN) {
+                     List<Stream> streams, String TOKENTYPE, String TOKEN) {
 
         // set surface of the player
         this.context = context;
         this.xmsPlayerUICallback = (XmsPlayerUICallback) context;
         this.simpleExoPlayerView = simpleExoPlayerView;
-        this.channelArrayList = channelArrayList;
+        this.streams = streams;
         this.TOKEN = TOKEN;
         this.TOKENTYPE = TOKENTYPE;
         instance = this;
     }
 
-    private MediaSource buildMediaSource(List<Channel> channels) {
+    private MediaSource buildMediaSource(List<Stream> channels) {
         /*
         * Function that handles creating a ConcatenatingMediaSource
         * Of UDP URIs
@@ -104,8 +103,8 @@ public class XmsPlayer  {
         SsChunkSource.Factory ssChunkSourceFactory = null;
 
         for (int i = 0; i < channels.size(); i++) {
-            Uri channel_stream_uri = Uri.parse(channels.get(i).getStream().getVid_stream());
-            int channel_type = channels.get(i).getStream().getType();
+            Uri channel_stream_uri = Uri.parse(channels.get(i).getVid_stream());
+            int channel_type = channels.get(i).getType();
             switch (channel_type) {
                 case  Stream.TYPE_UDP:
                     DataSource.Factory udsf = new UdpDataSource.Factory() {
@@ -195,9 +194,8 @@ public class XmsPlayer  {
         player.setPlayWhenReady(true);
 
         // set the mediasource and play when ready
-        player.prepare(buildMediaSource(channelArrayList));
+        player.prepare(buildMediaSource(streams));
         simpleExoPlayerView.setPlayer(player);
-        xmsPlayerUICallback.showChannelInfo(1);
 
     }
 
@@ -213,15 +211,15 @@ public class XmsPlayer  {
 
 
     /**
-     * @param channelList
+     * @param streams
      * @param showinfo
      * change source of stream and set if information about stream should show with respect to showinfo flag
      */
-    public void changeSource(List<Channel> channelList, boolean showinfo) {
-        player.prepare(buildMediaSource(channelList));
+    public void changeSource(List<Stream> streams, boolean showinfo) {
+        player.prepare(buildMediaSource(streams));
         simpleExoPlayerView.setPlayer(player);
         if (showinfo) {
-            xmsPlayerUICallback.showChannelInfo(channelList.get(0).getNumber());
+            xmsPlayerUICallback.showChannelInfo(streams.get(0).getId());
         }
     }
 

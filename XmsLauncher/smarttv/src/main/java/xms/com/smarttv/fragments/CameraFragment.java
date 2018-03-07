@@ -2,13 +2,12 @@ package xms.com.smarttv.fragments;
 
 
 import android.app.Fragment;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.XmsPro.xmsproplayer.FTPPlayer;
+import android.widget.VideoView;
 
 import xms.com.smarttv.R;
 
@@ -17,7 +16,7 @@ import xms.com.smarttv.R;
  */
 public class CameraFragment extends Fragment {
 
-    FTPPlayer ftPplayer;
+    VideoView videoView = null;
 
     public CameraFragment() {
         // Required empty public constructor
@@ -26,8 +25,12 @@ public class CameraFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        ftPplayer.releasePlayer();
+        if (videoView != null) {
+            videoView.stopPlayback();
+            videoView = null;
+        }
     }
+
 
 
     @Override
@@ -35,11 +38,9 @@ public class CameraFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_camera, container, false);
-        SurfaceView surfaceView = view.findViewById(R.id.video_door);
-        ftPplayer = new FTPPlayer(getActivity(), surfaceView,null);
-        ftPplayer.createPlayer();
-        ftPplayer.SetSource("rtsp://192.168.10.102:554/user=admin&password=&channel=1&stream=0.sdp");
-//        ftPplayer.SetSource("udp://224.1.10.14:1234");
+        videoView = view.findViewById(R.id.video_door);
+        videoView.setVideoURI(Uri.parse("rtsp://192.168.10.102:554/user=admin&password=&channel=1&stream=0.sdp"));
+        videoView.start();
         return view;
     }
 
