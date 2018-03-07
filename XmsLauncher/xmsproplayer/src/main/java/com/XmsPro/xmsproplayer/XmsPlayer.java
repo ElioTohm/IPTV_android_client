@@ -107,6 +107,7 @@ public class XmsPlayer  {
             int channel_type = channels.get(i).getType();
             switch (channel_type) {
                 case  Stream.TYPE_UDP:
+                    this.simpleExoPlayerView.setUseController(false);
                     DataSource.Factory udsf = new UdpDataSource.Factory() {
                         @Override
                         public DataSource createDataSource() {
@@ -139,6 +140,8 @@ public class XmsPlayer  {
                                             .createMediaSource(channel_stream_uri);
                     break;
                 case Stream.MISC:
+                    this.simpleExoPlayerView.setUseController(true);
+                    this.simpleExoPlayerView.showController();
                     if (defaultExtractorsFactory == null) {
                         defaultExtractorsFactory = new DefaultExtractorsFactory();
                     }
@@ -182,7 +185,7 @@ public class XmsPlayer  {
 
 
             player = ExoPlayerFactory.newSimpleInstance(renderersFactory, trackSelector,
-                    new DefaultLoadControl(new DefaultAllocator(true, 512 * 5120, 64),
+                    new DefaultLoadControl(new DefaultAllocator(true, 4096),
                                     500,
                                     DefaultLoadControl.DEFAULT_MAX_BUFFER_MS,
                                     500,
@@ -209,6 +212,9 @@ public class XmsPlayer  {
         }
     }
 
+    public void showProgress() {
+        simpleExoPlayerView.showController();
+    }
 
     /**
      * @param streams
