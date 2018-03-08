@@ -71,10 +71,10 @@ public class VODfragment extends VerticalGridFragment implements OnItemViewClick
 
     @Override
     public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item, RowPresenter.ViewHolder rowViewHolder, Row row) {
-        mListener.onVideoClicked(item);
+        mListener.MovieSelected((Movie)item);
     }
 
     public interface VODFragmentListener {
-        void onVideoClicked(Object item);
+        void MovieSelected(Movie item);
     }
 }

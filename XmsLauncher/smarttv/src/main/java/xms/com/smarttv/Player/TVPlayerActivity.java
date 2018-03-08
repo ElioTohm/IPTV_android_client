@@ -417,12 +417,6 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
     }
 
     @Override
-    public void onVideoClicked(Object item) {
-        detailSectionFragment = VODDetailFragment.newInstance((Movie) item);
-        showDetailSection (R.id.ItemDetailFragment, detailSectionFragment, "ItemDetail", true);
-    }
-
-    @Override
     public void showChannelInfo(int streamindex) {
         Channel channel = realm.where(Channel.class).equalTo("stream.id", streamindex).findFirst();
         Glide.with(this).asBitmap().load(channel.getThumbnail()).into(channel_icon);

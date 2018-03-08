@@ -51,15 +51,6 @@ public class VODActivity extends Activity implements VODHomeFragment.VODHomeList
     }
 
     @Override
-    public void onVideoClicked(Object item) {
-        getFragmentManager()
-                .beginTransaction()
-                .replace(R.id.Main, VODDetailFragment.newInstance((Movie)item))
-                .addToBackStack(null)
-                .commit();
-    }
-
-    @Override
     public void purchase(Movie movie) {
         getFragmentManager()
                 .beginTransaction()
