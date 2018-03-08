@@ -30,6 +30,23 @@ public class VODfragment extends VerticalGridFragment implements OnItemViewClick
         filter_param = getArguments().getInt(FILTER);
         setupAdapter();
     }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof VODFragmentListener) {
+            mListener = (VODFragmentListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnListFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item, RowPresenter.ViewHolder rowViewHolder, Row row) {
+        mListener.MovieSelected((Movie)item);
+    }
+
     public static VODfragment newInstance(int genre_id) {
         VODfragment fragment = new VODfragment();
         Bundle args = new Bundle();
@@ -55,23 +72,6 @@ public class VODfragment extends VerticalGridFragment implements OnItemViewClick
 
         startEntranceTransition();
         setOnItemViewClickedListener(this);
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof VODFragmentListener) {
-            mListener = (VODFragmentListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnListFragmentInteractionListener");
-        }
-    }
-
-
-    @Override
-    public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item, RowPresenter.ViewHolder rowViewHolder, Row row) {
-        mListener.MovieSelected((Movie)item);
     }
 
     public interface VODFragmentListener {

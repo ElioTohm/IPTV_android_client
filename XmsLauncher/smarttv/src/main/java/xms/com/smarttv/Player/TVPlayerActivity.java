@@ -211,6 +211,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
                         if (getFragmentManager().findFragmentByTag(TAG_LOCATIONDETAIL) == null ||
                                 getFragmentManager().findFragmentByTag(TAG_LOCATIONDETAIL) == null ) {
                             hideDetailSection(TAG_ITEMLIST);
+                            return false;
                         }
                         return super.dispatchKeyEvent(event);
                     }
