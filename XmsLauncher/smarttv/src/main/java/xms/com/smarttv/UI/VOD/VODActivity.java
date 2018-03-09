@@ -8,9 +8,8 @@ import com.eliotohme.data.Genre;
 import com.eliotohme.data.Movie;
 
 import xms.com.smarttv.R;
-import xms.com.smarttv.fragments.BackgroundImageFragment;
+import xms.com.smarttv.fragments.CameraFragment;
 import xms.com.smarttv.fragments.PurchaseDialog;
-import xms.com.smarttv.fragments.SectionMenuFragment;
 import xms.com.smarttv.fragments.VODDetailFragment;
 import xms.com.smarttv.fragments.VODfragment;
 
@@ -24,11 +23,11 @@ public class VODActivity extends Activity implements VODHomeFragment.VODHomeList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vod);
 
-        backgroundImageFragment = BackgroundImageFragment.newInstance(SectionMenuFragment.HEADER_ID_VOD);
-        vodHomeFragment = new VODHomeFragment();
+//        backgroundImageFragment = BackgroundImageFragment.newInstance(SectionMenuFragment.HEADER_ID_VOD);
+//        vodHomeFragment = new VODHomeFragment();
 
-        getFragmentManager().beginTransaction().add(R.id.background, backgroundImageFragment).commit();
-        getFragmentManager().beginTransaction().add(R.id.Main, vodHomeFragment).commit();
+        getFragmentManager().beginTransaction().add(R.id.background, new CameraFragment()).commit();
+//        getFragmentManager().beginTransaction().add(R.id.Main, vodHomeFragment).commit();
     }
 
     @Override

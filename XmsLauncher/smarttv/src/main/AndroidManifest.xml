@@ -73,8 +73,7 @@
             android:exported="false" />
 
         <activity android:name=".UI.VOD.VODActivity"
-            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
-            android:supportsPictureInPicture="true"/>
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
     </application>
 
 </manifest>

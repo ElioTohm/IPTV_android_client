@@ -13,14 +13,13 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
+import com.XmsPro.xmsproplayer.RTPPlayer;
 import com.eliotohme.data.User;
 
 import org.json.JSONException;
@@ -86,9 +85,13 @@ public class NotificationService extends IntentService {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final RelativeLayout notificationView = (RelativeLayout) inflater.inflate(R.layout.notification, null);
 
-        TextView notificationText = notificationView.findViewById(R.id.notification_message);
-        ImageView notificationImage = notificationView.findViewById(R.id.notification_background);
+//        TextView notificationText = notificationView.findViewById(R.id.notification_message);
+//        ImageView notificationImage = notificationView.findViewById(R.id.notification_background);
         Button button = notificationView.findViewById(R.id.close_notification);
+        SurfaceView surfaceView = notificationView.findViewById(R.id.camera_view);
+        RTPPlayer RTPPlayer = new RTPPlayer(notificationView.getContext(), surfaceView,null, 600, 350);
+        RTPPlayer.createPlayer();
+        RTPPlayer.SetSource("rtsp://192.168.10.102:554/user=admin&password=&channel=1&stream=0.sdp");
 
         int layouttype;
 
@@ -109,19 +112,19 @@ public class NotificationService extends IntentService {
         params.gravity = Gravity.END | Gravity.TOP;
         params.x = 0;
         params.y = 0;
-        params.width = 500;
-        params.height = 250;
+        params.width = 600;
+        params.height = 350;
 
-        notificationText.setText(notification.getMessage());
-
-        Glide.with(context)
-                .load(notification.getImage())
-                .into(notificationImage);
-
+//        notificationText.setText(notification.getMessage());
+//
+//        Glide.with(context)
+//                .load(notification.getImage())
+//                .into(notificationImage);
+//
         final WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
 
         windowManager.addView(notificationView, params);
-
+//        videoView.start();
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

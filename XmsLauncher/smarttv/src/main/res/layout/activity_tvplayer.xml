@@ -123,4 +123,14 @@
 
     </RelativeLayout>
 
+
+    <RelativeLayout
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:id="@+id/cam_fragment"
+        android:layout_width="650dp"
+        android:layout_height="400dp"
+        android:padding="10dp"/>
+
+
 </RelativeLayout>
