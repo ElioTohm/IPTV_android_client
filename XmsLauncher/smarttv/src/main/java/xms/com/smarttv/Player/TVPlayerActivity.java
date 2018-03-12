@@ -22,6 +22,7 @@ import com.eliotohme.data.Genre;
 import com.eliotohme.data.Movie;
 import com.eliotohme.data.Purchasable;
 import com.eliotohme.data.Purchase;
+import com.eliotohme.data.SectionItem;
 import com.eliotohme.data.Stream;
 import com.eliotohme.data.User;
 import com.eliotohme.data.network.ApiInterface;
@@ -42,7 +43,6 @@ import xms.com.smarttv.UI.CustomHeaderItem;
 import xms.com.smarttv.UI.VOD.VODHomeFragment;
 import xms.com.smarttv.app.Preferences;
 import xms.com.smarttv.fragments.BackgroundImageFragment;
-import xms.com.smarttv.fragments.CameraFragment;
 import xms.com.smarttv.fragments.ChannelsListFragment;
 import xms.com.smarttv.fragments.CityGuideFragment;
 import xms.com.smarttv.fragments.ClientAccountFragment;
@@ -84,6 +84,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
     private final String TAG_VOD = "VOD";
     private final String TAG_VODDETAIL = "VOD_Detail";
     private final String TAG_VODLIST = "VOD_List";
+    private final String TAG_CAM = "CAM";
 
     boolean IN_VOD = false;
     private View channelInfo;
@@ -188,23 +189,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
         if (action == KeyEvent.ACTION_UP) {
             int channel_numberpressed = 10;
             switch (keyCode) {
-                case KeyEvent.KEYCODE_DEL:
-                    xmsPlayer.releasePlayer();
-                    getFragmentManager().beginTransaction()
-                        .setCustomAnimations(R.animator.lb_onboarding_page_indicator_fade_in,
-                                R.animator.lb_onboarding_page_indicator_fade_out)
-                        .add(R.id.cam_fragment ,new CameraFragment(), "CAM")
-                        .commit();
-//                    startActivity(new Intent(this, VODActivity.class));
-                    return false;
                 case KeyEvent.KEYCODE_BACK:
-                    if (getFragmentManager().findFragmentByTag("CAM") != null) {
-                        streamList.clear();
-                        streamList.add(realm.where(Channel.class).equalTo("number", currentStreamId).findFirst().getStream());
-                        xmsPlayer.changeSource(streamList, true);
-                        getFragmentManager().beginTransaction().remove(getFragmentManager().findFragmentByTag("CAM")).commit();
-                        return false;
-                    }
                     if (getFragmentManager().findFragmentByTag(TAG_VOD) != null) {
                         if (getFragmentManager().findFragmentByTag(TAG_VODDETAIL) != null ||
                                 getFragmentManager().findFragmentByTag(TAG_VODLIST) != null){
@@ -421,7 +406,6 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
         } else if (item.getHeaderId() == HEADER_ID_VOD) {
             xmsPlayer.releasePlayer();
             hideDetailSection(TAG_ITEMLIST);
-//            startActivity(new Intent(this, VODActivity.class));
             detailSectionFragment = BackgroundImageFragment.newInstance(SectionMenuFragment.HEADER_ID_VOD);
             showDetailSection (R.id.Main, detailSectionFragment, TAG_BACKGROUND, false);
             detailSectionFragment = new VODHomeFragment();
@@ -467,7 +451,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
 
     @Override
     public void LocationSelected(Object item) {
-        detailSectionFragment = LocationDetailFragment.newInstance((Card) item);
+        detailSectionFragment = LocationDetailFragment.newInstance((SectionItem) item);
         getFragmentManager().beginTransaction()
                 .setCustomAnimations(R.animator.lb_onboarding_page_indicator_fade_in,
                         R.animator.lb_onboarding_page_indicator_fade_out)

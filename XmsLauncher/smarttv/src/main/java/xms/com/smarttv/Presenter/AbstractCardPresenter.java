@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import com.eliotohme.data.Genre;
 import com.eliotohme.data.Movie;
+import com.eliotohme.data.SectionItem;
 
 import xms.com.smarttv.R;
 import xms.com.smarttv.models.Card;
@@ -55,6 +56,9 @@ public abstract class AbstractCardPresenter<T extends BaseCardView> extends Pres
         } else if (item instanceof Genre) {
             Genre genre = (Genre) item;
             onBindViewHolder(genre, (T) viewHolder.view);
+        } else if (item instanceof SectionItem) {
+            SectionItem sectionItem = (SectionItem) item;
+            onBindViewHolder(sectionItem, (T) viewHolder.view);
         }
 
     }
@@ -84,6 +88,7 @@ public abstract class AbstractCardPresenter<T extends BaseCardView> extends Pres
      */
     public abstract void onBindViewHolder(Card card, T cardView);
     public abstract void onBindViewHolder(Movie movie, T cardView);
+    public abstract void onBindViewHolder(SectionItem sectionItem, T cardView);
     public abstract void onBindViewHolder(Genre genre, T cardView);
 
 }

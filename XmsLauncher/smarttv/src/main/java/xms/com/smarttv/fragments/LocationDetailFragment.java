@@ -17,24 +17,24 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.eliotohme.data.SectionItem;
 
 import java.io.Serializable;
 
 import xms.com.smarttv.Presenter.DetailsDescriptionPresenter;
 import xms.com.smarttv.R;
-import xms.com.smarttv.models.Card;
 
 public class LocationDetailFragment extends DetailsFragment implements OnActionClickedListener{
     private static final String ITEM_TAG = "CARD";
     private ArrayObjectAdapter mRowsAdapter;
-    private Card card;
+    private SectionItem sectionItem;
     private LocationDetailFragmentListener mListener;
     private int ACTION_SHOW_ON_MAP = 0;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        card = (Card)getArguments().getSerializable(ITEM_TAG);
+        sectionItem = (SectionItem) getArguments().getSerializable(ITEM_TAG);
         buildDetails();
     }
 
@@ -58,7 +58,7 @@ public class LocationDetailFragment extends DetailsFragment implements OnActionC
         selector.addClassPresenter(DetailsOverviewRow.class, rowPresenter);
         mRowsAdapter = new ArrayObjectAdapter(selector);
 
-        final DetailsOverviewRow detailsOverview = new DetailsOverviewRow(card);
+        final DetailsOverviewRow detailsOverview = new DetailsOverviewRow(sectionItem);
         RequestOptions options = new RequestOptions()
                 .error(R.drawable.default_background)
                 .circleCrop()
@@ -66,7 +66,7 @@ public class LocationDetailFragment extends DetailsFragment implements OnActionC
 
         Glide.with(this)
                 .asBitmap()
-                .load(card.getImageUrl())
+                .load(sectionItem.getPoster())
                 .apply(options)
                 .into(new SimpleTarget<Bitmap>() {
                     @Override
@@ -104,7 +104,7 @@ public class LocationDetailFragment extends DetailsFragment implements OnActionC
     @Override
     public void onActionClicked(Action action) {
         if (action.getId() == ACTION_SHOW_ON_MAP) {
-            mListener.LoadMap(card.getLattitude(), card.getLongitude(), 13);
+            mListener.LoadMap(sectionItem.getLatitude(), sectionItem.getLongitude(), 13);
         }
     }
 

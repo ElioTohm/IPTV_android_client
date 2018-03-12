@@ -8,6 +8,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.eliotohme.data.Genre;
 import com.eliotohme.data.Movie;
+import com.eliotohme.data.SectionItem;
 
 import xms.com.smarttv.R;
 import xms.com.smarttv.models.Card;
@@ -87,6 +88,16 @@ public class ImageCardViewPresenter extends AbstractCardPresenter<ImageCardView>
                 .asBitmap()
                 .load("http://192.168.0.75/storage/genres/Action.png")
                 .apply(new RequestOptions().fitCenter())
+                .into(cardView.getMainImageView());
+    }
+
+    @Override
+    public void onBindViewHolder(SectionItem sectionItem, final ImageCardView cardView) {
+        cardView.setTag(sectionItem);
+        cardView.setTitleText(sectionItem.getName());
+        Glide.with(getContext())
+                .asBitmap()
+                .load(sectionItem.getPoster())
                 .into(cardView.getMainImageView());
     }
 

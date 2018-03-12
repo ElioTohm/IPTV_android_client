@@ -1,29 +1,26 @@
 package xms.com.smarttv.fragments;
 
 import android.os.Bundle;
-import android.support.v17.leanback.app.BrowseFragment;
+import android.support.v17.leanback.app.VerticalGridFragment;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
-import android.support.v17.leanback.widget.PresenterSelector;
-import android.support.v17.leanback.widget.Row;
+import android.support.v17.leanback.widget.FocusHighlight;
+import android.support.v17.leanback.widget.VerticalGridPresenter;
 
-import com.google.gson.Gson;
+import com.eliotohme.data.SectionItem;
 
-import xms.com.smarttv.Presenter.CardPresenterSelector;
+import io.realm.Realm;
+import xms.com.smarttv.Presenter.ImageCardViewPresenter;
 import xms.com.smarttv.Presenter.ShadowRowPresenterSelector;
-import xms.com.smarttv.R;
-import xms.com.smarttv.UI.CustomHeaderItem;
-import xms.com.smarttv.Utils;
-import xms.com.smarttv.models.Card;
-import xms.com.smarttv.models.CardListRow;
-import xms.com.smarttv.models.CardRow;
 
-public class RestaurantsNBarFragment extends BrowseFragment {
+public class RestaurantsNBarFragment extends VerticalGridFragment {
+    private ArrayObjectAdapter mAdapter;
+    private static final int COLUMNS = 3;
+    private final int ZOOM_FACTOR = FocusHighlight.ZOOM_FACTOR_LARGE;
     private final ArrayObjectAdapter mRowsAdapter;
 
     public RestaurantsNBarFragment() {
         mRowsAdapter = new ArrayObjectAdapter(new ShadowRowPresenterSelector());
         setAdapter(mRowsAdapter);
-        setHeadersState(HEADERS_DISABLED);
     }
 
     @Override
@@ -35,24 +32,17 @@ public class RestaurantsNBarFragment extends BrowseFragment {
     }
 
     private void createRows() {
-        String json = Utils.inputStreamToString(getResources().openRawResource(
-                R.raw.restandbars));
-        CardRow[] rows = new Gson().fromJson(json, CardRow[].class);
-        for (CardRow row : rows) {
-            if (row.getType() == CardRow.TYPE_DEFAULT) {
-                mRowsAdapter.add(createCardRow(row));
-            }
-        }
+        VerticalGridPresenter gridPresenter = new VerticalGridPresenter(ZOOM_FACTOR, false);
+        gridPresenter.setNumberOfColumns(COLUMNS);
+        setGridPresenter(gridPresenter);
+
+        mAdapter = new ArrayObjectAdapter(new ImageCardViewPresenter(getActivity()));
+        setAdapter(mAdapter);
+
+        prepareEntranceTransition();
+        mAdapter.addAll(0, Realm.getDefaultInstance().where(SectionItem.class).equalTo("section", 1).findAll());
+
+        startEntranceTransition();
     }
 
-    private Row createCardRow(CardRow cardRow) {
-        PresenterSelector presenterSelector = new CardPresenterSelector(getActivity());
-        ArrayObjectAdapter adapter = new ArrayObjectAdapter(presenterSelector);
-        for (Card card : cardRow.getCards()) {
-            adapter.add(card);
-        }
-
-        CustomHeaderItem headerItem = new CustomHeaderItem(cardRow.getTitle());
-        return new CardListRow(headerItem, adapter, cardRow);
-    }
 }

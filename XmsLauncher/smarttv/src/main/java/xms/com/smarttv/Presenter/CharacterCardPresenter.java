@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.eliotohme.data.Genre;
 import com.eliotohme.data.Movie;
+import com.eliotohme.data.SectionItem;
 
 import xms.com.smarttv.models.Card;
 import xms.com.smarttv.view.CharacterCardView;
@@ -30,6 +31,11 @@ public class CharacterCardPresenter extends AbstractCardPresenter<CharacterCardV
 
     @Override
     public void onBindViewHolder(Movie movie, CharacterCardView cardView) {
+
+    }
+
+    @Override
+    public void onBindViewHolder(SectionItem sectionItem, CharacterCardView cardView) {
 
     }
 

@@ -21,6 +21,8 @@ import android.widget.Toast;
 import com.eliotohme.data.Channel;
 import com.eliotohme.data.Genre;
 import com.eliotohme.data.Movie;
+import com.eliotohme.data.Section;
+import com.eliotohme.data.SectionItem;
 import com.eliotohme.data.User;
 import com.eliotohme.data.network.ApiInterface;
 import com.eliotohme.data.network.ApiService;
@@ -77,7 +79,6 @@ public class SplashScreen extends Activity {
         }
     }
 
-
     /**
      * Register Device set token for api authentication
      */
@@ -121,6 +122,7 @@ public class SplashScreen extends Activity {
                                     realm.insertOrUpdate(user);
                                 }
                             });
+                            getSections();
                             getStreams();
                         } else {
                             registerdevice();
@@ -198,6 +200,61 @@ public class SplashScreen extends Activity {
         });
     }
 
+    private void getSections () {
+        ApiInterface apiInterface = ApiService.createService(ApiInterface.class, Preferences.getServerUrl(), TKN_TYPE, TKN);
+        Call<List<Section>> channelCall = apiInterface.getSections();
+        channelCall.enqueue(new Callback<List<Section>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<Section>> call, @NonNull final Response<List<Section>> response) {
+                Realm backgroundRealm = Realm.getDefaultInstance();
+                backgroundRealm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        if (response.code() == 200) {
+                            if (realm.where(Section.class).findAll().size() >0 ) {
+                                realm.delete(Section.class);
+                            }
+                            if (realm.where(SectionItem.class).findAll().size() >0 ) {
+                                realm.delete(SectionItem.class);
+                            }
+                            realm.insertOrUpdate(response.body());
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<List<Section>> call, @NonNull Throwable t) {
+                Log.e("TEST", String.valueOf(t));
+                Connectiondialoghandler();
+            }
+        });
+
+        Call<List<Movie>> movieCall = apiInterface.getMovies();
+        movieCall.enqueue(new Callback<List<Movie>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<Movie>> call, @NonNull final Response<List<Movie>> response) {
+                if (response.code() == 200) {
+                    Realm.getDefaultInstance().executeTransactionAsync(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            if (realm.where(Movie.class).findAll().size() >0 ) {
+                                realm.delete(Movie.class);
+                                realm.delete(Genre.class);
+                            }
+                            realm.insertOrUpdate(response.body());
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Movie>> call, Throwable t) {
+
+            }
+        });
+    }
+
     /**
      * Start Tvplayer by default
      */
@@ -213,7 +270,8 @@ public class SplashScreen extends Activity {
                 .setCancelable(false)
                 .setNegativeButton("Retry", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                    getStreams();
+                        getSections();
+                        getStreams();
                     }
                 })
                 .setPositiveButton("Register", new DialogInterface.OnClickListener() {
@@ -255,9 +313,11 @@ public class SplashScreen extends Activity {
                         Toast.makeText(SplashScreen.this,"Downloading Updates...", Toast.LENGTH_LONG).show();
                         new SaveApk(SplashScreen.this).execute(response);
                     } else {
+                        getSections();
                         getStreams();
                     }
                 } else {
+                    getSections();
                     getStreams();
                 }
             }

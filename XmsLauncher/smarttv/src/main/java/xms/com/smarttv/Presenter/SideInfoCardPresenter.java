@@ -10,6 +10,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.eliotohme.data.Genre;
 import com.eliotohme.data.Movie;
+import com.eliotohme.data.SectionItem;
 
 import xms.com.smarttv.R;
 import xms.com.smarttv.models.Card;
@@ -65,6 +66,11 @@ public class SideInfoCardPresenter extends AbstractCardPresenter<BaseCardView> {
 
     @Override
     public void onBindViewHolder(Movie movie, BaseCardView cardView) {
+
+    }
+
+    @Override
+    public void onBindViewHolder(SectionItem sectionItem, BaseCardView cardView) {
 
     }
 
