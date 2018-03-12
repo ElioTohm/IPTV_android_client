@@ -612,10 +612,11 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
      * and change the channel to the current channel number
      */
     private void cleaFragmentForPlayer () {
+        Channel channel = realm.where(Channel.class).equalTo("stream.id", currentStreamId).findFirst();
         if (getFragmentManager().findFragmentByTag(TAG_BACKGROUND) != null) {
             xmsPlayer.initializePlayer();
             streamList.clear();
-            streamList.add(realm.where(Channel.class).equalTo("number", currentStreamId).findFirst().getStream());
+            streamList.add(channel.getStream());
             xmsPlayer.changeSource(streamList, true);
             getFragmentManager().beginTransaction()
                     .setCustomAnimations(R.animator.lb_onboarding_page_indicator_fade_in,
