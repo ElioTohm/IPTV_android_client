@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.eliotohme.data.Client;
+import com.eliotohme.data.Purchase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +19,7 @@ import java.util.List;
 import io.realm.Realm;
 import xms.com.smarttv.Presenter.AccountActionsAdapter;
 import xms.com.smarttv.R;
+import xms.com.smarttv.UI.PurchasesAdapter;
 import xms.com.smarttv.models.Card;
 
 /**
@@ -52,6 +54,10 @@ public class ClientAccountFragment extends Fragment {
 
         RecyclerView actionsRecyclerView = view.findViewById(R.id.action_recycler_view);
         actionsRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false));
+
+        RecyclerView purchases = view.findViewById(R.id.purchase_recyclerview);
+        purchases.setLayoutManager(new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false));
+        purchases.setAdapter(new PurchasesAdapter(Realm.getDefaultInstance().where(Purchase.class).findAll(), false));
 
         clientname.setText(String.format("%s's Account",client.getName()));
         balance.setText(Integer.toString(client.getBalance()));
