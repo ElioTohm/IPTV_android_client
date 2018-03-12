@@ -3,6 +3,7 @@ package com.eliotohme.data.network;
 import com.eliotohme.data.Channel;
 import com.eliotohme.data.Client;
 import com.eliotohme.data.Movie;
+import com.eliotohme.data.Section;
 import com.eliotohme.data.User;
 import com.eliotohme.data.Weather;
 
@@ -29,6 +30,9 @@ public interface ApiInterface {
 
     @GET("/api/vodmovies")
     Call<List<Movie>> getMovies();
+
+    @GET("/api/sections")
+    Call<List<Section>> getSections();
 
     @GET("/api/registerDevice")
     Call<User> registerdevice(@Query("id") int id, @Query("secret") String secret);
