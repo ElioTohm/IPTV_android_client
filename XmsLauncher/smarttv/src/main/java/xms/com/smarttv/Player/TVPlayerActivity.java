@@ -84,7 +84,6 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
     private final String TAG_VOD = "VOD";
     private final String TAG_VODDETAIL = "VOD_Detail";
     private final String TAG_VODLIST = "VOD_List";
-    private final String TAG_CAM = "CAM";
 
     boolean IN_VOD = false;
     private View channelInfo;
