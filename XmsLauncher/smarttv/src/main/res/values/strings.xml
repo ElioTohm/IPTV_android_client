@@ -168,4 +168,8 @@
     <string name="title_item_detail">Item Detail</string>
     <string name="title_activity_playback">PlaybackActivity</string>
 
+    <!-- default server URL -->
+    <string name="defaultserverURL">http://xmsgit.ddns.net</string>
+    <string name="defaulttestingserverURL">http://192.168.0.75</string>
+
 </resources>
