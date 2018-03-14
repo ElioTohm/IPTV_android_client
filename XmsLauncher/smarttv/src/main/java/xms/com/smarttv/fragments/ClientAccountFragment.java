@@ -20,6 +20,7 @@ import io.realm.Realm;
 import xms.com.smarttv.Presenter.AccountActionsAdapter;
 import xms.com.smarttv.R;
 import xms.com.smarttv.UI.PurchasesAdapter;
+import xms.com.smarttv.app.Preferences;
 import xms.com.smarttv.models.Card;
 
 /**
@@ -64,22 +65,22 @@ public class ClientAccountFragment extends Fragment {
 
         Card roomservice = new Card();
         roomservice.setTitle("Room Service");
-        roomservice.setImageUrl("http://192.168.0.75/storage/hotel/images/roomservice.png");
+        roomservice.setImageUrl(Preferences.getServerUrl() + "/storage/hotel/images/roomservice.png");
         Card assistance = new Card();
         assistance.setTitle("Assistance");
-        assistance.setImageUrl("http://192.168.0.75/storage/hotel/images/assistance.png");
+        assistance.setImageUrl(Preferences.getServerUrl() + "/storage/hotel/images/assistance.png");
         Card housekeeper = new Card();
         housekeeper.setTitle("HouseKeeper");
-        housekeeper.setImageUrl("http://192.168.0.75/storage/hotel/images/housekeeper.png");
+        housekeeper.setImageUrl(Preferences.getServerUrl() + "/storage/hotel/images/housekeeper.png");
         Card survey = new Card();
         survey.setTitle("Survey");
-        survey.setImageUrl("http://192.168.0.75/storage/hotel/images/survey.png");
+        survey.setImageUrl(Preferences.getServerUrl() + "/storage/hotel/images/survey.png");
         Card parentalcontrol= new Card();
         parentalcontrol.setTitle("Parental Control");
-        parentalcontrol.setImageUrl("http://192.168.0.75/storage/hotel/images/parentalcontrol.png");
+        parentalcontrol.setImageUrl(Preferences.getServerUrl() + "/storage/hotel/images/parentalcontrol.png");
         Card instantmessaging = new Card();
         instantmessaging.setTitle("Instant Messaging");
-        instantmessaging.setImageUrl("http://192.168.0.75/storage/hotel/images/instantmessaging.png");
+        instantmessaging.setImageUrl(Preferences.getServerUrl() + "/storage/hotel/images/instantmessaging.png");
 
         List<Card> mRowsAdapter  = new ArrayList<>() ;
         mRowsAdapter.add(assistance);
