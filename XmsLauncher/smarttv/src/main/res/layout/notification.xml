@@ -6,38 +6,37 @@
     android:padding="10dp"
     android:background="@color/BlackTransparent">
 
-        <!--<ImageView-->
-            <!--android:id="@+id/notification_background"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:scaleType="fitXY"-->
-            <!--android:layout_centerInParent="true" />-->
+        <ImageView
+            android:id="@+id/notification_background"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="fitXY"
+            android:layout_centerInParent="true" />
 
-        <!--<TextView-->
-            <!--android:id="@+id/notification_message"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_centerHorizontal="true"-->
-            <!--android:layout_alignParentBottom="true"-->
-            <!--android:background="@color/BlackTransparent"-->
-            <!--android:textAlignment="center"-->
-            <!--android:textColor="@color/white"-->
-            <!--android:textColorHighlight="@android:color/darker_gray"-->
-            <!--android:textSize="50dp" />-->
+        <TextView
+            android:id="@+id/notification_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:background="@color/BlackTransparent"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textColorHighlight="@android:color/darker_gray"
+            android:textSize="50dp" />
 
         <Button
             android:id="@+id/close_notification"
             android:layout_width="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
+            android:layout_alignParentTop="true"
             android:layout_height="wrap_content"
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:focusedByDefault="true"
             android:text="X" />
-        <SurfaceView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/camera_view"/>
+        <!--<SurfaceView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:id="@+id/camera_view"/>-->
 
 </RelativeLayout>

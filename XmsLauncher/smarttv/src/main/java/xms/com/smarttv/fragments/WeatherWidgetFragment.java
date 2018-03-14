@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.eliotohme.data.User;
 import com.eliotohme.data.Weather;
 import com.eliotohme.data.network.ApiInterface;
 import com.eliotohme.data.network.ApiService;
@@ -21,15 +22,16 @@ import com.eliotohme.data.network.ApiService;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.realm.Realm;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import xms.com.smarttv.Presenter.WeatherRecyclerViewAdapter;
 import xms.com.smarttv.R;
+import xms.com.smarttv.app.Preferences;
 
 public class WeatherWidgetFragment extends Fragment {
     Weather weather;
-    String query = "https://query.yahooapis.com/";
 
     public WeatherWidgetFragment() {
         // Required empty public constructor
@@ -47,7 +49,8 @@ public class WeatherWidgetFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_weather_widget, container, false);
         Context context = view.getContext();
-        ApiInterface apiInterface = ApiService.createService(ApiInterface.class, query);
+        User user = Realm.getDefaultInstance().where(User.class).findFirst();
+        ApiInterface apiInterface = ApiService.createService(ApiInterface.class, Preferences.getServerUrl(), user.getToken_type(), user.getAccess_token());
 
         final RecyclerView forcastRecyclerView = view.findViewById(R.id.forcast_recycler_view);
         forcastRecyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));

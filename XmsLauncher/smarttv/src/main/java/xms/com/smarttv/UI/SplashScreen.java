@@ -92,7 +92,7 @@ public class SplashScreen extends Activity {
         final EditText user_id = view.findViewById(R.id.text_ID);
         final EditText user_secret = view.findViewById(R.id.text_secret);
         final EditText serverURI = view.findViewById(R.id.server_url);
-        serverURI.setText("http://192.168.10.40");
+        serverURI.setText("http://192.168.0.75");
 
         // set cancelable to true to be able to fix network before registery
         dialog.setCancelable(false);

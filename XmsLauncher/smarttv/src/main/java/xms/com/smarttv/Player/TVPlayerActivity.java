@@ -126,6 +126,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
 
         // init element and channel list with player
         channelInfo = findViewById(xms.com.smarttv.R.id.channelInfo);
+        channelInfo.setVisibility(View.INVISIBLE);
         currentChannel = findViewById(xms.com.smarttv.R.id.current_channel);
         channelName = findViewById(xms.com.smarttv.R.id.channel_name);
         channel_icon = findViewById(R.id.channel_icon);
@@ -571,7 +572,6 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
                                 ShowHotelInfo();
                             } else {
                                 xmsPlayer.initializePlayer();
-                                showChannelInfo(currentStreamId);
                             }
                         }
                         subrealm.executeTransaction(new Realm.Transaction() {
