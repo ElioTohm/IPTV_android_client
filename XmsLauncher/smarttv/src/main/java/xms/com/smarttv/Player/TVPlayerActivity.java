@@ -133,8 +133,10 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
         streamList = new ArrayList<>();
         channel_number_selector = findViewById(xms.com.smarttv.R.id.channel_number_selector);
         detailsectionContainer = findViewById(R.id.fragment_container_details);
-        currentStreamId = realm.where(Channel.class).findFirst().getStream().getId();
-        streamList.add(realm.where(Channel.class).findFirst().getStream());
+
+        Channel firstchannel = realm.where(Channel.class).equalTo("number", 1).findFirst();
+        currentStreamId = firstchannel.getStream().getId();
+        streamList.add(firstchannel.getStream());
         SimpleExoPlayerView simpleExoPlayerView = findViewById(R.id.simpleexoplayerview);
         xmsPlayer = new XmsPlayer(this, simpleExoPlayerView, streamList,
                 realm.where(User.class).findFirst().getToken_type(), realm.where(User.class).findFirst().getAccess_token());
