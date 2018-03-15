@@ -4,6 +4,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * Purchase Object
@@ -11,7 +12,7 @@ import io.realm.RealmObject;
  * and retrieved in response to update purchased item on client side
  */
 public class Purchase extends RealmObject {
-
+    @PrimaryKey
     @SerializedName("id")
     @Expose
     private Integer id;
