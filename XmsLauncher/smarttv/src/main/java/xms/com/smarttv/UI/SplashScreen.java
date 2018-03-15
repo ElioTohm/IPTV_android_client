@@ -49,7 +49,6 @@ public class SplashScreen extends Activity {
     private User user;
     private  String TKN_TYPE;
     private String TKN;
-    private int USER_ID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +65,6 @@ public class SplashScreen extends Activity {
                 // if user is found continue
                 TKN_TYPE = user.getToken_type();
                 TKN = user.getAccess_token();
-                USER_ID = user.getId();
 
                 checkForUpdate();
             } else {
