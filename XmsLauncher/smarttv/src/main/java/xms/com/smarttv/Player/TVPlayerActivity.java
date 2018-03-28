@@ -6,8 +6,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -27,6 +29,9 @@ import com.eliotohme.data.Stream;
 import com.eliotohme.data.User;
 import com.eliotohme.data.network.ApiInterface;
 import com.eliotohme.data.network.ApiService;
+import com.google.android.exoplayer2.C;
+import com.google.android.exoplayer2.source.TrackGroupArray;
+import com.google.android.exoplayer2.trackselection.MappingTrackSelector;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 
@@ -75,7 +80,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
         SectionMenuFragment.SectionMenuFragmentListener, XmsPlayerUICallback, VODfragment.VODFragmentListener,
         CityGuideFragment.CityGudieInterface, LocationDetailFragment.LocationDetailFragmentListener,
         ClientAccountFragment.ClientAccountFragmentListener, VODHomeFragment.VODHomeListener,
-        VODDetailFragment.VODDetailFragmentListener {
+        VODDetailFragment.VODDetailFragmentListener, View.OnClickListener {
 
     // Fragment Tags
     private final String TAG_ITEMLIST = "ItemList";
@@ -87,7 +92,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
     private final String TAG_VODLIST = "VOD_List";
 
     boolean IN_VOD = false;
-    private View channelInfo;
+    private RelativeLayout channelInfo;
     private TextView currentChannel, channel_number_selector, channelName;
     private XmsPlayer xmsPlayer;
     private Fragment menuFragment;
@@ -449,8 +454,8 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
         };
         mChannelInfoHandler.removeCallbacks(mChannelInfoRunnable);
         mChannelInfoHandler.postDelayed(mChannelInfoRunnable, 3000);
+        updateButtonVisibilities();
     }
-
 
     @Override
     public void LocationSelected(Object item) {
@@ -533,6 +538,53 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
         IN_VOD = true;
     }
 
+    @Override
+    public void onClick(View v) {
+        if (v.getParent() == channelInfo) {
+            MappingTrackSelector.MappedTrackInfo mappedTrackInfo = xmsPlayer.getmappedTrackInfo();
+            if (mappedTrackInfo != null) {
+                xmsPlayer.gettrackSelectionHelper().showSelectionDialog(
+                        this, ((Button) v).getText(), mappedTrackInfo, (int) v.getTag());
+            }
+        }
+    }
+
+    private void updateButtonVisibilities() {
+//        channelInfo.removeAllViews();
+        if (xmsPlayer == null) {
+            return;
+        }
+        MappingTrackSelector.MappedTrackInfo mappedTrackInfo = xmsPlayer.getmappedTrackInfo();
+        if (mappedTrackInfo == null) {
+            return;
+        }
+
+        for (int i = 0; i < mappedTrackInfo.length; i++) {
+            TrackGroupArray trackGroups = mappedTrackInfo.getTrackGroups(i);
+            if (trackGroups.length != 0) {
+                Button button = new Button(this);
+                String label;
+                switch (xmsPlayer.getplayer().getRendererType(i)) {
+                    case C.TRACK_TYPE_AUDIO:
+                        label = "Audio";
+                        break;
+                    case C.TRACK_TYPE_VIDEO:
+                        label = "Video";
+                        break;
+                    case C.TRACK_TYPE_TEXT:
+                        label = "Subtitle";
+                        break;
+                    default:
+                        continue;
+                }
+                button.setText(label);
+                button.setTag(i);
+                Log.d("TEST", label);
+                button.setOnClickListener(this);
+                channelInfo.addView(button, channelInfo.getChildCount() - 1);
+            }
+        }
+    }
 
     private void hideDetailSection(String DetailSectionFragment) {
         if (getFragmentManager().findFragmentByTag(DetailSectionFragment) != null) {
@@ -640,7 +692,6 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
                 .hide(menuFragment).commit();
     }
 
-
     private void showDetailSection (int ViewId, Fragment detailFragment, String tag, boolean showBackground) {
         if (showBackground) {
             detailsectionContainer.setBackgroundColor(getResources().getColor(R.color.BlackLightTransparent));
@@ -651,5 +702,4 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
                 .replace(ViewId, detailFragment, tag)
                 .commit();
     }
-
 }

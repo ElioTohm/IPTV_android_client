@@ -3,10 +3,12 @@ package com.XmsPro.xmsproplayer;
 import android.content.Context;
 import android.net.Uri;
 import android.util.Pair;
+import android.widget.Button;
 
 import com.XmsPro.xmsproplayer.Interface.XmsPlayerUICallback;
 import com.eliotohme.data.Stream;
 import com.eliotohme.data.network.AuthenticationInterceptor;
+import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -17,6 +19,7 @@ import com.google.android.exoplayer2.extractor.ExtractorsFactory;
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.source.dash.DashChunkSource;
 import com.google.android.exoplayer2.source.dash.DashMediaSource;
 import com.google.android.exoplayer2.source.dash.DefaultDashChunkSource;
@@ -28,6 +31,7 @@ import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.MappingTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
+import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.DataSource;
@@ -55,12 +59,26 @@ public class XmsPlayer  {
     private List<Stream> streams;
     private PlayerView playerview;
     private Context context;
+    public DefaultTrackSelector trackSelector;
     private static XmsPlayer instance;
     private XmsPlayerUICallback xmsPlayerUICallback;
     private String TOKENTYPE, TOKEN;
+    private TrackSelectionHelper trackSelectionHelper;
     static {
         DEFAULT_COOKIE_MANAGER = new CookieManager();
         DEFAULT_COOKIE_MANAGER.setCookiePolicy(CookiePolicy.ACCEPT_ORIGINAL_SERVER);
+    }
+
+    public SimpleExoPlayer getplayer(){
+        return player;
+    }
+
+    public TrackSelectionHelper gettrackSelectionHelper() {
+        return trackSelectionHelper;
+    }
+
+    public MappingTrackSelector.MappedTrackInfo getmappedTrackInfo() {
+        return trackSelector.getCurrentMappedTrackInfo();
     }
 
     public static XmsPlayer getPlayerInstance() {
@@ -69,6 +87,7 @@ public class XmsPlayer  {
         }
         return null;
     }
+
 
     /**
      * @param context
@@ -177,12 +196,14 @@ public class XmsPlayer  {
 
             //default BandwidthMeter
             BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
-
+            TrackSelection.Factory adaptiveTrackSelectionFactory =
+                    new AdaptiveTrackSelection.Factory(BANDWIDTH_METER);
             //Track selector Factory that takes the adaptive track selection as constructor
             TrackSelection.Factory videoTrackSelectionFactory = new AdaptiveTrackSelection.Factory(bandwidthMeter);
 
             // the track selector
-            MappingTrackSelector trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
+            trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
+            trackSelectionHelper = new TrackSelectionHelper(trackSelector, adaptiveTrackSelectionFactory);
 
             DefaultRenderersFactory renderersFactory = new DefaultRenderersFactory(this.context,
                     null, DefaultRenderersFactory.EXTENSION_RENDERER_MODE_PREFER);

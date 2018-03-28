@@ -8,5 +8,4 @@ public interface XmsPlayerUICallback {
 
     void showChannelInfo(int channelindex);
 
-
 }

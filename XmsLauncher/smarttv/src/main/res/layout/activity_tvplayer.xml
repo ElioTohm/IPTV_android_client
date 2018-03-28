@@ -11,14 +11,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/simpleexoplayerview"
+        app:controller_layout_id="@layout/custom_playback_controller"
         app:resize_mode="fill">
 
     </com.google.android.exoplayer2.ui.PlayerView>
-
-    <!--<VideoView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:id="@+id/native_player"/>-->
 
     <RelativeLayout
         android:layout_width="match_parent"
