@@ -1,2 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<merger version="3"><dataSet config="main"><source path="/home/elio/Desktop/work/android/androidlauncher/XmsLauncher/ffmpeg/src/main/assets"/><source path="/home/elio/Desktop/work/android/androidlauncher/XmsLauncher/ffmpeg/build/generated/assets/shaders/release"/></dataSet><dataSet config="release"><source path="/home/elio/Desktop/work/android/androidlauncher/XmsLauncher/ffmpeg/src/release/assets"/></dataSet></merger>
