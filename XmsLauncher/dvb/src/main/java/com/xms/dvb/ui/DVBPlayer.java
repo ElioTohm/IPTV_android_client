@@ -15,11 +15,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.XmsPro.xmsproplayer.FTPPlayer;
+import com.XmsPro.xmsproplayer.RTPPlayer;
 import com.XmsPro.xmsproplayer.Interface.XmsPlayerUICallback;
 import com.eliotohme.data.Channel;
-import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
-import com.google.android.exoplayer2.util.Util;
 import com.xms.dvb.R;
 import com.xms.dvb.XmlParser;
 import com.xms.dvb.app.Preferences;
@@ -30,7 +28,7 @@ import java.util.List;
 import io.realm.Realm;
 
 public class DVBPlayer extends Activity {
-    private FTPPlayer ftPplayer;
+    private RTPPlayer ftPplayer;
     private View channelInfo;
     private TextView currentChannel, channel_number_selector, channelName;
     private List<Channel> channelArrayList;
@@ -242,7 +240,7 @@ public class DVBPlayer extends Activity {
         realm = Realm.getDefaultInstance();
         channelArrayList.addAll(realm.where(Channel.class).findAllSorted("number"));
 
-        ftPplayer = new FTPPlayer(DVBPlayer.this, surfaceView,
+        ftPplayer = new RTPPlayer(DVBPlayer.this, surfaceView,
                 new XmsPlayerUICallback() {
                     @Override
                     public void showChannelInfo(int channelindex) {
@@ -259,7 +257,7 @@ public class DVBPlayer extends Activity {
                         mChannelInfoHandler.removeCallbacks(mChannelInfoRunnable);
                         mChannelInfoHandler.postDelayed(mChannelInfoRunnable, 5000);
                     }
-                });
+                }, 1280, 720);
 //        xmsPlayer = new XmsPlayer(this, simpleExoPlayerView, channelArrayList, USER_NAME,
 //                new XmsPlayerUICallback() {
 //                    @Override

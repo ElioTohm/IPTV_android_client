@@ -10,7 +10,7 @@ import android.support.v17.leanback.widget.PageRow;
 import android.support.v17.leanback.widget.Row;
 import android.support.v17.leanback.widget.RowHeaderPresenter;
 
-import com.XmsPro.xmsproplayer.FTPPlayer;
+import com.XmsPro.xmsproplayer.RTPPlayer;
 import com.XmsPro.xmsproplayer.XmsPlayer;
 import com.eliotohme.data.Channel;
 import com.xms.dvb.app.Preferences;
@@ -41,10 +41,9 @@ public class ChannelGridFragment extends HeadersFragment {
             @Override
             public void onHeaderClicked(RowHeaderPresenter.ViewHolder viewHolder, Row row) {
                 if (XmsPlayer.getPlayerInstance() != null) {
-                    XmsPlayer.getPlayerInstance().changeChannel((int) row.getHeaderItem().getId() - 1, true );
                     Preferences.setLastChannel((int) row.getHeaderItem().getId() - 1);
-                } else if (FTPPlayer.getPlayerInstance() != null) {
-                    FTPPlayer.getPlayerInstance().SetChannel((int) row.getHeaderItem().getId());
+                } else if (RTPPlayer.getPlayerInstance() != null) {
+                    RTPPlayer.getPlayerInstance().SetChannel((int) row.getHeaderItem().getId());
                     Preferences.setLastChannel((int) row.getHeaderItem().getId());
                 }
             }

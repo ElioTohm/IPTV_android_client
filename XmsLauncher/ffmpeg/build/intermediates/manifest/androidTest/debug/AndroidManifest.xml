@@ -3,7 +3,7 @@
     package="com.google.android.exoplayer2.ext.ffmpeg.test" >
 
     <uses-sdk
-        android:minSdkVersion="19"
+        android:minSdkVersion="21"
         android:targetSdkVersion="26" />
 
     <instrumentation
@@ -13,7 +13,7 @@
         android:label="Tests for com.google.android.exoplayer2.ext.ffmpeg.test"
         android:targetPackage="com.google.android.exoplayer2.ext.ffmpeg.test" />
 
-    <application>
+    <application android:debuggable="true" >
         <uses-library android:name="android.test.runner" />
     </application>
 
