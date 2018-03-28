@@ -188,14 +188,7 @@ public class XmsPlayer  {
                     null, DefaultRenderersFactory.EXTENSION_RENDERER_MODE_PREFER);
 
 
-            player = ExoPlayerFactory.newSimpleInstance(renderersFactory, trackSelector,
-                    new DefaultLoadControl(new DefaultAllocator(true, 100000, 128),
-                                    1000,
-                                    DefaultLoadControl.DEFAULT_MAX_BUFFER_MS,
-                                    500,
-                                    500,
-                                    DefaultLoadControl.DEFAULT_TARGET_BUFFER_BYTES,
-                                    true));
+            player = ExoPlayerFactory.newSimpleInstance(renderersFactory, trackSelector);
         }
 
         player.setPlayWhenReady(true);

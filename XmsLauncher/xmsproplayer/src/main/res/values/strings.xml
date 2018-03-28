@@ -10,5 +10,10 @@
     <string name="BUNDLE_3">Action</string>
     <string name="BUNDLE_4">Drama</string>
     <string name="BUNDLE_5">Indian</string>
+    <string name="selection_disabled">Disabled</string>
+
+    <string name="selection_default">Default</string>
+
+    <string name="enable_random_adaptation">auto</string>
 
 </resources>
