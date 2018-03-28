@@ -173,6 +173,8 @@ public class NotificationService extends IntentService {
                 try {
                     object.put("channel", "presence-Online");
                     object.put("name", "subscribe");
+                    headers.put("Authorization", "Bearer " + Realm.getDefaultInstance().where(User.class).findFirst().getAccess_token());
+                    auth.put("headers", headers);
                     object.put("auth", auth);
                 } catch (JSONException e) {
                     e.printStackTrace();

@@ -7,13 +7,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="xms.com.smarttv.Player.TVPlayerActivity">
 
-    <com.google.android.exoplayer2.ui.SimpleExoPlayerView
+    <com.google.android.exoplayer2.ui.PlayerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/simpleexoplayerview"
         app:resize_mode="fill">
 
-    </com.google.android.exoplayer2.ui.SimpleExoPlayerView>
+    </com.google.android.exoplayer2.ui.PlayerView>
 
     <!--<VideoView-->
         <!--android:layout_width="match_parent"-->

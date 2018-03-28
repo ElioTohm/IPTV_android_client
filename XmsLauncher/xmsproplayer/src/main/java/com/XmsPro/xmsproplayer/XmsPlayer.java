@@ -2,6 +2,7 @@ package com.XmsPro.xmsproplayer;
 
 import android.content.Context;
 import android.net.Uri;
+import android.util.Pair;
 
 import com.XmsPro.xmsproplayer.Interface.XmsPlayerUICallback;
 import com.eliotohme.data.Stream;
@@ -27,7 +28,7 @@ import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.MappingTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
-import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
+import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultAllocator;
@@ -52,7 +53,7 @@ public class XmsPlayer  {
     private SimpleExoPlayer player;
     private static final CookieManager DEFAULT_COOKIE_MANAGER;
     private List<Stream> streams;
-    private SimpleExoPlayerView simpleExoPlayerView;
+    private PlayerView playerview;
     private Context context;
     private static XmsPlayer instance;
     private XmsPlayerUICallback xmsPlayerUICallback;
@@ -71,16 +72,16 @@ public class XmsPlayer  {
 
     /**
      * @param context
-     * @param simpleExoPlayerView
+     * @param playerview
      * initialize both param to use in class
      */
-    public XmsPlayer(Context context, SimpleExoPlayerView simpleExoPlayerView,
+    public XmsPlayer(Context context, PlayerView playerview,
                      List<Stream> streams, String TOKENTYPE, String TOKEN) {
 
         // set surface of the player
         this.context = context;
         this.xmsPlayerUICallback = (XmsPlayerUICallback) context;
-        this.simpleExoPlayerView = simpleExoPlayerView;
+        this.playerview = playerview;
         this.streams = streams;
         this.TOKEN = TOKEN;
         this.TOKENTYPE = TOKENTYPE;
@@ -107,7 +108,7 @@ public class XmsPlayer  {
             int channel_type = channels.get(i).getType();
             switch (channel_type) {
                 case  Stream.TYPE_UDP:
-                    this.simpleExoPlayerView.setUseController(false);
+                    this.playerview.setUseController(false);
                     DataSource.Factory udsf = new UdpDataSource.Factory() {
                         @Override
                         public DataSource createDataSource() {
@@ -122,7 +123,10 @@ public class XmsPlayer  {
                                             .createMediaSource(channel_stream_uri);
                     break;
                 case Stream.TYPE_HLS:
+                    this.playerview.setUseController(true);
+
                     mediaSources[i]  = new HlsMediaSource.Factory(mediaDataSourceFactory)
+                                            .setExtractorFactory(new XmsHlsExtractorFactory())
                                             .createMediaSource(channel_stream_uri);
                     break;
                 case Stream.DASH:
@@ -140,8 +144,8 @@ public class XmsPlayer  {
                                             .createMediaSource(channel_stream_uri);
                     break;
                 case Stream.MISC:
-                    this.simpleExoPlayerView.setUseController(true);
-                    this.simpleExoPlayerView.showController();
+                    this.playerview.setUseController(true);
+                    this.playerview.showController();
                     if (defaultExtractorsFactory == null) {
                         defaultExtractorsFactory = new DefaultExtractorsFactory();
                     }
@@ -185,7 +189,7 @@ public class XmsPlayer  {
 
 
             player = ExoPlayerFactory.newSimpleInstance(renderersFactory, trackSelector,
-                    new DefaultLoadControl(new DefaultAllocator(true, 1024),
+                    new DefaultLoadControl(new DefaultAllocator(true, 100000, 128),
                                     1000,
                                     DefaultLoadControl.DEFAULT_MAX_BUFFER_MS,
                                     500,
@@ -198,7 +202,7 @@ public class XmsPlayer  {
 
         // set the mediasource and play when ready
         player.prepare(buildMediaSource(streams));
-        simpleExoPlayerView.setPlayer(player);
+        playerview.setPlayer(player);
 
     }
 
@@ -213,7 +217,7 @@ public class XmsPlayer  {
     }
 
     public void showProgress() {
-        simpleExoPlayerView.showController();
+        playerview.showController();
     }
 
     /**
@@ -223,7 +227,7 @@ public class XmsPlayer  {
      */
     public void changeSource(List<Stream> streams, boolean showinfo) {
         player.prepare(buildMediaSource(streams));
-        simpleExoPlayerView.setPlayer(player);
+        playerview.setPlayer(player);
         if (showinfo) {
             xmsPlayerUICallback.showChannelInfo(streams.get(0).getId());
         }

@@ -1,8 +1,7 @@
 package xms.com.smarttv.services;
 
 public class Notification {
-    private String[] TYPE = {"Greeting" , "Notification", "pub"};
-    private String type;
+    private int type;
     private String message;
     private String image;
 
@@ -17,7 +16,11 @@ public class Notification {
     }
 
     public void setType(int type) {
-        this.type = this.TYPE[type];
+        this.type = type;
+    }
+
+    public int getType() {
+        return type;
     }
 
     public void setMessage(String message) {

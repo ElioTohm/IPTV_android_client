@@ -27,6 +27,7 @@ import com.eliotohme.data.Stream;
 import com.eliotohme.data.User;
 import com.eliotohme.data.network.ApiInterface;
 import com.eliotohme.data.network.ApiService;
+import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 
 import java.io.IOException;
@@ -137,7 +138,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
         Channel firstchannel = realm.where(Channel.class).equalTo("number", 1).findFirst();
         currentStreamId = firstchannel.getStream().getId();
         streamList.add(firstchannel.getStream());
-        SimpleExoPlayerView simpleExoPlayerView = findViewById(R.id.simpleexoplayerview);
+        PlayerView simpleExoPlayerView = findViewById(R.id.simpleexoplayerview);
         xmsPlayer = new XmsPlayer(this, simpleExoPlayerView, streamList,
                 realm.where(User.class).findFirst().getToken_type(), realm.where(User.class).findFirst().getAccess_token());
     }
