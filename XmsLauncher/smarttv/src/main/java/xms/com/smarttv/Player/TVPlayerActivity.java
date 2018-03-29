@@ -11,6 +11,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -101,6 +102,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
     private ChannelsListFragment channelGridFragment;
     private Realm realm;
     private ImageView channel_icon;
+    private LinearLayout streams_view;
     private RelativeLayout detailsectionContainer;
     private Fragment detailSectionFragment = null;
 
@@ -136,6 +138,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
         currentChannel = findViewById(xms.com.smarttv.R.id.current_channel);
         channelName = findViewById(xms.com.smarttv.R.id.channel_name);
         channel_icon = findViewById(R.id.channel_icon);
+        streams_view = findViewById(R.id.streams_view);
         streamList = new ArrayList<>();
         channel_number_selector = findViewById(xms.com.smarttv.R.id.channel_number_selector);
         detailsectionContainer = findViewById(R.id.fragment_container_details);
@@ -540,7 +543,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
 
     @Override
     public void onClick(View v) {
-        if (v.getParent() == channelInfo) {
+        if (v.getParent() == streams_view) {
             MappingTrackSelector.MappedTrackInfo mappedTrackInfo = xmsPlayer.getmappedTrackInfo();
             if (mappedTrackInfo != null) {
                 xmsPlayer.gettrackSelectionHelper().showSelectionDialog(
@@ -550,7 +553,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
     }
 
     private void updateButtonVisibilities() {
-//        channelInfo.removeAllViews();
+        streams_view.removeAllViews();
         if (xmsPlayer == null) {
             return;
         }
@@ -579,9 +582,8 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
                 }
                 button.setText(label);
                 button.setTag(i);
-                Log.d("TEST", label);
                 button.setOnClickListener(this);
-                channelInfo.addView(button, channelInfo.getChildCount() - 1);
+                streams_view.addView(button, i - 1);
             }
         }
     }
