@@ -39,7 +39,7 @@ public class TrackSelectionHelper implements View.OnClickListener,
     private MappingTrackSelector.SelectionOverride override;
 
     private CheckedTextView disableView;
-    private CheckedTextView defaultView;
+//    private CheckedTextView defaultView;
     private CheckedTextView enableRandomAdaptationView;
     private CheckedTextView[][] trackViews;
 
@@ -107,16 +107,6 @@ public class TrackSelectionHelper implements View.OnClickListener,
         disableView.setOnClickListener(this);
         root.addView(disableView);
 
-        // View for clearing the override to allow the selector to use its default selection logic.
-        defaultView = (CheckedTextView) inflater.inflate(
-                android.R.layout.simple_list_item_single_choice, root, false);
-        defaultView.setBackgroundResource(selectableItemBackgroundResourceId);
-        defaultView.setText(R.string.selection_default);
-        defaultView.setFocusable(true);
-        defaultView.setOnClickListener(this);
-        root.addView(inflater.inflate(R.layout.list_divider, root, false));
-        root.addView(defaultView);
-
         // Per-track views.
         boolean haveAdaptiveTracks = false;
         trackViews = new CheckedTextView[trackGroups.length][];
@@ -166,7 +156,7 @@ public class TrackSelectionHelper implements View.OnClickListener,
 
     private void updateViews() {
         disableView.setChecked(isDisabled);
-        defaultView.setChecked(!isDisabled && override == null);
+//        defaultView.setChecked(!isDisabled && override == null);
         for (int i = 0; i < trackViews.length; i++) {
             for (int j = 0; j < trackViews[i].length; j++) {
                 trackViews[i][j].setChecked(override != null && override.groupIndex == i
@@ -202,9 +192,6 @@ public class TrackSelectionHelper implements View.OnClickListener,
     public void onClick(View view) {
         if (view == disableView) {
             isDisabled = true;
-            override = null;
-        } else if (view == defaultView) {
-            isDisabled = false;
             override = null;
         } else if (view == enableRandomAdaptationView) {
             setOverride(override.groupIndex, override.tracks, !enableRandomAdaptationView.isChecked());

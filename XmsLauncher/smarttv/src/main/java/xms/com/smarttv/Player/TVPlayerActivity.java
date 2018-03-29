@@ -564,7 +564,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
 
         for (int i = 0; i < mappedTrackInfo.length; i++) {
             TrackGroupArray trackGroups = mappedTrackInfo.getTrackGroups(i);
-            if (trackGroups.length != 0) {
+            if (trackGroups.length > 0) {
                 Button button = new Button(this);
                 String label;
                 switch (xmsPlayer.getplayer().getRendererType(i)) {
@@ -580,10 +580,13 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
                     default:
                         continue;
                 }
-                button.setText(label);
-                button.setTag(i);
-                button.setOnClickListener(this);
-                streams_view.addView(button, i - 1);
+                if ((!label.equals("Subtitle") && trackGroups.length > 1) || label.equals("Subtitle")) {
+                    button.setText(label);
+                    button.setTag(i);
+                    button.setOnClickListener(this);
+                    streams_view.addView(button, streams_view.getChildCount() - 1);
+                }
+
             }
         }
     }
