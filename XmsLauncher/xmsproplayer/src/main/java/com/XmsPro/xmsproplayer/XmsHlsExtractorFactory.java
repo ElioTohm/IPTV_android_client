@@ -3,6 +3,7 @@ package com.XmsPro.xmsproplayer;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Pair;
+
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.drm.DrmInitData;
 import com.google.android.exoplayer2.extractor.Extractor;
@@ -15,6 +16,7 @@ import com.google.android.exoplayer2.extractor.ts.TsExtractor;
 import com.google.android.exoplayer2.source.hls.HlsExtractorFactory;
 import com.google.android.exoplayer2.util.MimeTypes;
 import com.google.android.exoplayer2.util.TimestampAdjuster;
+
 import java.util.Collections;
 import java.util.List;
 

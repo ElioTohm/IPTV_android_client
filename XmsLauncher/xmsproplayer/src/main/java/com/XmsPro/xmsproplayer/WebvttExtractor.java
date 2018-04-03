@@ -1,6 +1,7 @@
 package com.XmsPro.xmsproplayer;
 
 import android.text.TextUtils;
+
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.ParserException;
@@ -15,6 +16,7 @@ import com.google.android.exoplayer2.text.webvtt.WebvttParserUtil;
 import com.google.android.exoplayer2.util.MimeTypes;
 import com.google.android.exoplayer2.util.ParsableByteArray;
 import com.google.android.exoplayer2.util.TimestampAdjuster;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.regex.Matcher;
