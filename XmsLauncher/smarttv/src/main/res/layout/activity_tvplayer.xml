@@ -67,6 +67,7 @@
 
     <RelativeLayout
         android:id="@+id/channelInfo"
+        android:padding="25dp"
         android:layout_width="match_parent"
         android:layout_height="175dip"
         android:layout_centerInParent="true"

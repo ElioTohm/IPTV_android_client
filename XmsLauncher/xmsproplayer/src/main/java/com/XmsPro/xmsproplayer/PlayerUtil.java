@@ -26,7 +26,7 @@ public class PlayerUtil {
         } else {
             trackName = buildLanguageString(format);
         }
-        return trackName.length() == 0 ? "unknown" : trackName;
+        return trackName.length() == 0 ? "Default" : trackName;
     }
 
     private static String buildResolutionString(Format format) {

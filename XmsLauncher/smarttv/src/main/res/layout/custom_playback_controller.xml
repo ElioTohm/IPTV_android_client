@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="10dp"
     android:layout_height="wrap_content"
     android:layout_gravity="bottom"
     android:layoutDirection="ltr"
@@ -15,8 +17,9 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:layout_width="250dp"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
+            android:src="@drawable/fracarro"
             android:scaleType="fitXY"
             android:id="@+id/thumbnail"/>
 
@@ -66,6 +69,8 @@
         <com.google.android.exoplayer2.ui.DefaultTimeBar
             android:id="@id/exo_progress"
             android:layout_width="0dp"
+            app:played_color="@color/selected_row_header"
+            app:buffered_color="@color/selected_row_item"
             android:layout_weight="1"
             android:layout_height="26dp"/>
 
