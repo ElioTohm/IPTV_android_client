@@ -22,14 +22,9 @@ public class PlayerUtil {
                     buildResolutionString(format), buildBitrateString(format)), buildTrackIdString(format)),
                     buildSampleMimeTypeString(format));
         } else if (MimeTypes.isAudio(format.sampleMimeType)) {
-            trackName = joinWithSeparator(joinWithSeparator(joinWithSeparator(joinWithSeparator(
-                    buildLanguageString(format), buildAudioPropertyString(format)),
-                    buildBitrateString(format)), buildTrackIdString(format)),
-                    buildSampleMimeTypeString(format));
+            trackName = buildLanguageString(format);
         } else {
-            trackName = joinWithSeparator(joinWithSeparator(joinWithSeparator(buildLanguageString(format),
-                    buildBitrateString(format)), buildTrackIdString(format)),
-                    buildSampleMimeTypeString(format));
+            trackName = buildLanguageString(format);
         }
         return trackName.length() == 0 ? "unknown" : trackName;
     }
@@ -46,7 +41,7 @@ public class PlayerUtil {
 
     private static String buildLanguageString(Format format) {
         return TextUtils.isEmpty(format.language) || "und".equals(format.language) ? ""
-                : format.language;
+                : new Locale(format.language).getDisplayLanguage();
     }
 
     private static String buildBitrateString(Format format) {
@@ -59,7 +54,7 @@ public class PlayerUtil {
     }
 
     private static String buildTrackIdString(Format format) {
-        return format.id == null ? "" : ("id:" + format.id);
+        return format.id == null ? "" : (format.id);
     }
 
     private static String buildSampleMimeTypeString(Format format) {

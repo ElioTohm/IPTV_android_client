@@ -541,6 +541,9 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
         IN_VOD = true;
     }
 
+    /**
+     * Button clicked handler to add multi audio and subtitle support
+     * */
     @Override
     public void onClick(View v) {
         if (v.getParent() == streams_view) {
@@ -580,11 +583,16 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
                     default:
                         continue;
                 }
-                if ((!label.equals("Subtitle") && trackGroups.length > 1) || label.equals("Subtitle")) {
-                    button.setText(label);
-                    button.setTag(i);
-                    button.setOnClickListener(this);
-                    streams_view.addView(button, streams_view.getChildCount() - 1);
+                if ((!label.equals("Subtitle") && trackGroups.length > 1) ||
+                        (label.equals("Subtitle") && (
+                                        (trackGroups.length == 1 &&
+                                        !trackGroups.get(0).getFormat(0).sampleMimeType.equals("application/cea-608")) ||
+                                        (trackGroups.length > 1)))
+                        ) {
+                        button.setText(label);
+                        button.setTag(i);
+                        button.setOnClickListener(this);
+                        streams_view.addView(button, streams_view.getChildCount() - 1);
                 }
 
             }
@@ -601,7 +609,6 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
                     .commit();
         }
     }
-
 
     private void ShowHotelInfo () {
         detailSectionFragment = BackgroundImageFragment.newInstance(SectionMenuFragment.HEADER_ID_HOTEL_INFO);
