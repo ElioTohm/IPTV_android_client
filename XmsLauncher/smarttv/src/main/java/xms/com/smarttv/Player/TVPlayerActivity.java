@@ -571,6 +571,10 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
         }
     }
 
+    /**
+     * show/hide Video/Audio/Sub buttons
+     * if the streams contains the streams
+     * */
     private void updatebuttonSelector() {
         if (xmsPlayer == null) {
             return;
@@ -622,6 +626,10 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
         }
     }
 
+    /**
+     * @param DetailSectionFragment
+     * to hide the fragment with the related tag
+     */
     private void hideDetailSection(String DetailSectionFragment) {
         if (getFragmentManager().findFragmentByTag(DetailSectionFragment) != null) {
             detailsectionContainer.setBackgroundColor(0x000000);
@@ -633,6 +641,30 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
         }
     }
 
+    /**
+     * show the fragment in the
+     * @param ViewId
+     * with the fragment class
+     * @param detailFragment
+     * and tag
+     * @param tag
+     * with flag that shows the background Fragment
+     * @param showBackground
+     */
+    private void showDetailSection (int ViewId, Fragment detailFragment, String tag, boolean showBackground) {
+        if (showBackground) {
+            detailsectionContainer.setBackgroundColor(getResources().getColor(R.color.BlackLightTransparent));
+        }
+        getFragmentManager().beginTransaction()
+                .setCustomAnimations(R.animator.lb_onboarding_page_indicator_fade_in,
+                        R.animator.lb_onboarding_page_indicator_fade_out)
+                .replace(ViewId, detailFragment, tag)
+                .commit();
+    }
+
+    /**
+     * show the hotel info fragment sections
+     */
     private void ShowHotelInfo () {
         detailSectionFragment = BackgroundImageFragment.newInstance(SectionMenuFragment.HEADER_ID_HOTEL_INFO);
         showDetailSection (R.id.Main, detailSectionFragment, TAG_BACKGROUND, false);
@@ -728,14 +760,4 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
                 .hide(menuFragment).commit();
     }
 
-    private void showDetailSection (int ViewId, Fragment detailFragment, String tag, boolean showBackground) {
-        if (showBackground) {
-            detailsectionContainer.setBackgroundColor(getResources().getColor(R.color.BlackLightTransparent));
-        }
-        getFragmentManager().beginTransaction()
-                .setCustomAnimations(R.animator.lb_onboarding_page_indicator_fade_in,
-                        R.animator.lb_onboarding_page_indicator_fade_out)
-                .replace(ViewId, detailFragment, tag)
-                .commit();
-    }
 }

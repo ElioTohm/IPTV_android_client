@@ -84,14 +84,19 @@ public class XmsPlayer  {
         return null;
     }
 
+    public boolean hasDuration () {
+        if (player.getDuration() > 1) {
+            return true;
+        }
+        return false;
+    }
 
     /**
      * @param context
      * @param playerview
      * initialize both param to use in class
      */
-    public XmsPlayer(Context context, PlayerView playerview, PlayerControlView playerControlView,
-                     List<Stream> streams, String TOKENTYPE, String TOKEN) {
+    public XmsPlayer(Context context, PlayerView playerview, PlayerControlView playerControlView, List<Stream> streams, String TOKENTYPE, String TOKEN) {
 
         // set surface of the player
         this.context = context;
@@ -250,11 +255,5 @@ public class XmsPlayer  {
         return new OkHttpDataSourceFactory(okHttpClient, userAgent, bandwidthMeter);
     }
 
-    public boolean hasDuration () {
-        if (player.getDuration() > 1) {
-            return true;
-        }
-        return false;
-    }
 }
 
