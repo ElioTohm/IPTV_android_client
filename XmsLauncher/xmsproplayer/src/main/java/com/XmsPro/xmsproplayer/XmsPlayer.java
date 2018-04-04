@@ -26,6 +26,7 @@ import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.MappingTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
+import com.google.android.exoplayer2.ui.PlayerControlView;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.DataSource;
@@ -57,6 +58,8 @@ public class XmsPlayer  {
     private XmsPlayerUICallback xmsPlayerUICallback;
     private String TOKENTYPE, TOKEN;
     private TrackSelectionHelper trackSelectionHelper;
+    PlayerControlView playerControlView;
+
     static {
         DEFAULT_COOKIE_MANAGER = new CookieManager();
         DEFAULT_COOKIE_MANAGER.setCookiePolicy(CookiePolicy.ACCEPT_ORIGINAL_SERVER);
@@ -87,13 +90,14 @@ public class XmsPlayer  {
      * @param playerview
      * initialize both param to use in class
      */
-    public XmsPlayer(Context context, PlayerView playerview,
+    public XmsPlayer(Context context, PlayerView playerview, PlayerControlView playerControlView,
                      List<Stream> streams, String TOKENTYPE, String TOKEN) {
 
         // set surface of the player
         this.context = context;
         this.xmsPlayerUICallback = (XmsPlayerUICallback) context;
         this.playerview = playerview;
+        this.playerControlView = playerControlView;
         this.streams = streams;
         this.TOKEN = TOKEN;
         this.TOKENTYPE = TOKENTYPE;
@@ -120,7 +124,6 @@ public class XmsPlayer  {
             int channel_type = channels.get(i).getType();
             switch (channel_type) {
                 case  Stream.TYPE_UDP:
-                    this.playerview.setUseController(false);
                     DataSource.Factory udsf = new UdpDataSource.Factory() {
                         @Override
                         public DataSource createDataSource() {
@@ -135,8 +138,6 @@ public class XmsPlayer  {
                                             .createMediaSource(channel_stream_uri);
                     break;
                 case Stream.TYPE_HLS:
-                    this.playerview.setUseController(true);
-
                     mediaSources[i]  = new HlsMediaSource.Factory(mediaDataSourceFactory)
                                             .setExtractorFactory(new XmsHlsExtractorFactory())
                                             .createMediaSource(channel_stream_uri);
@@ -156,7 +157,6 @@ public class XmsPlayer  {
                                             .createMediaSource(channel_stream_uri);
                     break;
                 case Stream.MISC:
-                    this.playerview.setUseController(true);
                     this.playerview.showController();
                     if (defaultExtractorsFactory == null) {
                         defaultExtractorsFactory = new DefaultExtractorsFactory();
@@ -206,10 +206,8 @@ public class XmsPlayer  {
         }
 
         player.setPlayWhenReady(true);
-
         // set the mediasource and play when ready
         player.prepare(buildMediaSource(streams));
-        playerview.setPlayer(player);
 
     }
 
@@ -223,10 +221,6 @@ public class XmsPlayer  {
         }
     }
 
-    public void showProgress() {
-        playerview.showController();
-    }
-
     /**
      * @param streams
      * @param showinfo
@@ -235,6 +229,7 @@ public class XmsPlayer  {
     public void changeSource(List<Stream> streams, boolean showinfo) {
         player.prepare(buildMediaSource(streams));
         playerview.setPlayer(player);
+        playerControlView.setPlayer(player);
         if (showinfo) {
             xmsPlayerUICallback.showChannelInfo(streams.get(0).getId());
         }

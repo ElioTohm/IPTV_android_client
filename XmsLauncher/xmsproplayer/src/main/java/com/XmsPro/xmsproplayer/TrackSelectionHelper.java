@@ -99,13 +99,13 @@ public class TrackSelectionHelper implements View.OnClickListener,
         attributeArray.recycle();
 
         // View for disabling the renderer.
-//        disableView = (CheckedTextView) inflater.inflate(
-//                android.R.layout.simple_list_item_single_choice, root, false);
-//        disableView.setBackgroundResource(selectableItemBackgroundResourceId);
-//        disableView.setText(R.string.selection_disabled);
-//        disableView.setFocusable(true);
-//        disableView.setOnClickListener(this);
-//        root.addView(disableView);
+        disableView = (CheckedTextView) inflater.inflate(
+                android.R.layout.simple_list_item_single_choice, root, false);
+        disableView.setBackgroundResource(selectableItemBackgroundResourceId);
+        disableView.setText(R.string.selection_disabled);
+        disableView.setFocusable(true);
+        disableView.setOnClickListener(this);
+        root.addView(disableView);
 
         // Per-track views.
         boolean haveAdaptiveTracks = false;
@@ -155,7 +155,7 @@ public class TrackSelectionHelper implements View.OnClickListener,
     }
 
     private void updateViews() {
-//        disableView.setChecked(isDisabled);
+        disableView.setChecked(isDisabled);
 //        defaultView.setChecked(!isDisabled && override == null);
         for (int i = 0; i < trackViews.length; i++) {
             for (int j = 0; j < trackViews[i].length; j++) {

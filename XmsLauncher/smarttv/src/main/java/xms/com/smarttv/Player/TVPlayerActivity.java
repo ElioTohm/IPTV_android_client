@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -32,6 +33,7 @@ import com.eliotohme.data.network.ApiService;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.MappingTrackSelector;
+import com.google.android.exoplayer2.ui.PlayerControlView;
 import com.google.android.exoplayer2.ui.PlayerView;
 
 import java.io.IOException;
@@ -91,18 +93,17 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
     private final String TAG_VODLIST = "VOD_List";
 
     boolean IN_VOD = false;
-    private RelativeLayout channelInfo;
-    private TextView currentChannel, channel_number_selector, channelName;
     private XmsPlayer xmsPlayer;
     private Fragment menuFragment;
     private int currentStreamId = 1;
     private List<Stream> streamList;
     private ChannelsListFragment channelGridFragment;
     private Realm realm;
-    private ImageView channel_icon;
-    private LinearLayout streams_view;
+    private ImageView stream_thumbnail;
+    private TextView stream_number, channel_number_selector, stream_name;
     private RelativeLayout detailsectionContainer;
     private Fragment detailSectionFragment = null;
+    private PlayerControlView playerControlView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,23 +130,20 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
         getFragmentManager().beginTransaction().add(R.id.fragment_container_channel, channelGridFragment).commit();
         getFragmentManager().beginTransaction().hide(channelGridFragment).commit();
         streamList = new ArrayList<>();
-
-        // init element and channel list with player
-        channelInfo = findViewById(xms.com.smarttv.R.id.channelInfo);
-        channelInfo.setVisibility(View.INVISIBLE);
-        currentChannel = findViewById(xms.com.smarttv.R.id.current_channel);
-        channelName = findViewById(xms.com.smarttv.R.id.channel_name);
-        channel_icon = findViewById(R.id.channel_icon);
-        streams_view = findViewById(R.id.streams_view);
-        streamList = new ArrayList<>();
         channel_number_selector = findViewById(xms.com.smarttv.R.id.channel_number_selector);
         detailsectionContainer = findViewById(R.id.fragment_container_details);
+        playerControlView = findViewById(R.id.player_control_view);
+
+        View stream_info_view = playerControlView.getRootView();
+        stream_thumbnail = stream_info_view.findViewById(R.id.thumbnail);
+        stream_number = stream_info_view.findViewById(R.id.stream_id);
+        stream_name = stream_info_view.findViewById(R.id.stream_name);
 
         Channel firstchannel = realm.where(Channel.class).equalTo("number", 1).findFirst();
         currentStreamId = firstchannel.getStream().getId();
         streamList.add(firstchannel.getStream());
         PlayerView simpleExoPlayerView = findViewById(R.id.simpleexoplayerview);
-        xmsPlayer = new XmsPlayer(this, simpleExoPlayerView, streamList,
+        xmsPlayer = new XmsPlayer(this, simpleExoPlayerView, playerControlView, streamList,
                 realm.where(User.class).findFirst().getToken_type(), realm.where(User.class).findFirst().getAccess_token());
     }
 
@@ -177,24 +175,28 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
         xmsPlayer.releasePlayer();
     }
 
+    @Override
+    public void onBackPressed() {}
+
     /**
      * if IN_VOD the user will interact with the player
      * to fastforward if not use key bindings to navigate fragments
      * */
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
+        int action = event.getAction();
+        int keyCode = event.getKeyCode();
         if (IN_VOD) {
-            if (event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
+            if (event.getKeyCode() == KeyEvent.KEYCODE_BACK && action == KeyEvent.ACTION_UP) {
                 IN_VOD = false;
                 xmsPlayer.releasePlayer();
                 detailSectionFragment = BackgroundImageFragment.newInstance(SectionMenuFragment.HEADER_ID_VOD);
                 showDetailSection (R.id.Main, detailSectionFragment, TAG_BACKGROUND, false);
             }
-            xmsPlayer.showProgress();
+            playerControlView.show();
             return super.dispatchKeyEvent(event);
         }
-        int action = event.getAction();
-        int keyCode = event.getKeyCode();
+
         if (action == KeyEvent.ACTION_UP) {
             int channel_numberpressed = 10;
             switch (keyCode) {
@@ -245,7 +247,8 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
                     return false;
                 case KeyEvent.KEYCODE_DPAD_CENTER:
                     if (channelGridFragment.isHidden() && menuFragment.isHidden() &&
-                            (getFragmentManager().findFragmentByTag(TAG_VOD) == null || getFragmentManager().findFragmentByTag(TAG_VOD).isHidden())) {
+                            (getFragmentManager().findFragmentByTag(TAG_VOD) == null || getFragmentManager().findFragmentByTag(TAG_VOD).isHidden()) &&
+                            !playerControlView.isVisible()) {
                         getFragmentManager().beginTransaction()
                                 .setCustomAnimations(R.animator.lb_onboarding_page_indicator_fade_in,
                                         R.animator.lb_onboarding_page_indicator_fade_out)
@@ -439,23 +442,14 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
 
     }
 
-
     @Override
     public void showChannelInfo(int streamindex) {
         Channel channel = realm.where(Channel.class).equalTo("stream.id", streamindex).findFirst();
-        Glide.with(this).asBitmap().load(channel.getThumbnail()).into(channel_icon);
-        currentChannel.setText(String.valueOf(channel.getNumber()));
-        channelName.setText(channel.getName());
-        channelInfo.setVisibility(View.VISIBLE);
-        Handler mChannelInfoHandler=new Handler();
-        Runnable mChannelInfoRunnable=new Runnable() {
-            public void run() {
-                channelInfo.setVisibility(View.INVISIBLE);
-            }
-        };
-        mChannelInfoHandler.removeCallbacks(mChannelInfoRunnable);
-        mChannelInfoHandler.postDelayed(mChannelInfoRunnable, 3000);
-        updateButtonVisibilities();
+        Glide.with(this).asBitmap().load(channel.getThumbnail()).into(stream_thumbnail);
+        stream_number.setText(String.valueOf(channel.getNumber()));
+        stream_name.setText(channel.getName());
+        updatebuttonSelector();
+        playerControlView.show();
     }
 
     @Override
@@ -469,7 +463,6 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
                 .commit();
     }
 
-
     @Override
     public void LoadMap(Double latitude, Double longitude, int zoom) {
         detailSectionFragment = MapFragment.newInstance(latitude, longitude, zoom);
@@ -482,12 +475,10 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
 
     }
 
-
     @Override
     public void ServiceClicked(Card card) {
 
     }
-
 
     @Override
     public void MovieSelected(Movie movie) {
@@ -544,17 +535,18 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
      * */
     @Override
     public void onClick(View v) {
-        if (v.getParent() == streams_view) {
+        if (v.getId() == R.id.Audio ||
+                v.getId() == R.id.Video||
+                v.getId() == R.id.Subtitle) {
             MappingTrackSelector.MappedTrackInfo mappedTrackInfo = xmsPlayer.getmappedTrackInfo();
             if (mappedTrackInfo != null) {
                 xmsPlayer.gettrackSelectionHelper().showSelectionDialog(
-                        this, ((Button) v).getText(), mappedTrackInfo, (int) v.getTag());
+                        this, getResources().getResourceEntryName(v.getId()), mappedTrackInfo, (int) v.getTag());
             }
         }
     }
 
-    private void updateButtonVisibilities() {
-        streams_view.removeAllViews();
+    private void updatebuttonSelector() {
         if (xmsPlayer == null) {
             return;
         }
@@ -563,36 +555,44 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
             return;
         }
 
+        View view = playerControlView.getRootView();
+        ImageButton audio_button = view.findViewById(R.id.Audio);
+        ImageButton video_button = view.findViewById(R.id.Video);
+        ImageButton sub_button = view.findViewById(R.id.Subtitle);
+        audio_button.setVisibility(View.INVISIBLE);
+        video_button.setVisibility(View.INVISIBLE);
+        sub_button.setVisibility(View.INVISIBLE);
+
         for (int i = 0; i < mappedTrackInfo.length; i++) {
             TrackGroupArray trackGroups = mappedTrackInfo.getTrackGroups(i);
             if (trackGroups.length > 0) {
-                Button button = new Button(this);
-                String label;
                 switch (xmsPlayer.getplayer().getRendererType(i)) {
                     case C.TRACK_TYPE_AUDIO:
-                        label = "Audio";
+                        if (trackGroups.length > 1) {
+                            audio_button.setVisibility(View.VISIBLE);
+                            audio_button.setTag(i);
+                            audio_button.setOnClickListener(this);
+                        }
                         break;
                     case C.TRACK_TYPE_VIDEO:
-                        label = "Video";
+                        if (trackGroups.length > 1) {
+                            video_button.setVisibility(View.VISIBLE);
+                            video_button.setTag(i);
+                            video_button.setOnClickListener(this);
+                        }
                         break;
                     case C.TRACK_TYPE_TEXT:
-                        label = "Subtitle";
+                        if ((trackGroups.length == 1 &&
+                                !trackGroups.get(0).getFormat(0).sampleMimeType.equals("application/cea-608")) ||
+                                (trackGroups.length > 1)) {
+                            sub_button.setVisibility(View.VISIBLE);
+                            sub_button.setTag(i);
+                            sub_button.setOnClickListener(this);
+                        }
                         break;
                     default:
                         continue;
                 }
-                if ((!label.equals("Subtitle") && trackGroups.length > 1) ||
-                        (label.equals("Subtitle") && (
-                                        (trackGroups.length == 1 &&
-                                        !trackGroups.get(0).getFormat(0).sampleMimeType.equals("application/cea-608")) ||
-                                        (trackGroups.length > 1)))
-                        ) {
-                        button.setText(label);
-                        button.setTag(i);
-                        button.setOnClickListener(this);
-                        streams_view.addView(button, streams_view.getChildCount() - 1);
-                }
-
             }
         }
     }

@@ -11,10 +11,20 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/simpleexoplayerview"
-        app:controller_layout_id="@layout/custom_playback_controller"
+        app:use_controller="false"
         app:resize_mode="fill">
 
     </com.google.android.exoplayer2.ui.PlayerView>
+
+    <com.google.android.exoplayer2.ui.PlayerControlView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        app:show_timeout="5000"
+        app:controller_layout_id="@layout/custom_playback_controller"
+        android:id="@+id/player_control_view">
+
+    </com.google.android.exoplayer2.ui.PlayerControlView>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -64,65 +74,6 @@
         android:text=""
         android:textColor="#FFF"
         android:textSize="50sp" />
-
-    <RelativeLayout
-        android:id="@+id/channelInfo"
-        android:padding="25dp"
-        android:layout_width="match_parent"
-        android:layout_height="175dip"
-        android:layout_centerInParent="true"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="false"
-        android:layout_alignParentEnd="false"
-        android:layout_alignParentTop="false"
-        android:layout_margin="20dp"
-        android:background="@color/BlackTransparent">
-
-        <LinearLayout android:id="@+id/streams_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"/>
-
-        <TextView
-            android:id="@+id/current_channel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:text="99"
-            android:layout_centerInParent="true"
-            android:textColor="#FFF"
-            android:textSize="50sp" />
-
-        <ImageView
-            android:id="@+id/channel_icon"
-            android:layout_toEndOf="@+id/current_channel"
-            android:layout_width="120dp"
-            android:layout_marginStart="100dp"
-            android:layout_height="120dp"
-            android:layout_marginTop="20dp"
-            android:layout_centerInParent="true"
-            android:contentDescription="@string/channel_ico"
-            android:scaleType="fitCenter" />
-
-        <TextView
-            android:id="@+id/channel_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:textColor="#FFF"
-            android:textSize="50sp" />
-
-        <TextClock
-            android:id="@+id/textClock"
-            android:textSize="50sp"
-            android:layout_centerVertical="true"
-            android:layout_alignParentEnd="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="19dp" />
-
-    </RelativeLayout>
-
 
     <RelativeLayout
         android:layout_alignParentTop="true"

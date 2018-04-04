@@ -3,53 +3,93 @@
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_margin="10dp"
-    android:layout_height="wrap_content"
+    android:layout_height="175dip"
     android:layout_gravity="bottom"
     android:layoutDirection="ltr"
     android:background="#CC000000"
     android:orientation="vertical">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="150dip"
         android:gravity="center"
-        android:paddingTop="4dp"
         android:orientation="horizontal">
 
-        <ImageView
-            android:layout_width="150dp"
+        <TextView
+            android:id="@+id/stream_id"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/fracarro"
-            android:scaleType="fitXY"
-            android:id="@+id/thumbnail"/>
+            android:layout_alignParentStart="true"
+            android:text="00"
+            android:layout_centerInParent="true"
+            android:textColor="#FFF"
+            android:textSize="50sp" />
 
-        <ImageButton android:id="@id/exo_prev"
-            style="@style/ExoMediaButton.Previous"/>
+        <LinearLayout
+            android:id="@+id/stream_select"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/stream_id"
+            android:orientation="vertical">
 
-        <ImageButton android:id="@id/exo_rew"
-            style="@style/ExoMediaButton.Rewind"/>
+            <ImageButton
+                android:id="@+id/Video"
+                android:src="@drawable/resolution"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:scaleType="fitXY"
+                android:visibility="invisible"/>
 
-        <ImageButton android:id="@id/exo_shuffle"
-            style="@style/ExoMediaButton.Shuffle"/>
+            <ImageButton
+                android:id="@+id/Audio"
+                android:src="@drawable/speaker"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:scaleType="fitXY"
+                android:visibility="invisible"/>
 
-        <ImageButton android:id="@id/exo_repeat_toggle"
-            style="@style/ExoMediaButton"/>
+            <ImageButton
+                android:id="@+id/Subtitle"
+                android:src="@drawable/subtitles"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:scaleType="fitXY"
+                android:visibility="invisible"/>
 
-        <ImageButton android:id="@id/exo_play"
-            style="@style/ExoMediaButton.Play"/>
+        </LinearLayout>
 
-        <ImageButton android:id="@id/exo_pause"
-            style="@style/ExoMediaButton.Pause"/>
+        <ImageView
+            android:id="@+id/thumbnail"
+            android:layout_toEndOf="@+id/stream_select"
+            android:layout_width="120dp"
+            android:layout_marginStart="100dp"
+            android:layout_height="120dp"
+            android:layout_marginTop="20dp"
+            android:layout_centerInParent="true"
+            android:contentDescription="@string/channel_ico"
+            android:scaleType="fitCenter" />
 
-        <ImageButton android:id="@id/exo_ffwd"
-            style="@style/ExoMediaButton.FastForward"/>
+        <TextView
+            android:id="@+id/stream_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textColor="#FFF"
+            android:textSize="50sp" />
 
-        <ImageButton android:id="@id/exo_next"
-            style="@style/ExoMediaButton.Next"/>
-        
-    </LinearLayout>
+        <TextClock
+            android:id="@+id/textClock"
+            android:textSize="50sp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="19dp" />
+
+    </RelativeLayout>
 
     <LinearLayout
+        android:id="@+id/exo_bar_section"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
