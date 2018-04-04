@@ -770,7 +770,6 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
             } else {
                 showChannelInfo(currentStreamId, 0, true);
             }
-
         }
         getFragmentManager().beginTransaction()
                 .setCustomAnimations(R.animator.lb_onboarding_page_indicator_fade_in,
