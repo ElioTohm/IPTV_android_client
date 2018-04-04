@@ -91,7 +91,7 @@ public class RTPPlayer implements IVLCVout.Callback {
             mMediaPlayer.setMedia(m);
             mMediaPlayer.play();
             CurrentChannelNumber = channel.getNumber();
-            xmsPlayerUICallback.showChannelInfo(media - 1);
+            xmsPlayerUICallback.showChannelInfo(media - 1, 2000, false);
         }
     }
 

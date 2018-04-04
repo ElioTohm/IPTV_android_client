@@ -6,6 +6,6 @@ package com.XmsPro.xmsproplayer.Interface;
 
 public interface XmsPlayerUICallback {
 
-    void showChannelInfo(int channelindex);
+    void showChannelInfo(int channelindexm, int duration, boolean updatestreams);
 
 }

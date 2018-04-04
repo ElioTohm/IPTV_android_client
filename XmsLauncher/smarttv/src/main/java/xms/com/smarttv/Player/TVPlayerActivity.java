@@ -105,6 +105,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
     private RelativeLayout detailsectionContainer;
     private LinearLayout progression_section;
     private Fragment detailSectionFragment = null;
+    private ImageButton audio_button, video_button, sub_button;
     private PlayerControlView playerControlView;
 
     @Override
@@ -141,6 +142,9 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
         stream_number = stream_info_view.findViewById(R.id.stream_id);
         stream_name = stream_info_view.findViewById(R.id.stream_name);
         progression_section = stream_info_view.findViewById(R.id.exo_bar_section);
+        audio_button = stream_info_view.findViewById(R.id.Audio);
+        video_button = stream_info_view.findViewById(R.id.Video);
+        sub_button = stream_info_view.findViewById(R.id.Subtitle);
 
         Channel firstchannel = realm.where(Channel.class).equalTo("number", 1).findFirst();
         currentStreamId = firstchannel.getStream().getId();
@@ -214,6 +218,10 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
             return super.dispatchKeyEvent(event);
         }
 
+        // if channel info is shown only catch the back event
+        if (playerControlView.isVisible() && playerControlView.getShowTimeoutMs() == 0 && keyCode != KeyEvent.KEYCODE_BACK && action == KeyEvent.ACTION_UP) {
+            return super.dispatchKeyEvent(event);
+        }
         if (action == KeyEvent.ACTION_UP) {
             int channel_numberpressed = 10;
             switch (keyCode) {
@@ -461,7 +469,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
     }
 
     @Override
-    public void showChannelInfo(int streamindex) {
+    public void showChannelInfo(int streamindex, int duration, boolean update) {
         Channel channel = realm.where(Channel.class).equalTo("stream.id", streamindex).findFirst();
         Glide.with(this).asBitmap().load(channel.getThumbnail()).into(stream_thumbnail);
         stream_number.setText(String.valueOf(channel.getNumber()));
@@ -471,7 +479,13 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
         } else {
             progression_section.setVisibility(LinearLayout.INVISIBLE);
         }
-        updatebuttonSelector();
+        if (update) {
+            updatebuttonSelector();
+        } else {
+            hidebuttonSekector();
+        }
+
+        playerControlView.setShowTimeoutMs(duration);
         playerControlView.show();
     }
 
@@ -585,9 +599,6 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
         }
 
         View view = playerControlView.getRootView();
-        ImageButton audio_button = view.findViewById(R.id.Audio);
-        ImageButton video_button = view.findViewById(R.id.Video);
-        ImageButton sub_button = view.findViewById(R.id.Subtitle);
         audio_button.setVisibility(View.INVISIBLE);
         video_button.setVisibility(View.INVISIBLE);
         sub_button.setVisibility(View.INVISIBLE);
@@ -624,6 +635,12 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
                 }
             }
         }
+    }
+
+    private void hidebuttonSekector() {
+        audio_button.setVisibility(View.INVISIBLE);
+        video_button.setVisibility(View.INVISIBLE);
+        sub_button.setVisibility(View.INVISIBLE);
     }
 
     /**
@@ -740,6 +757,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
             streamList.clear();
             streamList.add(channel.getStream());
             xmsPlayer.changeSource(streamList, true);
+            hidebuttonSekector();
             getFragmentManager().beginTransaction()
                     .setCustomAnimations(R.animator.lb_onboarding_page_indicator_fade_in,
                             R.animator.lb_onboarding_page_indicator_fade_out)
@@ -747,7 +765,12 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
         }
         if (getFragmentManager().findFragmentByTag(TAG_ITEMLIST) == null &&
                 channelGridFragment.isHidden() && menuFragment.isHidden()) {
-            showChannelInfo(currentStreamId);
+            if (playerControlView.isVisible() && playerControlView.getShowTimeoutMs() == 0) {
+                playerControlView.hide();
+            } else {
+                showChannelInfo(currentStreamId, 0, true);
+            }
+
         }
         getFragmentManager().beginTransaction()
                 .setCustomAnimations(R.animator.lb_onboarding_page_indicator_fade_in,

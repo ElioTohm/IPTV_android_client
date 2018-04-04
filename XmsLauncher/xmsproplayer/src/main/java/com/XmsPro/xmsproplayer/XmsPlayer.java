@@ -236,7 +236,8 @@ public class XmsPlayer  {
         playerview.setPlayer(player);
         playerControlView.setPlayer(player);
         if (showinfo) {
-            xmsPlayerUICallback.showChannelInfo(streams.get(0).getId());
+            xmsPlayerUICallback.showChannelInfo(streams.get(0).getId(), 1000, false
+            );
         }
     }
 

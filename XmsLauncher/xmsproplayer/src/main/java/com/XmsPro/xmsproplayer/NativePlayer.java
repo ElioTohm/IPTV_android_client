@@ -99,7 +99,7 @@ public class NativePlayer {
 //            e.printStackTrace();
 //        }
         if (showinfo) {
-            xmsPlayerUICallback.showChannelInfo(channelList.get(0).getNumber());
+            xmsPlayerUICallback.showChannelInfo(channelList.get(0).getNumber(), 1000, false);
         }
     }
 
