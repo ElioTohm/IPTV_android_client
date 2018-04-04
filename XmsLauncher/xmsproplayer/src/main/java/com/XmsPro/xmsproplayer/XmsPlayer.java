@@ -205,9 +205,9 @@ public class XmsPlayer  {
             player = ExoPlayerFactory.newSimpleInstance(renderersFactory, trackSelector);
         }
 
-        player.setPlayWhenReady(true);
         // set the mediasource and play when ready
         player.prepare(buildMediaSource(streams));
+        player.setPlayWhenReady(true);
 
     }
 
@@ -250,5 +250,11 @@ public class XmsPlayer  {
         return new OkHttpDataSourceFactory(okHttpClient, userAgent, bandwidthMeter);
     }
 
+    public boolean hasDuration () {
+        if (player.getDuration() > 1) {
+            return true;
+        }
+        return false;
+    }
 }
 

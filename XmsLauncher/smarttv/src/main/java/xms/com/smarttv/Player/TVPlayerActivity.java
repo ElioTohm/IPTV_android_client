@@ -92,6 +92,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
     private final String TAG_VODDETAIL = "VOD_Detail";
     private final String TAG_VODLIST = "VOD_List";
 
+    boolean doubleBackToExitPressedOnce = false;
     boolean IN_VOD = false;
     private XmsPlayer xmsPlayer;
     private Fragment menuFragment;
@@ -102,6 +103,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
     private ImageView stream_thumbnail;
     private TextView stream_number, channel_number_selector, stream_name;
     private RelativeLayout detailsectionContainer;
+    private LinearLayout progression_section;
     private Fragment detailSectionFragment = null;
     private PlayerControlView playerControlView;
 
@@ -138,6 +140,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
         stream_thumbnail = stream_info_view.findViewById(R.id.thumbnail);
         stream_number = stream_info_view.findViewById(R.id.stream_id);
         stream_name = stream_info_view.findViewById(R.id.stream_name);
+        progression_section = stream_info_view.findViewById(R.id.exo_bar_section);
 
         Channel firstchannel = realm.where(Channel.class).equalTo("number", 1).findFirst();
         currentStreamId = firstchannel.getStream().getId();
@@ -187,11 +190,25 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
         int action = event.getAction();
         int keyCode = event.getKeyCode();
         if (IN_VOD) {
-            if (event.getKeyCode() == KeyEvent.KEYCODE_BACK && action == KeyEvent.ACTION_UP) {
-                IN_VOD = false;
-                xmsPlayer.releasePlayer();
-                detailSectionFragment = BackgroundImageFragment.newInstance(SectionMenuFragment.HEADER_ID_VOD);
-                showDetailSection (R.id.Main, detailSectionFragment, TAG_BACKGROUND, false);
+            if (action == KeyEvent.ACTION_UP && event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
+                if (doubleBackToExitPressedOnce) {
+                    IN_VOD = false;
+                    xmsPlayer.releasePlayer();
+                    detailSectionFragment = BackgroundImageFragment.newInstance(SectionMenuFragment.HEADER_ID_VOD);
+                    showDetailSection (R.id.Main, detailSectionFragment, TAG_BACKGROUND, false);
+                }
+
+                this.doubleBackToExitPressedOnce = true;
+                Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+
+                new Handler().postDelayed(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        doubleBackToExitPressedOnce=false;
+                    }
+                }, 1000);
+
             }
             playerControlView.show();
             return super.dispatchKeyEvent(event);
@@ -204,7 +221,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
                     if (getFragmentManager().findFragmentByTag(TAG_VOD) != null) {
                         if (getFragmentManager().findFragmentByTag(TAG_VODDETAIL) != null ||
                                 getFragmentManager().findFragmentByTag(TAG_VODLIST) != null){
-                            return super.dispatchKeyEvent(event);
+                            getFragmentManager().popBackStack();
                         }
                         getFragmentManager().beginTransaction()
                                 .remove(getFragmentManager().findFragmentByTag(TAG_VOD))
@@ -228,6 +245,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
                         }
                         return super.dispatchKeyEvent(event);
                     }
+
                     return false;
                 case KeyEvent.KEYCODE_MENU:
                     if (channelGridFragment.isHidden()){
@@ -439,7 +457,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
             detailSectionFragment = new ClientAccountFragment();
             showDetailSection (R.id.fragment_container_details, detailSectionFragment, TAG_ITEMLIST, true);
         }
-
+        IN_VOD = false;
     }
 
     @Override
@@ -448,6 +466,11 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
         Glide.with(this).asBitmap().load(channel.getThumbnail()).into(stream_thumbnail);
         stream_number.setText(String.valueOf(channel.getNumber()));
         stream_name.setText(channel.getName());
+        if (xmsPlayer.hasDuration()) {
+            progression_section.setVisibility(LinearLayout.VISIBLE);
+        } else {
+            progression_section.setVisibility(LinearLayout.INVISIBLE);
+        }
         updatebuttonSelector();
         playerControlView.show();
     }
@@ -527,6 +550,8 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
         streamList.add(movie.getStream());
         xmsPlayer.initializePlayer();
         xmsPlayer.changeSource(streamList,false);
+        Glide.with(this).asBitmap().load(movie.getPoster()).into(stream_thumbnail);
+        stream_name.setText(movie.getTitle());
         IN_VOD = true;
     }
 
@@ -637,6 +662,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
                                 ShowHotelInfo();
                             } else {
                                 xmsPlayer.initializePlayer();
+                                xmsPlayer.changeSource(streamList, true);
                             }
                         }
                         subrealm.executeTransaction(new Realm.Transaction() {
