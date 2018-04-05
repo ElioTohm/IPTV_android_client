@@ -36,6 +36,8 @@ import io.socket.emitter.Emitter;
 import xms.com.smarttv.R;
 import xms.com.smarttv.app.Preferences;
 
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+
 /**
  * Notification background service
  * Connects to SocketIO port
@@ -67,6 +69,7 @@ public class NotificationService extends IntentService {
         if (Build.VERSION.SDK_INT >= 23) {
             if (!Settings.canDrawOverlays(getApplicationContext())) {
                 Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName()));
+                intent.setFlags(FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             } else {
                 showNotification(notification);

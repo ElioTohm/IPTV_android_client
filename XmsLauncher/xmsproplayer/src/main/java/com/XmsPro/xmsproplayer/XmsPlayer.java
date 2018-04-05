@@ -53,12 +53,12 @@ public class XmsPlayer  {
     private List<Stream> streams;
     private PlayerView playerview;
     private Context context;
-    public DefaultTrackSelector trackSelector;
+    private DefaultTrackSelector trackSelector;
     private static XmsPlayer instance;
     private XmsPlayerUICallback xmsPlayerUICallback;
     private String TOKENTYPE, TOKEN;
     private TrackSelectionHelper trackSelectionHelper;
-    PlayerControlView playerControlView;
+    private PlayerControlView playerControlView;
 
     static {
         DEFAULT_COOKIE_MANAGER = new CookieManager();
