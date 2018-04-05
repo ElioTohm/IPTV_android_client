@@ -8,7 +8,6 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -96,7 +95,8 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
     boolean IN_VOD = false;
     private XmsPlayer xmsPlayer;
     private Fragment menuFragment;
-    private int currentStreamId = 1;
+    private int currentChannelStreamId = 1;
+    private int movieStreamid = 0;
     private List<Stream> streamList;
     private ChannelsListFragment channelGridFragment;
     private Realm realm;
@@ -147,7 +147,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
         sub_button = stream_info_view.findViewById(R.id.Subtitle);
 
         Channel firstchannel = realm.where(Channel.class).equalTo("number", 1).findFirst();
-        currentStreamId = firstchannel.getStream().getId();
+        currentChannelStreamId = firstchannel.getStream().getId();
         streamList.add(firstchannel.getStream());
         PlayerView simpleExoPlayerView = findViewById(R.id.simpleexoplayerview);
         xmsPlayer = new XmsPlayer(this, simpleExoPlayerView, playerControlView, streamList,
@@ -200,10 +200,12 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
                     xmsPlayer.releasePlayer();
                     detailSectionFragment = BackgroundImageFragment.newInstance(SectionMenuFragment.HEADER_ID_VOD);
                     showDetailSection (R.id.Main, detailSectionFragment, TAG_BACKGROUND, false);
+                    movieStreamid = 0;
+                    return false;
                 }
 
                 this.doubleBackToExitPressedOnce = true;
-                Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "click BACK again to exit", Toast.LENGTH_SHORT).show();
 
                 new Handler().postDelayed(new Runnable() {
 
@@ -211,11 +213,17 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
                     public void run() {
                         doubleBackToExitPressedOnce=false;
                     }
-                }, 1000);
+                }, 3000);
 
             }
-            playerControlView.show();
-            return super.dispatchKeyEvent(event);
+
+            if (playerControlView.isVisible()) {
+                return super.dispatchKeyEvent(event);
+            }
+
+            showChannelInfo(movieStreamid, 10000, true);
+
+            return false;
         }
 
         // if channel info is shown only catch the back event
@@ -285,7 +293,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
                 case KeyEvent.KEYCODE_DPAD_UP:
                     if (channelGridFragment.isHidden() && menuFragment.isHidden() &&
                             (getFragmentManager().findFragmentByTag(TAG_VOD) == null || getFragmentManager().findFragmentByTag(TAG_VOD).isHidden())) {
-                        int channel_id = realm.where(Channel.class).equalTo("stream.id", currentStreamId).findFirst().getNumber();
+                        int channel_id = realm.where(Channel.class).equalTo("stream.id", currentChannelStreamId).findFirst().getNumber();
                         List<Channel> result = realm.where(Channel.class).greaterThan("number", channel_id).findAll().sort("number");
                         if (result.size() != 0 ) {
                             onChannelSelected(result.get(0), true);
@@ -293,14 +301,14 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
                             result = realm.where(Channel.class).findAll().sort("number");
                             onChannelSelected(result.get(0), true);
                         }
-                        currentStreamId = result.get(0).getStream().getId();
+                        currentChannelStreamId = result.get(0).getStream().getId();
                         return true;
                     }
                     return super.dispatchKeyEvent(event);
                 case KeyEvent.KEYCODE_DPAD_DOWN:
                     if (channelGridFragment.isHidden() && menuFragment.isHidden() &&
                             (getFragmentManager().findFragmentByTag(TAG_VOD) == null || getFragmentManager().findFragmentByTag(TAG_VOD).isHidden())) {
-                        int channel_id = realm.where(Channel.class).equalTo("stream.id", currentStreamId).findFirst().getNumber();
+                        int channel_id = realm.where(Channel.class).equalTo("stream.id", currentChannelStreamId).findFirst().getNumber();
                         List<Channel> result = realm.where(Channel.class).lessThan("number", channel_id).findAll().sort("number");
                         if (result.size() != 0 ) {
                             onChannelSelected(result.get(result.size()-1), true);
@@ -308,7 +316,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
                             result = realm.where(Channel.class).findAll().sort("number");
                             onChannelSelected(result.get(result.size() - 1), true);
                         }
-                        currentStreamId = result.get(result.size() - 1).getStream().getId();
+                        currentChannelStreamId = result.get(result.size() - 1).getStream().getId();
                         return true;
                     }
                     return super.dispatchKeyEvent(event);
@@ -363,7 +371,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
                         Channel channel = realm.where(Channel.class).equalTo("number", Integer.parseInt((String) channel_number_selector.getText())).findFirst();
                         if (channel != null) {
                             onChannelSelected(channel, true);
-                            currentStreamId = channel.getStream().getId();
+                            currentChannelStreamId = channel.getStream().getId();
                         }
                         channel_number_selector.setText("");
                         channel_number_selector.setVisibility(View.INVISIBLE);
@@ -390,10 +398,10 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
         if (channel.getPrice() > 0 && !channel.isPurchased()) {
             Toast.makeText(this, "This is a premium Channel long press to purchase", Toast.LENGTH_LONG).show();
         } else {
-            if (currentStreamId != channel.getStream().getId()) {
+            if (currentChannelStreamId != channel.getStream().getId()) {
                 streamList.add(channel.getStream());
                 xmsPlayer.changeSource(streamList, showinfo);
-                currentStreamId = channel.getStream().getId();
+                currentChannelStreamId = channel.getStream().getId();
             }
         }
     }
@@ -470,10 +478,19 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
 
     @Override
     public void showChannelInfo(int streamindex, int duration, boolean update) {
-        Channel channel = realm.where(Channel.class).equalTo("stream.id", streamindex).findFirst();
-        Glide.with(this).asBitmap().load(channel.getThumbnail()).into(stream_thumbnail);
-        stream_number.setText(String.valueOf(channel.getNumber()));
-        stream_name.setText(channel.getName());
+        Stream stream = realm.where(Stream.class).equalTo("id", streamindex).findFirst();
+        if (stream.getChannel() > 0) {
+            Channel channel = realm.where(Channel.class).equalTo("number", stream.getChannel()).findFirst();
+            Glide.with(this).asBitmap().load(channel.getThumbnail()).into(stream_thumbnail);
+            stream_number.setText(String.valueOf(channel.getNumber()));
+            stream_name.setText(channel.getName());
+        } else {
+            Movie movie = realm.where(Movie.class).equalTo("id", stream.getMovie()).findFirst();
+            Glide.with(this).asBitmap().load(movie.getPoster()).into(stream_thumbnail);
+            stream_number.setText("");
+            stream_name.setText(movie.getTitle());
+        }
+
         if (xmsPlayer.hasDuration()) {
             progression_section.setVisibility(LinearLayout.VISIBLE);
         } else {
@@ -560,12 +577,12 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
                         R.animator.lb_onboarding_page_indicator_fade_out)
                 .remove(getFragmentManager().findFragmentByTag(TAG_BACKGROUND)).commit();
 
+        movieStreamid = movie.getStream().getId();
         streamList.clear();
         streamList.add(movie.getStream());
         xmsPlayer.initializePlayer();
         xmsPlayer.changeSource(streamList,false);
-        Glide.with(this).asBitmap().load(movie.getPoster()).into(stream_thumbnail);
-        stream_name.setText(movie.getTitle());
+        showChannelInfo(movie.getStream().getId(), 1000, true);
         IN_VOD = true;
     }
 
@@ -751,7 +768,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
      * and change the channel to the current channel number
      */
     private void cleaFragmentForPlayer () {
-        Channel channel = realm.where(Channel.class).equalTo("stream.id", currentStreamId).findFirst();
+        Channel channel = realm.where(Channel.class).equalTo("stream.id", currentChannelStreamId).findFirst();
         if (getFragmentManager().findFragmentByTag(TAG_BACKGROUND) != null) {
             xmsPlayer.initializePlayer();
             streamList.clear();
@@ -768,7 +785,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
             if (playerControlView.isVisible() && playerControlView.getShowTimeoutMs() == 0) {
                 playerControlView.hide();
             } else {
-                showChannelInfo(currentStreamId, 0, true);
+                showChannelInfo(currentChannelStreamId, 0, true);
             }
         }
         getFragmentManager().beginTransaction()

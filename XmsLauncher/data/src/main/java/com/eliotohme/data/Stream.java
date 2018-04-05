@@ -23,6 +23,10 @@ public class Stream extends RealmObject {
     private String sub_stream;
     @SerializedName("type")
     private int type;
+    @SerializedName("channel")
+    private int channel;
+    @SerializedName("movie")
+    private int movie;
 
     public Stream() {
     }
@@ -71,5 +75,21 @@ public class Stream extends RealmObject {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getChannel() {
+        return channel;
+    }
+
+    public void setChannel(int channel) {
+        this.channel = channel;
+    }
+
+    public int getMovie() {
+        return movie;
+    }
+
+    public void setMovie(int movie) {
+        this.movie = movie;
     }
 }
