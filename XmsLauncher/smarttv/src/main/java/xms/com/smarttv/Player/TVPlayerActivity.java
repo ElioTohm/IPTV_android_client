@@ -119,6 +119,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
 
         Intent notificationService = new Intent(this, NotificationService.class);
         this.startService(notificationService);
+
         realm = Realm.getDefaultInstance();
 
         /*
@@ -199,7 +200,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
                     IN_VOD = false;
                     xmsPlayer.releasePlayer();
                     detailSectionFragment = BackgroundImageFragment.newInstance(SectionMenuFragment.HEADER_ID_VOD);
-                    showDetailSection (R.id.Main, detailSectionFragment, TAG_BACKGROUND, false);
+//                    showDetailSection (R.id.Main, detailSectionFragment, TAG_BACKGROUND, false);
                     movieStreamid = 0;
                     return false;
                 }
@@ -428,32 +429,32 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
         } else if (item.getHeaderId() == HEADER_ID_RESTOANDBAR) {
             xmsPlayer.releasePlayer();
             detailSectionFragment = BackgroundImageFragment.newInstance(SectionMenuFragment.HEADER_ID_RESTOANDBAR);
-            showDetailSection (R.id.Main, detailSectionFragment,TAG_BACKGROUND , false);
+//            showDetailSection (R.id.Main, detailSectionFragment,TAG_BACKGROUND , false);
             detailSectionFragment = new RestaurantsNBarFragment();
             showDetailSection (R.id.fragment_container_details, detailSectionFragment, TAG_ITEMLIST, true);
         } else if (item.getHeaderId() == HEADER_ID_WEATHER) {
             xmsPlayer.releasePlayer();
             detailSectionFragment = BackgroundImageFragment.newInstance(SectionMenuFragment.HEADER_ID_WEATHER);
-            showDetailSection (R.id.Main, detailSectionFragment, TAG_BACKGROUND, false);
+//            showDetailSection (R.id.Main, detailSectionFragment, TAG_BACKGROUND, false);
             detailSectionFragment = new WeatherWidgetFragment();
             showDetailSection (R.id.fragment_container_details, detailSectionFragment, TAG_ITEMLIST, true);
         } else if (item.getHeaderId() == HEADER_ID_CITYGUIDE) {
             xmsPlayer.releasePlayer();
             detailSectionFragment = BackgroundImageFragment.newInstance(SectionMenuFragment.HEADER_ID_CITYGUIDE);
-            showDetailSection (R.id.Main, detailSectionFragment, TAG_BACKGROUND, false);
+//            showDetailSection (R.id.Main, detailSectionFragment, TAG_BACKGROUND, false);
             detailSectionFragment = new CityGuideFragment();
             showDetailSection (R.id.fragment_container_details, detailSectionFragment, TAG_ITEMLIST, true);
         } else if (item.getHeaderId() == HEADER_ID_SPAANDFITNESS) {
             xmsPlayer.releasePlayer();
             detailSectionFragment = BackgroundImageFragment.newInstance(SectionMenuFragment.HEADER_ID_SPAANDFITNESS);
-            showDetailSection (R.id.Main, detailSectionFragment, TAG_BACKGROUND, false);
+//            showDetailSection (R.id.Main, detailSectionFragment, TAG_BACKGROUND, false);
             detailSectionFragment = new SpaFitnessFragment();
             showDetailSection (R.id.fragment_container_details, detailSectionFragment, TAG_ITEMLIST, true);
         } else if (item.getHeaderId() == HEADER_ID_VOD) {
             xmsPlayer.releasePlayer();
             hideDetailSection(TAG_ITEMLIST);
             detailSectionFragment = BackgroundImageFragment.newInstance(SectionMenuFragment.HEADER_ID_VOD);
-            showDetailSection (R.id.Main, detailSectionFragment, TAG_BACKGROUND, false);
+//            showDetailSection (R.id.Main, detailSectionFragment, TAG_BACKGROUND, false);
             detailSectionFragment = new VODHomeFragment();
             showDetailSection (R.id.fragment_vod_list, detailSectionFragment, TAG_VOD, false);
             getFragmentManager().beginTransaction()
@@ -463,13 +464,13 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
         } else if (item.getHeaderId() == HEADER_ID_APPS) {
             xmsPlayer.releasePlayer();
             detailSectionFragment = BackgroundImageFragment.newInstance(SectionMenuFragment.HEADER_ID_HOTEL_INFO);
-            showDetailSection (R.id.Main, detailSectionFragment, TAG_BACKGROUND, false);
+//            showDetailSection (R.id.Main, detailSectionFragment, TAG_BACKGROUND, false);
             detailSectionFragment = new ApplicationsMenu();
             showDetailSection (R.id.fragment_container_details, detailSectionFragment, TAG_ITEMLIST, true);
         } else if (item.getHeaderId() == HEADER_ID_ACCOUNT) {
             xmsPlayer.releasePlayer();
             detailSectionFragment = BackgroundImageFragment.newInstance(SectionMenuFragment.HEADER_ID_ACCOUNT);
-            showDetailSection (R.id.Main, detailSectionFragment, TAG_BACKGROUND, false);
+//            showDetailSection (R.id.Main, detailSectionFragment, TAG_BACKGROUND, false);
             detailSectionFragment = new ClientAccountFragment();
             showDetailSection (R.id.fragment_container_details, detailSectionFragment, TAG_ITEMLIST, true);
         }
@@ -572,10 +573,10 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
                 .setCustomAnimations(R.animator.lb_onboarding_page_indicator_fade_in,
                         R.animator.lb_onboarding_page_indicator_fade_out)
                 .remove(getFragmentManager().findFragmentByTag(TAG_VODDETAIL)).commit();
-        getFragmentManager().beginTransaction()
-                .setCustomAnimations(R.animator.lb_onboarding_page_indicator_fade_in,
-                        R.animator.lb_onboarding_page_indicator_fade_out)
-                .remove(getFragmentManager().findFragmentByTag(TAG_BACKGROUND)).commit();
+//        getFragmentManager().beginTransaction()
+//                .setCustomAnimations(R.animator.lb_onboarding_page_indicator_fade_in,
+//                        R.animator.lb_onboarding_page_indicator_fade_out)
+//                .remove(getFragmentManager().findFragmentByTag(TAG_BACKGROUND)).commit();
 
         movieStreamid = movie.getStream().getId();
         streamList.clear();
@@ -701,7 +702,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
      */
     private void ShowHotelInfo () {
         detailSectionFragment = BackgroundImageFragment.newInstance(SectionMenuFragment.HEADER_ID_HOTEL_INFO);
-        showDetailSection (R.id.Main, detailSectionFragment, TAG_BACKGROUND, false);
+//        showDetailSection (R.id.Main, detailSectionFragment, TAG_BACKGROUND, false);
         detailSectionFragment = new HotelInfoFragment();
         showDetailSection (R.id.fragment_container_details, detailSectionFragment, TAG_ITEMLIST, true);
     }
@@ -775,10 +776,10 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
             streamList.add(channel.getStream());
             xmsPlayer.changeSource(streamList, true);
             hidebuttonSekector();
-            getFragmentManager().beginTransaction()
-                    .setCustomAnimations(R.animator.lb_onboarding_page_indicator_fade_in,
-                            R.animator.lb_onboarding_page_indicator_fade_out)
-                    .remove(getFragmentManager().findFragmentByTag(TAG_BACKGROUND)).commit();
+//            getFragmentManager().beginTransaction()
+//                    .setCustomAnimations(R.animator.lb_onboarding_page_indicator_fade_in,
+//                            R.animator.lb_onboarding_page_indicator_fade_out)
+//                    .remove(getFragmentManager().findFragmentByTag(TAG_BACKGROUND)).commit();
         }
         if (getFragmentManager().findFragmentByTag(TAG_ITEMLIST) == null &&
                 channelGridFragment.isHidden() && menuFragment.isHidden()) {

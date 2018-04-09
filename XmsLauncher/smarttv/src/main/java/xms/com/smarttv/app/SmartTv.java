@@ -2,14 +2,25 @@ package xms.com.smarttv.app;
 
 import android.app.Application;
 
+import java.net.URISyntaxException;
+
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
+import io.socket.client.IO;
+import io.socket.client.Socket;
 
 public class SmartTv extends Application {
     private static SmartTv instance;
 
     public static SmartTv getInstance() {
         return instance;
+    }
+
+    public Socket socket;
+    {
+        try {
+            socket = IO.socket("http://chat.socket.io");
+        } catch (URISyntaxException e) {}
     }
 
     /**
@@ -19,6 +30,14 @@ public class SmartTv extends Application {
     public void onCreate() {
         super.onCreate();
         instance = this;
+        Preferences.init(this);
+
+        try {
+            socket = IO.socket(Preferences.getNotificationPort());
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+
         // Initialize Realm
         Realm.init(this);
 
@@ -29,7 +48,9 @@ public class SmartTv extends Application {
                 .build();
         Realm.setDefaultConfiguration(realmConfiguration);
 
-        Preferences.init(this);
+    }
 
+    public Socket getSocket () {
+        return this.socket;
     }
 }

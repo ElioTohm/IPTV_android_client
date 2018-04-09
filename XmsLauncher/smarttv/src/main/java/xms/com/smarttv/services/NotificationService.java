@@ -35,6 +35,7 @@ import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 import xms.com.smarttv.R;
 import xms.com.smarttv.app.Preferences;
+import xms.com.smarttv.app.SmartTv;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
@@ -48,6 +49,8 @@ public class NotificationService extends IntentService {
 
     private String TAG = "TEST";
 
+    private Socket socket = SmartTv.getInstance().getSocket();
+
     public NotificationService() {
         super("NotificationService");
     }
@@ -56,9 +59,7 @@ public class NotificationService extends IntentService {
     protected void onHandleIntent(@Nullable Intent intent) {
         Log.e(TAG, "ECHO START...");
         try {
-
             connectNotificationChannel();
-
         } catch (URISyntaxException e) {
             Log.e(TAG, "ECHO ERROR");
             e.printStackTrace();
@@ -144,7 +145,6 @@ public class NotificationService extends IntentService {
      * @throws URISyntaxException
      */
     private void connectNotificationChannel () throws URISyntaxException {
-        final Socket socket = IO.socket(Preferences.getNotificationPort());
 
         socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
             @Override
@@ -184,6 +184,10 @@ public class NotificationService extends IntentService {
                 }
 
                 socket.emit("subscribe", object);
+
+                channelMonitoring("test");
+
+
             }
         }).on("App\\Events\\NotificationEvent", new Emitter.Listener() {
             @Override
@@ -210,11 +214,30 @@ public class NotificationService extends IntentService {
         }).on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
             @Override
             public void call(Object... args) {
-            Log.e(TAG, "ECHO DISCONNECTED");
+                Log.e(TAG, "ECHO DISCONNECTED");
             }
         });
 
         socket.connect();
+    }
+
+
+    public void channelMonitoring (String channel) {
+        JSONObject object = new JSONObject();
+        JSONObject auth = new JSONObject();
+        JSONObject headers = new JSONObject();
+
+        try {
+            object.put("channel", "presence-Online-Whisper");
+            object.put("name", "subscribe");
+            headers.put("Authorization", "Bearer " + Realm.getDefaultInstance().where(User.class).findFirst().getAccess_token());
+            auth.put("headers", headers);
+            object.put("auth", auth);
+            object.put("typing", channel);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        socket.emit("typing", object);
     }
 
 }

@@ -243,7 +243,7 @@ public class DVBPlayer extends Activity {
         ftPplayer = new RTPPlayer(DVBPlayer.this, surfaceView,
                 new XmsPlayerUICallback() {
                     @Override
-                    public void showChannelInfo(int channelindex) {
+                    public void showChannelInfo(int channelindex, int duration, boolean update) {
                         Channel channel = channelArrayList.get(channelindex);
                         currentChannel.setText(String.valueOf(channel.getNumber()));
                         channelName.setText(channel.getName());
@@ -257,24 +257,5 @@ public class DVBPlayer extends Activity {
                         mChannelInfoHandler.removeCallbacks(mChannelInfoRunnable);
                         mChannelInfoHandler.postDelayed(mChannelInfoRunnable, 5000);
                     }
-                }, 1280, 720);
-//        xmsPlayer = new XmsPlayer(this, simpleExoPlayerView, channelArrayList, USER_NAME,
-//                new XmsPlayerUICallback() {
-//                    @Override
-//                    public void showChannelInfo(int channelindex) {
-//                        Channel channel = channelArrayList.get(channelindex);
-//                        currentChannel.setText(String.valueOf(channel.getNumber()));
-//                        channelName.setText(channel.getName());
-//                        channelInfo.setVisibility(View.VISIBLE);
-//                        Handler mChannelInfoHandler=new Handler();
-//                        Runnable mChannelInfoRunnable=new Runnable() {
-//                            public void run() {
-//                                channelInfo.setVisibility(View.INVISIBLE);
-//                            }
-//                        };
-//                        mChannelInfoHandler.removeCallbacks(mChannelInfoRunnable);
-//                        mChannelInfoHandler.postDelayed(mChannelInfoRunnable, 5000);
-//                    }
-//                }, null, null);
-    }
+                }, 1280, 720); }
 }

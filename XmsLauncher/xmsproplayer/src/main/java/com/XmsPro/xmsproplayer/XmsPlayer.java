@@ -162,7 +162,6 @@ public class XmsPlayer  {
                                             .createMediaSource(channel_stream_uri);
                     break;
                 case Stream.MISC:
-                    this.playerview.showController();
                     if (defaultExtractorsFactory == null) {
                         defaultExtractorsFactory = new DefaultExtractorsFactory();
                     }
@@ -211,7 +210,7 @@ public class XmsPlayer  {
         }
 
         // set the mediasource and play when ready
-        player.prepare(buildMediaSource(streams));
+        playerview.setPlayer(player);
         player.setPlayWhenReady(true);
 
     }
@@ -233,7 +232,6 @@ public class XmsPlayer  {
      */
     public void changeSource(List<Stream> streams, boolean showinfo) {
         player.prepare(buildMediaSource(streams));
-        playerview.setPlayer(player);
         playerControlView.setPlayer(player);
         if (showinfo) {
             xmsPlayerUICallback.showChannelInfo(streams.get(0).getId(), 1000, false

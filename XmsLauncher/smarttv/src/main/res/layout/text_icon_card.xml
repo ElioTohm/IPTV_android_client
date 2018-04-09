@@ -72,8 +72,7 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_gravity="center_vertical"
-            android:adjustViewBounds="true"
-            android:src="@drawable/stars_white"/>
+            android:adjustViewBounds="true"/>
 
     </android.support.v17.leanback.widget.NonOverlappingRelativeLayout>
 </merge>

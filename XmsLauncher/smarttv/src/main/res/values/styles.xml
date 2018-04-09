@@ -19,7 +19,6 @@
 
     <!-- Various movie card styles. Used in cards example. -->
     <style name="MovieCardBadgeStyle" parent="Widget.Leanback.ImageCardView.BadgeStyle">
-        <item name="android:src">@drawable/stars_red</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:scaleType">center</item>
     </style>
