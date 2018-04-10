@@ -48,7 +48,7 @@ public class OnboardingFragment extends android.support.v17.leanback.app.Onboard
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Set the logo to display a splash animation
-        setLogoResourceId(R.drawable.fracarro);
+        setLogoResourceId(R.drawable.app_icon);
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             name = bundle.getString("name");

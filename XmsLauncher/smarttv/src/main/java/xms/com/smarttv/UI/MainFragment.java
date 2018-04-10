@@ -179,7 +179,7 @@ public class MainFragment extends BrowseFragment {
 
     private void setupUIElements() {
          setBadgeDrawable(getActivity().getResources().getDrawable(
-         R.drawable.fracarro));
+         R.drawable.app_icon));
         setTitle(getString(R.string.browse_title)); // Badge, when set, takes precedent
         // over title
         setHeadersState(HEADERS_ENABLED);

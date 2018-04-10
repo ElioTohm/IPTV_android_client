@@ -6,7 +6,7 @@
     android:orientation="vertical">
 
     <ImageView
-        android:src="@drawable/fracarro"
+        android:src="@drawable/app_icon"
         android:layout_width="match_parent"
         android:layout_height="85dp"
         android:scaleType="center"

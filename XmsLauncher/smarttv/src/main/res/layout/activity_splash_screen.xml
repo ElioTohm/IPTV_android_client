@@ -12,7 +12,7 @@
         android:scaleType="fitXY"
         android:layout_centerInParent="true"
         android:id="@+id/iconview"
-        android:src="@drawable/fracarro"/>
+        android:src="@drawable/app_icon"/>
 
     <ProgressBar
         android:id="@+id/progressBar"

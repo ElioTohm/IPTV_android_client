@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="120dp"
         android:id="@+id/DefaultIcon"
-        android:src="@drawable/fracarro" />
+        android:src="@drawable/app_icon" />
 
     <TextView
         android:layout_marginTop="30dp"
