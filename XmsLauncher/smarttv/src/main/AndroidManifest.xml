@@ -12,7 +12,8 @@
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
-    <uses-permission android:name="android.permission.INSTALL_PACKAGES"
+    <uses-permission
+        android:name="android.permission.INSTALL_PACKAGES"
         tools:ignore="ProtectedPermissions" />
 
     <uses-feature
@@ -36,7 +37,6 @@
         android:largeHeap="true"
         android:launchMode="singleTop"
         android:supportsRtl="true"
-
         android:theme="@style/Theme.Leanback">
         <activity
             android:name=".UI.MainActivity"
@@ -81,8 +81,13 @@
             android:name=".services.GetInstalledAppService"
             android:exported="false" />
 
-        <activity android:name=".UI.VOD.VODActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+        <activity
+            android:name=".UI.VOD.VODActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+        <service
+            android:name=".services.MonitoringService"
+            android:exported="false"></service>
     </application>
 
 </manifest>

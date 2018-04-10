@@ -26,7 +26,6 @@ import com.eliotohme.data.User;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.URISyntaxException;
 
 import io.realm.Realm;
 import io.socket.client.Socket;
@@ -55,13 +54,44 @@ public class NotificationService extends IntentService {
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
-        try {
-            connectNotificationChannel();
-            Log.e(TAG, "ECHO START...");
-        } catch (URISyntaxException e) {
-            Log.e(TAG, "ECHO ERROR");
-            e.printStackTrace();
-        }
+        socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                socket.emit(EVENT_SUBSCRIBE, Realm.getDefaultInstance().where(User.class).findFirst().getRoom());
+            }
+        })
+        .on(EVENT_BROADCASTNOTIFICATION, new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                JSONObject obj = (JSONObject)args[0];
+                Notification notification = new Notification();
+                try {
+                    JSONObject message = obj.getJSONObject("message");
+                    notification.setType(message.getInt("type"));
+                    notification.setMessage(message.getString("message"));
+                    notification.setImage(message.getString("image"));
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                final Notification finalNotification = notification;
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        checkDrawOverlayPermission(finalNotification);
+                    }
+                });
+
+            }
+        })
+        .on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                Log.e(TAG, "ECHO DISCONNECTED");
+            }
+        });
+
+        socket.connect();
     }
 
     public void checkDrawOverlayPermission(Notification notification) {
@@ -135,52 +165,6 @@ public class NotificationService extends IntentService {
             }
         });
 
-    }
-
-    /**
-     * connects to private notification channel
-     * connects tp presence channel
-     * @throws URISyntaxException
-     */
-    private void connectNotificationChannel () throws URISyntaxException {
-        socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                socket.emit(EVENT_SUBSCRIBE, Realm.getDefaultInstance().where(User.class).findFirst().getRoom());
-            }
-        })
-        .on(EVENT_BROADCASTNOTIFICATION, new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                JSONObject obj = (JSONObject)args[0];
-                Notification notification = new Notification();
-                try {
-                    JSONObject message = obj.getJSONObject("message");
-                    notification.setType(message.getInt("type"));
-                    notification.setMessage(message.getString("message"));
-                    notification.setImage(message.getString("image"));
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                final Notification finalNotification = notification;
-                new Handler(Looper.getMainLooper()).post(new Runnable() {
-                    @Override
-                    public void run() {
-                        checkDrawOverlayPermission(finalNotification);
-                    }
-                });
-
-            }
-        })
-        .on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                Log.e(TAG, "ECHO DISCONNECTED");
-            }
-        });
-
-        socket.connect();
     }
 
 }
