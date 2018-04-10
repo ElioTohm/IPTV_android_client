@@ -113,11 +113,7 @@ public class SplashScreen extends Activity {
                                     // save token
                                     TKN = response.body().getAccess_token();
                                     TKN_TYPE = response.body().getToken_type();
-                                    User user = new User();
-                                    user.setId(response.body().getId());
-                                    user.setAccess_token(response.body().getAccess_token());
-                                    user.setToken_type(response.body().getToken_type());
-                                    realm.insertOrUpdate(user);
+                                    realm.insertOrUpdate(response.body());
                                 }
                             });
                             getSections();

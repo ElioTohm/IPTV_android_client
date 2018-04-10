@@ -60,8 +60,14 @@ public class ClientAccountFragment extends Fragment {
         purchases.setLayoutManager(new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false));
         purchases.setAdapter(new PurchasesAdapter(Realm.getDefaultInstance().where(Purchase.class).findAll(), false));
 
-        clientname.setText(String.format("%s's Account",client.getName()));
-        balance.setText(Integer.toString(client.getBalance()));
+        if (client != null) {
+            clientname.setText(String.format("%s's Account",client.getName()));
+            balance.setText(Integer.toString(client.getBalance()));
+
+        } else {
+            clientname.setText("No Checked in Client Yet");
+            balance.setText("");
+        }
 
         Card roomservice = new Card();
         roomservice.setTitle("Room Service");

@@ -48,7 +48,6 @@ import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 public class NotificationService extends IntentService {
 
     private String TAG = "TEST";
-
     private Socket socket = SmartTv.getInstance().getSocket();
 
     public NotificationService() {
@@ -57,9 +56,9 @@ public class NotificationService extends IntentService {
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
-        Log.e(TAG, "ECHO START...");
         try {
             connectNotificationChannel();
+            Log.e(TAG, "ECHO START...");
         } catch (URISyntaxException e) {
             Log.e(TAG, "ECHO ERROR");
             e.printStackTrace();
@@ -126,7 +125,7 @@ public class NotificationService extends IntentService {
         Glide.with(context)
                 .load(notification.getImage())
                 .into(notificationImage);
-//
+
         final WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
 
         windowManager.addView(notificationView, params);
@@ -145,54 +144,55 @@ public class NotificationService extends IntentService {
      * @throws URISyntaxException
      */
     private void connectNotificationChannel () throws URISyntaxException {
-
         socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
             @Override
             public void call(Object... args) {
-                JSONObject object = new JSONObject();
-                JSONObject auth = new JSONObject();
-                JSONObject headers = new JSONObject();
-
-                try {
-                    object.put("channel", "private-Notification_To_" + Realm.getDefaultInstance().where(User.class).findFirst().getId());
-                    object.put("name", "subscribe");
-                    headers.put("Authorization", "Bearer " + Realm.getDefaultInstance().where(User.class).findFirst().getAccess_token());
-                    auth.put("headers", headers);
-                    object.put("auth", auth);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-                socket.emit("subscribe", object, new Ack() {
+//                JSONObject object = new JSONObject();
+//                JSONObject auth = new JSONObject();
+//                JSONObject headers = new JSONObject();
+//
+//                try {
+//                    object.put("channel", "private-Notification_To_" + Realm.getDefaultInstance().where(User.class).findFirst().getId());
+//                    object.put("name", "subscribe");
+//                    headers.put("Authorization", "Bearer " + Realm.getDefaultInstance().where(User.class).findFirst().getAccess_token());
+//                    auth.put("headers", headers);
+//                    object.put("auth", auth);
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//
+//                socket.emit("subscribe", object, new Ack() {
+//                    @Override
+//                    public void call(Object... args) {
+//                        Log.e(TAG, "ECHO SUBSCRIBED");
+//                    }
+//                });
+//
+//                Log.e(TAG, "ECHO CONNECTED to ONLINE");
+//                object = new JSONObject();
+//
+//                try {
+//                    object.put("channel", "presence-Online");
+//                    object.put("name", "subscribe");
+//                    headers.put("Authorization", "Bearer " + Realm.getDefaultInstance().where(User.class).findFirst().getAccess_token());
+//                    auth.put("headers", headers);
+//                    object.put("auth", auth);
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+                socket.on("notification", new Emitter.Listener() {
                     @Override
                     public void call(Object... args) {
-                        Log.e(TAG, "ECHO SUBSCRIBED");
+
                     }
                 });
-
-                Log.e(TAG, "ECHO CONNECTED to ONLINE");
-                object = new JSONObject();
-
-                try {
-                    object.put("channel", "presence-Online");
-                    object.put("name", "subscribe");
-                    headers.put("Authorization", "Bearer " + Realm.getDefaultInstance().where(User.class).findFirst().getAccess_token());
-                    auth.put("headers", headers);
-                    object.put("auth", auth);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-                socket.emit("subscribe", object);
-
-                channelMonitoring("test");
-
-
+                socket.emit("add user", Realm.getDefaultInstance().where(User.class).findFirst().getRoom());
             }
-        }).on("App\\Events\\NotificationEvent", new Emitter.Listener() {
+        })
+        .on("new message", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
-                JSONObject obj = (JSONObject)args[1];
+                JSONObject obj = (JSONObject)args[0];
                 Notification notification = new Notification();
                 try {
                     notification.setType(obj.getInt("type"));
@@ -211,7 +211,8 @@ public class NotificationService extends IntentService {
                 });
 
             }
-        }).on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
+        })
+        .on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
             @Override
             public void call(Object... args) {
                 Log.e(TAG, "ECHO DISCONNECTED");
@@ -219,25 +220,6 @@ public class NotificationService extends IntentService {
         });
 
         socket.connect();
-    }
-
-
-    public void channelMonitoring (String channel) {
-        JSONObject object = new JSONObject();
-        JSONObject auth = new JSONObject();
-        JSONObject headers = new JSONObject();
-
-        try {
-            object.put("channel", "presence-Online-Whisper");
-            object.put("name", "subscribe");
-            headers.put("Authorization", "Bearer " + Realm.getDefaultInstance().where(User.class).findFirst().getAccess_token());
-            auth.put("headers", headers);
-            object.put("auth", auth);
-            object.put("typing", channel);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        socket.emit("typing", object);
     }
 
 }

@@ -4,10 +4,15 @@ package com.eliotohme.data;
 import com.google.gson.annotations.SerializedName;
 
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 public class User extends RealmObject {
+    @PrimaryKey
     @SerializedName("id")
     private int id;
+
+    @SerializedName("room")
+    private String room;
 
     @SerializedName("error")
     private int error;
@@ -55,4 +60,12 @@ public class User extends RealmObject {
     }
 
     public int getError() { return error; }
+
+    public String getRoom() {
+        return room;
+    }
+
+    public void setRoom(String room) {
+        this.room = room;
+    }
 }

@@ -17,11 +17,6 @@ public class SmartTv extends Application {
     }
 
     public Socket socket;
-    {
-        try {
-            socket = IO.socket("http://chat.socket.io");
-        } catch (URISyntaxException e) {}
-    }
 
     /**
      * init Application Class to init Realm
