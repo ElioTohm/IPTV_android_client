@@ -18,9 +18,11 @@ import xms.com.smarttv.app.SmartTv;
 public class MonitoringService extends IntentService {
 
     private Socket socket = SmartTv.getInstance().getSocket();
-    private String TAG = "Watching";
-    private String EVENT_MONITORING = "Monitoring";
-    private String channelName;
+    public static String TAG_STREAM = "stream";
+    public static String TAG_ACTIVITY = "activity";
+    public static String EVENT_MONITORING = "Monitoring";
+    private String stream;
+    private String activity;
 
     /**
      * Creates an IntentService.  Invoked by your subclass's constructor.
@@ -32,16 +34,28 @@ public class MonitoringService extends IntentService {
     @Override
     public void onStart(@Nullable Intent intent, int startId) {
         super.onStart(intent, startId);
-        this.channelName = intent.getStringExtra("Watching");
+        if (intent.getStringExtra(TAG_STREAM) != null) {
+            this.stream = intent.getStringExtra(TAG_STREAM);
+        }
+        if (intent.getStringExtra(TAG_ACTIVITY) != null) {
+            this.activity = intent.getStringExtra(TAG_ACTIVITY);
+        }
+
     }
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
-        Log.e(TAG, "ECHO START...");
         JSONObject monitor = new JSONObject();
         try {
+
             monitor.put("device", Realm.getDefaultInstance().where(User.class).findFirst().getRoom());
-            monitor.put("stream", this.channelName);
+            if (this.stream != null) {
+                monitor.put("stream", this.stream);
+            }
+            if (this.activity != null) {
+                monitor.put("activity", this.activity);
+            }
+
         } catch (JSONException e) {
             e.printStackTrace();
         }

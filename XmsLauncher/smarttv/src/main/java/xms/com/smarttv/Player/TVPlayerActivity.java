@@ -408,6 +408,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
                 streamList.add(channel.getStream());
                 xmsPlayer.changeSource(streamList, showinfo);
                 currentChannelStreamId = channel.getStream().getId();
+                monitor(MonitoringService.TAG_STREAM, channel.getName());
             }
         }
     }
@@ -426,6 +427,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
      */
     @Override
     public void onSectionClicked(CustomHeaderItem item) {
+        monitor(MonitoringService.TAG_ACTIVITY, item.getName());
         if (item.getHeaderId() == HEADER_ID_CHANNELS) {
             cleaFragmentForPlayer();
         } else if (item.getHeaderId() == HEADER_ID_HOTEL_INFO) {
@@ -513,10 +515,6 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
 
         playerControlView.setShowTimeoutMs(duration);
         playerControlView.show();
-
-        Intent monitoring = new Intent(this, MonitoringService.class);
-        monitoring.putExtra("Watching", watching);
-        this.startService(monitoring);
     }
 
     @Override
@@ -595,6 +593,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
         streamList.add(movie.getStream());
         xmsPlayer.initializePlayer();
         xmsPlayer.changeSource(streamList,false);
+        monitor(MonitoringService.TAG_STREAM, movie.getTitle());
         showChannelInfo(movie.getStream().getId(), 1000, true);
         IN_VOD = true;
     }
@@ -741,7 +740,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
                         Realm subrealm = Realm.getDefaultInstance();
                         Client client = subrealm.where(Client.class).findFirst();
                         if (client != null ) {
-                            if (!response.body().getEmail().equals(client.getEmail())) {
+                            if (response.body() !=null && !response.body().getEmail().equals(client.getEmail())) {
                                 ShowHotelInfo();
                             } else {
                                 xmsPlayer.initializePlayer();
@@ -791,6 +790,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
             streamList.clear();
             streamList.add(channel.getStream());
             xmsPlayer.changeSource(streamList, true);
+            monitor(MonitoringService.TAG_STREAM, channel.getName());
             hidebuttonSekector();
             getFragmentManager().beginTransaction()
                     .setCustomAnimations(R.animator.lb_onboarding_page_indicator_fade_in,
@@ -814,6 +814,12 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
                 .setCustomAnimations(R.animator.lb_onboarding_page_indicator_fade_in,
                         R.animator.lb_onboarding_page_indicator_fade_out)
                 .hide(menuFragment).commit();
+    }
+
+    private void monitor (String TAG, String info) {
+        Intent monitoring = new Intent(this, MonitoringService.class);
+        monitoring.putExtra(TAG, info);
+        this.startService(monitoring);
     }
 
 }
