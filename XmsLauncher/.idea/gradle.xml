@@ -11,6 +11,7 @@
             <option value="$PROJECT_DIR$/data" />
             <option value="$PROJECT_DIR$/dvb" />
             <option value="$PROJECT_DIR$/ffmpeg" />
+            <option value="$PROJECT_DIR$/multiviewer" />
             <option value="$PROJECT_DIR$/smarttv" />
             <option value="$PROJECT_DIR$/xmsproplayer" />
           </set>

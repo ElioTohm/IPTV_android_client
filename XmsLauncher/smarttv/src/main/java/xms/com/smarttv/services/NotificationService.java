@@ -46,7 +46,7 @@ public class NotificationService extends IntentService {
     private String TAG = "TEST";
     private Socket socket = SmartTv.getInstance().getSocket();
     private String EVENT_SUBSCRIBE = "Subscribe";
-    private String EVENT_BROADCASTNOTIFICATION = "BroadCastNotification";
+    private String EVENT_BROADCASTNOTIFICATION = "Notification ";
 
     public NotificationService() {
         super("NotificationService");
@@ -54,6 +54,7 @@ public class NotificationService extends IntentService {
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
+        EVENT_BROADCASTNOTIFICATION = EVENT_BROADCASTNOTIFICATION + Realm.getDefaultInstance().where(User.class).findFirst().getRoom();
         socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
             @Override
             public void call(Object... args) {
@@ -146,8 +147,8 @@ public class NotificationService extends IntentService {
         params.gravity = Gravity.END | Gravity.TOP;
         params.x = 0;
         params.y = 0;
-        params.width = 600;
-        params.height = 350;
+        params.width = 800;
+        params.height = 250;
 
         notificationText.setText(notification.getMessage());
 

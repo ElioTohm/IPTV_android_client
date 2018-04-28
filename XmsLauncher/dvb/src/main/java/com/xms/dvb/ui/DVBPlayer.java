@@ -238,7 +238,7 @@ public class DVBPlayer extends Activity {
         SurfaceView surfaceView = findViewById(R.id.surface);
         USER_NAME = 1;
         realm = Realm.getDefaultInstance();
-        channelArrayList.addAll(realm.where(Channel.class).findAllSorted("number"));
+        channelArrayList.addAll(realm.where(Channel.class).findAll().sort("number"));
 
         ftPplayer = new RTPPlayer(DVBPlayer.this, surfaceView,
                 new XmsPlayerUICallback() {

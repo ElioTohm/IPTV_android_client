@@ -1,1 +1,1 @@
-include ':smarttv', ':ffmpeg', ':xmsproplayer', ':data', ':dvb'
+include ':smarttv', ':ffmpeg', ':xmsproplayer', ':data', ':dvb', ':multiviewer'

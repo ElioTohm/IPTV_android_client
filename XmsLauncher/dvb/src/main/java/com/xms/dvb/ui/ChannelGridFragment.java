@@ -59,7 +59,7 @@ public class ChannelGridFragment extends HeadersFragment {
         final Realm realm = Realm.getDefaultInstance();
 
         // get all genre
-        channelRealmResults = realm.where(Channel.class).findAllSorted("number");
+        channelRealmResults = realm.where(Channel.class).findAll().sort("number");
 
         // loop in result genre to create row genre for channels
         for (Channel channel : channelRealmResults) {

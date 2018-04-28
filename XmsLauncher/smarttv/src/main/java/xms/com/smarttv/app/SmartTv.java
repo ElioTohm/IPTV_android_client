@@ -2,6 +2,8 @@ package xms.com.smarttv.app;
 
 import android.app.Application;
 
+import com.eliotohme.data.Migration;
+
 import java.net.URISyntaxException;
 
 import io.realm.Realm;
@@ -39,7 +41,8 @@ public class SmartTv extends Application {
         // set @realmConfiguration for development database will be rewritten on change
         final RealmConfiguration realmConfiguration = new RealmConfiguration.Builder()
                 .name(Realm.DEFAULT_REALM_NAME)
-                .deleteRealmIfMigrationNeeded()
+                .schemaVersion(2) // Must be bumped when the schema changes
+                .migration(new Migration()) // Migration to run
                 .build();
         Realm.setDefaultConfiguration(realmConfiguration);
 
