@@ -1,5 +1,6 @@
 package xms.com.smarttv.Player;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
@@ -92,7 +93,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
     private final String TAG_VOD = "VOD";
     private final String TAG_VODDETAIL = "VOD_Detail";
     private final String TAG_VODLIST = "VOD_List";
-
+    private PlayerView simpleExoPlayerView;
     boolean doubleBackToExitPressedOnce = false;
     boolean IN_VOD = false;
     private XmsPlayer xmsPlayer;
@@ -109,6 +110,16 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
     private Fragment detailSectionFragment = null;
     private ImageButton audio_button, video_button, sub_button;
     private PlayerControlView playerControlView;
+
+    @SuppressLint("InlinedApi")
+    private void hideSystemUi() {
+        simpleExoPlayerView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
+                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,7 +166,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
         Channel firstchannel = realm.where(Channel.class).equalTo("number", 1).findFirst();
         currentChannelStreamId = firstchannel.getStream().getId();
         streamList.add(firstchannel.getStream());
-        PlayerView simpleExoPlayerView = findViewById(R.id.simpleexoplayerview);
+        simpleExoPlayerView = findViewById(R.id.simpleexoplayerview);
         xmsPlayer = new XmsPlayer(this, simpleExoPlayerView, playerControlView, streamList,
                 realm.where(User.class).findFirst().getToken_type(), realm.where(User.class).findFirst().getAccess_token());
     }
@@ -173,6 +184,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
     @Override
     public void onResume() {
         super.onResume();
+        hideSystemUi();
         xmsPlayer.initializePlayer();
     }
 

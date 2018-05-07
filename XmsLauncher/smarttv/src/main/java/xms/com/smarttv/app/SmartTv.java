@@ -29,11 +29,7 @@ public class SmartTv extends Application {
         instance = this;
         Preferences.init(this);
 
-        try {
-            socket = IO.socket(Preferences.getNotificationPort());
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
+        setSocket();
 
         // Initialize Realm
         Realm.init(this);
@@ -41,8 +37,8 @@ public class SmartTv extends Application {
         // set @realmConfiguration for development database will be rewritten on change
         final RealmConfiguration realmConfiguration = new RealmConfiguration.Builder()
                 .name(Realm.DEFAULT_REALM_NAME)
-                .schemaVersion(2) // Must be bumped when the schema changes
-                .migration(new Migration()) // Migration to run
+                .schemaVersion(1) // Must be bumped when the schema changes
+                .deleteRealmIfMigrationNeeded()
                 .build();
         Realm.setDefaultConfiguration(realmConfiguration);
 
@@ -50,5 +46,14 @@ public class SmartTv extends Application {
 
     public Socket getSocket () {
         return this.socket;
+    }
+
+    public void setSocket () {
+        try {
+            socket = IO.socket(Preferences.getNotificationPort());
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+
     }
 }

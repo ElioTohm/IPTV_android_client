@@ -52,7 +52,7 @@ public final class ServiceAppList {
 
         int[] drawables = {
             R.drawable.tv,
-            R.drawable.weather,
+            R.drawable.tv,
             R.drawable.serviceroom,
             R.drawable.shop,
             R.drawable.map

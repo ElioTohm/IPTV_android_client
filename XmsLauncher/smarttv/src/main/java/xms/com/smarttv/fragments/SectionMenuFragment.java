@@ -31,19 +31,17 @@ public class SectionMenuFragment extends Fragment {
     private static final String HEADER_NAME_RESTOANDBAR = "Restaurants & Bars";
     public static final int HEADER_ID_SPAANDFITNESS = 3;
     private static final String HEADER_NAME_SPAANDFITNESS = "Spa & Fitness";
-    public static final int HEADER_ID_OFFERS = 4;
-    private static final String HEADER_NAME_OFFERS  = "Special Offers";
-    public static final int HEADER_ID_WEATHER = 5;
+    public static final int HEADER_ID_WEATHER = 4;
     private static final String HEADER_NAME_WEATHER = "Weather";
-    public static final int HEADER_ID_CITYGUIDE = 6;
+    public static final int HEADER_ID_CITYGUIDE = 5;
     private static final String HEADER_NAME_CITYGUIDE = "City Guide";
-    public static final int HEADER_ID_CHANNELS = 7;
+    public static final int HEADER_ID_CHANNELS = 6;
     private static final String HEADER_NAME_CHANNELS = "Live TV";
-    public static final int HEADER_ID_VOD = 8;
+    public static final int HEADER_ID_VOD = 7;
     private static final String HEADER_NAME_VOD = "VOD";
-    public static final int HEADER_ID_ACCOUNT = 9;
+    public static final int HEADER_ID_ACCOUNT = 8;
     private static final String HEADER_NAME_ACCOUNT = "Your Account";
-    public static final int HEADER_ID_APPS = 10;
+    public static final int HEADER_ID_APPS = 9;
     private static final String HEADER_NAME_APPS = "Applications";
 
 

@@ -55,6 +55,11 @@ public class NotificationService extends IntentService {
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
         EVENT_BROADCASTNOTIFICATION = EVENT_BROADCASTNOTIFICATION + Realm.getDefaultInstance().where(User.class).findFirst().getRoom();
+        if (socket == null) {
+            SmartTv.getInstance().setSocket();
+            socket = SmartTv.getInstance().getSocket();
+        }
+
         socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
             @Override
             public void call(Object... args) {

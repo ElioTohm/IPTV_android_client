@@ -1,10 +1,20 @@
 package com.eliotohme.data;
 
+import android.support.annotation.NonNull;
+import android.util.Log;
+
+import com.eliotohme.data.network.ApiInterface;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
+import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmObject;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class Section extends RealmObject {
     @SerializedName("id")
@@ -98,6 +108,34 @@ public class Section extends RealmObject {
 
     public void setSectionItem(RealmList<SectionItem> sectionItem) {
         this.sectionItem = sectionItem;
+    }
+
+
+    public void getlist_network (ApiInterface apiInterface) {
+        Call<List<Section>> channelCall = apiInterface.getSections();
+        channelCall.enqueue(new Callback<List<Section>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<Section>> call, @NonNull final Response<List<Section>> response) {
+                Realm backgroundRealm = Realm.getDefaultInstance();
+                backgroundRealm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        if (response.code() == 200) {
+                            if (realm.where(Section.class).findAll().size() > 0 ) {
+                                realm.delete(Section.class);
+                            }
+                            if (realm.where(SectionItem.class).findAll().size() > 0 ) {
+                                realm.delete(SectionItem.class);
+                            }
+                            realm.insertOrUpdate(response.body());
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<List<Section>> call, @NonNull Throwable t) {}
+        });
     }
 
 }

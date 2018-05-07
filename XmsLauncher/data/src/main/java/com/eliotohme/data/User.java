@@ -68,4 +68,5 @@ public class User extends RealmObject {
     public void setRoom(String room) {
         this.room = room;
     }
+
 }

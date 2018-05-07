@@ -1,13 +1,21 @@
 package com.eliotohme.data;
 
+import android.support.annotation.NonNull;
+
+import com.eliotohme.data.network.ApiInterface;
+import com.eliotohme.data.network.ApiService;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 import java.util.List;
 
+import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmObject;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class Movie extends RealmObject implements Serializable {
     @SerializedName("id")
@@ -134,5 +142,31 @@ public class Movie extends RealmObject implements Serializable {
 
     public void setPurchased(boolean purchased) {
         this.purchased = purchased;
+    }
+
+    public void getlist_network (ApiInterface apiInterface) {
+        Call<List<Movie>> movieCall = apiInterface.getMovies();
+        movieCall.enqueue(new Callback<List<Movie>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<Movie>> call, @NonNull final Response<List<Movie>> response) {
+                if (response.code() == 200) {
+                    Realm.getDefaultInstance().executeTransactionAsync(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            if (realm.where(Movie.class).findAll().size() >0 ) {
+                                realm.delete(Movie.class);
+                                realm.delete(Genre.class);
+                            }
+                            realm.insertOrUpdate(response.body());
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Movie>> call, Throwable t) {
+
+            }
+        });
     }
 }

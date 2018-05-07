@@ -19,13 +19,13 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.eliotohme.data.Channel;
-import com.eliotohme.data.Genre;
+import com.eliotohme.data.HotelService;
 import com.eliotohme.data.Movie;
 import com.eliotohme.data.Section;
-import com.eliotohme.data.SectionItem;
 import com.eliotohme.data.User;
 import com.eliotohme.data.network.ApiInterface;
 import com.eliotohme.data.network.ApiService;
+import com.eliotohme.data.network.ModelNetworkCallback;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -33,7 +33,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.ref.WeakReference;
-import java.util.List;
 
 import io.realm.Realm;
 import okhttp3.ResponseBody;
@@ -44,12 +43,12 @@ import xms.com.smarttv.Player.TVPlayerActivity;
 import xms.com.smarttv.R;
 import xms.com.smarttv.app.Preferences;
 
-public class SplashScreen extends Activity {
+public class SplashScreen extends Activity implements ModelNetworkCallback {
     private Realm realm;
     private User user;
     private  String TKN_TYPE;
     private String TKN;
-
+    private ApiInterface apiInterface= null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,7 +64,6 @@ public class SplashScreen extends Activity {
                 // if user is found continue
                 TKN_TYPE = user.getToken_type();
                 TKN = user.getAccess_token();
-
                 checkForUpdate();
             } else {
                 // if user row is null register device
@@ -98,7 +96,7 @@ public class SplashScreen extends Activity {
             public void onClick(final DialogInterface dialog, int id) {
                 Preferences.setServerUrl(String.valueOf(serverURI.getText()));
                 // register client
-                final ApiInterface apiInterface = ApiService.createService(ApiInterface.class, String.valueOf(serverURI.getText()));
+                apiInterface = ApiService.createService(ApiInterface.class, String.valueOf(serverURI.getText()));
 
                 Call<User> userCall = apiInterface.registerdevice(Integer.parseInt(user_id.getText().toString()),
                         user_secret.getText().toString());
@@ -116,7 +114,6 @@ public class SplashScreen extends Activity {
                                     realm.insertOrUpdate(response.body());
                                 }
                             });
-                            getSections();
                             getStreams();
                         } else {
                             registerdevice();
@@ -125,7 +122,7 @@ public class SplashScreen extends Activity {
                     @Override
                     public void onFailure(@NonNull Call<User> call, @NonNull Throwable t) {
                         t.printStackTrace();
-                        Connectiondialoghandler();
+                        callError();
                     }
                 });
 
@@ -139,147 +136,8 @@ public class SplashScreen extends Activity {
      * function will always be called when device is turned on
      */
     private void getStreams () {
-        ApiInterface apiInterface = ApiService.createService(ApiInterface.class, Preferences.getServerUrl(), TKN_TYPE, TKN);
-        Call<List<Channel>> channelCall = apiInterface.getChannel();
-        channelCall.enqueue(new Callback<List<Channel>>() {
-            @Override
-            public void onResponse(@NonNull Call<List<Channel>> call, @NonNull final Response<List<Channel>> response) {
-                Realm backgroundRealm = Realm.getDefaultInstance();
-                backgroundRealm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                    if (response.code() == 200) {
-                        realm.delete(Channel.class);
-                        realm.delete(Genre.class);
-                        realm.insertOrUpdate(response.body());
-                        startTVplayer();
-                        finish();
-                    } else {
-                        realm.deleteAll();
-                        registerdevice();
-                    }
-                    }
-                });
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<List<Channel>> call, @NonNull Throwable t) {
-                Log.e("TEST", String.valueOf(t));
-                Connectiondialoghandler();
-            }
-        });
-
-        Call<List<Movie>> movieCall = apiInterface.getMovies();
-        movieCall.enqueue(new Callback<List<Movie>>() {
-            @Override
-            public void onResponse(@NonNull Call<List<Movie>> call, @NonNull final Response<List<Movie>> response) {
-                if (response.code() == 200) {
-                    Realm.getDefaultInstance().executeTransactionAsync(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
-                            if (realm.where(Movie.class).findAll().size() >0 ) {
-                                realm.delete(Movie.class);
-                                realm.delete(Genre.class);
-                            }
-                            realm.insertOrUpdate(response.body());
-                        }
-                    });
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Movie>> call, Throwable t) {
-
-            }
-        });
-    }
-
-    private void getSections () {
-        ApiInterface apiInterface = ApiService.createService(ApiInterface.class, Preferences.getServerUrl(), TKN_TYPE, TKN);
-        Call<List<Section>> channelCall = apiInterface.getSections();
-        channelCall.enqueue(new Callback<List<Section>>() {
-            @Override
-            public void onResponse(@NonNull Call<List<Section>> call, @NonNull final Response<List<Section>> response) {
-                Realm backgroundRealm = Realm.getDefaultInstance();
-                backgroundRealm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        if (response.code() == 200) {
-                            if (realm.where(Section.class).findAll().size() > 0 ) {
-                                realm.delete(Section.class);
-                            }
-                            if (realm.where(SectionItem.class).findAll().size() > 0 ) {
-                                realm.delete(SectionItem.class);
-                            }
-                            realm.insertOrUpdate(response.body());
-                        }
-                    }
-                });
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<List<Section>> call, @NonNull Throwable t) {
-                Log.e("TEST", String.valueOf(t));
-                Connectiondialoghandler();
-            }
-        });
-
-        Call<List<Movie>> movieCall = apiInterface.getMovies();
-        movieCall.enqueue(new Callback<List<Movie>>() {
-            @Override
-            public void onResponse(@NonNull Call<List<Movie>> call, @NonNull final Response<List<Movie>> response) {
-                if (response.code() == 200) {
-                    Realm.getDefaultInstance().executeTransactionAsync(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
-                            if (realm.where(Movie.class).findAll().size() >0 ) {
-                                realm.delete(Movie.class);
-                                realm.delete(Genre.class);
-                            }
-                            realm.insertOrUpdate(response.body());
-                        }
-                    });
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Movie>> call, Throwable t) {
-
-            }
-        });
-    }
-
-    /**
-     * Start Tvplayer by default
-     */
-    private void startTVplayer (){
-        // start TVplayer
-        startActivity(new Intent(getApplication(), TVPlayerActivity.class));
-        finish();
-    }
-
-    private void Connectiondialoghandler () {
-        new AlertDialog.Builder(SplashScreen.this)
-                .setMessage("Can not connect please try again")
-                .setCancelable(false)
-                .setNegativeButton("Retry", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        getSections();
-                        getStreams();
-                    }
-                })
-                .setPositiveButton("Register", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                    registerdevice();
-                    }
-                })
-                .setNeutralButton("Settings", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                    startActivityForResult(new Intent(android.provider.Settings.ACTION_SETTINGS), 0);
-                    }
-                })
-                .show();
+        apiInterface = ApiService.createService(ApiInterface.class, Preferences.getServerUrl(), TKN_TYPE, TKN);
+        new Channel().getlist_network(apiInterface, this);
     }
 
     private void checkForUpdate () {
@@ -291,7 +149,7 @@ public class SplashScreen extends Activity {
             e.printStackTrace();
         }
 
-        ApiInterface apiInterface = ApiService.createService(ApiInterface.class,Preferences.getServerUrl(), TKN_TYPE, TKN);
+        apiInterface = ApiService.createService(ApiInterface.class,Preferences.getServerUrl(), TKN_TYPE, TKN);
         Call<ResponseBody> call = apiInterface.checkUpdate(appversion);
 
         call.enqueue(new Callback<ResponseBody>() {
@@ -307,11 +165,9 @@ public class SplashScreen extends Activity {
                         Toast.makeText(SplashScreen.this,"Downloading Updates...", Toast.LENGTH_LONG).show();
                         new SaveApk(SplashScreen.this).execute(response);
                     } else {
-                        getSections();
                         getStreams();
                     }
                 } else {
-                    getSections();
                     getStreams();
                 }
             }
@@ -319,9 +175,49 @@ public class SplashScreen extends Activity {
             @Override
             public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
                 Log.e("TEST", t.toString());
-                Connectiondialoghandler();
+                callError();
             }
         });
+    }
+
+    @Override
+    public void callPassed() {
+        new Section().getlist_network(apiInterface);
+        new Movie().getlist_network(apiInterface);
+        new HotelService().getlist_network(apiInterface);
+        // start TVplayer
+        startActivity(new Intent(getApplication(), TVPlayerActivity.class));
+        finish();
+    }
+
+    @Override
+    public void callFailed() {
+        registerdevice();
+    }
+
+    @Override
+    public void callError() {
+
+        new AlertDialog.Builder(SplashScreen.this)
+                .setMessage("Can not connect please try again")
+                .setCancelable(false)
+                .setNegativeButton("Retry", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        getStreams();
+                    }
+                })
+                .setPositiveButton("Register", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        registerdevice();
+                    }
+                })
+                .setNeutralButton("Settings", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        startActivityForResult(new Intent(android.provider.Settings.ACTION_SETTINGS), 0);
+                    }
+                })
+                .show();
     }
 
     private static class SaveApk extends AsyncTask<Response<ResponseBody>, Void, Void> {
