@@ -50,8 +50,6 @@ public interface ApiInterface {
     @GET("/api/services")
     Call<List<HotelService>> getService();
 
-
-
     @Streaming
     @GET
     Call<ResponseBody> downloadFileWithDynamicUrlSync(@Url String fileUrl);

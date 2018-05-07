@@ -16,7 +16,15 @@ public class HotelService extends RealmObject {
     private String name;
     private String action;
     private String tag;
+    private String icon;
 
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
 
     public HotelService() {
     }

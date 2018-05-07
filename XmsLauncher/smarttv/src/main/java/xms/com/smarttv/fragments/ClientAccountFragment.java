@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.eliotohme.data.Client;
+import com.eliotohme.data.HotelService;
 import com.eliotohme.data.Purchase;
 
 import java.util.ArrayList;
@@ -69,32 +70,14 @@ public class ClientAccountFragment extends Fragment {
             balance.setText("");
         }
 
-        Card roomservice = new Card();
-        roomservice.setTitle("Room Service");
-        roomservice.setImageUrl(Preferences.getServerUrl() + "/storage/hotel/images/roomservice.png");
-        Card assistance = new Card();
-        assistance.setTitle("Assistance");
-        assistance.setImageUrl(Preferences.getServerUrl() + "/storage/hotel/images/assistance.png");
-        Card housekeeper = new Card();
-        housekeeper.setTitle("HouseKeeper");
-        housekeeper.setImageUrl(Preferences.getServerUrl() + "/storage/hotel/images/housekeeper.png");
-        Card survey = new Card();
-        survey.setTitle("Survey");
-        survey.setImageUrl(Preferences.getServerUrl() + "/storage/hotel/images/survey.png");
-        Card parentalcontrol= new Card();
-        parentalcontrol.setTitle("Parental Control");
-        parentalcontrol.setImageUrl(Preferences.getServerUrl() + "/storage/hotel/images/parentalcontrol.png");
-        Card instantmessaging = new Card();
-        instantmessaging.setTitle("Instant Messaging");
-        instantmessaging.setImageUrl(Preferences.getServerUrl() + "/storage/hotel/images/instantmessaging.png");
-
         List<Card> mRowsAdapter  = new ArrayList<>() ;
-        mRowsAdapter.add(assistance);
-        mRowsAdapter.add(roomservice);
-        mRowsAdapter.add(housekeeper);
-        mRowsAdapter.add(parentalcontrol);
-        mRowsAdapter.add(instantmessaging);
-        mRowsAdapter.add(survey);
+        List<HotelService> hotelServices = Realm.getDefaultInstance().where(HotelService.class).findAll();
+        for (HotelService hotelService : hotelServices) {
+            Card roomservice = new Card();
+            roomservice.setTitle(hotelService.getName());
+            roomservice.setImageUrl(hotelService.getIcon());
+            mRowsAdapter.add(roomservice);
+        }
         actionsRecyclerView.setAdapter(new AccountActionsAdapter(mRowsAdapter, mListener));
 
         return view;
