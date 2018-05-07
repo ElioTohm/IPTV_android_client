@@ -22,22 +22,20 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    api fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:' + project.ext.supportLibraryVersion
-    compile 'com.android.support:cardview-v7:' + project.ext.supportLibraryVersion
-    compile 'com.android.support:recyclerview-v7:' + project.ext.supportLibraryVersion
-    compile 'com.android.support:leanback-v17:' + project.ext.supportLibraryVersion
-    compile 'com.google.android.exoplayer:extension-leanback:' + project.ext.releaseVersion
+    implementation 'com.android.support:appcompat-v7:' + project.ext.supportLibraryVersion
+    implementation 'com.android.support:cardview-v7:' + project.ext.supportLibraryVersion
+    implementation 'com.android.support:recyclerview-v7:' + project.ext.supportLibraryVersion
+    implementation 'com.google.android.exoplayer:extension-leanback:' + project.ext.releaseVersion
     //player
-    compile 'de.mrmaffen:libvlc-android:2.1.12@aar'
-    compile 'com.google.android.exoplayer:exoplayer:' + project.ext.releaseVersion
-    compile 'com.google.android.exoplayer:extension-okhttp:' + project.ext.releaseVersion
-    testCompile 'junit:junit:4.12'
-    compile 'com.android.support:leanback-v17:' + project.ext.supportLibraryVersion
-    compile project(':ffmpeg')
-    compile project(path: ':data')
+    api 'de.mrmaffen:libvlc-android:2.1.12@aar'
+    api 'com.google.android.exoplayer:exoplayer:' + project.ext.releaseVersion
+    api 'com.google.android.exoplayer:extension-okhttp:' + project.ext.releaseVersion
+    testImplementation 'junit:junit:4.12'
+    api project(':ffmpeg')
+    api project(path: ':data')
 
 }

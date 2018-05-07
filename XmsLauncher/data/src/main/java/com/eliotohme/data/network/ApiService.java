@@ -1,7 +1,5 @@
 package com.eliotohme.data.network;
 
-import android.support.v4.BuildConfig;
-
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
@@ -25,12 +23,12 @@ public class ApiService {
 
         Retrofit retrofit = builder.build();
 
-        if (BuildConfig.DEBUG) {
-            HttpLoggingInterceptor debuginterceptor = new HttpLoggingInterceptor();
-            debuginterceptor.setLevel(HttpLoggingInterceptor.Level.HEADERS);
+//        if (BuildConfig.DEBUG) {
+        HttpLoggingInterceptor debuginterceptor = new HttpLoggingInterceptor();
+        debuginterceptor.setLevel(HttpLoggingInterceptor.Level.HEADERS);
 
-            httpClient.addInterceptor(debuginterceptor);
-        }
+        httpClient.addInterceptor(debuginterceptor);
+//        }
 
         if (authToken != null && tokenType != null) {
             AuthenticationInterceptor interceptor = new AuthenticationInterceptor(tokenType, authToken);

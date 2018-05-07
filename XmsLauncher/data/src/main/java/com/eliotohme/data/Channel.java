@@ -11,7 +11,7 @@ import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
 public class Channel extends RealmObject implements Serializable {
-    @PrimaryKey
+//    @PrimaryKey
     @SerializedName("id")
     @Expose
     private Integer id;

@@ -15,7 +15,6 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion project.ext.compileSdkVersion
-    buildToolsVersion project.ext.buildToolsVersion
 
     defaultConfig {
         minSdkVersion project.ext.minSdkVersion
@@ -27,11 +26,11 @@ android {
         jniLibs.srcDir 'src/main/libs'
         jni.srcDirs = [] // Disable the automatic ndk-build call by Android Studio.
     }
+    buildToolsVersion '27.0.3'
 }
 
 dependencies {
-//    compile project(':xmsplayer')
-    compile 'com.google.android.exoplayer:exoplayer:' + project.ext.releaseVersion
+    implementation 'com.google.android.exoplayer:exoplayer:' + project.ext.releaseVersion
 }
 
 

@@ -31,20 +31,21 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:leanback-v17:' + project.ext.supportLibraryVersion
-    compile project(':xmsproplayer')
-    compile('io.socket:socket.io-client:1.0.0') {
+    api fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.android.support:leanback-v17:' + project.ext.supportLibraryVersion
+    implementation project(':xmsproplayer')
+    implementation project(':data')
+    implementation('io.socket:socket.io-client:1.0.0') {
         // excluding org.json which is provided by Android
         exclude group: 'org.json', module: 'json'
     }
-    compile 'com.android.support.constraint:constraint-layout:' + project.ext.constraintlayout
-    compile 'com.github.bumptech.glide:glide:' + project.ext.glide
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation 'com.android.support.constraint:constraint-layout:' + project.ext.constraintlayout
+    implementation 'com.github.bumptech.glide:glide:' + project.ext.glide
+    implementation 'com.android.support.constraint:constraint-layout:1.1.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:' + project.ext.glide
-    compile 'com.android.support:recyclerview-v7:' + project.ext.supportLibraryVersion
-    compile 'com.android.support:support-v4:' + project.ext.supportLibraryVersion
-    compile 'com.android.support:support-vector-drawable:' + project.ext.supportLibraryVersion
-    compile 'org.osmdroid:osmdroid-android:' + project.ext.osm
-    compile 'io.realm:android-adapters:2.1.1'
+    implementation 'com.android.support:recyclerview-v7:' + project.ext.supportLibraryVersion
+    implementation 'com.android.support:support-v4:' + project.ext.supportLibraryVersion
+    implementation 'com.android.support:support-vector-drawable:' + project.ext.supportLibraryVersion
+    implementation 'org.osmdroid:osmdroid-android:' + project.ext.osm
+    api 'io.realm:android-adapters:2.1.1'
 }

@@ -12,7 +12,7 @@ public class Stream extends RealmObject {
     public final static int SS = 4;
     public final static int MISC = 5;
 
-    @PrimaryKey
+//    @PrimaryKey
     @SerializedName("id")
     private int id;
     @SerializedName("vid_stream")
@@ -31,7 +31,7 @@ public class Stream extends RealmObject {
     public Stream() {
     }
 
-    public Stream(String vid_stream, String sub_stream, int type) {
+    public Stream(int id,String vid_stream, String sub_stream, int type) {
         this.vid_stream = vid_stream;
         this.sub_stream = sub_stream;
         this.type = type;

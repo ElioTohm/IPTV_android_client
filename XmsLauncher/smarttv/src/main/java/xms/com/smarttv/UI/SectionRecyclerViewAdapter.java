@@ -40,7 +40,7 @@ public class SectionRecyclerViewAdapter extends RecyclerView.Adapter<SectionRecy
         holder.section = mValues.get(position);
         holder.section_name.setText(holder.section.getName());
         Glide.with(holder.mView.getContext())
-            .load(holder.mView.getContext().getResources().getDrawable(holder.section.getIconResId()))
+            .load(holder.section.getIconUrl())
             .into(holder.imageView);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {

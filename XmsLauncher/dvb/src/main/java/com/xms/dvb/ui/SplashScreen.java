@@ -48,9 +48,10 @@ public class SplashScreen extends Activity {
         setContentView(R.layout.activity_splash);
         realm = Realm.getDefaultInstance();
         User user = realm.where(User.class).findFirst();
-        if (user == null || user.getAccess_token().equals(null) || user.getAccess_token().equals("")) {
-            registerdevice();
-        } else if (realm.where(Channel.class).count() > 0) {
+//        if (user == null || user.getAccess_token().equals(null) || user.getAccess_token().equals("")) {
+//            registerdevice();
+//        } else
+            if (realm.where(Channel.class).count() > 0) {
             if (Preferences.getStartingUrl().equals("")) {
                 new DownloadXmlTask().execute();
             } else {
@@ -285,15 +286,17 @@ public class SplashScreen extends Activity {
                 int increamnetedport = port;
                 for (int i = 1; i <= channelNumber; i ++ ) {
                     Channel channel = new Channel();
-                    Stream stream = new Stream(startUrl.substring(0,lastindex)+ "." + increamented + ":" + increamnetedport,
+                    Stream stream = new Stream(1,startUrl.substring(0,lastindex)+ "." + increamented + ":" + increamnetedport,
                             null, 1);
                     increamented  = (increamented  + uri_hopes);
                     increamnetedport = increamnetedport + port_hope;
                     channel.setStream(stream);
                     channel.setNumber(i);
+                    channel.setId(1);
                     channel.setName("Unkown");
                     channels.add(channel);
                 }
+
 
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override

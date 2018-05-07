@@ -90,7 +90,7 @@ public class SplashScreen extends Activity {
         final EditText user_id = view.findViewById(R.id.text_ID);
         final EditText user_secret = view.findViewById(R.id.text_secret);
         final EditText serverURI = view.findViewById(R.id.server_url);
-        serverURI.setText(getResources().getString(R.string.defaultserverURL));
+        serverURI.setText(getResources().getString(R.string.defaultDEVURL));
 
         // set cancelable to true to be able to fix network before registery
         dialog.setCancelable(false);
@@ -205,10 +205,10 @@ public class SplashScreen extends Activity {
                     @Override
                     public void execute(Realm realm) {
                         if (response.code() == 200) {
-                            if (realm.where(Section.class).findAll().size() >0 ) {
+                            if (realm.where(Section.class).findAll().size() > 0 ) {
                                 realm.delete(Section.class);
                             }
-                            if (realm.where(SectionItem.class).findAll().size() >0 ) {
+                            if (realm.where(SectionItem.class).findAll().size() > 0 ) {
                                 realm.delete(SectionItem.class);
                             }
                             realm.insertOrUpdate(response.body());

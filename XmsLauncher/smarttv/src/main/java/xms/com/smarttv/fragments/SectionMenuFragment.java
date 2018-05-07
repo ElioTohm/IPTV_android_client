@@ -10,9 +10,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.eliotohme.data.Section;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import io.realm.Realm;
 import xms.com.smarttv.R;
 import xms.com.smarttv.UI.CustomHeaderItem;
 import xms.com.smarttv.UI.SectionRecyclerViewAdapter;
@@ -22,25 +25,25 @@ public class SectionMenuFragment extends Fragment {
     private static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 1;
     private SectionMenuFragmentListener mListener;
-    public static final int HEADER_ID_HOTEL_INFO = 0;
+    public static final int HEADER_ID_HOTEL_INFO = 1;
     private static final String HEADER_NAME_HOTEL_INFO = "Hotel Info";
-    public static final int HEADER_ID_RESTOANDBAR = 1;
+    public static final int HEADER_ID_RESTOANDBAR = 2;
     private static final String HEADER_NAME_RESTOANDBAR = "Restaurants & Bars";
-    public static final int HEADER_ID_SPAANDFITNESS = 2;
+    public static final int HEADER_ID_SPAANDFITNESS = 3;
     private static final String HEADER_NAME_SPAANDFITNESS = "Spa & Fitness";
-    public static final int HEADER_ID_OFFERS = 3;
+    public static final int HEADER_ID_OFFERS = 4;
     private static final String HEADER_NAME_OFFERS  = "Special Offers";
-    public static final int HEADER_ID_WEATHER = 4;
+    public static final int HEADER_ID_WEATHER = 5;
     private static final String HEADER_NAME_WEATHER = "Weather";
-    public static final int HEADER_ID_CITYGUIDE = 5;
+    public static final int HEADER_ID_CITYGUIDE = 6;
     private static final String HEADER_NAME_CITYGUIDE = "City Guide";
-    public static final int HEADER_ID_CHANNELS = 6;
+    public static final int HEADER_ID_CHANNELS = 7;
     private static final String HEADER_NAME_CHANNELS = "Live TV";
-    public static final int HEADER_ID_VOD = 7;
+    public static final int HEADER_ID_VOD = 8;
     private static final String HEADER_NAME_VOD = "VOD";
-    public static final int HEADER_ID_ACCOUNT = 3;
+    public static final int HEADER_ID_ACCOUNT = 9;
     private static final String HEADER_NAME_ACCOUNT = "Your Account";
-    public static final int HEADER_ID_APPS = 8;
+    public static final int HEADER_ID_APPS = 10;
     private static final String HEADER_NAME_APPS = "Applications";
 
 
@@ -80,25 +83,13 @@ public class SectionMenuFragment extends Fragment {
         } else {
             recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
         }
-        CustomHeaderItem info = new CustomHeaderItem(HEADER_ID_HOTEL_INFO, HEADER_NAME_HOTEL_INFO, R.drawable.info);
-        CustomHeaderItem bar = new CustomHeaderItem(HEADER_ID_RESTOANDBAR, HEADER_NAME_RESTOANDBAR, R.drawable.bar);
-        CustomHeaderItem fitness = new CustomHeaderItem(HEADER_ID_SPAANDFITNESS, HEADER_NAME_SPAANDFITNESS, R.drawable.gym);
-        CustomHeaderItem weather = new CustomHeaderItem(HEADER_ID_WEATHER, HEADER_NAME_WEATHER, R.drawable.weather);
-        CustomHeaderItem cityguide = new CustomHeaderItem(HEADER_ID_CITYGUIDE, HEADER_NAME_CITYGUIDE, R.drawable.compass);
-        CustomHeaderItem livechannels = new CustomHeaderItem(HEADER_ID_CHANNELS, HEADER_NAME_CHANNELS, R.drawable.live);
-        CustomHeaderItem vod = new CustomHeaderItem(HEADER_ID_VOD, HEADER_NAME_VOD, R.drawable.vod);
-        CustomHeaderItem account = new CustomHeaderItem(HEADER_ID_ACCOUNT, HEADER_NAME_ACCOUNT, R.drawable.account);
-        CustomHeaderItem apps = new CustomHeaderItem(HEADER_ID_APPS, HEADER_NAME_APPS, R.drawable.apps);
+
         List<CustomHeaderItem> mRowsAdapter  = new ArrayList<>() ;
-        mRowsAdapter.add(info);
-        mRowsAdapter.add(livechannels);
-        mRowsAdapter.add(vod);
-        mRowsAdapter.add(bar);
-        mRowsAdapter.add(fitness);
-        mRowsAdapter.add(weather);
-        mRowsAdapter.add(cityguide);
-        mRowsAdapter.add(apps);
-        mRowsAdapter.add(account);
+        Realm realm = Realm.getDefaultInstance();
+        List<Section> sections = realm.where(Section.class).findAll();
+        for (Section section : sections) {
+            mRowsAdapter.add(new CustomHeaderItem(section.getId(), section.getName(), section.getIcon()));
+        }
         recyclerView.setAdapter(new SectionRecyclerViewAdapter(mRowsAdapter, mListener));
         return view;
     }

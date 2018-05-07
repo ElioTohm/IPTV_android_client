@@ -7,36 +7,31 @@ public class CustomHeaderItem extends HeaderItem {
 
     private long ID;
     private static final String TAG = CustomHeaderItem.class.getSimpleName();
-    public static final int ICON_NONE = -1;
+    private String iconUrl;
 
-    /**
-     * Hold an icon resource id
-     */
-    private int mIconResId = ICON_NONE;
-
-    public CustomHeaderItem(long id, String name, int iconResId) {
+    public CustomHeaderItem(long id, String name, String iconUrl) {
         super(id, name);
         this.ID = id;
-        mIconResId = iconResId;
+        this.iconUrl = iconUrl;
     }
 
     public CustomHeaderItem(long id, String name) {
-        this(id, name, ICON_NONE);
+        this(id, name, "");
     }
 
     public CustomHeaderItem(String name) {
         super(name);
     }
 
-    public int getIconResId() {
-        return mIconResId;
+    public String getIconUrl() {
+        return iconUrl;
     }
 
     public long getHeaderId() {
         return this.ID;
     }
 
-    public void setIconResId(int iconResId) {
-        this.mIconResId = iconResId;
+    public void setIconResId(String iconResId) {
+        this.iconUrl = iconResId;
     }
 }
