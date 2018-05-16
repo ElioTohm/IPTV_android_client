@@ -499,16 +499,13 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
     @Override
     public void showChannelInfo(int streamindex, int duration, boolean update) {
         Stream stream = realm.where(Stream.class).equalTo("id", streamindex).findFirst();
-        String watching= "";
         if (stream.getChannel() > 0) {
             Channel channel = realm.where(Channel.class).equalTo("number", stream.getChannel()).findFirst();
-            watching = channel.getName();
             Glide.with(this).asBitmap().load(channel.getThumbnail()).into(stream_thumbnail);
             stream_number.setText(String.valueOf(channel.getNumber()));
             stream_name.setText(channel.getName());
         } else {
             Movie movie = realm.where(Movie.class).equalTo("id", stream.getMovie()).findFirst();
-            watching = movie.getTitle();
             Glide.with(this).asBitmap().load(movie.getPoster()).into(stream_thumbnail);
             stream_number.setText("");
             stream_name.setText(movie.getTitle());

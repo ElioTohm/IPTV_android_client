@@ -30,7 +30,9 @@ import org.json.JSONObject;
 import io.realm.Realm;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
+import xms.com.smarttv.Player.TVPlayerActivity;
 import xms.com.smarttv.R;
+import xms.com.smarttv.UI.SplashScreen;
 import xms.com.smarttv.app.SmartTv;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
@@ -47,6 +49,7 @@ public class NotificationService extends IntentService {
     private Socket socket = SmartTv.getInstance().getSocket();
     private String EVENT_SUBSCRIBE = "Subscribe";
     private String EVENT_BROADCASTNOTIFICATION = "Notification ";
+    private String EVENT_RESTART = "restart";
 
     public NotificationService() {
         super("NotificationService");
@@ -88,6 +91,14 @@ public class NotificationService extends IntentService {
                     }
                 });
 
+            }
+        })
+        .on(EVENT_RESTART, new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                Intent dialogIntent = new Intent(getBaseContext(), SplashScreen.class);
+                dialogIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                getApplication().startActivity(dialogIntent);
             }
         })
         .on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
