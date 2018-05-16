@@ -2,7 +2,9 @@ package xms.com.smarttv.Player;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -48,6 +50,7 @@ import retrofit2.Response;
 import xms.com.smarttv.R;
 import xms.com.smarttv.UI.ApplicationsMenu;
 import xms.com.smarttv.UI.CustomHeaderItem;
+import xms.com.smarttv.UI.SplashScreen;
 import xms.com.smarttv.UI.VOD.VODHomeFragment;
 import xms.com.smarttv.app.Preferences;
 import xms.com.smarttv.fragments.BackgroundImageFragment;
@@ -749,12 +752,38 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
                         Realm subrealm = Realm.getDefaultInstance();
                         Client client = subrealm.where(Client.class).findFirst();
                         if (client != null ) {
-                            if (response.body() !=null && !response.body().getEmail().equals(client.getEmail())) {
-                                ShowHotelInfo();
+                            if (response.body().getId() != null) {
+                                if (!response.body().getEmail().equals(client.getEmail())) {
+                                    ShowHotelInfo();
+                                } else {
+                                    xmsPlayer.initializePlayer();
+                                    xmsPlayer.changeSource(streamList, true);
+                                }
                             } else {
-                                xmsPlayer.initializePlayer();
-                                xmsPlayer.changeSource(streamList, true);
+                                new AlertDialog.Builder(TVPlayerActivity.this)
+                                        .setMessage("No client registered in this room retry later when client is registered")
+                                        .setCancelable(false)
+                                        .setNegativeButton("Retry", new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                Intent dialogIntent = new Intent(getBaseContext(), SplashScreen.class);
+                                                dialogIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                getApplication().startActivity(dialogIntent);
+                                            }
+                                        })
+                                        .show();
                             }
+                        } else {
+                            new AlertDialog.Builder(TVPlayerActivity.this)
+                                    .setMessage("No client registered in this room retry later when client is registered")
+                                    .setCancelable(false)
+                                    .setNegativeButton("Retry", new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            Intent dialogIntent = new Intent(getBaseContext(), SplashScreen.class);
+                                            dialogIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                            getApplication().startActivity(dialogIntent);
+                                        }
+                                    })
+                                    .show();
                         }
                         subrealm.executeTransaction(new Realm.Transaction() {
                             @Override
