@@ -137,7 +137,7 @@
 
     <!-- default server URL -->
     <string name="defaultSERVERURL">http://</string>
-    <string name="defaultDEVURL">http://192.168.0.75</string>
+    <string name="defaultDEVURL">http://192.168.103.103</string>
     <string name="audio">Audio</string>
     <string name="subtitles">Subtitles</string>
     <string name="video">Video</string>

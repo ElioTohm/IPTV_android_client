@@ -11,6 +11,8 @@ import android.widget.TextView;
 import android.widget.ViewFlipper;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 
 import xms.com.smarttv.R;
 import xms.com.smarttv.app.Preferences;
@@ -65,8 +67,6 @@ public class BackgroundImageFragment extends Fragment {
             case SectionMenuFragment.HEADER_ID_SPAANDFITNESS:
                 gallery = new String[]{
                         Preferences.getServerUrl() + "/storage/hotel/images/spa1.png",
-//                        "/storage/hotel/images/spa2.png",
-//                        "/storage/hotel/images/gym1.png",
                         Preferences.getServerUrl() + "/storage/hotel/images/gym2.png"
                 };
                 break;
@@ -94,8 +94,11 @@ public class BackgroundImageFragment extends Fragment {
             ImageView imageView = new ImageView(view.getContext());
             imageView.setScaleType(ImageView.ScaleType.FIT_XY);
             viewflipper.addView(imageView);
+//            RequestOptions myOptions = new RequestOptions()
+//                    .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true);
             Glide.with(view.getContext())
                     .load(imageurl)
+//                    .apply(myOptions)
                     .into(imageView);
         }
 

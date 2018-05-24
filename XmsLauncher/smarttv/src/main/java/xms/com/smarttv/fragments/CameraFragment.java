@@ -42,7 +42,7 @@ public class CameraFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_camera, container, false);
         SurfaceView surfaceView = view.findViewById(R.id.video_door);
-        RTPPlayer = new RTPPlayer(getActivity(), surfaceView,null, 600, 350);
+//        RTPPlayer = new RTPPlayer(getActivity(), surfaceView, 600, 350);
         RTPPlayer.createPlayer();
         RTPPlayer.SetSource("rtsp://192.168.10.102:554/user=admin&password=&channel=1&stream=0.sdp");
 //        videoView = view.findViewById(R.id.video_door);

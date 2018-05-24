@@ -170,7 +170,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
         currentChannelStreamId = firstchannel.getStream().getId();
         streamList.add(firstchannel.getStream());
         simpleExoPlayerView = findViewById(R.id.simpleexoplayerview);
-        xmsPlayer = new XmsPlayer(this, simpleExoPlayerView, playerControlView, streamList,
+        xmsPlayer = new XmsPlayer(this, simpleExoPlayerView, playerControlView,
                 realm.where(User.class).findFirst().getToken_type(), realm.where(User.class).findFirst().getAccess_token());
     }
 
@@ -514,7 +514,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
             stream_name.setText(movie.getTitle());
         }
 
-        if (xmsPlayer.hasDuration()) {
+        if (xmsPlayer.getDuration() > 0) {
             progression_section.setVisibility(LinearLayout.VISIBLE);
         } else {
             progression_section.setVisibility(LinearLayout.INVISIBLE);

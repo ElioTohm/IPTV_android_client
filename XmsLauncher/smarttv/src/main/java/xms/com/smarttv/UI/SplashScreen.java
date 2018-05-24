@@ -214,7 +214,8 @@ public class SplashScreen extends Activity implements ModelNetworkCallback {
                 .setNeutralButton("Settings", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        startActivityForResult(new Intent(android.provider.Settings.ACTION_SETTINGS), 0);
+                        Intent LaunchIntent = getPackageManager().getLaunchIntentForPackage("com.android.tv.settings");
+                        startActivity( LaunchIntent );
                     }
                 })
                 .show();

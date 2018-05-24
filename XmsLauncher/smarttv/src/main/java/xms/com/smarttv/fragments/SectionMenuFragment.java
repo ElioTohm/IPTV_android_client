@@ -26,23 +26,14 @@ public class SectionMenuFragment extends Fragment {
     private int mColumnCount = 1;
     private SectionMenuFragmentListener mListener;
     public static final int HEADER_ID_HOTEL_INFO = 1;
-    private static final String HEADER_NAME_HOTEL_INFO = "Hotel Info";
-    public static final int HEADER_ID_RESTOANDBAR = 2;
-    private static final String HEADER_NAME_RESTOANDBAR = "Restaurants & Bars";
-    public static final int HEADER_ID_SPAANDFITNESS = 3;
-    private static final String HEADER_NAME_SPAANDFITNESS = "Spa & Fitness";
-    public static final int HEADER_ID_WEATHER = 4;
-    private static final String HEADER_NAME_WEATHER = "Weather";
-    public static final int HEADER_ID_CITYGUIDE = 5;
-    private static final String HEADER_NAME_CITYGUIDE = "City Guide";
+    public static final int HEADER_ID_SPAANDFITNESS = 2;
+    public static final int HEADER_ID_CITYGUIDE = 3;
+    public static final int HEADER_ID_RESTOANDBAR = 4;
+    public static final int HEADER_ID_WEATHER = 5;
     public static final int HEADER_ID_CHANNELS = 6;
-    private static final String HEADER_NAME_CHANNELS = "Live TV";
     public static final int HEADER_ID_VOD = 7;
-    private static final String HEADER_NAME_VOD = "VOD";
     public static final int HEADER_ID_ACCOUNT = 8;
-    private static final String HEADER_NAME_ACCOUNT = "Your Account";
     public static final int HEADER_ID_APPS = 9;
-    private static final String HEADER_NAME_APPS = "Applications";
 
 
     public SectionMenuFragment() {

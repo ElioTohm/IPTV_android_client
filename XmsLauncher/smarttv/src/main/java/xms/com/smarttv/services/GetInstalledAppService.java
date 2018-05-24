@@ -29,6 +29,7 @@ public class GetInstalledAppService extends IntentService {
             realm.executeTransactionAsync(new Realm.Transaction() {
                 @Override
                 public void execute(@NonNull Realm realm) {
+                    realm.delete(InstalledApps.class);
                     realm.insertOrUpdate(installedApps);
                 }
             });
@@ -49,6 +50,15 @@ public class GetInstalledAppService extends IntentService {
             ApplicationInfo ai = pm.getApplicationInfo(packinfo.packageName, 0);
 
             if ((ai.flags & ApplicationInfo.FLAG_SYSTEM) == 0 && !packinfo.applicationInfo.loadLabel(getApplication().getPackageManager()).toString().equals(getString(R.string.app_name))) {
+                InstalledApps installedApps = new InstalledApps();
+                installedApps.setAppname(packinfo.applicationInfo.loadLabel(getApplication().getPackageManager()).toString());
+                installedApps.setPname(packinfo.packageName);
+                installedApps.setVersionName(packinfo.versionName);
+                installedApps.setVersionCode(packinfo.versionCode);
+                res.add(installedApps);
+            }
+
+            if ((ai.flags & ApplicationInfo.FLAG_SYSTEM) == 1 && packinfo.applicationInfo.loadLabel(getApplication().getPackageManager()).toString().equals("Settings")) {
                 InstalledApps installedApps = new InstalledApps();
                 installedApps.setAppname(packinfo.applicationInfo.loadLabel(getApplication().getPackageManager()).toString());
                 installedApps.setPname(packinfo.packageName);

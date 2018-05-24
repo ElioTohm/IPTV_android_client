@@ -12,7 +12,7 @@ public class Stream extends RealmObject {
     public final static int SS = 4;
     public final static int MISC = 5;
 
-//    @PrimaryKey
+    @PrimaryKey
     @SerializedName("id")
     private int id;
     @SerializedName("vid_stream")

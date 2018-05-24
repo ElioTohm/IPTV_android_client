@@ -15,12 +15,13 @@ import java.util.List;
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class Channel extends RealmObject implements Serializable {
-//    @PrimaryKey
+    @PrimaryKey
     @SerializedName("id")
     @Expose
     private Integer id;

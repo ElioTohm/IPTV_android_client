@@ -6,6 +6,8 @@ import android.net.Uri;
 import com.XmsPro.xmsproplayer.Interface.XmsPlayerUICallback;
 import com.eliotohme.data.Stream;
 import com.eliotohme.data.network.AuthenticationInterceptor;
+import com.google.android.exoplayer2.C;
+import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
@@ -30,10 +32,12 @@ import com.google.android.exoplayer2.ui.PlayerControlView;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.DataSource;
+import com.google.android.exoplayer2.upstream.DefaultAllocator;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.google.android.exoplayer2.upstream.UdpDataSource;
+import com.google.android.exoplayer2.util.PriorityTaskManager;
 import com.google.android.exoplayer2.util.Util;
 
 import java.net.CookieManager;
@@ -50,7 +54,6 @@ public class XmsPlayer  {
     private DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
     private SimpleExoPlayer player;
     private static final CookieManager DEFAULT_COOKIE_MANAGER;
-    private List<Stream> streams;
     private PlayerView playerview;
     private Context context;
     private DefaultTrackSelector trackSelector;
@@ -59,7 +62,7 @@ public class XmsPlayer  {
     private String TOKENTYPE, TOKEN;
     private TrackSelectionHelper trackSelectionHelper;
     private PlayerControlView playerControlView;
-
+    private DefaultRenderersFactory renderersFactory;
     static {
         DEFAULT_COOKIE_MANAGER = new CookieManager();
         DEFAULT_COOKIE_MANAGER.setCookiePolicy(CookiePolicy.ACCEPT_ORIGINAL_SERVER);
@@ -84,11 +87,11 @@ public class XmsPlayer  {
         return null;
     }
 
-    public boolean hasDuration () {
-        if (player.getDuration() > 1) {
-            return true;
+    public long getDuration () {
+        if (player.getDuration() / 1000 > 600) {
+            return player.getDuration();
         }
-        return false;
+        return 0;
     }
 
     /**
@@ -96,14 +99,13 @@ public class XmsPlayer  {
      * @param playerview
      * initialize both param to use in class
      */
-    public XmsPlayer(Context context, PlayerView playerview, PlayerControlView playerControlView, List<Stream> streams, String TOKENTYPE, String TOKEN) {
+    public XmsPlayer(Context context, PlayerView playerview, PlayerControlView playerControlView, String TOKENTYPE, String TOKEN) {
 
         // set surface of the player
         this.context = context;
         this.xmsPlayerUICallback = (XmsPlayerUICallback) context;
         this.playerview = playerview;
         this.playerControlView = playerControlView;
-        this.streams = streams;
         this.TOKEN = TOKEN;
         this.TOKENTYPE = TOKENTYPE;
         instance = this;
@@ -114,7 +116,7 @@ public class XmsPlayer  {
         * Function that handles creating a ConcatenatingMediaSource
         * Of UDP URIs
         */
-        DataSource.Factory mediaDataSourceFactory = buildDataSourceFactory(false);
+        DataSource.Factory mediaDataSourceFactory = buildDataSourceFactory(true);
 
         // Loop on URI list to create individual Media source
         MediaSource[] mediaSources = new MediaSource[channels.size()];
@@ -202,9 +204,7 @@ public class XmsPlayer  {
             trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
             trackSelectionHelper = new TrackSelectionHelper(trackSelector, adaptiveTrackSelectionFactory);
 
-            DefaultRenderersFactory renderersFactory = new DefaultRenderersFactory(this.context,
-                    null, DefaultRenderersFactory.EXTENSION_RENDERER_MODE_PREFER);
-
+            renderersFactory = new DefaultRenderersFactory(this.context, null, DefaultRenderersFactory.EXTENSION_RENDERER_MODE_PREFER);
 
             player = ExoPlayerFactory.newSimpleInstance(renderersFactory, trackSelector);
         }
@@ -231,6 +231,19 @@ public class XmsPlayer  {
      * change source of stream and set if information about stream should show with respect to showinfo flag
      */
     public void changeSource(List<Stream> streams, boolean showinfo) {
+//        if (streams.get(0).getType() == Stream.TYPE_UDP) {
+//            player = ExoPlayerFactory.newSimpleInstance(renderersFactory, trackSelector, new DefaultLoadControl(
+//                    new DefaultAllocator(true, C.DEFAULT_BUFFER_SEGMENT_SIZE),
+//                    DefaultLoadControl.DEFAULT_MIN_BUFFER_MS,
+//                    DefaultLoadControl.DEFAULT_MAX_BUFFER_MS,
+//                    1000,
+//                    500,
+//                    DefaultLoadControl.DEFAULT_TARGET_BUFFER_BYTES,
+//                    true
+//            ));
+//        } else {
+//            player = ExoPlayerFactory.newSimpleInstance(renderersFactory, trackSelector);
+//        }
         player.prepare(buildMediaSource(streams));
         playerControlView.setPlayer(player);
         if (showinfo) {
