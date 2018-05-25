@@ -6,6 +6,7 @@
     android:orientation="vertical">
 
     <ImageView
+        android:layout_marginTop="15dp"
         android:paddingStart="15dp"
         android:paddingEnd="15dp"
         android:layout_width="match_parent"

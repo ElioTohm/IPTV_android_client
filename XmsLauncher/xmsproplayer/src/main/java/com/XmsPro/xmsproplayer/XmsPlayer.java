@@ -47,6 +47,7 @@ import java.util.List;
 import okhttp3.OkHttpClient;
 
 import static com.google.android.exoplayer2.extractor.ts.DefaultTsPayloadReaderFactory.FLAG_ALLOW_NON_IDR_KEYFRAMES;
+import static com.google.android.exoplayer2.extractor.ts.DefaultTsPayloadReaderFactory.FLAG_IGNORE_SPLICE_INFO_STREAM;
 import static com.google.android.exoplayer2.extractor.ts.TsExtractor.MODE_SINGLE_PMT;
 
 public class XmsPlayer  {
@@ -139,6 +140,7 @@ public class XmsPlayer  {
                     };
                     ExtractorsFactory tsExtractorFactory = new DefaultExtractorsFactory()
                             .setTsExtractorFlags(FLAG_ALLOW_NON_IDR_KEYFRAMES)
+                            .setTsExtractorFlags(FLAG_IGNORE_SPLICE_INFO_STREAM)
                             .setTsExtractorMode(MODE_SINGLE_PMT);
                     mediaSources[i] = new ExtractorMediaSource.Factory(udsf)
                                             .setExtractorsFactory(tsExtractorFactory)

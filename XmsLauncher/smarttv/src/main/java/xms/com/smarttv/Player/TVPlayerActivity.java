@@ -206,10 +206,6 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
     @Override
     public void onBackPressed() {}
 
-    /**
-     * if IN_VOD the user will interact with the player
-     * to fastforward if not use key bindings to navigate fragments
-     * */
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
         int action = event.getAction();
@@ -406,13 +402,6 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
         return super.dispatchKeyEvent(event);
     }
 
-    /**
-     * ChannelFragment listener to change the stream to the corresponding channel
-     * takes
-     * @param channel
-     * @param showinfo
-     * show info flag to show channel detail section
-     */
     @Override
     public void onChannelSelected(Channel channel, boolean showinfo) {
         streamList.clear();
@@ -428,18 +417,11 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
         }
     }
 
-    /**
-     * Show Purchase Dialog
-     * */
     @Override
     public void onChannelPurchased(Channel item) {
         getFragmentManager().beginTransaction().add(R.id.fragment_container_purshase, PurchaseDialog.newInstance(item, "Channel")).commit();
     }
 
-    /**
-     * @param item
-     * ListFragmentInteraction listener that show corresponding Fragment Detail
-     */
     @Override
     public void onSectionClicked(CustomHeaderItem item) {
         monitor(MonitoringService.TAG_ACTIVITY, item.getName());
