@@ -46,7 +46,6 @@ public class BackgroundImageFragment extends Fragment {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_background_image, container, false);
         ViewFlipper viewflipper = view.findViewById(R.id.viewflipper);
-        TextView welcomemessage = view.findViewById(R.id.welcome_message);
 
         String[] gallery = null;
         switch (type) {

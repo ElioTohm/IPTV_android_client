@@ -61,14 +61,9 @@ public class ClientAccountFragment extends Fragment {
         purchases.setLayoutManager(new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false));
         purchases.setAdapter(new PurchasesAdapter(Realm.getDefaultInstance().where(Purchase.class).findAll(), false));
 
-        if (client != null) {
-            clientname.setText(String.format("%s's Account",client.getName()));
-            balance.setText(Integer.toString(client.getBalance()));
+        clientname.setText(String.format("%s's Account",client.getName()));
+        balance.setText(Integer.toString(client.getBalance()));
 
-        } else {
-            clientname.setText("No Checked in Client Yet");
-            balance.setText("");
-        }
 
         List<Card> mRowsAdapter  = new ArrayList<>() ;
         List<HotelService> hotelServices = Realm.getDefaultInstance().where(HotelService.class).findAll();

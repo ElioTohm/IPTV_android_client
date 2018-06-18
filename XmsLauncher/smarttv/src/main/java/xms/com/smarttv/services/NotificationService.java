@@ -48,7 +48,8 @@ public class NotificationService extends IntentService {
     private String TAG = "TEST";
     private Socket socket = SmartTv.getInstance().getSocket();
     private String EVENT_SUBSCRIBE = "Subscribe";
-    private String EVENT_BROADCASTNOTIFICATION = "Notification ";
+    private String EVENT_NOTIFICATION = "Notification ";
+    private String EVENT_BROADCASTNOTIFICATION = "BroadCastNotification";
     private String EVENT_RESTART = "restart";
 
     public NotificationService() {
@@ -57,7 +58,7 @@ public class NotificationService extends IntentService {
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
-        EVENT_BROADCASTNOTIFICATION = EVENT_BROADCASTNOTIFICATION + Realm.getDefaultInstance().where(User.class).findFirst().getRoom();
+        EVENT_NOTIFICATION = EVENT_NOTIFICATION + Realm.getDefaultInstance().where(User.class).findFirst().getRoom();
         if (socket == null) {
             SmartTv.getInstance().setSocket();
             socket = SmartTv.getInstance().getSocket();
@@ -67,6 +68,29 @@ public class NotificationService extends IntentService {
             @Override
             public void call(Object... args) {
                 socket.emit(EVENT_SUBSCRIBE, Realm.getDefaultInstance().where(User.class).findFirst().getRoom());
+            }
+        })
+        .on(EVENT_NOTIFICATION, new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                JSONObject obj = (JSONObject)args[0];
+                Notification notification = new Notification();
+                try {
+                    JSONObject message = obj.getJSONObject("message");
+                    notification.setType(message.getInt("type"));
+                    notification.setMessage(message.getString("message"));
+                    notification.setImage(message.getString("image"));
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                final Notification finalNotification = notification;
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        checkDrawOverlayPermission(finalNotification);
+                    }
+                });
             }
         })
         .on(EVENT_BROADCASTNOTIFICATION, new Emitter.Listener() {

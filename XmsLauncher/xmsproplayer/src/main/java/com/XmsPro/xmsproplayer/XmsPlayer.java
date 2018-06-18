@@ -20,6 +20,9 @@ import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.dash.DashChunkSource;
 import com.google.android.exoplayer2.source.dash.DashMediaSource;
 import com.google.android.exoplayer2.source.dash.DefaultDashChunkSource;
+import com.google.android.exoplayer2.source.dash.manifest.DashManifestParser;
+import com.google.android.exoplayer2.source.dash.manifest.FilteringDashManifestParser;
+import com.google.android.exoplayer2.source.dash.manifest.RepresentationKey;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
 import com.google.android.exoplayer2.source.smoothstreaming.DefaultSsChunkSource;
 import com.google.android.exoplayer2.source.smoothstreaming.SsChunkSource;
@@ -51,7 +54,7 @@ import static com.google.android.exoplayer2.extractor.ts.DefaultTsPayloadReaderF
 import static com.google.android.exoplayer2.extractor.ts.TsExtractor.MODE_SINGLE_PMT;
 
 public class XmsPlayer  {
-    private String userAgent;
+    private String userAgent, TOKENTYPE, TOKEN;
     private DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
     private SimpleExoPlayer player;
     private static final CookieManager DEFAULT_COOKIE_MANAGER;
@@ -60,7 +63,6 @@ public class XmsPlayer  {
     private DefaultTrackSelector trackSelector;
     private static XmsPlayer instance;
     private XmsPlayerUICallback xmsPlayerUICallback;
-    private String TOKENTYPE, TOKEN;
     private TrackSelectionHelper trackSelectionHelper;
     private PlayerControlView playerControlView;
     private DefaultRenderersFactory renderersFactory;
@@ -135,7 +137,7 @@ public class XmsPlayer  {
                     DataSource.Factory udsf = new UdpDataSource.Factory() {
                         @Override
                         public DataSource createDataSource() {
-                            return new UdpDataSource(null, 65507, UdpDataSource.DEAFULT_SOCKET_TIMEOUT_MILLIS);
+                            return new UdpDataSource(null, 65507);
                         }
                     };
                     ExtractorsFactory tsExtractorFactory = new DefaultExtractorsFactory()
@@ -155,7 +157,7 @@ public class XmsPlayer  {
                     if (dashChunkSourceFactory == null) {
                         dashChunkSourceFactory = new DefaultDashChunkSource.Factory(mediaDataSourceFactory);
                     }
-                    mediaSources[i]  = new DashMediaSource.Factory(dashChunkSourceFactory, mediaDataSourceFactory)
+                    mediaSources[i]  = new DashMediaSource.Factory(dashChunkSourceFactory, buildDataSourceFactory(false))
                                             .createMediaSource(channel_stream_uri);
                     break;
                 case Stream.SS:
@@ -206,7 +208,7 @@ public class XmsPlayer  {
             trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
             trackSelectionHelper = new TrackSelectionHelper(trackSelector, adaptiveTrackSelectionFactory);
 
-            renderersFactory = new DefaultRenderersFactory(this.context, null, DefaultRenderersFactory.EXTENSION_RENDERER_MODE_PREFER);
+            renderersFactory = new DefaultRenderersFactory(this.context, null, DefaultRenderersFactory.EXTENSION_RENDERER_MODE_ON);
 
             player = ExoPlayerFactory.newSimpleInstance(renderersFactory, trackSelector);
         }
@@ -233,19 +235,6 @@ public class XmsPlayer  {
      * change source of stream and set if information about stream should show with respect to showinfo flag
      */
     public void changeSource(List<Stream> streams, boolean showinfo) {
-//        if (streams.get(0).getType() == Stream.TYPE_UDP) {
-//            player = ExoPlayerFactory.newSimpleInstance(renderersFactory, trackSelector, new DefaultLoadControl(
-//                    new DefaultAllocator(true, C.DEFAULT_BUFFER_SEGMENT_SIZE),
-//                    DefaultLoadControl.DEFAULT_MIN_BUFFER_MS,
-//                    DefaultLoadControl.DEFAULT_MAX_BUFFER_MS,
-//                    1000,
-//                    500,
-//                    DefaultLoadControl.DEFAULT_TARGET_BUFFER_BYTES,
-//                    true
-//            ));
-//        } else {
-//            player = ExoPlayerFactory.newSimpleInstance(renderersFactory, trackSelector);
-//        }
         player.prepare(buildMediaSource(streams));
         playerControlView.setPlayer(player);
         if (showinfo) {

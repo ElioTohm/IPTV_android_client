@@ -69,6 +69,7 @@ import xms.com.smarttv.fragments.VODfragment;
 import xms.com.smarttv.fragments.WeatherWidgetFragment;
 import xms.com.smarttv.models.Card;
 import xms.com.smarttv.services.GetInstalledAppService;
+import xms.com.smarttv.services.MessagingService;
 import xms.com.smarttv.services.MonitoringService;
 import xms.com.smarttv.services.NotificationService;
 
@@ -177,11 +178,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
     @Override
     public void onStart() {
         super.onStart();
-        try {
-            getClientInfo();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        getClientInfo();
     }
 
     @Override
@@ -531,12 +528,14 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
                 .replace(R.id.fragment_container_details, detailSectionFragment, "Map")
                 .addToBackStack(null)
                 .commit();
-
     }
 
     @Override
     public void ServiceClicked(Card card) {
-
+        Toast.makeText(TVPlayerActivity.this,"Request Sent..", Toast.LENGTH_LONG).show();
+        Intent messaging = new Intent(this, MessagingService.class);
+        messaging.putExtra(MessagingService.TAG_MESSAGE, card.getTitle());
+        this.startService(messaging);
     }
 
     @Override
@@ -721,7 +720,7 @@ public class TVPlayerActivity extends Activity implements ChannelsListFragment.C
      * if there is change show the onboarding activity
      * @throws IOException
      */
-    private void getClientInfo() throws IOException {
+    private void getClientInfo() {
         User user = realm.where(User.class).findFirst();
         assert user != null;
         ApiInterface apiInterface = ApiService.createService(ApiInterface.class, Preferences.getServerUrl(), user.getToken_type(), user.getAccess_token());
